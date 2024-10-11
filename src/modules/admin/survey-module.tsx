@@ -19,8 +19,6 @@ export const SurveyModule = () => {
 
     return (
         <div className='w-full h-full flex flex-col px-4 py-4 gap-4 rounded-lg overflow-y-auto mb-4'>
-                {/* <SurveyManagerComponent /> */}
-                {/* <SurveyManagement /> */}
                 <SurveyMan />
         </div>
     );

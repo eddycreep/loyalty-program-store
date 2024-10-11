@@ -46,20 +46,22 @@ interface ProductProps {
 
 type ProductResponse = ProductProps[]
 
-//setProductDiscountProps
-interface DiscountProps {
-    DiscountID: number,
-    ProductID: number,
-    DiscountName: string,
-    StartDate: string,
-    EndDate: string,
-    DiscountType: string,
-    DiscountValue: number,
-    DiscountTier: string,
-    MinimumSpending: number,
-    UsageCount: number
+//specials
+interface Specials {
+    special_id: number,
+    special: string,
+    special_type: string,
+    store_id: string,
+    start_date: string,
+    expiry_date: string,
+    special_value: string,
 }
-type DiscountResponse = DiscountProps[]
+type SpecialsResponse = Specials[]
+
+interface SavedSpecial {
+    special_id: string,
+}
+type SavedIDresponse = SavedSpecial[]
 
 //setProductDiscountProps
 interface SpecialProps {
@@ -75,37 +77,28 @@ type SpecialResponse = SpecialProps[]
 
 //getAllProductsOnSpecial
 interface GetSpecialsProps {
-    ProductID: number,
-    SpecialName: string,
-    SpecialValue: number,
-    StartDate: string,
-    ExpiryDate: string,
-    IsActive: number,
-    ProductName: string,
-    Price: number
+    special_id: string,
+    special: string,
+    special_type: string,
+    store_id: string,
+    start_date: string,
+    expiry_date: string,
+    special_value: string,
+    isActive: number,
+    product_description: string,
+    special_price: number
 }
 type GetSpecialsResponse = GetSpecialsProps[]
 
 
-//getAllProductsOnDiscounts
-interface GetDiscountsProps {
-    ProductID: number,
-    DiscountName: string,
-    StartDate: string,
-    EndDate: string,
-    DiscountValue: number,
-    DiscountTier: string,
-    ProductName: string,
-    Price: number
-}
-type GetDiscountsResponse = GetDiscountsProps[]
-
-
 export const ProductsManModule = () => {
+    //individual product specials
     const [product, setProduct] = useState('');
-    const [productSpecialDes, setProductSpecialDes] = useState('');
+    const [productSpecial, setProductSpecial] = useState('');
     const [specialPrice, setSpecialPrice] = useState(0);
+    const [storeid, setStoreID] = useState('');
     const [specialType, setSpecialType] = useState('');
+    const [specialValue, setSpecialValue] = useState('');
     const [specialStartDate, setSpecialStartDate] = useState('');
     const [specialExpDate, setSpecialExpDate] = useState('');
     const [isActive, setIsActive] = useState(false);
@@ -120,8 +113,13 @@ export const ProductsManModule = () => {
     const [groupSpecialExpDate, setGroupSpecialExpDate] = useState('');
     const [groupIsActive, setGroupIsActive] = useState(false);
     
+    //specialssss
+    const [allSpecials, setAllSpecials] = useState<SpecialsResponse>([]);
+    const [specialID, setSpecialID] = useState('');
+
+
     //all product specials
-    const [allSpecialProducts, setAllSpecialProducts] = useState<GetSpecialsResponse>([]);
+    const [activeProductSpecials, setActiveProductSpecials] = useState<GetSpecialsResponse>([]);
 
     const discountOptions = [
         {discount: 'Anniversary Discount'},
@@ -144,13 +142,68 @@ export const ProductsManModule = () => {
     const url = `products/getproducts`;
     const { data, loading, error } = useQuery<ProductResponse>(url);
 
+    //tblspecials
+    const saveSpecial = async () => {
+        try {
+            const newStartDate = new Date(specialStartDate);
+            const newExpDate = new Date(specialExpDate);
 
-    const getProductSpecials = async () => {
+            const payload = {
+                special: productSpecial,
+                specialType: specialType,
+                storeId: storeid,
+                startDate: newStartDate,
+                expiryDate: newExpDate,
+                specialValue: specialValue,
+                isactive: isActive
+            }
+
+            const url = `products/setspecial`
+            const response = await axios.post<SpecialsResponse>(`${apiEndPoint}/${url}`, payload)
+            console.log("SAVED SPECIAL:", response)
+
+            toast.success('The special has been saved to tblspecialsss', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            });
+
+            getSavedSpecialID();
+
+        } catch (error) {
+            console.log("AN ERROR OCCURED WHEN SAVING SPECIAL:", error)
+        }
+    }
+    
+    //get special id from tblspecials
+    const getSavedSpecialID = async () => {
+        const encodedProductSpecial = encodeURIComponent(productSpecial);
+
+        try {
+            const url = `products/getspecialid/${encodedProductSpecial}/${specialType}/${storeid}/${specialValue}`
+            const response = await axios.get<SavedIDresponse>(`${apiEndPoint}/${url}`)
+            const specialid = response?.data?.[0]?.special_id;  // assuming response.data is an array
+            console.log("specialid: " + specialid)
+            setSpecialID(specialid);
+            //setSpecialID(response?.data)
+            console.log("RETURNED Special ID:", response)
+
+            toast.success('The special ID HAS RETURNED', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            });
+
+            saveProductSpecial();
+        } catch (error) {
+            console.log("AN ERROR OCCURED WHEN FETCHING SAVED SPECIAL ID:", error)
+        }
+    }
+
+    const getActiveProductSpecials = async () => {
         try{
             //http://localhost:4200/products/getproductspecials
             const url = `products/getproductspecials`
             const response = await axios.get<GetSpecialsResponse>(`${apiEndPoint}/${url}`)
-            setAllSpecialProducts(response?.data)
+            setActiveProductSpecials(response?.data)
             console.log("RETRIEVED ALL PRODUCT SPECIALS:", response)
 
         } catch (error) {
@@ -164,16 +217,12 @@ export const ProductsManModule = () => {
             const newStartDate = new Date(specialStartDate);
             const newExpDate = new Date(specialExpDate);
 
-            //product, productSpecialDes, specialPrice, specialStartDate, specialExpDate
+            //specialid, productdescription, specialprice
 
             const payload = {
-                product: product,
-                specialDescription: productSpecialDes,
-                specialPrice: specialPrice,
-                specialType: specialType,
-                startDate: newStartDate,
-                expiryDate: newExpDate,
-                isActive: isActive
+                specialid: specialID,
+                productdescription: product,
+                specialprice: specialPrice
             }
 
             const url = `products/setproductspecial`
@@ -266,10 +315,10 @@ export const ProductsManModule = () => {
         });
     };
 
-    // useEffect(() => {
-    //     getProductSpecials();
-    //     getProductDiscounts();
-    // }, []);
+    useEffect(() => {
+        getActiveProductSpecials();
+        //getProductDiscounts();
+    }, []);
 
 
     return (
@@ -291,18 +340,17 @@ export const ProductsManModule = () => {
                                         </tr>
                                     </thead>
                                         <tbody className="mb-2">
+                                        {activeProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) =>
                                             <tr className=''>
-                                                <td className='p-2'>15</td>
-                                                <td className='p-2'>Cheese Burger</td>
-                                                <td className='p-2'>Buy 2 get 10% Off</td>
-                                                <td className='p-2'>Percentage</td>
+                                                <td className='p-2'>{special_id}</td>
+                                                <td className='p-2'>{product_description}</td>
+                                                <td className='p-2'>{special}</td>
+                                                <td className='p-2'>{special_type}</td>
                                                 <td className='p-2'>
-                                                    {/* {product.Discount_Expiry ? `${new Date(product.Discount_Expiry).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'} */}
-                                                    Tue Oct 01 2024 00:00:00
+                                                    {start_date ? `${new Date(start_date).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'}
                                                 </td>
                                                 <td className='p-2'>
-                                                    {/* {product.Special_ExpiryDate ? `${new Date(product.Special_ExpiryDate).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'} */}
-                                                    Thu Oct 31 2024 00:00:00
+                                                    {expiry_date ? `${new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'}
                                                 </td>
                                                 <td className='p-2'>
                                                     <button className="bg-black text-white p-2 w-14 h-18 rounded-lg hover:bg-red flex justify-center items-center">
@@ -310,6 +358,7 @@ export const ProductsManModule = () => {
                                                     </button>
                                                 </td>
                                             </tr>
+                                            )}
                                         </tbody>
                                 </table>
                         </div>
@@ -345,7 +394,7 @@ export const ProductsManModule = () => {
                                             <Label htmlFor="name" className="text-left pt-4">
                                                 Special:
                                             </Label>
-                                            <input type="input" placeholder="10" onChange={(e) => setProductSpecialDes(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                                            <input type="input" placeholder="10" onChange={(e) => setProductSpecial(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                                         </div>
                                     </div>
                                     <div className="flex gap-4">
@@ -375,7 +424,7 @@ export const ProductsManModule = () => {
                                             </Label>
                                             <select 
                                                 className="w-full p-2 rounded-lg border border-gray-300"
-                                                onChange={(e) => setSpecialType(e.target.value)}
+                                                onChange={(e) => setSpecialValue(e.target.value)}
                                             >
                                                     <option>Select Value</option>
                                                         <option value="Percentage">Percentage</option>
@@ -383,20 +432,37 @@ export const ProductsManModule = () => {
                                             </select>
                                         </div>
                                         <div className="w-full">
+                                            <Label htmlFor="name" className="text-left pt-4">
+                                                Store ID:
+                                            </Label>
+                                            <select 
+                                                className="w-full p-2 rounded-lg border border-gray-300"
+                                                onChange={(e) => setStoreID(e.target.value)}
+                                            >
+                                                    <option>Select Store ID</option>
+                                                    <option value="S001">S001</option>
+                                                    <option value="S002">S002</option>
+                                                    <option value="S003">S003</option>
+                                                    <option value="S004">S004</option>
+                                                    <option value="S005">S005</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <div className="w-[270px]">
                                             <Label htmlFor="username" className="text-left pt-4">
                                                 Start Date:
                                             </Label>
                                             <input type="date" onChange={(e) => setSpecialStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                                         </div>
-                                    </div>
-                                    <div className="flex gap-4">
                                         <div className="w-[270px]">
                                             <Label htmlFor="username" className="text-left pt-4">
                                                 Expiry Date:
                                             </Label>
                                             <input type="date" onChange={(e) => setSpecialExpDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                                         </div>
-                                        <div className="flex flex-col">
+                                    </div>
+                                    <div className="flex flex-col">
                                             <Label htmlFor="isactive" className="text-left p-1">
                                                 Active/Inactive:
                                             </Label>
@@ -409,10 +475,9 @@ export const ProductsManModule = () => {
                                                 <label htmlFor="check-apple"></label>
                                             </div>
                                         </div>
-                                    </div>
                                 </div>
                                 <DialogFooter>
-                                    <button onClick={ saveProductSpecial } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                                    <button onClick={ saveSpecial } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
                                         Save
                                     </button>
                                 </DialogFooter>

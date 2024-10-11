@@ -1,60 +1,218 @@
 'use client'
 
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { SurveyDialog } from "@/components/component/survey-dialog"; 
-import { ReviewDialog } from "@/components/component/review-dialog";
-import {
-    Smartphone, Mail, MessageSquare, Globe, QrCode, ScrollText, Tag,
-    Popcorn, IceCream2, Pizza, Citrus, NotepadText, Notebook, BookOpenText, MenuSquare, Soup 
-} from "lucide-react";
-
+import { Smartphone, Mail, MessageSquare, Globe, QrCode, ScrollText, Edit, Tag, AlignCenterVertical } from "lucide-react"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { RewardsDialog } from "@/components/component/rewards"
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const RewardsModule = () => {
-
-    const discountOptions = [
-        {discount: 'Anniversary Discount'},
-        {discount: 'August Season Discount'}, 
-        {discount: 'Back to School Discount'}, 
-        {discount: 'Early Bird Special'}, 
-        {discount: 'Holiday Special'}, 
-        {discount: 'Limited Time Offer'}, 
-        {discount: 'New Years Promotion'}, 
-        {discount: 'Product Discount'}, 
-        {discount: 'Product Review Reward Discount'}, 
-        {discount: 'Referral Reward Discount'}, 
-        {discount: 'Spring Season Discount'}, 
-        {discount: 'Summer Season Discount'}, 
-        {discount: 'Survey Reward Discount'}, 
-        {discount: 'Weekend Deal'}, 
-        {discount: 'Winter Season Discount'}
-    ];
+    const [showRewardsDialog, setShowRewardsDialog] = useState(false);
 
     return (
         <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-52'>
+            <div className="flex justify-center items-center pt-6">
+                <AlignCenterVertical size={60} color="gray"/>
+            </div>
             <Card>
                 <CardContent className="pt-6">
                 <h2 className="text-2xl font-semibold mb-4">Alternative Ways to Redeem Discounts</h2>
                 <ul className="space-y-4">
-                    <li className="flex items-center">
-                    <QrCode className="h-5 w-5 mr-2 text-primary" />
-                    <span>In-store kiosks: Customers can scan their loyalty card or enter their phone number to retrieve available discounts.</span>
-                    </li>
-                    <li className="flex items-center">
-                    <Smartphone className="h-5 w-5 mr-2 text-primary" />
-                    <span>Mobile app: Customers can view and activate their discounts directly from our mobile application.</span>
-                    </li>
-                    <li className="flex items-center">
-                    <Mail className="h-5 w-5 mr-2 text-primary" />
-                    <span>Email notifications: We send personalized emails with discount codes that can be used online or in-store.</span>
-                    </li>
-                    <li className="flex items-center">
-                    <MessageSquare className="h-5 w-5 mr-2 text-primary" />
-                    <span>SMS: Customers can opt-in to receive text messages with their available discounts and redemption codes.</span>
-                    </li>
-                    <li className="flex items-center">
-                    <Globe className="h-5 w-5 mr-2 text-primary" />
-                    <span>Website account: Logged-in customers can see and apply their discounts during online checkout.</span>
-                    </li>
+                        <div className="flex justify-between">
+                            <div className="flex">
+                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
+                                    <QrCode />
+                                </div>
+                                <div className="pl-2">
+                                    <p className="font-bold">In-store kiosks: 20% Off Cart</p>
+                                    <p>Customers can scan their loyalty card or enter their ID number to retrieve available discounts.</p>
+                                </div>
+                            </div>
+                            <div>
+                            <Dialog>
+                            <DialogTrigger asChild>
+                                <Button className="bg-black text-white p-2 rounded-lg hover:bg-red">
+                                    <Edit />
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[600px]">
+                                <DialogHeader>
+                                    <DialogTitle>Add New Group Special</DialogTitle>
+                                    <DialogDescription>
+                                        Select the product and set the special with the required fields. Click save once completed.
+                                    </DialogDescription>
+                                </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="flex gap-4">
+                                    <div className="w-full">
+                                    <Label htmlFor="name" className="text-left pt-4">
+                                        Special ID:
+                                    </Label>
+                                        <select 
+                                            className="w-full p-2 rounded-lg border border-gray-300"
+                                        >
+                                            <option value="" className="dash-text">Select Special</option>
+                                                <option value="1">Buy 3 Get 20% Off</option>
+                                                <option value="2">Buy 1 Get 5% Off</option>
+                                                <option value="3">Buy 4 Get 15% Off</option>
+                                                <option value="4">Buy 2 Get R20 Off</option>
+                                                <option value="5">Buy 3 Get R50 Off</option>
+                                        </select>
+                                </div>
+                                    <div className="w-full">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Product:
+                                        </Label>
+                                            <select 
+                                                className="w-full p-2 rounded-lg border border-gray-300"
+                                            >
+                                                    <option>sleelct product</option>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div className="flex gap-4">
+                                    <div className="w-full">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Special:
+                                        </Label>
+                                            <input type="input" placeholder="buy 2 and get 20% off next purchase" className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                    <div className="w-full">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Special Price:
+                                        </Label>
+                                        <input type="input" placeholder="10.99" className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                </div>
+                                <div className="flex gap-4">
+                                    <div className="w-full">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Special Type:
+                                        </Label>
+                                        <select 
+                                            className="w-full p-2 rounded-lg border border-gray-300"
+                                        >
+                                            <option>Select Type</option>
+                                                <option value="Combined Special">Combined Special</option>
+                                        </select>
+                                                </div>
+                                                <div className="w-full">
+                                                    <Label htmlFor="name" className="text-left pt-4">
+                                                        Special Value:
+                                                    </Label>
+                                                    <select 
+                                                        className="w-full p-2 rounded-lg border border-gray-300"
+                                                    >
+                                                            <option>Select Value</option>
+                                                                <option value="Percentage">Percentage</option>
+                                                                <option value="Amount">Amount</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-4">
+                                                <div className="w-full">
+                                                    <Label htmlFor="username" className="text-left pt-4">
+                                                        Start Date:
+                                                    </Label>
+                                                    <input type="date"  className='w-full p-2 rounded-lg border border-gray-300'/>
+                                                </div>
+                                                <div className="w-full">
+                                                    <Label htmlFor="username" className="text-left pt-4">
+                                                        Expiry Date:
+                                                    </Label>
+                                                    <input type="date" className='w-full p-2 rounded-lg border border-gray-300'/>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col w-full">
+                                                    <Label htmlFor="isactive" className="text-left pt-4">
+                                                        Active/Inactive:
+                                                    </Label>
+                                                    <div className="checkbox-apple">
+                                                        <input className="yep" 
+                                                        id="check-apple" 
+                                                        type="checkbox"
+                                                    />
+                                                        <label htmlFor="check-apple"></label>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <DialogFooter>
+                                            <button className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                                                Save
+                                            </button>
+                                        </DialogFooter>
+                                    </DialogContent>
+                            </Dialog>
+                            </div>
+                        </div>
+                        <div className="flex justify-between">
+                            <div className="flex">
+                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
+                                    <Smartphone />
+                                </div>
+                                <div className="pl-2">
+                                    <p className="font-bold">Mobile app:</p>
+                                    <p>Customers can view and activate their discounts directly from our mobile application.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <Button className="bg-black text-white p-2 rounded-lg hover:bg-red">
+                                    <Edit />
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="flex justify-between">
+                            <div className="flex">
+                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
+                                    <Mail />
+                                </div>
+                                <div className="pl-2">
+                                    <p className="font-bold">Email notifications:</p>
+                                    <p>We send personalized emails with discount codes that can be used online or in-store.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <Button className="bg-black text-white p-2 rounded-lg hover:bg-red">
+                                    <Edit />
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="flex justify-between">
+                            <div className="flex">
+                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
+                                    <MessageSquare />
+                                </div>
+                                <div className="pl-2">
+                                    <p className="font-bold">SMS:</p>
+                                    <p>Customers can opt-in to receive text messages with their available discounts and redemption codes.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <Button className="bg-black text-white p-2 rounded-lg hover:bg-red">
+                                    <Edit />
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="flex justify-between">
+                            <div className="flex">
+                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
+                                    <Globe />
+                                </div>
+                                <div className="pl-2">
+                                    <p className="font-bold">Website account:</p>
+                                    <p>Logged-in customers can see and apply their discounts during online checkout.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <Button className="bg-black text-white p-2 rounded-lg hover:bg-red">
+                                    <Edit />
+                                </Button>
+                            </div>
+                        </div>
                 </ul>
                 </CardContent>
             </Card>
@@ -86,130 +244,6 @@ export const RewardsModule = () => {
                     </CardContent>
                 </Card>
             </div>
-                <div className="w-full flex gap-16">
-                    <div className="bg-white w-[500px] h-[480px] py-2 px-2 rounded shadow-dark">
-                        <h3>Surveys</h3>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <ScrollText />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Signing up for the loyalty program</p>
-                                    <p className="text-sm text-gray-400 pt-1">10% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <NotepadText />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Signing up for the loyalty program</p>
-                                    <p className="text-sm text-gray-400 pt-1">10% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <MenuSquare />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Signing up for the loyalty program</p>
-                                    <p className="text-sm text-gray-400 pt-1">10% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <Notebook />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Signing up for the loyalty program</p>
-                                    <p className="text-sm text-gray-400 pt-1">10% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <BookOpenText />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Signing up for the loyalty program</p>
-                                    <p className="text-sm text-gray-400 pt-1">10% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='py-4'>
-                            <SurveyDialog />
-                        </div>
-                    </div>
-                    <div className="bg-white w-[500px] h-[480px] py-2 px-2 rounded shadow-dark">
-                        <h3>Product Reviews</h3>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <Popcorn />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Product Feedback Review</p>
-                                    <p className="text-sm text-gray-400 pt-1">10% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <Citrus />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Customer Satisfaction Review (Loyalty Prgram)</p>
-                                    <p className="text-sm text-gray-400 pt-1">15% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <Soup />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Wishlist and Improvement Review</p>
-                                    <p className="text-sm text-gray-400 pt-1">5% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <Pizza />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Discounts and Special Offers Review</p>
-                                    <p className="text-sm text-gray-400 pt-1">5% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-4 pb-2 border-b pt-4'>
-                            <div className='w-full flex justify-start gap-4'>
-                                <div className="h-12 w-16 flex justify-center pt-3 border rounded bg-gray-100">
-                                    <IceCream2 />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="font-bold">Branch and Location Feedback Review</p>
-                                    <p className="text-sm text-gray-400 pt-1">10% Discount on any purchase</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='pt-4'>
-                            <ReviewDialog />
-                        </div>
-                    </div>
-                </div>
         </div>
     );
 }
