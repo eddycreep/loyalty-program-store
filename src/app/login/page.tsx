@@ -31,14 +31,14 @@ export default function Page() {
         if (isVisisble) {
             return (
                 <span className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility}>
-                    <Eye size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors?.purple} />
+                    <Eye size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors?.red} />
                 </span>
             )
         }
         else {
             return (
                 <span className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility}>
-                    <EyeOff size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors?.purple} onClick={toggleVisibility} />
+                    <EyeOff size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors?.red} onClick={toggleVisibility} />
                 </span>
             )
         }
@@ -153,7 +153,7 @@ export default function Page() {
                         {formState.errors.password && <span className="text-red text-sm">{formState.errors.password.message}</span>}
                     </div>
                 </form>
-                <button className='w-full p-2 rounded bg-purple text-white uppercase' onClick={handleSubmit(onSubmit)} disabled={isLoading}>{isLoading ? 'Signin in...' : 'Sign in'}</button>
+                <button className='w-full p-2 rounded bg-red hover:bg-rose-500 text-white uppercase' onClick={handleSubmit(onSubmit)} disabled={isLoading}>{isLoading ? 'Signin in...' : 'Sign in'}</button>
             </div>
         </div>
     );

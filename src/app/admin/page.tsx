@@ -4,7 +4,7 @@ import axios from "axios";
 import moment from 'moment';
 import { useSession } from "@/context";
 import { useAudit } from "@/shared/tools/auditMonit";
-import { AdminModule } from "@/modules/admin/adminModule";
+import { AdminModule } from "@/modules/admin/admin-module";
 
 export default function Checkin() {
     const { user } = useSession();

@@ -9,21 +9,10 @@ export const StoreNav = () => {
                 <Image 
                     src="/covers/plus.jpg" 
                     alt="Logo"
-                    width={200}
+                    width={100}
                     height={50}
                 />
             </div>
-            {/* <div className="flex gap-2">
-                <div className="">
-                    <Image 
-                        src="/covers/contactt.png" 
-                        alt="Logo"
-                        width={40}
-                        height={40}
-                    />
-                </div>
-                <p className="text-2xl">Yanga</p>
-            </div> */}
         </div>
     );
 }

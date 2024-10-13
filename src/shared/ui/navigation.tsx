@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useSession } from "@/context";
 import { colors } from "@/utils/colors";
 import { usePathname } from 'next/navigation';
-import { CalendarClock, LayoutDashboard, X, ListTodo, Blocks, Home, LayoutDashboardIcon } from "lucide-react";
+import { CalendarClock, LayoutDashboard, X, ListTodo, Blocks, Home, LayoutDashboardIcon, Power } from "lucide-react";
 
 
 export const Navigation = () => {
@@ -90,7 +90,7 @@ export const Navigation = () => {
         </ul>
         <button className="gap-2 flex items-center justify-center w-10/12 mx-auto rounded p-2 bg-red text-white" onClick={logout}>
             <span className="text-white font-medium uppercase text-xs">Logout</span>
-          </button>
+        </button>
       </div>
     )
   }

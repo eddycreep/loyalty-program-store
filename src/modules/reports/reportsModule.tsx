@@ -10,6 +10,24 @@ import { useAudit } from '@/shared/tools/auditMonit';
 import MultiColorLoader from '@/lib/loaders';
 import Image from 'next/image';
 
+interface LoyaltyClientsProps {
+    id: number,
+    name: string,
+    surname: string
+    id_number: number,
+    mobile_number: string,
+    age: number,
+    gender: string,
+    birthday: string,
+    ethnicity: string,
+    employment_status: string,
+    loyalty: number,
+    sign_up_date: string
+}
+
+type LoyaltyResponse = LoyaltyClientsProps[]
+type NonLoyaltyResponse = LoyaltyClientsProps[]
+
 
 export const ReportsModule = () => {
 
