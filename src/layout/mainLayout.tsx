@@ -26,7 +26,7 @@ export default function AppWrapper({ children }: Readonly<{ children: React.Reac
                 <nav className={`${hideNavigation ? 'hidden' : 'w-full lg:w-1/12'}`}>
                     <Navigation />
                 </nav>
-                <div className={`${hideNavigation ? 'w-full' : 'lg:w-11/12 lg:rounded'} h-full bg-gray-400 flex-grow`}>
+                <div className={`${hideNavigation ? 'w-full' : 'lg:w-11/12 lg:rounded'} h-full bg-gray-100 flex-grow`}>
                     {children}
                 </div>
             </div>

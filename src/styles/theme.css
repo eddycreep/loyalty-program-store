@@ -82,7 +82,7 @@
     height: 25px;
 }
 
-/* From Uiverse.io by SchawnnahJ - LOADER*/ 
+/* From Uiverse.io by SchawnnahJ, LOADER*/ 
 .loader {
     position: relative;
     width: 2.5em;
@@ -497,4 +497,62 @@ li {
   body {
     @apply bg-background text-foreground;
     }
+}
+
+/* CUSTOMER REVIEW CARDS */
+/* From Uiverse.io by vinodjangid07 */ 
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 62px; /* Increase the gap between cards */
+    width: 100%; /* Full width of the container */
+}
+
+.stats-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 350px; /* Increased width */
+    height: 250px; /* Increased height to match the wider width */
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    padding: 20px; /* Increased padding */
+    box-shadow:
+        20px 20px 60px #e6e6e6,
+        -20px -20px 60px #f3f3f3;
+}
+
+.heading {
+    font-size: 0.8em; /* Slightly larger font for better readability */
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.bottom-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bottom-wrapper .star {
+    width: 35px; /* Increased size */
+    fill: gold;
+}
+
+.bottom-wrapper .tag {
+    width: 32px; /* Increased size */
+    fill: rgb(141, 214, 32);
+}
+
+.bottom-wrapper .thumb {
+    width: 32px; /* Increased size */
+    fill: blueviolet;
+}
+
+.bottom-wrapper p {
+    font-size: 1.4em; /* Larger text for better readability */
+    font-weight: 700;
 }

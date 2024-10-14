@@ -9,6 +9,7 @@ import { useQuery } from "@/hooks/useQuery";
 import * as React from "react";
 import {useState, useEffect } from 'react';
 import axios from 'axios';
+import { ReviewCards } from '@/components/component/review-cards';
 
 interface ReviewProps {
     id: number,
@@ -84,10 +85,9 @@ export const ReviewsModule = () => {
   return (
     <div className="min-h-screen overflow-y-auto">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-4">Customer Product Reviews</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
-          {/* Manually creating six cards */}
+        <h2 className="text-2xl font-bold text-center mb-4">Customer Product Reviews</h2>
+        <ReviewCards />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-14">
           {reviews.map((review) => (
             <Card key={review.id} className="flex flex-col">
               <CardHeader className="flex flex-row items-center gap-4">
@@ -123,7 +123,6 @@ export const ReviewsModule = () => {
               </CardContent>
             </Card>
           ))}
-
         </div>
       </div>
     </div>

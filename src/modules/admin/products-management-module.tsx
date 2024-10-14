@@ -3,15 +3,15 @@
 import { useQuery } from "@/hooks/useQuery";
 import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
-import MultiColorLoader from '@/lib/loaders';
 import { useState, useEffect } from 'react';
-import { format } from "date-fns";
 import toast from 'react-hot-toast';
-import { XIcon, Check, Percent, Gem, X, Pencil } from "lucide-react";
+import { XIcon, Check, Percent, Gem, X, Pencil, Edit, Activity, Loader2, Loader, TrendingUp } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { EditProductSpecials } from "@/components/component/edit-product-specials";
+import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
+import { IconDescriptions } from "@/components/component/icon-descriptions";
 
 interface ProductProps {
     idx: number,
@@ -90,8 +90,27 @@ interface GetSpecialsProps {
 }
 type GetSpecialsResponse = GetSpecialsProps[]
 
+//get-active-group-specials
+interface GetGroupSpecials {
+    special_id: string,
+    special_group_id: string,
+    special: string,
+    special_type: string,
+    store_id: string,
+    start_date: string,
+    expiry_date: string,
+    special_value: string,
+    isActive: number,
+    product_description: string,
+    special_price: number
+}
+type GetGroupSpecialsResponse = GetGroupSpecials[]
+
 
 export const ProductsManModule = () => {
+    const [editProductsPopup, setEditProductsPopup] = useState(false);
+    const [editGroupProductsPopup, setEditGroupProductsPopup] = useState(false);
+
     //individual product specials
     const [product, setProduct] = useState('');
     const [productSpecial, setProductSpecial] = useState('');
@@ -119,7 +138,9 @@ export const ProductsManModule = () => {
 
 
     //all product specials
-    const [activeProductSpecials, setActiveProductSpecials] = useState<GetSpecialsResponse>([]);
+    const [allProductSpecials, setAllProductSpecials] = useState<GetSpecialsResponse>([]);
+    const [allGroupSpecials, setAllGroupSpecials] = useState<GetGroupSpecialsResponse>([]);
+
 
     const discountOptions = [
         {discount: 'Anniversary Discount'},
@@ -138,6 +159,9 @@ export const ProductsManModule = () => {
         {discount: 'Weekend Deal'}, 
         {discount: 'Winter Season Discount'}
     ];
+
+    const headers = ['ID',	'Product',	'Special',	'Special Value',	'Start Date',	'Expiry Date',	'Status', 'Action']
+    const groupHeaders = ['Special ID',	'Group ID', 'Product',	'Special',	'Special Price',	'Start Date',	'Expiry Date',	'Status', 'Action']
 
     const url = `products/getproducts`;
     const { data, loading, error } = useQuery<ProductResponse>(url);
@@ -195,19 +219,6 @@ export const ProductsManModule = () => {
             saveProductSpecial();
         } catch (error) {
             console.log("AN ERROR OCCURED WHEN FETCHING SAVED SPECIAL ID:", error)
-        }
-    }
-
-    const getActiveProductSpecials = async () => {
-        try{
-            //http://localhost:4200/products/getproductspecials
-            const url = `products/getproductspecials`
-            const response = await axios.get<GetSpecialsResponse>(`${apiEndPoint}/${url}`)
-            setActiveProductSpecials(response?.data)
-            console.log("RETRIEVED ALL PRODUCT SPECIALS:", response)
-
-        } catch (error) {
-            console.log("AN ERROR OCCURED WHEN FETCHING PRODUCT SPECIALS:", error)
         }
     }
 
@@ -315,54 +326,61 @@ export const ProductsManModule = () => {
         });
     };
 
+    const toggleEditProductPage = () => {
+        setEditProductsPopup(!editProductsPopup);
+    };
+
+    const toggleEditGroupProductPage = () => {
+        setEditGroupProductsPopup(!editGroupProductsPopup);
+    };
+
+    //  GET REQUESTS FOR ACTIVE x UPCOMING SPECIALS
+    const getAllProductSpecials = async () => {
+        try{
+            //http://localhost:4200/products/getproductspecials
+            const url = `products/getproductspecials`
+            const response = await axios.get<GetSpecialsResponse>(`${apiEndPoint}/${url}`)
+            setAllProductSpecials(response?.data)
+            console.log("RETRIEVED ALL PRODUCT SPECIALS:", response)
+
+        } catch (error) {
+            console.log("AN ERROR OCCURED WHEN FETCHING PRODUCT SPECIALS:", error)
+        }
+    }
+
+    //getallgroupspecials
+
+    const getAllGroupSpecials = async () => {
+        try{
+            //getactivegroupspecials
+            const url = `products/getallgroupspecials`
+            const response = await axios.get<GetGroupSpecialsResponse>(`${apiEndPoint}/${url}`)
+            setAllGroupSpecials(response?.data)
+            console.log("RETRIEVED ALL ACTIVE GROUP SPECIALS:", response)
+
+        } catch (error) {
+            console.log("AN ERROR OCCURED WHEN FETCHING PRODUCT SPECIALS:", error)
+        }
+    }
+
     useEffect(() => {
-        getActiveProductSpecials();
-        //getProductDiscounts();
+        getAllProductSpecials();
+        getAllGroupSpecials();
     }, []);
 
 
     return (
-        <div className='w-full h-screen overflow-y-auto mb-4 pr-4 space-y-6'>
-            <div className='bg-white w-full rounded-lg p-4 shadow-dark'>
-                        <h3>Specials</h3>
-                        <p className='text-gray-500'>Reward customers with specials for completing actions.</p>
-                        <div className='w-full flex justify-start gap-4 pt-8 pb-2 border-b'>
-                                <table className='w-full table-fixed p-4'>
-                                    <thead>
-                                        <tr className='text-left h-10 p-2 text-md sm:text-sm font-medium'>
-                                            <th className='p-2 w-[40px]'>ID</th>
-                                            <th className='p-2 w-[120px]'>Product</th>
-                                            <th className='p-2 w-[115px]'>Special</th>
-                                            <th className='p-2 w-[105px]'>Special Value</th>
-                                            <th className='p-2 w-[155px]'>Start Date</th>
-                                            <th className='p-2 w-[170px]'>Expiry Date</th>
-                                            <th className='p-2 w-[60px]'>Action</th>
-                                        </tr>
-                                    </thead>
-                                        <tbody className="mb-2">
-                                        {activeProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) =>
-                                            <tr className=''>
-                                                <td className='p-2'>{special_id}</td>
-                                                <td className='p-2'>{product_description}</td>
-                                                <td className='p-2'>{special}</td>
-                                                <td className='p-2'>{special_type}</td>
-                                                <td className='p-2'>
-                                                    {start_date ? `${new Date(start_date).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'}
-                                                </td>
-                                                <td className='p-2'>
-                                                    {expiry_date ? `${new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'}
-                                                </td>
-                                                <td className='p-2'>
-                                                    <button className="bg-black text-white p-2 w-14 h-18 rounded-lg hover:bg-red flex justify-center items-center">
-                                                        <Pencil size={18} color="white"/>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            )}
-                                        </tbody>
-                                </table>
-                        </div>
-                        <div className='flex gap-2 pt-4'>
+        <div className='w-full h-screen overflow-y-auto mb-4 pr-4 space-y-6 pb-6'>
+            <div>
+                <div>
+                    <IconDescriptions />
+                </div>
+            <div className="flex justify-between">
+                <div className="flex flex-col pl-2 pt-6">
+                    <h4 className="text-2xl font-semibold text-red">Product Specials</h4>
+                    <p className="text-gray-500">Reward customers with specials for completing actions.</p>
+                </div>
+                <div className='flex gap-2 pt-8 pr-2'>
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button className="bg-black text-white p-2 w-40 rounded-lg hover:bg-red">Add Special</Button>
@@ -483,54 +501,62 @@ export const ProductsManModule = () => {
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
+                </div>
+            </div>
+            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                {headers?.map((header, index) => (
+                <p
+                    key={index}
+                    className={`text-xs uppercase font-medium flex-1 text-center ${
+                    index === 1 ? 'hidden lg:block' : ''
+                    }`}
+                >
+                    {header}
+                </p>
+                ))}
+            </div>
+            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+            {allProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => {
+                    const currentDate = new Date();
+                    const specialStartDate = new Date(start_date);
+
+                    return (
+                        <div key={special_id} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm flex-1 text-center text-red">{special_id}</p>
+                                <p className="text-sm flex-1 text-center">{product_description}</p>
+                                <p className="text-sm flex-1 text-center">{special}</p>
+                                {/* <p className="text-sm flex-1 text-center">{special_type}</p> */}
+                                <p className="text-sm flex-1 text-center">R{special_price}</p>
+                                <p className="text-sm flex-1 text-center">
+                                    {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                                </p>
+                                <p className="text-sm flex-1 text-center">
+                                    {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                                </p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2"> 
+                                    {isActive === 1 && <Activity color="green" size={20} />}
+                                    {isActive === 0 && <X color="red" size={20} />}
+                                    {specialStartDate > currentDate && <TrendingUp color="orange" size={20} />}
+                                </p>
+                                {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
+                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
+                                    <Edit />
+                                </button>
+                            </div>
                         </div>
+                    );
+                })}
+            </div>
+            </div>
+            {/* GROUP SPECIALS */}
+            <div className="pb-16">
+                <div className="flex justify-between">
+                    <div className="flex flex-col pl-2 pt-6">
+                        <h4 className="text-2xl font-semibold text-red">Group Specials</h4>
+                        <p className="text-gray-500">Reward customers with specials for completing actions.</p>
                     </div>
-                    <div className='bg-white w-full rounded-lg p-4 pt-4 shadow-dark'>
-                        <h3>Group Specials</h3>
-                        <p className='text-gray-500'>Reward customers with specials for completing actions.</p>
-                        <div className='w-full flex justify-start gap-4 pt-8 pb-2 border-b'>
-                            <table className='w-full table-fixed p-4'>
-                                    <thead>
-                                        <tr className='text-left h-10 p-2 text-md sm:text-sm font-medium'>
-                                            <th className='p-2 w-[50px]'>Group ID</th>
-                                            <th className='p-2 w-[110px]'>Product</th>
-                                            <th className='p-2 w-[100px]'>Special</th>
-                                            <th className='p-2 w-[100px]'>Special Type</th>
-                                            <th className='p-2 w-[80px]'>Special Price</th>
-                                            <th className='p-2 w-[180px]'>Start Date</th>
-                                            <th className='p-2 w-[180px]'>Expiry Date</th>
-                                            <th className='p-2 w-[70px]'>Action</th>
-                                        </tr>
-                                    </thead>
-                                        <tbody className="mb-2">
-                                            <tr className=''>
-                                                <td className='p-2'>18</td>
-                                                <td className='p-2'>SWITCH 400ML</td>
-                                                <td className='p-2'>Buy 2 get 1 free</td>
-                                                <td className='p-2'>
-                                                    Combined Special
-                                                </td>
-                                                <td className='p-2'>
-                                                    80.00
-                                                </td>
-                                                <td className='p-2'>
-                                                    {/* {product.Special_ExpiryDate ? `${new Date(product.Special_ExpiryDate).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'} */}
-                                                    Thu Oct 31 2024 00:00:00
-                                                </td>
-                                                <td className='p-2'>
-                                                    {/* {product.Special_ExpiryDate ? `${new Date(product.Special_ExpiryDate).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'} */}
-                                                    Thu Oct 31 2024 00:00:00
-                                                </td>
-                                                <td className='p-2'>
-                                                    <button className="bg-black text-white p-2 w-14 h-18 rounded-lg hover:bg-red flex justify-center items-center">
-                                                        <Pencil size={18} color="white" />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                </table>
-                        </div>
-                        <div className='flex gap-2 pt-4'>
+                <div className='flex gap-2 pt-8 pr-2'>
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button className="bg-black text-white p-2 w-40 rounded-lg hover:bg-red">Add Group Special</Button>
@@ -650,8 +676,55 @@ export const ProductsManModule = () => {
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
+                </div>
+                </div>
+                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                    {groupHeaders?.map((header, index) => (
+                    <p
+                        key={index}
+                        className={`text-xs uppercase font-medium flex-1 text-center ${
+                        index === 1 ? 'hidden lg:block' : ''
+                        }`}
+                    >
+                        {header}
+                    </p>
+                    ))}
+                </div>
+                <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+                {allGroupSpecials?.map(({ special_id, special_group_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => {
+                    const currentDate = new Date();
+                    const specialStartDate = new Date(start_date);
+
+                    return (
+                        <div key={special_id} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm flex-1 text-center text-red">{special_id}</p>
+                                <p className="text-sm flex-1 text-center text-red">{special_group_id}</p>
+                                <p className="text-sm flex-1 text-center">{product_description}</p>
+                                <p className="text-sm flex-1 text-center">{special}</p>
+                                {/* <p className="text-sm flex-1 text-center">{special_type}</p> */}
+                                <p className="text-sm flex-1 text-center">R{special_price}</p>
+                                <p className="text-sm flex-1 text-center">
+                                    {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                                </p>
+                                <p className="text-sm flex-1 text-center">
+                                    {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                                </p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2"> 
+                                    {isActive === 1 && <Activity color="green" size={20} />}
+                                    {isActive === 0 && <X color="red" size={20} />}
+                                    {specialStartDate > currentDate && <TrendingUp color="orange" size={20} />}
+                                </p>
+                                {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
+                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
+                                    <Edit />
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    );
+                })}
+                </div>
+            </div>
         </div>
     );
 }
