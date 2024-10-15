@@ -1,23 +1,99 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Smartphone, Mail, MessageSquare, Globe, QrCode, ScrollText, Edit, Tag, AlignCenterVertical } from "lucide-react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { RewardsDialog } from "@/components/component/rewards"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Smartphone, Mail, MessageSquare, Globe, QrCode, ScrollText, Edit, Tag, AlignCenterVertical, Percent, Coins } from "lucide-react"
+import { Plus, Trash2, Share2, Calendar, Gift, Users, Star, Zap, Trophy, ShoppingBag, Heart, Target, Smile, Soup } from 'lucide-react'
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+// import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { ImprovedRewardsManagerComponent } from "@/components/improved-rewards-manager"
+
+// Define the Reward type
+type Reward = {
+    id: number
+    task: string
+    reward: string
+    type: 'percentage' | 'fixed'
+    icon: JSX.Element
+  }
+  
+  // Define the initial rewards
+  const initialRewards: Reward[] = [
+    // { id: 1, task: 'Share product on social media', reward: '10% off next purchase', type: 'percentage', icon: <Share2 className="h-6 w-6" /> },
+    { id: 1, task: 'Attend in-store event', reward: '$5 store credit', type: 'fixed', icon: <Calendar className="h-6 w-6" /> },
+    { id: 2, task: 'Refer a friend', reward: 'Free gift with next purchase', type: 'fixed', icon: <Gift className="h-6 w-6" /> },
+    // { id: 4, task: 'Join loyalty program', reward: '15% off first purchase', type: 'percentage', icon: <Users className="h-6 w-6" /> },
+    { id: 3, task: 'Complete a Product Review', reward: '5% off reviewed product', type: 'percentage', icon: <Soup className="h-6 w-6" /> },
+  ]
 
 export const RewardsModule = () => {
     const [showRewardsDialog, setShowRewardsDialog] = useState(false);
 
+    //vercel
+    const [rewards, setRewards] = useState<Reward[]>(initialRewards)
+    const [newReward, setNewReward] = useState<Omit<Reward, 'id' | 'icon'>>({ task: '', reward: '', type: 'percentage' })
+  
+    const handleAddReward = () => {
+      if (newReward.task && newReward.reward) {
+        setRewards([...rewards, { ...newReward, id: rewards.length + 1, icon: <Heart className="h-6 w-6" /> }])
+        setNewReward({ task: '', reward: '', type: 'percentage' })
+      }
+    }
+  
+    const handleDeleteReward = (id: number) => {
+      setRewards(rewards.filter(reward => reward.id !== id))
+    }
+
     return (
         <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-52'>
-            <div className="flex justify-center items-center pt-6">
-                <AlignCenterVertical size={60} color="gray"/>
-            </div>
+            {/* <ImprovedRewardsManagerComponent /> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {rewards.map(reward => (
+              <Card key={reward.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                <CardHeader className="bg-gray-100 p-4">
+                  <CardTitle className="flex items-center gap-3 text-lg font-semibold text-gray-800">
+                    <div className="p-2 bg-primary rounded-full text-white">
+                      {reward.icon}
+                    </div>
+                    {reward.task}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4">
+                <p className="text-gray-600 mb-2">Task: {reward.reward}</p>
+                    {reward.type === 'percentage' ? (
+                    <Percent className="mr-2" />
+                    ) : (
+                    <Coins className="mr-2" />
+                    )}
+                  <Badge variant="secondary" className="mt-2 font-medium">
+                    {reward.type === 'percentage' ? 'Percentage' : 'Fixed Amount'}
+                  </Badge>
+                  {/* <p className="text-gray-600 mb-2">Task: {reward.reward}</p>
+                    <Badge variant="secondary" className="mt-2 font-medium flex items-center">
+                        {reward.type === 'percentage' ? (
+                        <Percent className="mr-2" />
+                        ) : (
+                        <Coins className="mr-2" />
+                        )}
+                        {reward.type === 'percentage' ? 'Percentage' : 'Fixed Amount'}
+                    </Badge> */}
+                </CardContent>
+                <CardFooter className="flex justify-end space-x-2 p-4 bg-gray-50">
+                  <Button size="sm" variant="outline" className="hover:bg-gray-200 transition-colors">
+                    <Edit className="h-4 w-4 mr-1" />
+                    Edit
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => handleDeleteReward(reward.id)} className="hover:bg-red-600 transition-colors">
+                    <Trash2 className="h-4 w-4 mr-1" />
+                    Delete
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
             <Card>
                 <CardContent className="pt-6">
                 <h2 className="text-2xl font-semibold mb-4">Alternative Ways to Redeem Discounts</h2>
