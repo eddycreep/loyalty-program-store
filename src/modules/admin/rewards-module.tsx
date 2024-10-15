@@ -1,15 +1,13 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Smartphone, Mail, MessageSquare, Globe, QrCode, ScrollText, Edit, Tag, AlignCenterVertical, Percent, Coins } from "lucide-react"
-import { Plus, Trash2, Share2, Calendar, Gift, Users, Star, Zap, Trophy, ShoppingBag, Heart, Target, Smile, Soup } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Smartphone, Mail, MessageSquare, Globe, QrCode, Edit, Tag } from "lucide-react"
+import { Calendar, Gift, Heart, Soup } from 'lucide-react'
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label";
-// import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ImprovedRewardsManagerComponent } from "@/components/improved-rewards-manager"
+import { RewardCards } from "@/components/component/rewards-cards"
 
 // Define the Reward type
 type Reward = {
@@ -18,39 +16,66 @@ type Reward = {
     reward: string
     type: 'percentage' | 'fixed'
     icon: JSX.Element
-  }
-  
-  // Define the initial rewards
-  const initialRewards: Reward[] = [
-    // { id: 1, task: 'Share product on social media', reward: '10% off next purchase', type: 'percentage', icon: <Share2 className="h-6 w-6" /> },
-    { id: 1, task: 'Attend in-store event', reward: '$5 store credit', type: 'fixed', icon: <Calendar className="h-6 w-6" /> },
-    { id: 2, task: 'Refer a friend', reward: 'Free gift with next purchase', type: 'fixed', icon: <Gift className="h-6 w-6" /> },
-    // { id: 4, task: 'Join loyalty program', reward: '15% off first purchase', type: 'percentage', icon: <Users className="h-6 w-6" /> },
-    { id: 3, task: 'Complete a Product Review', reward: '5% off reviewed product', type: 'percentage', icon: <Soup className="h-6 w-6" /> },
-  ]
+}
+
+// Define the initial rewards
+const initialRewards: Reward[] = [
+        // { id: 1, task: 'Share product on social media', reward: '10% off next purchase', type: 'percentage', icon: <Share2 className="h-6 w-6" /> },
+        { id: 1, task: 'Attend in-store event', reward: '$5 store credit', type: 'fixed', icon: <Calendar className="h-6 w-6" /> },
+        { id: 2, task: 'Refer a friend', reward: 'Free gift with next purchase', type: 'fixed', icon: <Gift className="h-6 w-6" /> },
+        // { id: 4, task: 'Join loyalty program', reward: '15% off first purchase', type: 'percentage', icon: <Users className="h-6 w-6" /> },
+        { id: 3, task: 'Complete a Product Review', reward: '5% off reviewed product', type: 'percentage', icon: <Soup className="h-6 w-6" /> },
+]
 
 export const RewardsModule = () => {
     const [showRewardsDialog, setShowRewardsDialog] = useState(false);
+    const headers = ['Title', 'Task', 'Reward', 'Type', 'Action']
 
     //vercel
     const [rewards, setRewards] = useState<Reward[]>(initialRewards)
     const [newReward, setNewReward] = useState<Omit<Reward, 'id' | 'icon'>>({ task: '', reward: '', type: 'percentage' })
-  
+
     const handleAddReward = () => {
-      if (newReward.task && newReward.reward) {
-        setRewards([...rewards, { ...newReward, id: rewards.length + 1, icon: <Heart className="h-6 w-6" /> }])
-        setNewReward({ task: '', reward: '', type: 'percentage' })
-      }
+        if (newReward.task && newReward.reward) {
+            setRewards([...rewards, { ...newReward, id: rewards.length + 1, icon: <Heart className="h-6 w-6" /> }])
+            setNewReward({ task: '', reward: '', type: 'percentage' })
+        }
     }
-  
+
     const handleDeleteReward = (id: number) => {
-      setRewards(rewards.filter(reward => reward.id !== id))
+        setRewards(rewards.filter(reward => reward.id !== id))
     }
 
     return (
-        <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-52'>
-            {/* <ImprovedRewardsManagerComponent /> */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div>
+                <RewardCards />
+            </div>
+            <div>
+                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                    {headers?.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
+                <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+                {/* {allProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => { */}
+                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                                <div className="flex items-center justify-between">
+                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
+                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
+                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
+                                    <p className="text-sm flex-1 text-center">Percentage</p>
+                                    <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
+                                        <Edit />
+                                    </p>
+                                </div>
+                            </div>
+                    {/* })} */}
+                </div>
+            </div>
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {rewards.map(reward => (
               <Card key={reward.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                 <CardHeader className="bg-gray-100 p-4">
@@ -71,15 +96,6 @@ export const RewardsModule = () => {
                   <Badge variant="secondary" className="mt-2 font-medium">
                     {reward.type === 'percentage' ? 'Percentage' : 'Fixed Amount'}
                   </Badge>
-                  {/* <p className="text-gray-600 mb-2">Task: {reward.reward}</p>
-                    <Badge variant="secondary" className="mt-2 font-medium flex items-center">
-                        {reward.type === 'percentage' ? (
-                        <Percent className="mr-2" />
-                        ) : (
-                        <Coins className="mr-2" />
-                        )}
-                        {reward.type === 'percentage' ? 'Percentage' : 'Fixed Amount'}
-                    </Badge> */}
                 </CardContent>
                 <CardFooter className="flex justify-end space-x-2 p-4 bg-gray-50">
                   <Button size="sm" variant="outline" className="hover:bg-gray-200 transition-colors">
@@ -93,8 +109,8 @@ export const RewardsModule = () => {
                 </CardFooter>
               </Card>
             ))}
-          </div>
-            <Card>
+            </div> */}
+            {/* <Card>
                 <CardContent className="pt-6">
                 <h2 className="text-2xl font-semibold mb-4">Alternative Ways to Redeem Discounts</h2>
                 <ul className="space-y-4">
@@ -291,7 +307,7 @@ export const RewardsModule = () => {
                         </div>
                 </ul>
                 </CardContent>
-            </Card>
+            </Card> */}
             <div className="grid gap-4">
                 <Card>
                     <CardHeader>
