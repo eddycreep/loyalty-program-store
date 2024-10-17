@@ -7,7 +7,7 @@ interface Props {
     onClose: () => void;
 }
 
-export const EditProductSpecials = ({ onClose }: Props) => {
+export const EditRewards = ({ onClose }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [product, setProduct] = useState('');
     const [productSpecial, setProductSpecial] = useState('');
@@ -22,7 +22,6 @@ export const EditProductSpecials = ({ onClose }: Props) => {
     const handleSpecialToggle = () => setIsActive(!isActive);
 
     const saveSpecial = () => {
-        // Save logic here
         console.log("Special saved");
         setIsModalOpen(false);
     };
