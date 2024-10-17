@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { EditProductSpecials } from "@/components/component/edit-product-specials";
 import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
 import { ApiError } from "next/dist/server/api-utils";
+import { IconTooltip } from "@/components/component/icon-tooltip";
+import { XIconTooltip } from "@/components/component/x-icon-tooltip";
 
 interface ProductProps {
     idx: number,
@@ -141,24 +143,6 @@ export const ProductsManModule = () => {
     const [allProductSpecials, setAllProductSpecials] = useState<GetSpecialsResponse>([]);
     const [allGroupSpecials, setAllGroupSpecials] = useState<GetGroupSpecialsResponse>([]);
 
-
-    const discountOptions = [
-        {discount: 'Anniversary Discount'},
-        {discount: 'August Season Discount'}, 
-        {discount: 'Back to School Discount'}, 
-        {discount: 'Early Bird Special'}, 
-        {discount: 'Holiday Special'}, 
-        {discount: 'Limited Time Offer'}, 
-        {discount: 'New Years Promotion'}, 
-        {discount: 'Product Discount'}, 
-        {discount: 'Product Review Reward Discount'}, 
-        {discount: 'Referral Reward Discount'}, 
-        {discount: 'Spring Season Discount'}, 
-        {discount: 'Summer Season Discount'}, 
-        {discount: 'Survey Reward Discount'}, 
-        {discount: 'Weekend Deal'}, 
-        {discount: 'Winter Season Discount'}
-    ];
 
     const headers = ['ID',	'Product',	'Special',	'Special Value',	'Start Date',	'Expiry Date',	'Status', 'Action']
     const groupHeaders = ['Special ID',	'Group ID', 'Product',	'Special',	'Special Price',	'Start Date',	'Expiry Date',	'Status', 'Action']
@@ -535,28 +519,24 @@ export const ProductsManModule = () => {
                     ))}
                 </div>
                 <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                {allProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => {
-                        const currentDate = new Date();
-                        const specialStartDate = new Date(start_date);
-
-                        return (
-                            <div key={special_id} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">{special_id}</p>
-                                    <p className="text-sm flex-1 text-center">{product_description}</p>
-                                    <p className="text-sm flex-1 text-center">{special}</p>
-                                    {/* <p className="text-sm flex-1 text-center">{special_type}</p> */}
-                                    <p className="text-sm flex-1 text-center">R{special_price}</p>
+                                    <p className="text-sm flex-1 text-center text-red">19</p>
+                                    <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
+                                    <p className="text-sm flex-1 text-center">GET 10% OFF PRODDCT</p>
+                                    <p className="text-sm flex-1 text-center">56.99</p>
                                     <p className="text-sm flex-1 text-center">
-                                        {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                                        {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                        2023-11-15
                                     </p>
                                     <p className="text-sm flex-1 text-center">
-                                        {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                                        {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                        2023-11-15
                                     </p>
                                     <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2"> 
-                                        {isActive === 1 && <Activity color="green" size={20} />}
-                                        {isActive === 0 && <X color="red" size={20} />}
-                                        {specialStartDate > currentDate && <TrendingUp color="orange" size={20} />}
+                                        {/* <Activity color="green" size={20} /> */}
+                                        {/* <IconTooltip /> */}
+                                        <XIconTooltip />
                                     </p>
                                     {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
                                     <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
@@ -564,8 +544,6 @@ export const ProductsManModule = () => {
                                     </button>
                                 </div>
                             </div>
-                        );
-                    })}
                 </div>
             </div>
             {/* GROUP SPECIALS */}
