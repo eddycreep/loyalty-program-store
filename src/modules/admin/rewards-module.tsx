@@ -1,9 +1,10 @@
 'use client'
 
+import axios from 'axios';
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Smartphone, Mail, MessageSquare, Globe, QrCode, Edit, Tag } from "lucide-react"
-import { Calendar, Gift, Heart, Soup } from 'lucide-react'
+import { apiEndPoint, colors } from '@/utils/colors';
+import toast from 'react-hot-toast';
+import { Check, Edit, Calendar, Gift, X, Soup, Store} from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label";
@@ -28,27 +29,73 @@ const initialRewards: Reward[] = [
         { id: 3, task: 'Complete a Product Review', reward: '5% off reviewed product', type: 'percentage', icon: <Soup className="h-6 w-6" /> },
 ]
 
+interface RewardProps {
+    uid: number,
+    reward_title: string,
+    description: string,
+    expiry_date: string,
+    reward: string,
+    reward_type: string,
+    rewardPrice: number,
+    isActive: number
+}
+type RewardsResponse = RewardProps[]
+
 export const RewardsModule = () => {
     const [editProductsPopup, setEditProductsPopup] = useState(false);
-    const headers = ['Title', 'Task', 'Reward', 'Type', 'Action']
+    const headers = ['Title', 'Task', 'Reward', 'Type', 'Amount', 'Action']
 
-    //vercel
-    const [rewards, setRewards] = useState<Reward[]>(initialRewards)
-    const [newReward, setNewReward] = useState<Omit<Reward, 'id' | 'icon'>>({ task: '', reward: '', type: 'percentage' })
 
-    const handleAddReward = () => {
-        if (newReward.task && newReward.reward) {
-            setRewards([...rewards, { ...newReward, id: rewards.length + 1, icon: <Heart className="h-6 w-6" /> }])
-            setNewReward({ task: '', reward: '', type: 'percentage' })
+    const [title, setRewardTitle] = useState('')
+    const [description, setRewardDescription] = useState('')
+    const [expiryDate, setRewardExpiryDate] = useState('')
+    const [reward, setReward] = useState('')
+    const [rewardType, setRewardType] = useState('')
+    const [rewardPrice, setRewardPrice] = useState(0)
+    const [isActive, setRewardIsActive] = useState(false)
+    
+    const addReward = async () => {
+        try {
+            const payload = {
+                rewardTitle: title,
+                description: description,
+                expiryDate: expiryDate,
+                reward: reward,
+                rewardType: rewardType,
+                rewardPrice: rewardPrice,
+                isActive: isActive
+            }
+
+            const url = `products/setreward`
+            const response = await axios.post<RewardsResponse>(`${apiEndPoint}/${url}`, payload)
+            console.log("The reward has been added successfully", response.data)
+            rewardSuccessNotification()
+        } catch (error) {
+            console.error('Failed to add reward:', error);
+            rewardErrorNotification();
         }
     }
 
-    const handleDeleteReward = (id: number) => {
-        setRewards(rewards.filter(reward => reward.id !== id))
-    }
+    const handleSpecialToggle = () => {
+        setRewardIsActive(!isActive); // Toggle the state
+    };
 
     const toggleEditProductPage = () => {
         setEditProductsPopup(!editProductsPopup);
+    };
+
+    const rewardSuccessNotification = () => {
+        toast.success('The reward has been saved to the database', {
+            icon: <Check color={colors.green} size={24} />,
+            duration: 3000,
+        });
+    };
+
+    const rewardErrorNotification = () => {
+        toast.error('There was an error was setting the new reward', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
     };
 
     return (
@@ -69,96 +116,51 @@ export const RewardsModule = () => {
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-[600px]">
                                     <DialogHeader>
-                                    <DialogTitle>Add New Group Special</DialogTitle>
+                                    <DialogTitle>Add New Rewad</DialogTitle>
                                     <DialogDescription>
-                                        Select the product and set the special with the required fields. Click save once completed.
+                                        Add alternative ways customers can redeem rewards
                                     </DialogDescription>
                                     </DialogHeader>
                                     <div className="grid gap-4 py-4">
-                                        <div className="flex gap-4">
+                                        <div className="flex flex-col gap-2">
                                             <div className="w-full">
                                                 <Label htmlFor="name" className="text-left pt-4">
-                                                    Special ID:
+                                                    Title:
                                                 </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    // onChange={(e) => setSpecialGroupId(Number(e.target.value))} // Store the selected product idx
-                                                >
-                                                        <option value="" className="dash-text">Select Special</option>
-                                                            <option value="1">Buy 3 Get 20% Off</option>
-                                                            <option value="2">Buy 1 Get 5% Off</option>
-                                                            <option value="3">Buy 4 Get 15% Off</option>
-                                                            <option value="4">Buy 2 Get R20 Off</option>
-                                                            <option value="5">Buy 3 Get R50 Off</option>
-                                                </select>
+                                                <input onChange={(e) => setRewardTitle(e.target.value)} type="input" placeholder="Product Reviews" className='w-full p-2 rounded-lg border border-gray-300'/>
                                             </div>
                                             <div className="w-full">
                                                 <Label htmlFor="name" className="text-left pt-4">
-                                                    Product:
+                                                    Description:
                                                 </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    // onChange={(e) => setGroupProduct(e.target.value)}
-                                                >
-                                                        {/* {data?.map(({ idx, Product_Description }) => */}
-                                                            <option  value="TEST">TEST</option>
-                                                        {/* )} */}
-                                                </select>
+                                                <input onChange={(e) => setRewardDescription(e.target.value)} type="input" placeholder="complete a review on store products" className='w-full p-2 rounded-lg border border-gray-300'/>
                                             </div>
                                         </div>
-                                        <div className="flex gap-4">
+                                        <div className="flex flex-col gap-2">
                                             <div className="w-full">
                                                 <Label htmlFor="name" className="text-left pt-4">
-                                                    Special:
+                                                    Reward:
                                                 </Label>
-                                                <input type="input" placeholder="buy 2 and get 20% off next purchase" className='w-full p-2 rounded-lg border border-gray-300'/>
+                                                <input onChange={(e) => setReward(e.target.value)} type="input" placeholder="10% Off Cart" className='w-full p-2 rounded-lg border border-gray-300'/>
                                             </div>
                                             <div className="w-full">
                                                 <Label htmlFor="name" className="text-left pt-4">
-                                                    Special Price:
+                                                    Price:
                                                 </Label>
-                                                <input type="input" placeholder="10.99"  className='w-full p-2 rounded-lg border border-gray-300'/>
+                                                <input onChange={(e) => setRewardPrice(Number(e.target.value))} type="input" placeholder="10" className='w-full p-2 rounded-lg border border-gray-300'/>
                                             </div>
-                                        </div>
-                                        <div className="flex gap-4">
                                             <div className="w-full">
                                                 <Label htmlFor="name" className="text-left pt-4">
-                                                    Special Type:
+                                                    Type:
                                                 </Label>
                                                 <select 
                                                     className="w-full p-2 rounded-lg border border-gray-300"
-                                                    // onChange={(e) => setSpecialGroupType(e.target.value)}
+                                                    onChange={(e) => setRewardType(e.target.value)}
                                                 >
                                                         <option>Select Type</option>
-                                                            <option value="Combined Special">Combined Special</option>
-                                                </select>
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Special Value:
-                                                </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    // onChange={(e) => setSpecialType(e.target.value)}
-                                                >
-                                                        <option>Select Value</option>
                                                             <option value="Percentage">Percentage</option>
                                                             <option value="Amount">Amount</option>
                                                 </select>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-4">
-                                            <div className="w-full">
-                                                <Label htmlFor="username" className="text-left pt-4">
-                                                    Start Date:
-                                                </Label>
-                                                <input type="date"className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="username" className="text-left pt-4">
-                                                    Expiry Date:
-                                                </Label>
-                                                <input type="date" className='w-full p-2 rounded-lg border border-gray-300'/>
                                             </div>
                                         </div>
                                         <div className="flex flex-col w-full">
@@ -169,14 +171,14 @@ export const RewardsModule = () => {
                                                     <input className="yep" 
                                                     id="check-apple" 
                                                     type="checkbox" 
-                                                    // onClick={ handleGroupSpecialToggle }
+                                                    onClick={ handleSpecialToggle }
                                                 />
                                                     <label htmlFor="check-apple"></label>
                                                 </div>
                                             </div>
                                     </div>
                                     <DialogFooter>
-                                        <button  className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                                        <button  onClick={ addReward } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
                                             Save
                                         </button>
                                     </DialogFooter>
@@ -196,9 +198,10 @@ export const RewardsModule = () => {
                             <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
+                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by completing product reviews</p>
                                     <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
                                     <p className="text-sm flex-1 text-center">Percentage</p>
+                                    <p className="text-sm flex-1 text-center text-green">10</p>
                                     {editProductsPopup && <EditRewards onClose={ toggleEditProductPage } />}
                                     <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
                                         <Edit />
@@ -207,10 +210,11 @@ export const RewardsModule = () => {
                             </div>
                             <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
-                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
-                                    <p className="text-sm flex-1 text-center">Percentage</p>
+                                    <p className="text-sm flex-1 text-center text-red">Survey Completion</p>
+                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by completing survys</p>
+                                    <p className="text-sm flex-1 text-center">R50 discount on Cart</p>
+                                    <p className="text-sm flex-1 text-center">Amount</p>
+                                    <p className="text-sm flex-1 text-center text-green">50</p>
                                     <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
                                         <Edit />
                                     </p>
@@ -218,10 +222,11 @@ export const RewardsModule = () => {
                             </div>
                             <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
-                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
+                                    <p className="text-sm flex-1 text-center text-red">Client Referral</p>
+                                    <p className="text-sm flex-1 text-center">Customers can earn rewards referring new customers to the loyalty program</p>
+                                    <p className="text-sm flex-1 text-center">20% Discount on Cart</p>
                                     <p className="text-sm flex-1 text-center">Percentage</p>
+                                    <p className="text-sm flex-1 text-center text-green">20</p>
                                     <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
                                         <Edit />
                                     </p>
@@ -229,54 +234,11 @@ export const RewardsModule = () => {
                             </div>
                             <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
-                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
+                                    <p className="text-sm flex-1 text-center text-red">Store Event</p>
+                                    <p className="text-sm flex-1 text-center">Customers can earn rewards battending events hosted by the company</p>
+                                    <p className="text-sm flex-1 text-center">20% Discount any product</p>
                                     <p className="text-sm flex-1 text-center">Percentage</p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
-                                        <Edit />
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
-                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
-                                    <p className="text-sm flex-1 text-center">Percentage</p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
-                                        <Edit />
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
-                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
-                                    <p className="text-sm flex-1 text-center">Percentage</p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
-                                        <Edit />
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
-                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
-                                    <p className="text-sm flex-1 text-center">Percentage</p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
-                                        <Edit />
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by submitting product reviews</p>
-                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
-                                    <p className="text-sm flex-1 text-center">Percentage</p>
+                                    <p className="text-sm flex-1 text-center text-green">20</p>
                                     <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
                                         <Edit />
                                     </p>
