@@ -85,7 +85,7 @@ export const ReviewsModule = () => {
   return (
     <div className="min-h-screen overflow-y-auto">
       <div className="container mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-4">Customer Product Reviews</h2>
+        <h2 className="text-2xl text-center mb-4 font-bold text-red">Customer Product Reviews</h2>
         <ReviewCards />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-14">
           {reviews.map((review) => (

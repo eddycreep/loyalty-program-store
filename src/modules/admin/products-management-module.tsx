@@ -521,7 +521,7 @@ export const ProductsManModule = () => {
                 <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
                             <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">19</p>
+                                    <p className="text-sm flex-1 text-center text-red">1</p>
                                     <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
                                     <p className="text-sm flex-1 text-center">GET 10% OFF PRODDCT</p>
                                     <p className="text-sm flex-1 text-center">56.99</p>
@@ -533,10 +533,33 @@ export const ProductsManModule = () => {
                                         {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
                                         2023-11-15
                                     </p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2"> 
-                                        {/* <Activity color="green" size={20} /> */}
-                                        {/* <IconTooltip /> */}
-                                        <XIconTooltip />
+                                    <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                                        {/* <XIconTooltip /> */}
+                                        Active
+                                    </p>
+                                    {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
+                                    <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
+                                        <Edit />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                                <div className="flex items-center justify-between">
+                                    <p className="text-sm flex-1 text-center text-red">2</p>
+                                    <p className="text-sm flex-1 text-center">MIXED FRUIT PACK</p>
+                                    <p className="text-sm flex-1 text-center">GET 10% OFF PRODDCT</p>
+                                    <p className="text-sm flex-1 text-center">20.99</p>
+                                    <p className="text-sm flex-1 text-center">
+                                        {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                        2023-11-15
+                                    </p>
+                                    <p className="text-sm flex-1 text-center">
+                                        {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                        2023-11-15
+                                    </p>
+                                    <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                                        {/* <XIconTooltip /> */}
+                                        Active
                                     </p>
                                     {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
                                     <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
@@ -688,28 +711,28 @@ export const ProductsManModule = () => {
                     ))}
                 </div>
                 <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                {allGroupSpecials?.map(({ special_id, special_group_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => {
+                {/* {allGroupSpecials?.map(({ special_id, special_group_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => {
                     const currentDate = new Date();
-                    const specialStartDate = new Date(start_date);
+                    const specialStartDate = new Date(start_date); */}
 
-                    return (
-                        <div key={special_id} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                    {/* return ( */}
+                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                             <div className="flex items-center justify-between">
-                                <p className="text-sm flex-1 text-center text-red">{special_id}</p>
-                                <p className="text-sm flex-1 text-center">{special_group_id}</p>
-                                <p className="text-sm flex-1 text-center">{product_description}</p>
-                                <p className="text-sm flex-1 text-center">{special}</p>
-                                <p className="text-sm flex-1 text-center">R{special_price}</p>
+                                <p className="text-sm flex-1 text-center text-red">19</p>
+                                <p className="text-sm flex-1 text-center">1</p>
+                                <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
+                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                                <p className="text-sm flex-1 text-center">56.99</p>
                                 <p className="text-sm flex-1 text-center">
-                                    {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                                    {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                    2023-11-15
                                 </p>
                                 <p className="text-sm flex-1 text-center">
-                                    {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                                    {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                    2023-11-15
                                 </p>
-                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2"> 
-                                    {isActive === 1 && <Activity color="green" size={20} />}
-                                    {isActive === 0 && <X color="red" size={20} />}
-                                    {specialStartDate > currentDate && <TrendingUp color="orange" size={20} />}
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                                    Active
                                 </p>
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
                                 <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
@@ -717,8 +740,80 @@ export const ProductsManModule = () => {
                                 </button>
                             </div>
                         </div>
-                    );
-                })}
+                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm flex-1 text-center text-red">19</p>
+                                <p className="text-sm flex-1 text-center">1</p>
+                                <p className="text-sm flex-1 text-center">KINGSLEY 2LTR ASST</p>
+                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                                <p className="text-sm flex-1 text-center">20.99</p>
+                                <p className="text-sm flex-1 text-center">
+                                    {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                    2023-11-15
+                                </p>
+                                <p className="text-sm flex-1 text-center">
+                                    {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                    2023-11-15
+                                </p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                                    Active
+                                </p>
+                                {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
+                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
+                                    <Edit />
+                                </button>
+                            </div>
+                        </div>
+                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm flex-1 text-center text-red">19</p>
+                                <p className="text-sm flex-1 text-center">2</p>
+                                <p className="text-sm flex-1 text-center">DORITOS</p>
+                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                                <p className="text-sm flex-1 text-center">23.99</p>
+                                <p className="text-sm flex-1 text-center">
+                                    {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                    2023-11-15
+                                </p>
+                                <p className="text-sm flex-1 text-center">
+                                    {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                    2023-11-15
+                                </p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                                    Active
+                                </p>
+                                {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
+                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
+                                    <Edit />
+                                </button>
+                            </div>
+                        </div>
+                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm flex-1 text-center text-red">19</p>
+                                <p className="text-sm flex-1 text-center">2</p>
+                                <p className="text-sm flex-1 text-center">LAYS</p>
+                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                                <p className="text-sm flex-1 text-center">23.99</p>
+                                <p className="text-sm flex-1 text-center">
+                                    {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                    2023-11-15
+                                </p>
+                                <p className="text-sm flex-1 text-center">
+                                    {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                    2023-11-15
+                                </p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                                    Active
+                                </p>
+                                {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
+                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
+                                    <Edit />
+                                </button>
+                            </div>
+                        </div>
+                    {/* );
+                })} */}
                 </div>
             </div>
         </div>

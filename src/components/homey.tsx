@@ -46,6 +46,7 @@ export default function HomePage() {
 
   const headers = ['Product', 'Special Type', 'Start Date', 'Expiry Date', 'Redemptions', 'Active']
   const upcomingHeaders = ['Product', 'Special Type', 'Start Date', 'Expiry Date', 'Active']
+  const surveyHeaders = ['Survey ID', 'Survey Name', 'Category', 'Creation Date', 'Status']
 
   const getActiveProductSpecials = async () => {
     try{
@@ -93,7 +94,7 @@ export default function HomePage() {
 
 
   return (
-    <div className="p-2 h-screen overflow-y-auto">
+    <div className="p-2 h-screen overflow-y-auto mb-32">
       <h2 className="text-2xl font-semibold mb-4">Loyalty Program Metrics</h2>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <Card className="bg-green">
@@ -209,7 +210,99 @@ export default function HomePage() {
       </div>
 
         <div className="pt-14">
-          <Card>
+        <div className="bg-gray-200 text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
+                {surveyHeaders?.map((header, index) => (
+                    <p
+                        key={index}
+                        className={`text-xs uppercase font-medium flex-1 text-center ${
+                        index === 1 ? 'hidden lg:block' : ''
+                        }`}
+                    >
+                        {header}
+                    </p>
+                ))}
+            </div>
+            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
+                    <div className="flex items-center justify-between">
+                        <p className="text-sm flex-1 text-center cursor-pointer text-red">1</p>
+                        <p className="text-sm flex-1 text-center">Product Review</p>
+                        <p className="text-sm flex-1 text-center">Products</p>
+                        <p className="text-sm flex-1 text-center">
+                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                            2023-11-15
+                        </p>
+                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                            Active
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
+                    <div className="flex items-center justify-between">
+                        <p className="text-sm flex-1 text-center cursor-pointer text-red">2</p>
+                        <p className="text-sm flex-1 text-center">Cooldrink Satisfaction Survey</p>
+                        <p className="text-sm flex-1 text-center">Products</p>
+                        <p className="text-sm flex-1 text-center">
+                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                            2023-11-15
+                        </p>
+                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                            Active
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
+                    <div className="flex items-center justify-between">
+                        <p className="text-sm flex-1 text-center cursor-pointer text-red">3</p>
+                        <p className="text-sm flex-1 text-center">Snacks Feedback</p>
+                        <p className="text-sm flex-1 text-center">Products</p>
+                        <p className="text-sm flex-1 text-center">
+                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                            2023-11-15
+                        </p>
+                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                            Active
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
+                    <div className="flex items-center justify-between">
+                        <p className="text-sm flex-1 text-center cursor-pointer text-red">4</p>
+                        <p className="text-sm flex-1 text-center">Chips Taste Test</p>
+                        <p className="text-sm flex-1 text-center">Products</p>
+                        <p className="text-sm flex-1 text-center">
+                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                            2023-11-15
+                        </p>
+                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                            Active
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
+                    <div className="flex items-center justify-between">
+                        <p className="text-sm flex-1 text-center cursor-pointer text-red">5</p>
+                        <p className="text-sm flex-1 text-center">Seasonal Specials Feedback</p>
+                        <p className="text-sm flex-1 text-center">Products</p>
+                        <p className="text-sm flex-1 text-center">
+                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                            2023-11-15
+                        </p>
+                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
+                            Active
+                        </p>
+                    </div>
+                </div>
+            </div>
+          {/* <Card>
             <CardHeader>
               <CardTitle className="text-lg">Active Surveys</CardTitle>
             </CardHeader>
@@ -230,7 +323,7 @@ export default function HomePage() {
                 ))}
               </ul>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </div>
   )

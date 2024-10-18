@@ -1,29 +1,76 @@
 "use client"
 
-import React, { useState } from 'react';
-import { X } from 'lucide-react'
+import axios from 'axios';
+import { useState, useEffect } from "react"
+import { apiEndPoint, colors } from '@/utils/colors';
+import toast from 'react-hot-toast';
+import { Check, Edit, Calendar, Gift, X, Soup } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label";
 
 interface Props {
     onClose: () => void;
 }
 
+interface RewardProps {
+    uid: number,
+    reward_title: string,
+    description: string,
+    expiry_date: string,
+    reward: string,
+    reward_type: string,
+    rewardPrice: number,
+    isActive: number
+}
+type RewardsResponse = RewardProps[]
+
 export const EditRewards = ({ onClose }: Props) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [product, setProduct] = useState('');
-    const [productSpecial, setProductSpecial] = useState('');
-    const [specialPrice, setSpecialPrice] = useState(0);
-    const [specialType, setSpecialType] = useState('');
-    const [specialValue, setSpecialValue] = useState('');
-    const [storeID, setStoreID] = useState('');
-    const [specialStartDate, setSpecialStartDate] = useState('');
-    const [specialExpDate, setSpecialExpDate] = useState('');
-    const [isActive, setIsActive] = useState(false);
+    const [title, setRewardTitle] = useState('')
+    const [description, setRewardDescription] = useState('')
+    const [expiryDate, setRewardExpiryDate] = useState('')
+    const [reward, setReward] = useState('')
+    const [rewardType, setRewardType] = useState('')
+    const [rewardPrice, setRewardPrice] = useState(0)
+    const [isActive, setRewardIsActive] = useState(false)
 
-    const handleSpecialToggle = () => setIsActive(!isActive);
+    const handleSpecialToggle = () => setRewardIsActive(!isActive);
 
-    const saveSpecial = () => {
-        console.log("Special saved");
-        setIsModalOpen(false);
+    const updateReward = async () => {
+        try {
+            const payload = {
+                rewardTitle: title,
+                description: description,
+                expiryDate: expiryDate,
+                reward: reward,
+                rewardType: rewardType,
+                rewardPrice: rewardPrice,
+                isActive: isActive
+            }
+
+            const url = `products/setreward`
+            const response = await axios.patch<RewardsResponse>(`${apiEndPoint}/${url}`, payload)
+            console.log("The reward has been added successfully", response.data)
+            rewardSuccessNotification()
+            onClose();
+        } catch (error) {
+            console.error('Failed to add reward:', error);
+            rewardErrorNotification();
+        }
+    }
+
+    const rewardSuccessNotification = () => {
+        toast.success('The reward has been saved to the database', {
+            icon: <Check color={colors.green} size={24} />,
+            duration: 3000,
+        });
+    };
+
+    const rewardErrorNotification = () => {
+        toast.error('There was an error was setting the new reward', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
     };
 
     return (
@@ -33,117 +80,72 @@ export const EditRewards = ({ onClose }: Props) => {
                         <div className="flex justify-end cursor-pointer">
                             <X size={18} color='red' onClick={onClose}/>
                         </div>
-                        <div className="text-xl font-semibold">Set New Product Special</div>
-                        <p className="text-gray-600">Select the product and set the special with the required fields. Click save once completed.</p>
-                        <div className="grid gap-4 py-4">
-                            <div className="flex gap-4">
-                                <div className="w-full">
-                                    <label className="text-left pt-4">Product</label>
-                                    <select
-                                        className="w-full p-2 rounded-lg border border-gray-300"
-                                        onChange={(e) => setProduct(e.target.value)}
-                                    >
-                                        <option value="">Select Product</option>
-                                        {/* Replace with your product data */}
-                                        <option value="Product1">Product1</option>
-                                        <option value="Product2">Product2</option>
-                                    </select>
+                        <div className="text-xl font-semibold">Edit Reward</div>
+                        <p className="text-gray-600">Add alternative ways customers can redeem rewards</p>
+                        <div className="pt-4">
+                                <div className="flex flex-col gap-2">
+                                    <div className="w-full">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Title:
+                                        </Label>
+                                        <input onChange={(e) => setRewardTitle(e.target.value)} type="input" placeholder="Product Reviews" className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                    <div className="w-full">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Description:
+                                        </Label>
+                                        <input onChange={(e) => setRewardDescription(e.target.value)} type="input" placeholder="complete a review on store products" className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
                                 </div>
-                                <div className="w-full">
-                                    <label className="text-left pt-4">Special:</label>
-                                    <input
-                                        type="input"
-                                        placeholder="10"
-                                        onChange={(e) => setProductSpecial(e.target.value)}
-                                        className="w-full p-2 rounded-lg border border-gray-300"
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="w-full">
-                                    <label className="text-left pt-4">Special Price:</label>
-                                    <input
-                                        type="input"
-                                        placeholder="10"
-                                        onChange={(e) => setSpecialPrice(Number(e.target.value))}
-                                        className="w-full p-2 rounded-lg border border-gray-300"
-                                    />
-                                </div>
-                                <div className="w-full">
-                                    <label className="text-left pt-4">Special Type:</label>
-                                    <select
-                                        className="w-full p-2 rounded-lg border border-gray-300"
-                                        onChange={(e) => setSpecialType(e.target.value)}
-                                    >
-                                        <option>Select Type</option>
-                                        <option value="Special">Special</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="w-full">
-                                    <label className="text-left pt-4">Special Value:</label>
-                                    <select
-                                        className="w-full p-2 rounded-lg border border-gray-300"
-                                        onChange={(e) => setSpecialValue(e.target.value)}
-                                    >
-                                        <option>Select Value</option>
-                                        <option value="Percentage">Percentage</option>
-                                        <option value="Amount">Amount</option>
-                                    </select>
-                                </div>
-                                <div className="w-full">
-                                    <label className="text-left pt-4">Store ID:</label>
-                                    <select
-                                        className="w-full p-2 rounded-lg border border-gray-300"
-                                        onChange={(e) => setStoreID(e.target.value)}
-                                    >
-                                        <option>Select Store ID</option>
-                                        <option value="S001">S001</option>
-                                        <option value="S002">S002</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="w-[270px]">
-                                    <label className="text-left pt-4">Start Date:</label>
-                                    <input
-                                        type="date"
-                                        onChange={(e) => setSpecialStartDate(e.target.value)}
-                                        className="w-full p-2 rounded-lg border border-gray-300"
-                                    />
-                                </div>
-                                <div className="w-[270px]">
-                                    <label className="text-left pt-4">Expiry Date:</label>
-                                    <input
-                                        type="date"
-                                        onChange={(e) => setSpecialExpDate(e.target.value)}
-                                        className="w-full p-2 rounded-lg border border-gray-300"
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex flex-col">
-                                <label className="text-left p-1">Active/Inactive:</label>
-                                <div className="checkbox-apple">
-                                    <input
-                                        className="yep"
-                                        id="check-apple"
-                                        type="checkbox"
-                                        checked={isActive}
-                                        onClick={handleSpecialToggle}
-                                    />
-                                    <label htmlFor="check-apple"></label>
-                                </div>
-                            </div>
-                        </div>
+                                <div className="flex flex-col gap-2">
+                                            <div className="w-full">
+                                                <Label htmlFor="name" className="text-left pt-4">
+                                                    Reward:
+                                                </Label>
+                                                <input onChange={(e) => setReward(e.target.value)} type="input" placeholder="10% Off Cart" className='w-full p-2 rounded-lg border border-gray-300'/>
+                                            </div>
+                                            <div className="w-full">
+                                                <Label htmlFor="name" className="text-left pt-4">
+                                                    Price:
+                                                </Label>
+                                                <input onChange={(e) => setRewardPrice(Number(e.target.value))} type="input" placeholder="10" className='w-full p-2 rounded-lg border border-gray-300'/>
+                                            </div>
+                                            <div className="w-full">
+                                                <Label htmlFor="name" className="text-left pt-4">
+                                                    Type:
+                                                </Label>
+                                                <select 
+                                                    className="w-full p-2 rounded-lg border border-gray-300"
+                                                    onChange={(e) => setRewardType(e.target.value)}
+                                                >
+                                                        <option>Select Type</option>
+                                                            <option value="Percentage">Percentage</option>
+                                                            <option value="Amount">Amount</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col w-full">
+                                                <Label htmlFor="isactive" className="text-left pt-4">
+                                                    Active/Inactive:
+                                                </Label>
+                                                <div className="checkbox-apple">
+                                                    <input className="yep" 
+                                                    id="check-apple" 
+                                                    type="checkbox" 
+                                                    onClick={ handleSpecialToggle }
+                                                />
+                                                    <label htmlFor="check-apple"></label>
+                                                </div>
+                                            </div>
                         <button
-                            onClick={saveSpecial}
+                            onClick={ updateReward  }
                             className="bg-black text-white p-2 w-full rounded-lg hover:bg-red"
                         >
                             Save
                         </button>
                     </div>
                 </div>
+            </div>
         </div>
     );
 };
