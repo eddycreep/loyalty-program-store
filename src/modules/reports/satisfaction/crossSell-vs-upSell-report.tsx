@@ -109,6 +109,7 @@ const activeMembers = [
 ];
 
 
+
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
@@ -140,7 +141,7 @@ const months = [
 ];
 
 
-export const ActiveMembersReport = () => {
+export const CrossvsUpsellReport = () => {
     const headers = ['Store ID', 'Store Name', 'Date', 'Total Active Members', 'Percentage of Active Members', 'Loyalty Tier Distribution'];
 
     const [selectedMonth, setSelectedMonth] = useState(''); // Initialize without filtering on mount
@@ -296,8 +297,8 @@ export const ActiveMembersReport = () => {
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
             <div className="">
-                <h4 className="text-xl font-bold">Active Members</h4>
-                <p className="text-sm text-gray-500">Number of active members over time</p>
+                <h4 className="text-xl font-bold">Redemption Rate</h4>
+                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
             </div>
             <div className='flex gap-4'>
             <div className="pt-6">

@@ -9,30 +9,30 @@
 // import SquareCircleLoader from "@/lib/square-circle-loader"
 
 
-// const retentionRateReport = [
+// const revenuePerMemberReport = [
 //     {
 //         store_id: 'SOO1',
 //         store_name: 'PLUS DC Stellenbosch',
 //         date: '2024-10-01',
-//         total_members_at_start: 2000,
-//         members_retained: 1800,
-//         retention_rate: 90,
+//         total_revenue: 30000,
+//         total_active_members: 1500,
+//         revenue_per_member: 20,
 //     },
 //     {
 //         store_id: 'SOO2',
 //         store_name: 'PLUS DC Albertin',
 //         date: '2024-10-01',
-//         total_members_at_start: 1500,
-//         members_retained: 1200,
-//         retention_rate: 80,
+//         total_revenue: 25000,
+//         total_active_members: 1200,
+//         revenue_per_member: 20.83,
 //     },
 //     {
 //         store_id: 'SOO3',
 //         store_name: 'PLUS DC Bellville',
 //         date: '2024-10-01',
-//         total_members_at_start: 2200,
-//         members_retained: 2100,
-//         retention_rate: 95.5,
+//         total_revenue: 40000,
+//         total_active_members: 1800,
+//         revenue_per_member: 22.22,
 //     },
 //     // Add more stores as needed...
 // ];
@@ -56,7 +56,7 @@
 
 
 
-// export const RetentionRateReport = () => {
+// export const RevenueReport = () => {
 //     const headers = ['Store ID', 'Store', 'Month', 'No. New Members'];
 
 //     const [selectedMonth, setSelectedMonth] = useState(''); // Initialize without filtering on mount

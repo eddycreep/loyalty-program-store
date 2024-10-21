@@ -9,103 +9,19 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import SquareCircleLoader from "@/lib/square-circle-loader"
 
 
-const activeMembers = [
-    {
-        store_id: 'SOO1',
-        store_name: 'PLUS DC Stellenbosch',
-        date: '2024-10-01',
-        total_active_members: 1500,
-        percentage_active_members: 75,
-        loyalty_tier: 'Platinum'
-    },
-    {
-        store_id: 'SOO2',
-        store_name: 'PLUS DC Albertin',
-        date: '2024-10-01',
-        total_active_members: 1200,
-        percentage_active_members: 60,
-        loyalty_tier: 'Platinum'
-    },
-    {
-        store_id: 'SOO3',
-        store_name: 'PLUS DC Bellville',
-        date: '2024-10-01',
-        total_active_members: 1800,
-        percentage_active_members: 90,
-        loyalty_tier: 'Diamond'
-    },
-    {
-        store_id: 'SOO4',
-        store_name: 'PLUS DC Nelspruit',
-        date: '2024-10-01',
-        total_active_members: 800,
-        percentage_active_members: 40,
-        loyalty_tier: 'Gold'
-    },
-    {
-        store_id: 'SOO5',
-        store_name: 'PLUS DC Durbanville',
-        date: '2024-10-01',
-        total_active_members: 1300,
-        percentage_active_members: 65,
-        loyalty_tier: 'Platinum'
-    },
-    {
-        store_id: 'SOO6',
-        store_name: 'PLUS DC Bloemfontein',
-        date: '2024-10-01',
-        total_active_members: 900,
-        percentage_active_members: 45,
-        loyalty_tier: 'Gold'
-    },
-    {
-        store_id: 'SOO7',
-        store_name: 'PLUS DC Cape Town',
-        date: '2024-10-01',
-        total_active_members: 2000,
-        percentage_active_members: 100,
-        loyalty_tier: 'Diamond'
-    },
-    {
-        store_id: 'SOO8',
-        store_name: 'PLUS DC Pietermaritzburg',
-        date: '2024-10-01',
-        total_active_members: 1100,
-        percentage_active_members: 55,
-        loyalty_tier: 'Platinum'
-    },
-    {
-        store_id: 'SOO9',
-        store_name: 'PLUS DC East London',
-        date: '2024-10-01',
-        total_active_members: 750,
-        percentage_active_members: 37.5,
-        loyalty_tier: 'Gold'
-    },
-    {
-        store_id: 'SOO10',
-        store_name: 'PLUS DC Pretoria',
-        date: '2024-10-01',
-        total_active_members: 1600,
-        percentage_active_members: 80,
-        loyalty_tier: 'Diamond'
-    },
-    {
-        store_id: 'SOO11',
-        store_name: 'PLUS DC Germiston',
-        date: '2024-10-01',
-        total_active_members: 950,
-        percentage_active_members: 47.5,
-        loyalty_tier: 'Gold'
-    },
-    {
-        store_id: 'SOO12',
-        store_name: 'PLUS DC Polokwane',
-        date: '2024-10-01',
-        total_active_members: 500,
-        percentage_active_members: 25,
-        loyalty_tier: 'Gold'
-    },
+const enrollmentRate = [
+    { month: 'january', store_id: 'SOO11', store: 'PLUS DC Germiston', newMembers: 200 },
+    { month: 'february', store_id: 'SOO11', store: 'PLUS DC Germiston', newMembers: 220 },  // Store ID SOO11 matches store name 'PLUS DC Germiston'
+    { month: 'march', store_id: 'SOO2', store: 'PLUS DC Albertin', newMembers: 240 },
+    { month: 'april', store_id: 'SOO10', store: 'PLUS DC Pretoria', newMembers: 260 },
+    { month: 'may', store_id: 'SOO5', store: 'PLUS DC Durbanville', newMembers: 300 },
+    { month: 'june', store_id: 'SOO2', store: 'PLUS DC Albertin', newMembers: 320 },  // Store ID SOO2 matches store name 'PLUS DC Albertin'
+    { month: 'july', store_id: 'SOO3', store: 'PLUS DC Bellville', newMembers: 340 },
+    { month: 'august', store_id: 'SOO7', store: 'PLUS DC Cape Town', newMembers: 360 },
+    { month: 'september', store_id: 'SOO7', store: 'PLUS DC Cape Town', newMembers: 380 },  // Store ID SOO7 matches store name 'PLUS DC Cape Town'
+    { month: 'october', store_id: 'SOO11', store: 'PLUS DC Germiston', newMembers: 400 },  // Store ID SOO11 matches store name 'PLUS DC Germiston'
+    { month: 'november', store_id: 'SOO12', store: 'PLUS DC Polokwane', newMembers: 420 },
+    { month: 'december', store_id: 'SOO1', store: 'PLUS DC Stellenbosch', newMembers: 440 },
 ];
 
 
@@ -124,43 +40,28 @@ const stores = [
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-const months = [
-    { id: 1, month: 'January' },
-    { id: 2, month: 'February' },
-    { id: 3, month: 'March' },
-    { id: 4, month: 'April' },
-    { id: 5, month: 'May' },
-    { id: 6, month: 'June' },
-    { id: 7, month: 'July' },
-    { id: 8, month: 'August' },
-    { id: 9, month: 'September' },
-    { id: 10, month: 'October' },
-    { id: 11, month: 'November' },
-    { id: 12, month: 'December' }
-];
 
 
-export const ActiveMembersReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Active Members', 'Percentage of Active Members', 'Loyalty Tier Distribution'];
+export const LifetimeValueReport = () => {
+    const headers = ['Store ID', 'Store', 'Month', 'No. New Members'];
 
     const [selectedMonth, setSelectedMonth] = useState(''); // Initialize without filtering on mount
-    const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState(activeMembers); // Start with all data
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [selectedStore, setSelectedStore] = useState('')
+    const [filteredData, setFilteredData] = useState<{ store_id: string, store: string, month: string, newMembers: number }[]>([]); // No data filtered initially
+    const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
+    const [isError, setIsError] = useState(false); // Error state to handle no data
 
-    // Effect to filter data when store or month changes
+    // Effect to filter data only after a month has been selected
+    // Filter data based on selected month and store
     useEffect(() => {
         setIsLoading(true);
 
-        let filtered = activeMembers;
+        let filtered = enrollmentRate;
 
-        // Filter by month if selected
         if (selectedMonth !== '' && selectedMonth !== 'All') {
-            filtered = filtered.filter(item => item.date.startsWith(selectedMonth));
+            filtered = filtered.filter(item => item.month === selectedMonth);
         }
 
-        // Filter by store if selected
         if (selectedStore !== '' && selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
@@ -178,7 +79,7 @@ export const ActiveMembersReport = () => {
         }
 
         setIsLoading(false);
-    }, [selectedMonth, selectedStore]);
+    }, [selectedMonth, selectedStore]); // Runs when either month or store changes
 
     // Display loading screen if data is being fetched
     if (isLoading) {
@@ -198,7 +99,7 @@ export const ActiveMembersReport = () => {
                         <SelectGroup>
                             <SelectLabel>Month</SelectLabel>
                             <SelectItem value="All">All</SelectItem>
-                            {months.map(({ month }) => (
+                            {enrollmentRate.map(({ month }) => (
                                 <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
                             ))}
                         </SelectGroup>
@@ -254,7 +155,7 @@ export const ActiveMembersReport = () => {
                         <SelectGroup>
                             <SelectLabel>Month</SelectLabel>
                             <SelectItem value="All">All</SelectItem>
-                            {months.map(({ month }) => (
+                            {enrollmentRate.map(({ month }) => (
                                 <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
                             ))}
                         </SelectGroup>
@@ -292,12 +193,15 @@ export const ActiveMembersReport = () => {
         );
     }
 
+    // Display filtered data when available
+    
+
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
             <div className="">
-                <h4 className="text-xl font-bold">Active Members</h4>
-                <p className="text-sm text-gray-500">Number of active members over time</p>
+                <h4 className="text-xl font-bold">Redemption Rate</h4>
+                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
             </div>
             <div className='flex gap-4'>
             <div className="pt-6">
@@ -309,7 +213,7 @@ export const ActiveMembersReport = () => {
                         <SelectGroup>
                             <SelectLabel>Month</SelectLabel>
                             <SelectItem value="All">All</SelectItem>
-                            {months.map(({ month }) => (
+                            {enrollmentRate.map(({ month }) => (
                                 <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
                             ))}
                         </SelectGroup>
@@ -348,15 +252,13 @@ export const ActiveMembersReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-            {filteredData.map(({ store_id, store_name, date, total_active_members, percentage_active_members, loyalty_tier }) => (
-                    <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
+                {filteredData.map((item, index) => (
+                    <div key={index} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
-                            <p className="text-sm flex-1 text-center text">{store_name}</p>
-                            <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_active_members}</p>
-                            <p className="text-sm flex-1 text-center">{percentage_active_members}</p>
-                            <p className="text-sm flex-1 text-center">{loyalty_tier}</p>
+                            <p className="text-sm flex-1 text-center text-red">{item.store_id}</p>
+                            <p className="text-sm flex-1 text-center">{item.store}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{item.month}</p>
+                            <p className="text-sm flex-1 text-center">{item.newMembers}</p>
                         </div>
                     </div>
                 ))}
