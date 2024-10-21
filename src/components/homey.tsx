@@ -7,6 +7,7 @@ import { useState, useEffect } from "react"
 import { Users, CreditCard, DollarSign, FileText, Edit, CheckCircle, Coins, Hourglass } from "lucide-react"
 import {  CarouselDApiDemo } from "@/components/component/products-banner"
 import { CalendarDemo } from "@/components/component/specials-calender"
+import  EngagementMetrics from "@/components/engagement-metrics"
 
 interface GetSpecialsProps {
   special_id: string,
@@ -44,9 +45,9 @@ export default function HomePage() {
   const [upcomingProductSpecials, setUpcomingProductSpecials] = useState<UpcomingProdSpecialsRes>([]);
   // const [upcomingGroupSpecials, setUpcomingGroupSpecials] = useState<GetSpecialsResponse>([]);
 
-  const headers = ['Product', 'Special Type', 'Start Date', 'Expiry Date', 'Redemptions', 'Active']
-  const upcomingHeaders = ['Product', 'Special Type', 'Start Date', 'Expiry Date', 'Active']
-  const surveyHeaders = ['Survey ID', 'Survey Name', 'Category', 'Creation Date', 'Status']
+  const headers = ['Product', 'Special', 'Special Type', 'Start Date', 'Expiry Date', 'Redemptions', 'Status']
+  const upcomingHeaders = ['Product', 'Special', 'Special Type', 'Start Date', 'Expiry Date', 'Status']
+  const groupHeaders = ['Product', 'Group ID','Special',	'Special Price',	'Start Date',	'Expiry Date',	'Redemptions', 'Status']
 
   const getActiveProductSpecials = async () => {
     try{
@@ -95,7 +96,7 @@ export default function HomePage() {
 
   return (
     <div className="p-2 h-screen overflow-y-auto mb-32">
-      <h2 className="text-2xl font-semibold mb-4">Loyalty Program Metrics</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-red">Loyalty Program Metrics</h2>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <Card className="bg-green">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -138,9 +139,9 @@ export default function HomePage() {
           </CardContent>
         </Card>
       </div>
-      <h2 className="text-2xl font-semibold mb-4">Promotions Management</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-red">Promotions Management</h2>
       <div>
-        <h4 className="text-xl font-semibold mb-4 pl-2">Active Specials</h4>
+        <h4 className="text-xl font-semibold mb-4 pl-2 text-gray-500">Active Specials</h4>
         <div className="bg-gray-200 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
             {headers?.map((header, index) => (
               <p
@@ -153,30 +154,77 @@ export default function HomePage() {
               </p>
             ))}
           </div>
-          <div className="pt-2 max-h-[200px] space-y-2">
-            {activeProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => (
-              <div key={special_id} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                {/* Use flexbox to align the content in a row */}
-                <div className="flex items-center justify-between">
-                  <p className="text-sm flex-1 text-center">{product_description}</p>
-                  <p className="text-sm flex-1 text-center">{special_type}</p>
-                  <p className="text-sm flex-1 text-center">
-                    {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'}
-                  </p>
-                  <p className="text-sm flex-1 text-center">
-                    {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'}
-                  </p>
-                  <p className="text-sm flex-1 text-center text-purple">300</p>
-                  <p className="text-sm flex-1 text-center flex items-center justify-center">
-                    <CheckCircle color="green" />
-                  </p>
+
+          {/* PRODUCT SPECIALS - ROWS */}
+            <div className="pt-2 max-h-[200px] space-y-2">
+              {/* {activeProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  {/* Use flexbox to align the content in a row */}
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center">DANONE 1KG D/CREAM</p>
+                    <p className="text-sm flex-1 text-center">Buy-One-Get-5%</p>
+                    <p className="text-sm flex-1 text-center">Percentage</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-10
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-27
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              {/* ))} */}
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center">CHARCOAL 4KG BAGS</p>
+                    <p className="text-sm flex-1 text-center">5% Off Product</p>
+                    <p className="text-sm flex-1 text-center">Percentage</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-15
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-31
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center">BEEF SHIN</p>
+                    <p className="text-sm flex-1 text-center">5% Off Purchase</p>
+                    <p className="text-sm flex-1 text-center">Percentage</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-01
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-31
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+            </div>
 
           <div>
-            <h4 className="text-xl font-semibold mb-4 pl-2 pt-10">Upcoming Specials</h4>
+            <h4 className="text-xl font-semibold mb-4 pl-2 pt-10 text-gray-500">Upcoming Specials</h4>
             <div className="bg-gray-200 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
             {upcomingHeaders?.map((header, index) => (
               <p
@@ -190,140 +238,286 @@ export default function HomePage() {
             ))}
           </div>
             <div className="pt-2 max-h-[200px] space-y-2">
-              {upcomingProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => (
-                <div key={special_id} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+              {/* {upcomingProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
+                <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm flex-1 text-center">{product_description}</p>
-                    <p className="text-sm flex-1 text-center">{special_type}</p>
+                    <p className="text-sm flex-1 text-center">Yogurt</p>
+                    <p className="text-sm flex-1 text-center">Get 15% Off Purchase</p>
+                    <p className="text-sm flex-1 text-center">Percentage</p>
                     <p className="text-sm flex-1 text-center">
-                      {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-25
                     </p>
                     <p className="text-sm flex-1 text-center">
-                      {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'}
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-30
                     </p>
                     <p className="text-sm flex-1 text-center flex items-center justify-center">⏳</p>
                   </div>
                 </div>
-              ))}
+              {/* ))} */}
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+              {/* {upcomingProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
+                <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center">Bread</p>
+                    <p className="text-sm flex-1 text-center">Get 12% Off Purchase</p>
+                    <p className="text-sm flex-1 text-center">Percentage</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-25
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-30
+                    </p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">⏳</p>
+                  </div>
+                </div>
+              {/* ))} */}
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+              {/* {upcomingProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
+                <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center">Eggs</p>
+                    <p className="text-sm flex-1 text-center">Get 10% Off Purchase</p>
+                    <p className="text-sm flex-1 text-center">Percentage</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-25
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-30
+                    </p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">⏳</p>
+                  </div>
+                </div>
+              {/* ))} */}
+            </div>
+          </div>
+      </div>
+
+      <div>
+        <div className="pt-14">
+          <h4 className="text-xl font-semibold mb-4 pl-2 text-gray-500">Active Combined Specials</h4>
+        </div>
+          <div className="bg-gray-200 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+            {groupHeaders?.map((header, index) => (
+              <p
+                key={index}
+                className={`text-xs uppercase font-medium flex-1 text-center ${
+                  index === 1 ? 'hidden lg:block' : ''
+                }`}
+              >
+                {header}
+              </p>
+            ))}
+          </div>
+
+          {/* COMBINED SPECIALS - ROWS*/}
+            <div className="pt-2 max-h-[200px] space-y-2">
+              {/* {activeProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center text-gray-500">SWITCH 440M</p>
+                    <p className="text-sm flex-1 text-center text-gray-500">1</p>
+                    <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                    <p className="text-sm flex-1 text-center">14.99</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-10
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-27
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+              {/* ))} */}
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center text-gray-500">KINGSLEY 2LTR ASST</p>
+                    <p className="text-sm flex-1 text-center text-gray-500">1</p>
+                    <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                    <p className="text-sm flex-1 text-center">14.99</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-15
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-31
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center text-gray-500">DORITOS</p>
+                    <p className="text-sm flex-1 text-center text-gray-500">2</p>
+                    <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                    <p className="text-sm flex-1 text-center">24.99</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-01
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-31
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center text-gray-500">LAYS</p>
+                    <p className="text-sm flex-1 text-center text-gray-500">2</p>
+                    <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                    <p className="text-sm flex-1 text-center">24.99</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-01
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-31
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+            </div>
+
+          <div>
+            <h4 className="text-xl font-semibold mb-4 pl-2 pt-10 text-gray-500">Upcoming Combined Specials</h4>
+            <div className="bg-gray-200 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+            {groupHeaders?.map((header, index) => (
+              <p
+                key={index}
+                className={`text-xs uppercase font-medium flex-1 text-center ${
+                  index === 1 ? 'hidden lg:block' : ''
+                }`}
+              >
+                {header}
+              </p>
+            ))}
+          </div>
+          <div className="pt-2 max-h-[200px] space-y-2">
+              {/* {activeProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center text-gray-500">SWITCH 440M</p>
+                    <p className="text-sm flex-1 text-center text-gray-500">1</p>
+                    <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                    <p className="text-sm flex-1 text-center">14.99</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-10
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2024-10-27
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+              {/* ))} */}
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center text-gray-500">KINGSLEY 2LTR ASST</p>
+                    <p className="text-sm flex-1 text-center text-gray-500">1</p>
+                    <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                    <p className="text-sm flex-1 text-center">14.99</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-15
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-31
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center text-gray-500">DORITOS</p>
+                    <p className="text-sm flex-1 text-center text-gray-500">2</p>
+                    <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                    <p className="text-sm flex-1 text-center">24.99</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-01
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-31
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
+            </div>
+            <div className="pt-2 max-h-[200px] space-y-2">
+                <div  className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm flex-1 text-center text-gray-500">LAYS</p>
+                    <p className="text-sm flex-1 text-center text-gray-500">2</p>
+                    <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
+                    <p className="text-sm flex-1 text-center">24.99</p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {start_date ? new Date(start_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-01
+                    </p>
+                    <p className="text-sm flex-1 text-center">
+                      {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                      2023-11-31
+                    </p>
+                    <p className="text-sm flex-1 text-center text-purple">300</p>
+                    <p className="text-sm flex-1 text-center flex items-center justify-center">
+                      <CheckCircle color="green" />
+                    </p>
+                  </div>
+                </div>
             </div>
           </div>
       </div>
 
         <div className="pt-14">
-        <div className="bg-gray-200 text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
-                {surveyHeaders?.map((header, index) => (
-                    <p
-                        key={index}
-                        className={`text-xs uppercase font-medium flex-1 text-center ${
-                        index === 1 ? 'hidden lg:block' : ''
-                        }`}
-                    >
-                        {header}
-                    </p>
-                ))}
-            </div>
-            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm flex-1 text-center cursor-pointer text-red">1</p>
-                        <p className="text-sm flex-1 text-center">Product Review</p>
-                        <p className="text-sm flex-1 text-center">Products</p>
-                        <p className="text-sm flex-1 text-center">
-                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                            2023-11-15
-                        </p>
-                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                            Active
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm flex-1 text-center cursor-pointer text-red">2</p>
-                        <p className="text-sm flex-1 text-center">Cooldrink Satisfaction Survey</p>
-                        <p className="text-sm flex-1 text-center">Products</p>
-                        <p className="text-sm flex-1 text-center">
-                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                            2023-11-15
-                        </p>
-                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                            Active
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm flex-1 text-center cursor-pointer text-red">3</p>
-                        <p className="text-sm flex-1 text-center">Snacks Feedback</p>
-                        <p className="text-sm flex-1 text-center">Products</p>
-                        <p className="text-sm flex-1 text-center">
-                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                            2023-11-15
-                        </p>
-                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                            Active
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm flex-1 text-center cursor-pointer text-red">4</p>
-                        <p className="text-sm flex-1 text-center">Chips Taste Test</p>
-                        <p className="text-sm flex-1 text-center">Products</p>
-                        <p className="text-sm flex-1 text-center">
-                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                            2023-11-15
-                        </p>
-                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                            Active
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-lg h-10">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm flex-1 text-center cursor-pointer text-red">5</p>
-                        <p className="text-sm flex-1 text-center">Seasonal Specials Feedback</p>
-                        <p className="text-sm flex-1 text-center">Products</p>
-                        <p className="text-sm flex-1 text-center">
-                            {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                            2023-11-15
-                        </p>
-                        <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                            Active
-                        </p>
-                    </div>
-                </div>
-            </div>
-          {/* <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Active Surveys</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
-                {[
-                  { title: "Customer Satisfaction Q2", completionRate: "68%", reward: "10% off next purchase" },
-                  { title: "Product Feedback: Summer Fruits", completionRate: "45%", reward: "100 bonus points" },
-                ].map((survey, index) => (
-                  <li key={index} className="border-b pb-2">
-                    <div className="flex items-center">
-                      <FileText className="h-4 w-4 mr-2 text-muted-foreground" />
-                      <span className="font-semibold">{survey.title}</span>
-                    </div>
-                    <p className="text-sm">Completion Rate: {survey.completionRate}</p>
-                    <p className="text-sm text-muted-foreground">Reward: {survey.reward}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card> */}
+            <EngagementMetrics />
         </div>
       </div>
   )

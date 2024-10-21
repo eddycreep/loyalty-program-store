@@ -11,7 +11,7 @@ import { ViewDeatiledSurvey } from "./view-detailed-survey";
 import { useRouter } from 'next/navigation'; // Import the router
 
 export const ViewSurveys = () => {
-    const headers = ['Survey ID', 'Survey Name', 'Category', 'Creation Date', 'Status', 'Action']
+    const headers = ['Survey ID', 'Survey Name', 'Category', 'Creation Date', 'Status']
 
     const router = useRouter(); // Initialize the router
 
@@ -52,9 +52,9 @@ export const ViewSurveys = () => {
                         <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
                             Active
                         </p>
-                        <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
+                        {/* <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
                             <Pencil />
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
@@ -71,9 +71,9 @@ export const ViewSurveys = () => {
                         <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
                             Active
                         </p>
-                        <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
+                        {/* <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
                             <Pencil />
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
@@ -90,9 +90,9 @@ export const ViewSurveys = () => {
                         <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
                             Active
                         </p>
-                        <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
+                        {/* <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
                             <Pencil />
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
@@ -109,9 +109,9 @@ export const ViewSurveys = () => {
                         <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
                             Active
                         </p>
-                        <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
+                        {/* <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
                             <Pencil />
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
@@ -128,9 +128,9 @@ export const ViewSurveys = () => {
                         <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
                             Active
                         </p>
-                        <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
+                        {/* <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
                             <Pencil />
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>

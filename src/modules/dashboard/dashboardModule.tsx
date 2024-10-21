@@ -13,12 +13,14 @@ import { LoyaltyCustomersChart } from '@/components/component/customers-bar-char
 import { AreaChartComponent } from '@/components/component/area-chart';
 import { BarChartComponent } from '@/components/component/bar-chart';
 import { ProductBarChart } from '@/components/component/review-bar-chart';
+import { LoyaltyDashboardComponent } from '@/components/loyalty-dashboard';
+import DashboardComponent  from '@/components/dashboard';
 
 export const DashboardModule = () => {
     return (
         <div className="min-h-screen w-full overflow-y-auto p-2 flex flex-col mb-24"> {/* Ensured this container can scroll if content exceeds viewport height */}
             {/* min-h-screen: Ensures the component takes at least the full height of the screen. || overflow-y-auto: Allows vertical scrolling when content exceeds the height of the container. */}
-            <div className="flex flex-col space-y-4">
+            {/* <div className="flex flex-col space-y-4">
                 <div className="grid grid-cols-3 gap-4">
                     <div className="rounded shadow-lg">
                         <AreaChartComponent />
@@ -38,7 +40,9 @@ export const DashboardModule = () => {
                         <ProductBarChart />
                     </div>
                 </div>
-            </div>
+            </div> */}
+            {/* <LoyaltyDashboardComponent /> */}
+            <DashboardComponent />
         </div>
     );
 }
