@@ -8,9 +8,31 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ActiveMembersReport } from "./customer-engagement/active-members-report"
-import { EnrollmentRateReport } from "./customer-engagement/enrollment-rate-report"
-import { RetentionRateReport } from "./customer-engagement/retention-rate-report"
-import { RedemptionRateReport } from "./customer-engagement/redemption-rate-report"
+// import { EnrollmentRateReport } from "./customer-engagement/enrollment-rate-report"
+// import { RetentionRateReport } from "./customer-engagement/retention-rate-report"
+// import { RedemptionRateReport } from "./customer-engagement/redemption-rate-report"
+
+// FINANCIAL
+// import { RevenueReport } from "./financial/revenue-report"
+import { LifetimeValueReport } from "./financial/lifetime-value-report"
+import { CostvsRevenueReport } from "./financial/cost-vs-revenue-report"
+import { CostvsDiscountedRevenueReport } from "./financial/cost-vs-discounted-revenue"
+
+//REDEMPTIONS
+//FirstRedemptionReport
+//RedemptionFrequencyReport
+//UnsusedLoyaltyReport
+
+//SATISFACTION
+//CustomerSatisfactionReport
+//NetPromotoerScoreReport
+//AvgSpendPerTransactionReport
+//CrossvsUpsellReport
+
+//EFFECTIVENESS
+//PromotionalImpactReport
+
+
 
 interface LoyaltyClientsProps {
     id: number,
@@ -46,7 +68,7 @@ export const ReportsModule = () => {
           <TabsTrigger value="redemption">Redemption</TabsTrigger>
           <TabsTrigger value="satisfaction">Satisfaction</TabsTrigger>
           <TabsTrigger value="effectiveness">Effectiveness</TabsTrigger>
-          <TabsTrigger value="performance">Product Performance</TabsTrigger>
+          {/* <TabsTrigger value="performance">Product Performance</TabsTrigger> */}
         </TabsList>
         <TabsContent value="customer-engagement" className="space-y-4">
             <div className="pl-2">
@@ -58,9 +80,9 @@ export const ReportsModule = () => {
                 </div>
             </div>
             {currentTab === 'members' && <ActiveMembersReport />}
-            {currentTab === 'enrollment' && <EnrollmentRateReport />}
+            {/* {currentTab === 'enrollment' && <EnrollmentRateReport />}
             {currentTab === 'retention' && <RetentionRateReport />}
-            {currentTab === 'redemption' && <RedemptionRateReport />}
+            {currentTab === 'redemption' && <RedemptionRateReport />} */}
         </TabsContent>
         <TabsContent value="financial" className="space-y-4">
             <div className="pl-2">
@@ -71,240 +93,49 @@ export const ReportsModule = () => {
                     <button onClick={() => setCurrentTab('costDiscountRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'costDiscountRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cost vs Discounted Revenue</button>
                 </div>
             </div>
-            {currentTab === 'revenue' && <ActiveMembersReport />}
-            {currentTab === 'lifetime' && <EnrollmentRateReport />}
-            {currentTab === 'costRevenue' && <RetentionRateReport />}
-            {currentTab === 'costDiscountRevenue' && <RedemptionRateReport />}
+            {/* {currentTab === 'revenue' && <RevenueReport />} */}
+            {currentTab === 'lifetime' && <LifetimeValueReport />}
+            {currentTab === 'costRevenue' && <CostvsRevenueReport />}
+            {currentTab === 'costDiscountRevenue' && <CostvsDiscountedRevenueReport />}
         </TabsContent>
         <TabsContent value="redemption" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Time to First Redemption</CardTitle>
-                <CardDescription>Average time for new members to redeem first reward</CardDescription>
-              </CardHeader>
-              <CardContent>
-              Time to First Redemption
-                {/* <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-13))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={timeToFirstRedemption}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="days" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="count" fill="var(--color-count)" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer> */}
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Redemption Frequency</CardTitle>
-                <CardDescription>How often members redeem rewards</CardDescription>
-              </CardHeader>
-              <CardContent>
-              Redemption Frequency
-                {/* <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-14))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={redemptionFrequency}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="frequency" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="count" fill="var(--color-count)" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer> */}
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Unused Points Liability</CardTitle>
-                <CardDescription>Total number of points earned but not redeemed</CardDescription>
-              </CardHeader>
-              <CardContent className="flex items-center justify-center">
-              Unused Points Liability
-                {/* <div className="relative w-48 h-48">
-                  <svg className="w-full h-full" viewBox="0 0 100 100">
-                    <circle
-                      className="text-muted-foreground"
-                      strokeWidth="10"
-                      stroke="currentColor"
-                      fill="transparent"
-                      r="45"
-                      cx="50"
-                      cy="50"
-                    />
-                    <circle
-                      className="text-primary"
-                      strokeWidth="10"
-                      strokeDasharray={`${unusedPointsLiability * 2.83} 283`}
-                      strokeLinecap="round"
-                      stroke="currentColor"
-                      fill="transparent"
-                      r="45"
-                      cx="50"
-                      cy="50"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold">{unusedPointsLiability}%</span>
-                  </div>
-                </div> */}
-              </CardContent>
-            </Card>
-          </div>
+          <div className="pl-2">
+                <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                    <button onClick={() => setCurrentTab('firstRedemtion')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'firstRedemtion'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>AVG First Redemption</button>
+                    <button onClick={() => setCurrentTab('redemptionFrequency')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'redemptionFrequency'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Redemption Frequencye</button>
+                    <button onClick={() => setCurrentTab('usedSpecials')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'usedSpecials'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Unused Specials</button>
+                </div>
+            </div>
+            {/* {currentTab === 'firstRedemtion' && <FirstRedemptionReport />}
+            {currentTab === 'redemptionFrequency' && <RedemptionFrequencyReport />}
+            {currentTab === 'usedSpecials' && <UnsusedLoyaltyReport />} */}
         </TabsContent>
         <TabsContent value="satisfaction" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Customer Satisfaction Score (CSAT)</CardTitle>
-              <CardDescription>Satisfaction scores from surveys</CardDescription>
-            </CardHeader>
-            <CardContent>
-            Customer Satisfaction Score (CSAT)
-              {/* <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={csatScores}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis domain={[0, 5]} />
-                  <Tooltip /> 
-                  <Line type="monotone" dataKey="score" stroke="#8884d8" /> 
-                </LineChart>
-              </ResponsiveContainer> */}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Net Promoter Score (NPS)</CardTitle>
-              <CardDescription>Likelihood of members recommending the program</CardDescription>
-            </CardHeader>
-            <CardContent>
-            Net Promoter Score (NPS)
-              {/* <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={npsScores}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis domain={[-100, 100]} />
-                  <Tooltip /> 
-                  <Line type="monotone" dataKey="score" stroke="#8884d8" />
-                </LineChart>
-              </ResponsiveContainer> */}
-            </CardContent>
-          </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Average Spend per Transaction</CardTitle>
-                <CardDescription>By customer segment</CardDescription>
-              </CardHeader>
-              <CardContent>
-              Average Spend per Transaction
-                {/* <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={averageSpend}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="segment" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="spend" fill="hsl(var(--chart-10))" />
-                  </BarChart>
-                </ResponsiveContainer> */}
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Cross-Sell/Upsell Rate</CardTitle>
-                <CardDescription>Success rate of additional product purchases</CardDescription>
-              </CardHeader>
-              <CardContent>
-              Cross-Sell/Upsell Rate
-                {/* <ChartContainer config={{ crossSell: { label: "Cross-Sell", color: "hsl(var(--chart-18))" }, upSell: { label: "Up-Sell", color: "hsl(var(--chart-19))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={crossSellUpsellRate}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="crossSell" fill="var(--color-crossSell)" />
-                      <Bar dataKey="upSell" fill="var(--color-upSell)" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer> */}
-              </CardContent>
-            </Card>
-          </div>
+          <div className="pl-2">
+                <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                    <button onClick={() => setCurrentTab('satisfaction')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'satisfaction'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Customer Satisfaction</button>
+                    <button onClick={() => setCurrentTab('npc')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'npc'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Net Promoter Score (NPS)</button>
+                    <button onClick={() => setCurrentTab('avgTransaction')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'avgTransaction'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>AVG Spend p/ Transaction</button>
+                    <button onClick={() => setCurrentTab('crossSell')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'crossSell'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cross-Sell/Upsell Rate</button>
+                </div>
+            </div>
+            {/* {currentTab === 'satisfaction' && <ActiveMembersReport />} */}
+            {/* {currentTab === 'npc' && <EnrollmentRateReport />}
+            {currentTab === 'avgTransaction' && <RetentionRateReport />}
+            {currentTab === 'crossSell' && <RedemptionRateReport />} */}
         </TabsContent>
         <TabsContent value="effectiveness" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Member Conversion Rate</CardTitle>
-                <CardDescription>Percentage of non-members joining the loyalty program</CardDescription>
-              </CardHeader>
-              <CardContent>
-              Member Conversion Rate
-                {/* <ChartContainer config={{ value: { label: "Conversion", color: "hsl(var(--chart-20))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={memberConversionRate}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="stage" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Area type="monotone" dataKey="value" fill="var(--color-value)" stroke="var(--color-value)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </ChartContainer> */}
-              </CardContent>
-            </Card>
-            {/* <Card>
-              <CardHeader>
-                <CardTitle>Program ROI</CardTitle>
-                <CardDescription>Return on Investment over years</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={programROI}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="year" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="roi" fill="hsl(var(--chart-11))" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card> */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Promotional Impact</CardTitle>
-                <CardDescription>Effectiveness of special promotions on sales</CardDescription>
-              </CardHeader>
-              <CardContent>
-              Promotional Impact
-                {/* <ChartContainer config={{ sales: { label: "Sales", color: "hsl(var(--chart-22))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={promotionalImpact}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="sales" fill="var(--color-sales)">
-                        {promotionalImpact.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.promotion ? "var(--color-promotion)" : "var(--color-sales)"} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer> */}
-              </CardContent>
-            </Card>
-          </div>
+          <div className="pl-2">
+                <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                    <button onClick={() => setCurrentTab('memberConversion')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'memberConversion'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>MemberConversion Rate</button>
+                    <button onClick={() => setCurrentTab('promotionalImpact')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'promotionalImpact'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Promotional Impact</button>
+                </div>
+            </div>
+            {/* {currentTab === 'memberConversion' && <ActiveMembersReport />} */}
+            {/* {currentTab === 'promotionalImpact' && <EnrollmentRateReport />} */}
         </TabsContent>
         {/* product performance */}
-        <TabsContent value="performance" className="space-y-4">
+        {/* <TabsContent value="performance" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -313,17 +144,6 @@ export const ReportsModule = () => {
               </CardHeader>
               <CardContent>
               Member Conversion Rate
-                {/* <ChartContainer config={{ value: { label: "Conversion", color: "hsl(var(--chart-20))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={memberConversionRate}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="stage" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Area type="monotone" dataKey="value" fill="var(--color-value)" stroke="var(--color-value)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </ChartContainer> */}
               </CardContent>
             </Card>
             <Card>
@@ -333,25 +153,10 @@ export const ReportsModule = () => {
               </CardHeader>
               <CardContent>
               Promotional Impact
-                {/* <ChartContainer config={{ sales: { label: "Sales", color: "hsl(var(--chart-22))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={promotionalImpact}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="sales" fill="var(--color-sales)">
-                        {promotionalImpact.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.promotion ? "var(--color-promotion)" : "var(--color-sales)"} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer> */}
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
         </div>
     );
