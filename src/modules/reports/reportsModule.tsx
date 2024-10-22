@@ -7,10 +7,12 @@ import { toast } from 'react-hot-toast';
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+// CUSTOMER ENGAGEMENT
 import { ActiveMembersReport } from "./customer-engagement/active-members-report"
-// import { EnrollmentRateReport } from "./customer-engagement/enrollment-rate-report"
-// import { RetentionRateReport } from "./customer-engagement/retention-rate-report"
-// import { RedemptionRateReport } from "./customer-engagement/redemption-rate-report"
+import { EnrollmentRateReport } from "./customer-engagement/enrollment-rate-report"
+import { RetentionRateReport } from "./customer-engagement/retention-rate-report"
+import { RedemptionRateReport } from "./customer-engagement/redemption-rate-report"
 
 // FINANCIAL
 // import { RevenueReport } from "./financial/revenue-report"
@@ -19,18 +21,19 @@ import { CostvsRevenueReport } from "./financial/cost-vs-revenue-report"
 import { CostvsDiscountedRevenueReport } from "./financial/cost-vs-discounted-revenue"
 
 //REDEMPTIONS
-//FirstRedemptionReport
-//RedemptionFrequencyReport
-//UnsusedLoyaltyReport
+import { FirstRedemptionReport } from "./redemption/first-redemption-report"
+import { RedemptionFrequencyReport } from "./redemption/redemption-frequency-report"
+import { UnsusedLoyaltyReport } from "./redemption/unused-specials-report"
 
 //SATISFACTION
-//CustomerSatisfactionReport
-//NetPromotoerScoreReport
-//AvgSpendPerTransactionReport
-//CrossvsUpsellReport
+import { CustomerSatisfactionReport } from "./satisfaction/customer-satisfaction-report"
+import { NetPromotoerScoreReport } from "./satisfaction/net-promotor-score"
+import { AvgSpendPerTransactionReport } from "./satisfaction/avg-spend-per-transaction"
+import { CrossvsUpsellReport } from "./satisfaction/crossSell-vs-upSell-report"
 
 //EFFECTIVENESS
-//PromotionalImpactReport
+import { MemberConversionReport } from "./effectiveness/member-conversion-report"
+import { PromotionalImpactReport } from "./effectiveness/promotional-impace-report"
 
 
 
@@ -80,9 +83,9 @@ export const ReportsModule = () => {
                 </div>
             </div>
             {currentTab === 'members' && <ActiveMembersReport />}
-            {/* {currentTab === 'enrollment' && <EnrollmentRateReport />}
+            {currentTab === 'enrollment' && <EnrollmentRateReport />}
             {currentTab === 'retention' && <RetentionRateReport />}
-            {currentTab === 'redemption' && <RedemptionRateReport />} */}
+            {currentTab === 'redemption' && <RedemptionRateReport />}
         </TabsContent>
         <TabsContent value="financial" className="space-y-4">
             <div className="pl-2">
@@ -106,9 +109,9 @@ export const ReportsModule = () => {
                     <button onClick={() => setCurrentTab('usedSpecials')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'usedSpecials'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Unused Specials</button>
                 </div>
             </div>
-            {/* {currentTab === 'firstRedemtion' && <FirstRedemptionReport />}
+            {currentTab === 'firstRedemtion' && <FirstRedemptionReport />}
             {currentTab === 'redemptionFrequency' && <RedemptionFrequencyReport />}
-            {currentTab === 'usedSpecials' && <UnsusedLoyaltyReport />} */}
+            {currentTab === 'usedSpecials' && <UnsusedLoyaltyReport />}
         </TabsContent>
         <TabsContent value="satisfaction" className="space-y-4">
           <div className="pl-2">
@@ -119,10 +122,10 @@ export const ReportsModule = () => {
                     <button onClick={() => setCurrentTab('crossSell')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'crossSell'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cross-Sell/Upsell Rate</button>
                 </div>
             </div>
-            {/* {currentTab === 'satisfaction' && <ActiveMembersReport />} */}
-            {/* {currentTab === 'npc' && <EnrollmentRateReport />}
-            {currentTab === 'avgTransaction' && <RetentionRateReport />}
-            {currentTab === 'crossSell' && <RedemptionRateReport />} */}
+            {currentTab === 'satisfaction' && <CustomerSatisfactionReport />}
+            {currentTab === 'npc' && <NetPromotoerScoreReport />}
+            {currentTab === 'avgTransaction' && <AvgSpendPerTransactionReport />}
+            {currentTab === 'crossSell' && <CrossvsUpsellReport />}
         </TabsContent>
         <TabsContent value="effectiveness" className="space-y-4">
           <div className="pl-2">
@@ -131,10 +134,10 @@ export const ReportsModule = () => {
                     <button onClick={() => setCurrentTab('promotionalImpact')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'promotionalImpact'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Promotional Impact</button>
                 </div>
             </div>
-            {/* {currentTab === 'memberConversion' && <ActiveMembersReport />} */}
-            {/* {currentTab === 'promotionalImpact' && <EnrollmentRateReport />} */}
+            {currentTab === 'memberConversion' && <MemberConversionReport />} 
+            {currentTab === 'promotionalImpact' && <PromotionalImpactReport />}
         </TabsContent>
-        {/* product performance */}
+        {/* product performance
         {/* <TabsContent value="performance" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
