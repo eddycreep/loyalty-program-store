@@ -7,9 +7,19 @@ import toast from 'react-hot-toast';
 import { Check, X, BadgeAlert, AlertTriangle, Filter } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import SquareCircleLoader from "@/lib/square-circle-loader"
+import { Label } from "@/components/ui/label";
 
 
-const enrollmentRate = [
+interface EnrollmentRateData {
+    store_id: string;
+    store_name: string;
+    date: string;
+    new_members_enrolled: number;
+    total_members: number;
+    enrollment_rate: number;
+}
+
+const enrollmentRateReport: EnrollmentRateData[] = [
     {
         store_id: 'SOO1',
         store_name: 'PLUS DC Stellenbosch',
@@ -38,8 +48,6 @@ const enrollmentRate = [
 ];
 
 
-
-
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
@@ -60,69 +68,69 @@ const stores = [
 export const EnrollmentRateReport = () => {
     const headers = ['Store ID', 'Store Name', 'Date', 'New Members Enrolled', 'Total Members', 'Enrollment Rate (%)'];
 
-    const [selectedMonth, setSelectedMonth] = useState(''); // Initialize without filtering on mount
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState([]); // No data filtered initially
+    const [filteredData, setFilteredData] = useState<EnrollmentRateData[]>([]); // Explicitly typed state
     const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
     const [isError, setIsError] = useState(false); // Error state to handle no data
 
     // Filter data based on selected month and store
-    // useEffect(() => {
-    //     setIsLoading(true);
+    const handleFilter = () => {
+        setIsLoading(true);
+        let filtered = enrollmentRateReport;
 
-    //     let filtered = enrollmentRate;
+        // Filter by date range
+        if (startDate && endDate) {
+            filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
+        }
 
-    //     // Filter by selected month
-    //     if (selectedMonth !== '' && selectedMonth !== 'All') {
-    //         filtered = filtered.filter(item => item.date.includes(selectedMonth));
-    //     }
+        // Filter by selected store
+        if (selectedStore !== 'All') {
+            filtered = filtered.filter(item => item.store_id === selectedStore);
+        }
 
-    //     // Filter by selected store
-    //     if (selectedStore !== '' && selectedStore !== 'All') {
-    //         filtered = filtered.filter(item => item.store_id === selectedStore);
-    //     }
+        setFilteredData(filtered);
 
-    //     setFilteredData(filtered);
+        if (filtered.length === 0) {
+            setIsError(true);
+            toast.error('No data found for the selected filters!', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+        } else {
+            setIsError(false);
+        }
 
-    //     if (filtered.length === 0) {
-    //         setIsError(true);
-    //         toast.error('No data found for the selected filters!', {
-    //             icon: <X color={colors.red} size={24} />,
-    //             duration: 3000,
-    //         });
-    //     } else {
-    //         setIsError(false);
-    //     }
-
-    //     setIsLoading(false);
-    // }, [selectedMonth, selectedStore]); // Runs when either month or store changes
+        setIsLoading(false);
+    };
 
     // Display loading screen if data is being fetched
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
                 <div className="">
-                    <h4 className="text-xl font-bold">Active Members</h4>
-                    <p className="text-sm text-gray-500">Number of active members over time</p>
+                    <h4 className="text-xl font-bold">Enrollment Rate</h4>
+                    <p className="text-sm text-gray-500">New members joining the program</p>
                 </div>
                 <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {/* {enrollmentRate.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))} */}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="pt-6">
+                    <div className="pt-6">
+                        <div className="flex gap-4">
+                            <div className="w-[270px]">
+                                <Label htmlFor="username" className="text-left pt-4">
+                                    Start Date:
+                                </Label>
+                                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
+                            <div className="w-[270px]">
+                                <Label htmlFor="username" className="text-left pt-4">
+                                    Expiry Date:
+                                </Label>
+                                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="pt-12">
                         <Select onValueChange={(value) => setSelectedStore(value)}>
                             <SelectTrigger className="w-[200px] bg-white">
                                 <SelectValue placeholder="Select a store" />
@@ -132,18 +140,18 @@ export const EnrollmentRateReport = () => {
                                     <SelectLabel>Store</SelectLabel>
                                     <SelectItem value="All">All</SelectItem>
                                     {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
+                                        <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
                                     ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-8 rounded shadoww-lg flex items-center justify-center">
+                    <div className="flex justify-end w-full pt-12">
+                        <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                             <Filter />
                         </button>
                     </div>
-            </div>
+                </div>
 
                 <div className="pt-20 flex flex-col items-center justify-center">
                     <SquareCircleLoader />
@@ -162,23 +170,23 @@ export const EnrollmentRateReport = () => {
                     <p className="text-sm text-gray-500">Number of active members over time</p>
                 </div>
                 <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {/* {enrollmentRate.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))} */}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="pt-6">
+                    <div className="pt-6">
+                        <div className="flex gap-4">
+                            <div className="w-[270px]">
+                                <Label htmlFor="username" className="text-left pt-4">
+                                    Start Date:
+                                </Label>
+                                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
+                            <div className="w-[270px]">
+                                <Label htmlFor="username" className="text-left pt-4">
+                                    Expiry Date:
+                                </Label>
+                                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="pt-12">
                         <Select onValueChange={(value) => setSelectedStore(value)}>
                             <SelectTrigger className="w-[200px] bg-white">
                                 <SelectValue placeholder="Select a store" />
@@ -188,18 +196,18 @@ export const EnrollmentRateReport = () => {
                                     <SelectLabel>Store</SelectLabel>
                                     <SelectItem value="All">All</SelectItem>
                                     {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
+                                        <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
                                     ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-8 rounded shadoww-lg flex items-center justify-center">
+                    <div className="flex justify-end w-full pt-12">
+                        <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                             <Filter />
                         </button>
                     </div>
-            </div>
+                </div>
 
                 <div className="flex flex-col items-center justify-center pt-20">
                     <AlertTriangle size={44} />
@@ -209,54 +217,51 @@ export const EnrollmentRateReport = () => {
         );
     }
 
-    // Display filtered data when available
-    
-
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
             <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
+                <h4 className="text-xl font-bold">Enrollment Rate</h4>
+                <p className="text-sm text-gray-500">New members joining the program</p>
             </div>
             <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {/* {enrollmentRate.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))} */}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="pt-6">
-                        <Select onValueChange={(value) => setSelectedStore(value)}>
-                            <SelectTrigger className="w-[200px] bg-white">
-                                <SelectValue placeholder="Select a store" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Store</SelectLabel>
-                                    <SelectItem value="All">All</SelectItem>
-                                    {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                <div className="pt-6">
+                    <div className="flex gap-4">
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Start Date:
+                            </Label>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Expiry Date:
+                            </Label>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
                     </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-9 rounded shadoww-lg flex items-center justify-center">
-                            <Filter />
-                        </button>
-                    </div>
+                </div>
+                <div className="pt-12">
+                    <Select onValueChange={(value) => setSelectedStore(value)}>
+                        <SelectTrigger className="w-[200px] bg-white">
+                            <SelectValue placeholder="Select a store" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Store</SelectLabel>
+                                <SelectItem value="All">All</SelectItem>
+                                {stores.map(({ id, store_id, store }) => (
+                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex justify-end w-full pt-12">
+                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                        <Filter />
+                    </button>
+                </div>
             </div>
 
             <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
@@ -268,13 +273,19 @@ export const EnrollmentRateReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map((item, index) => (
-                    <div key={index} className="bg-white flex flex-col p-3 rounded shadow-lg">
+                {filteredData.map(({ store_id, store_name, date, new_members_enrolled, total_members, enrollment_rate }) => (
+                    <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            {/* <p className="text-sm flex-1 text-center text-red">{item.store_id}</p>
-                            <p className="text-sm flex-1 text-center">{item.store}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{item.month}</p>
-                            <p className="text-sm flex-1 text-center">{item.newMembers}</p> */}
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{date}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{new_members_enrolled}</p>
+                            <p className="text-sm flex-1 text-center">
+                                {total_members}
+                            </p>
+                            <p className="text-sm flex-1 text-center">
+                                {enrollment_rate}
+                            </p>
                         </div>
                     </div>
                 ))}

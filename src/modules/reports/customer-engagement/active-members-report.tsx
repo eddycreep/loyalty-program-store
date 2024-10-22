@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { Check, X, BadgeAlert, AlertTriangle, Filter } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import SquareCircleLoader from "@/lib/square-circle-loader"
-
+import { Label } from "@/components/ui/label";
 
 const activeMembers = [
     {
@@ -143,42 +143,63 @@ const months = [
 export const ActiveMembersReport = () => {
     const headers = ['Store ID', 'Store Name', 'Date', 'Total Active Members', 'Percentage of Active Members', 'Loyalty Tier Distribution'];
 
+    const [startdate, setStartDate] = useState('');
+    const [enddate, setEndDate ] = useState('');
+
     const [selectedMonth, setSelectedMonth] = useState(''); // Initialize without filtering on mount
     const [selectedStore, setSelectedStore] = useState('');
     const [filteredData, setFilteredData] = useState(activeMembers); // Start with all data
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    // Effect to filter data when store or month changes
-    useEffect(() => {
+
+    // Function to handle filtering based on selected dates and store
+    const handleFilter = () => {
         setIsLoading(true);
 
         let filtered = activeMembers;
 
-        // Filter by month if selected
-        if (selectedMonth !== '' && selectedMonth !== 'All') {
-            filtered = filtered.filter(item => item.date.startsWith(selectedMonth));
+        // Parse the selected dates
+        const start = new Date(startdate);
+        const end = new Date(enddate);
+
+        // Validate dates: Ensure start date is not after end date
+        if (startdate && enddate && start > end) {
+        toast.error('Start date cannot be after end date!', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+        setIsLoading(false);
+        return;
+        }
+
+        // Filter by start date and end date if both are selected
+        if (startdate && enddate) {
+        filtered = filtered.filter((item) => {
+            const itemDate = new Date(item.date);
+            return itemDate >= start && itemDate <= end;
+        });
         }
 
         // Filter by store if selected
-        if (selectedStore !== '' && selectedStore !== 'All') {
-            filtered = filtered.filter(item => item.store_id === selectedStore);
+        if (selectedStore && selectedStore !== 'All') {
+        filtered = filtered.filter((item) => item.store_id === selectedStore);
         }
 
         setFilteredData(filtered);
 
         if (filtered.length === 0) {
-            setIsError(true);
-            toast.error('No data found for the selected filters!', {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
+        setIsError(true);
+        toast.error('No data found for the selected filters!', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
         } else {
-            setIsError(false);
+        setIsError(false);
         }
 
         setIsLoading(false);
-    }, [selectedMonth, selectedStore]);
+    };
 
     // Display loading screen if data is being fetched
     if (isLoading) {
@@ -189,43 +210,43 @@ export const ActiveMembersReport = () => {
                     <p className="text-sm text-gray-500">Number of active members over time</p>
                 </div>
                 <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {months.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="pt-6">
-                        <Select onValueChange={(value) => setSelectedStore(value)}>
-                            <SelectTrigger className="w-[200px] bg-white">
-                                <SelectValue placeholder="Select a store" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Store</SelectLabel>
-                                    <SelectItem value="All">All</SelectItem>
-                                    {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                <div className="pt-6">
+                    <div className="flex gap-4">
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Start Date:
+                            </Label>
+                            <input type="date" onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Expiry Date:
+                            </Label>
+                            <input type="date" onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
                     </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-8 rounded shadoww-lg flex items-center justify-center">
-                            <Filter />
-                        </button>
-                    </div>
+                </div>
+                <div className="pt-12">
+                    <Select onValueChange={(value) => setSelectedStore(value)}>
+                        <SelectTrigger className="w-[200px] bg-white">
+                            <SelectValue placeholder="Select a store" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Store</SelectLabel>
+                                <SelectItem value="All">All</SelectItem>
+                                {stores.map(({ id, store_id, store }) => (
+                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex justify-end w-full pt-12">
+                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                        <Filter />
+                    </button>
+                </div>
             </div>
 
                 <div className="pt-20 flex flex-col items-center justify-center">
@@ -245,43 +266,43 @@ export const ActiveMembersReport = () => {
                     <p className="text-sm text-gray-500">Number of active members over time</p>
                 </div>
                 <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {months.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="pt-6">
-                        <Select onValueChange={(value) => setSelectedStore(value)}>
-                            <SelectTrigger className="w-[200px] bg-white">
-                                <SelectValue placeholder="Select a store" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Store</SelectLabel>
-                                    <SelectItem value="All">All</SelectItem>
-                                    {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                <div className="pt-6">
+                    <div className="flex gap-4">
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Start Date:
+                            </Label>
+                            <input type="date" value={startdate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Expiry Date:
+                            </Label>
+                            <input type="date" value={enddate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
                     </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-8 rounded shadoww-lg flex items-center justify-center">
-                            <Filter />
-                        </button>
-                    </div>
+                </div>
+                <div className="pt-12">
+                    <Select onValueChange={(value) => setSelectedStore(value)}>
+                        <SelectTrigger className="w-[200px] bg-white">
+                            <SelectValue placeholder="Select a store" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Store</SelectLabel>
+                                <SelectItem value="All">All</SelectItem>
+                                {stores.map(({ id, store_id, store }) => (
+                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex justify-end w-full pt-12">
+                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                        <Filter />
+                    </button>
+                </div>
             </div>
 
                 <div className="flex flex-col items-center justify-center pt-20">
@@ -300,43 +321,43 @@ export const ActiveMembersReport = () => {
                 <p className="text-sm text-gray-500">Number of active members over time</p>
             </div>
             <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {months.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="pt-6">
-                        <Select onValueChange={(value) => setSelectedStore(value)}>
-                            <SelectTrigger className="w-[200px] bg-white">
-                                <SelectValue placeholder="Select a store" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Store</SelectLabel>
-                                    <SelectItem value="All">All</SelectItem>
-                                    {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                <div className="pt-6">
+                    <div className="flex gap-4">
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Start Date:
+                            </Label>
+                            <input type="date" value={startdate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Expiry Date:
+                            </Label>
+                            <input type="date" value={enddate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
                     </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-9 rounded shadoww-lg flex items-center justify-center">
-                            <Filter />
-                        </button>
-                    </div>
+                </div>
+                <div className="pt-12">
+                    <Select onValueChange={(value) => setSelectedStore(value)}>
+                        <SelectTrigger className="w-[200px] bg-white">
+                            <SelectValue placeholder="Select a store" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Store</SelectLabel>
+                                <SelectItem value="All">All</SelectItem>
+                                {stores.map(({ id, store_id, store }) => (
+                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex justify-end w-full pt-12">
+                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                        <Filter />
+                    </button>
+                </div>
             </div>
 
             <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
@@ -351,12 +372,20 @@ export const ActiveMembersReport = () => {
             {filteredData.map(({ store_id, store_name, date, total_active_members, percentage_active_members, loyalty_tier }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_active_members}</p>
-                            <p className="text-sm flex-1 text-center">{percentage_active_members}</p>
-                            <p className="text-sm flex-1 text-center">{loyalty_tier}</p>
+                            <p className={`text-sm flex-1 text-center ${percentage_active_members > 50 ? 'text-green' : 'text-red'}`}>
+                                {percentage_active_members}%
+                            </p>
+                            <p className={`text-sm flex-1 text-center ${
+                                loyalty_tier === 'Gold' ? 'text-amber-400' :
+                                loyalty_tier === 'Diamond' ? 'text-blue' :
+                                loyalty_tier === 'Platinum' ? 'text-gray-500' : ''
+                            }`}>
+                                {loyalty_tier}
+                            </p>
                         </div>
                     </div>
                 ))}
