@@ -109,10 +109,10 @@ export const EnrollmentRateReport = () => {
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-                <div className="">
+                {/* <div className="">
                     <h4 className="text-xl font-bold">Enrollment Rate</h4>
                     <p className="text-sm text-gray-500">New members joining the program</p>
-                </div>
+                </div> */}
                 <div className='flex gap-4'>
                     <div className="pt-6">
                         <div className="flex gap-4">
@@ -165,10 +165,10 @@ export const EnrollmentRateReport = () => {
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-                <div className="">
+                {/* <div className="">
                     <h4 className="text-xl font-bold">Active Members</h4>
                     <p className="text-sm text-gray-500">Number of active members over time</p>
-                </div>
+                </div> */}
                 <div className='flex gap-4'>
                     <div className="pt-6">
                         <div className="flex gap-4">
@@ -220,10 +220,10 @@ export const EnrollmentRateReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            <div className="">
+            {/* <div className="">
                 <h4 className="text-xl font-bold">Enrollment Rate</h4>
                 <p className="text-sm text-gray-500">New members joining the program</p>
-            </div>
+            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">

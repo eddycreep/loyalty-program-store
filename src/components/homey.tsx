@@ -96,7 +96,7 @@ export default function HomePage() {
 
   return (
     <div className="p-2 h-screen overflow-y-auto mb-32">
-      <h2 className="text-2xl font-semibold mb-4 text-red">Loyalty Program Metrics</h2>
+      <h2 className="text-2xl font-bold mb-4">Loyalty Program Metrics</h2>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <Card className="bg-green">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -139,9 +139,9 @@ export default function HomePage() {
           </CardContent>
         </Card>
       </div>
-      <h2 className="text-2xl font-semibold mb-4 text-red">Promotions Management</h2>
+      <h2 className="text-xl font-bold mb-4">Promotions Management</h2>
       <div>
-        <h4 className="text-xl font-semibold mb-4 pl-2 text-gray-500">Active Specials</h4>
+        <h4 className="text-xl font-semibold mb-4 pl-2 text-red">Active Specials</h4>
         <div className="bg-gray-200 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
             {headers?.map((header, index) => (
               <p

@@ -15,7 +15,7 @@ import { RetentionRateReport } from "./customer-engagement/retention-rate-report
 import { RedemptionRateReport } from "./customer-engagement/redemption-rate-report"
 
 // FINANCIAL
-// import { RevenueReport } from "./financial/revenue-report"
+import { RevenueReport } from "./financial/revenue-report"
 import { LifetimeValueReport } from "./financial/lifetime-value-report"
 import { CostvsRevenueReport } from "./financial/cost-vs-revenue-report"
 import { CostvsDiscountedRevenueReport } from "./financial/cost-vs-discounted-revenue"
@@ -96,7 +96,7 @@ export const ReportsModule = () => {
                     <button onClick={() => setCurrentTab('costDiscountRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'costDiscountRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cost vs Discounted Revenue</button>
                 </div>
             </div>
-            {/* {currentTab === 'revenue' && <RevenueReport />} */}
+            {currentTab === 'revenue' && <RevenueReport />}
             {currentTab === 'lifetime' && <LifetimeValueReport />}
             {currentTab === 'costRevenue' && <CostvsRevenueReport />}
             {currentTab === 'costDiscountRevenue' && <CostvsDiscountedRevenueReport />}
