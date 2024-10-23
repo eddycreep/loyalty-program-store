@@ -180,11 +180,11 @@ export const RedemptionRateReport = () => {
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-                <div className="">
-                    <h4 className="text-xl font-bold">Active Members</h4>
-                    <p className="text-sm text-gray-500">Number of active members over time</p>
-                </div>
-                <div className='flex gap-4'>
+            {/* <div className="">
+                <h4 className="text-xl font-bold">Redemption Rate</h4>
+                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
+            </div> */}
+            <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
@@ -195,13 +195,16 @@ export const RedemptionRateReport = () => {
                         </div>
                         <div className="w-[270px]">
                             <Label htmlFor="username" className="text-left pt-4">
-                                Expiry Date:
+                                End Date:
                             </Label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
-                <div className="pt-12">
+                <div className="pt-6">
+                    <Label htmlFor="username" className="text-left">
+                        Store:
+                    </Label>
                     <Select onValueChange={(value) => setSelectedStore(value)}>
                         <SelectTrigger className="w-[200px] bg-white">
                             <SelectValue placeholder="Select a store" />
@@ -222,6 +225,14 @@ export const RedemptionRateReport = () => {
                         <Filter />
                     </button>
                 </div>
+            </div>
+
+            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+                {headers.map((header, index) => (
+                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        {header}
+                    </p>
+                ))}
             </div>
 
                 <div className="pt-20 flex flex-col items-center justify-center">
@@ -236,11 +247,11 @@ export const RedemptionRateReport = () => {
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-                <div className="">
-                    <h4 className="text-xl font-bold">Active Members</h4>
-                    <p className="text-sm text-gray-500">Number of active members over time</p>
-                </div>
-                <div className='flex gap-4'>
+            {/* <div className="">
+                <h4 className="text-xl font-bold">Redemption Rate</h4>
+                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
+            </div> */}
+            <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
@@ -251,13 +262,16 @@ export const RedemptionRateReport = () => {
                         </div>
                         <div className="w-[270px]">
                             <Label htmlFor="username" className="text-left pt-4">
-                                Expiry Date:
+                                End Date:
                             </Label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
-                <div className="pt-12">
+                <div className="pt-6">
+                    <Label htmlFor="username" className="text-left">
+                        Store:
+                    </Label>
                     <Select onValueChange={(value) => setSelectedStore(value)}>
                         <SelectTrigger className="w-[200px] bg-white">
                             <SelectValue placeholder="Select a store" />
@@ -280,6 +294,14 @@ export const RedemptionRateReport = () => {
                 </div>
             </div>
 
+            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+                {headers.map((header, index) => (
+                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        {header}
+                    </p>
+                ))}
+            </div>
+
                 <div className="flex flex-col items-center justify-center pt-20">
                     <AlertTriangle size={44} />
                     <p className="ml-2 uppercase pt-2 text-red">There is no data available for the selected month!</p>
@@ -290,10 +312,10 @@ export const RedemptionRateReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            <div className="">
+            {/* <div className="">
                 <h4 className="text-xl font-bold">Redemption Rate</h4>
                 <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div>
+            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -305,13 +327,16 @@ export const RedemptionRateReport = () => {
                         </div>
                         <div className="w-[270px]">
                             <Label htmlFor="username" className="text-left pt-4">
-                                Expiry Date:
+                                End Date:
                             </Label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
-                <div className="pt-12">
+                <div className="pt-6">
+                    <Label htmlFor="username" className="text-left">
+                        Store:
+                    </Label>
                     <Select onValueChange={(value) => setSelectedStore(value)}>
                         <SelectTrigger className="w-[200px] bg-white">
                             <SelectValue placeholder="Select a store" />

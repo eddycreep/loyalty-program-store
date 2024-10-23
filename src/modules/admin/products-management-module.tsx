@@ -381,7 +381,7 @@ export const ProductsManModule = () => {
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
                         <h4 className="text-2xl font-semibold text-red">Product Specials</h4>
-                        <p className="text-gray-500">Reward customers with specials for completing actions.</p>
+                        <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
                             <Dialog>
@@ -574,7 +574,7 @@ export const ProductsManModule = () => {
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
                         <h4 className="text-2xl font-semibold text-red">Group Specials</h4>
-                        <p className="text-gray-500">Reward customers with specials for completing actions.</p>
+                        <p className="text-gray-500">Assign exclusive combo specials that customers can purchase</p>
                     </div>
                 <div className='flex gap-2 pt-8 pr-2'>
                         <Dialog>

@@ -125,7 +125,8 @@
     position: relative;
     width: 18rem;
     height: 8rem;
-    background: #29292c;
+    /* background: #29292c; */
+    background: #ffffff;
     border-radius: 1rem;
     overflow: hidden;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -139,7 +140,8 @@
     content: "";
     inset: 0.0625rem;
     border-radius: 0.9375rem;
-    background: #18181b;
+    /* background: #18181b; */
+    background: #ffffff;
     z-index: 2
   }
   

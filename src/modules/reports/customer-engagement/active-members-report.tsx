@@ -124,24 +124,8 @@ const stores = [
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-const months = [
-    { id: 1, month: 'January' },
-    { id: 2, month: 'February' },
-    { id: 3, month: 'March' },
-    { id: 4, month: 'April' },
-    { id: 5, month: 'May' },
-    { id: 6, month: 'June' },
-    { id: 7, month: 'July' },
-    { id: 8, month: 'August' },
-    { id: 9, month: 'September' },
-    { id: 10, month: 'October' },
-    { id: 11, month: 'November' },
-    { id: 12, month: 'December' }
-];
-
-
 export const ActiveMembersReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Active Members', 'Percentage of Active Members', 'Loyalty Tier Distribution'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Active Members', 'Active Members(%)', 'Loyalty Tier'];
 
     const [startdate, setStartDate] = useState('');
     const [enddate, setEndDate ] = useState('');
@@ -205,10 +189,10 @@ export const ActiveMembersReport = () => {
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-                <div className="">
+                {/* <div className="">
                     <h4 className="text-xl font-bold">Active Members</h4>
                     <p className="text-sm text-gray-500">Number of active members over time</p>
-                </div>
+                </div> */}
                 <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -261,10 +245,10 @@ export const ActiveMembersReport = () => {
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-                <div className="">
+                {/* <div className="">
                     <h4 className="text-xl font-bold">Active Members</h4>
                     <p className="text-sm text-gray-500">Number of active members over time</p>
-                </div>
+                </div> */}
                 <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -316,10 +300,10 @@ export const ActiveMembersReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            <div className="">
+            {/* <div className="">
                 <h4 className="text-xl font-bold">Active Members</h4>
                 <p className="text-sm text-gray-500">Number of active members over time</p>
-            </div>
+            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">

@@ -7,21 +7,28 @@ import toast from 'react-hot-toast';
 import { Check, X, BadgeAlert, AlertTriangle, Filter } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import SquareCircleLoader from "@/lib/square-circle-loader"
+import { Label } from "@/components/ui/label";
 
+interface LifetimeData {
+    store_id: string;
+    store_name: string;
+    date: string;
+    average_purchase_value: number;
+    average_purchase_frequency: number;
+    ltv_estimate: number;
+}
 
-const enrollmentRate = [
-    { month: 'january', store_id: 'SOO11', store: 'PLUS DC Germiston', newMembers: 200 },
-    { month: 'february', store_id: 'SOO11', store: 'PLUS DC Germiston', newMembers: 220 },  // Store ID SOO11 matches store name 'PLUS DC Germiston'
-    { month: 'march', store_id: 'SOO2', store: 'PLUS DC Albertin', newMembers: 240 },
-    { month: 'april', store_id: 'SOO10', store: 'PLUS DC Pretoria', newMembers: 260 },
-    { month: 'may', store_id: 'SOO5', store: 'PLUS DC Durbanville', newMembers: 300 },
-    { month: 'june', store_id: 'SOO2', store: 'PLUS DC Albertin', newMembers: 320 },  // Store ID SOO2 matches store name 'PLUS DC Albertin'
-    { month: 'july', store_id: 'SOO3', store: 'PLUS DC Bellville', newMembers: 340 },
-    { month: 'august', store_id: 'SOO7', store: 'PLUS DC Cape Town', newMembers: 360 },
-    { month: 'september', store_id: 'SOO7', store: 'PLUS DC Cape Town', newMembers: 380 },  // Store ID SOO7 matches store name 'PLUS DC Cape Town'
-    { month: 'october', store_id: 'SOO11', store: 'PLUS DC Germiston', newMembers: 400 },  // Store ID SOO11 matches store name 'PLUS DC Germiston'
-    { month: 'november', store_id: 'SOO12', store: 'PLUS DC Polokwane', newMembers: 420 },
-    { month: 'december', store_id: 'SOO1', store: 'PLUS DC Stellenbosch', newMembers: 440 },
+const lifetimeData: LifetimeData[] = [
+    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', average_purchase_value: 50, average_purchase_frequency: 6, ltv_estimate: 300 },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-10-01', average_purchase_value: 40, average_purchase_frequency: 5, ltv_estimate: 200 },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', average_purchase_value: 60, average_purchase_frequency: 7, ltv_estimate: 420 },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-28', average_purchase_value: 55, average_purchase_frequency: 6, ltv_estimate: 330 },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', average_purchase_value: 65, average_purchase_frequency: 7, ltv_estimate: 455 },
+    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-09-27', average_purchase_value: 70, average_purchase_frequency: 8, ltv_estimate: 560 },
+    { store_id: 'SOO7', store_name: 'PLUS DC Cape Town', date: '2024-09-25', average_purchase_value: 62, average_purchase_frequency: 6, ltv_estimate: 372 },
+    { store_id: 'SOO8', store_name: 'PLUS DC Pietermaritzburg', date: '2024-09-29', average_purchase_value: 58, average_purchase_frequency: 5, ltv_estimate: 290 },
+    { store_id: 'SOO9', store_name: 'PLUS DC East London', date: '2024-09-26', average_purchase_value: 52, average_purchase_frequency: 6, ltv_estimate: 312 },
+    { store_id: 'SOO10', store_name: 'PLUS DC Pretoria', date: '2024-09-23', average_purchase_value: 68, average_purchase_frequency: 7, ltv_estimate: 476 },
 ];
 
 
@@ -43,31 +50,33 @@ const stores = [
 
 
 export const LifetimeValueReport = () => {
-    const headers = ['Store ID', 'Store', 'Month', 'No. New Members'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Average Time to First Redemption (Days)', 'Total New Members', 'Count of First Redemptions'];
 
-    const [selectedMonth, setSelectedMonth] = useState(''); // Initialize without filtering on mount
-    const [selectedStore, setSelectedStore] = useState('')
-    const [filteredData, setFilteredData] = useState<{ store_id: string, store: string, month: string, newMembers: number }[]>([]); // No data filtered initially
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [selectedStore, setSelectedStore] = useState('');
+    const [filteredData, setFilteredData] = useState<LifetimeData[]>([]); // Explicitly typed state
     const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
     const [isError, setIsError] = useState(false); // Error state to handle no data
 
-    // Effect to filter data only after a month has been selected
-    // Filter data based on selected month and store
-    useEffect(() => {
+    // Filter function to handle filtering by date range and store
+    const handleFilter = () => {
         setIsLoading(true);
-
-        let filtered = enrollmentRate;
-
-        if (selectedMonth !== '' && selectedMonth !== 'All') {
-            filtered = filtered.filter(item => item.month === selectedMonth);
+        let filtered = lifetimeData;  // Start with full data set
+        
+        // Filter by selected date range (startDate and endDate)
+        if (startDate && endDate) {
+            filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-        if (selectedStore !== '' && selectedStore !== 'All') {
+        // Filter by selected store if not "All"
+        if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered);
+        setFilteredData(filtered);  // Set filtered data to state
 
+        // Handle case when no data matches the filters
         if (filtered.length === 0) {
             setIsError(true);
             toast.error('No data found for the selected filters!', {
@@ -78,55 +87,66 @@ export const LifetimeValueReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);
-    }, [selectedMonth, selectedStore]); // Runs when either month or store changes
+        setIsLoading(false);  // Disable loader after filtering
+    };
 
     // Display loading screen if data is being fetched
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-                <div className="">
-                    <h4 className="text-xl font-bold">Active Members</h4>
-                    <p className="text-sm text-gray-500">Number of active members over time</p>
+            {/* <div className="">
+                <h4 className="text-xl font-bold">Redemption Rate</h4>
+                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
+            </div> */}
+            <div className='flex gap-4'>
+                <div className="pt-6">
+                    <div className="flex gap-4">
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Start Date:
+                            </Label>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                End Date:
+                            </Label>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                    </div>
                 </div>
-                <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {enrollmentRate.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+                <div className="pt-6">
+                    <Label htmlFor="username" className="text-left">
+                        Store:
+                    </Label>
+                    <Select onValueChange={(value) => setSelectedStore(value)}>
+                        <SelectTrigger className="w-[200px] bg-white">
+                            <SelectValue placeholder="Select a store" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Store</SelectLabel>
+                                <SelectItem value="All">All</SelectItem>
+                                {stores.map(({ id, store_id, store }) => (
+                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex justify-end w-full pt-12">
+                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                        <Filter />
+                    </button>
+                </div>
             </div>
-            <div className="pt-6">
-                        <Select onValueChange={(value) => setSelectedStore(value)}>
-                            <SelectTrigger className="w-[200px] bg-white">
-                                <SelectValue placeholder="Select a store" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Store</SelectLabel>
-                                    <SelectItem value="All">All</SelectItem>
-                                    {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-8 rounded shadoww-lg flex items-center justify-center">
-                            <Filter />
-                        </button>
-                    </div>
+
+            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+                {headers.map((header, index) => (
+                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        {header}
+                    </p>
+                ))}
             </div>
 
                 <div className="pt-20 flex flex-col items-center justify-center">
@@ -141,48 +161,59 @@ export const LifetimeValueReport = () => {
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-                <div className="">
-                    <h4 className="text-xl font-bold">Active Members</h4>
-                    <p className="text-sm text-gray-500">Number of active members over time</p>
+            {/* <div className="">
+                <h4 className="text-xl font-bold">Redemption Rate</h4>
+                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
+            </div> */}
+            <div className='flex gap-4'>
+                <div className="pt-6">
+                    <div className="flex gap-4">
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Start Date:
+                            </Label>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                End Date:
+                            </Label>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                    </div>
                 </div>
-                <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {enrollmentRate.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+                <div className="pt-6">
+                    <Label htmlFor="username" className="text-left">
+                        Store:
+                    </Label>
+                    <Select onValueChange={(value) => setSelectedStore(value)}>
+                        <SelectTrigger className="w-[200px] bg-white">
+                            <SelectValue placeholder="Select a store" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Store</SelectLabel>
+                                <SelectItem value="All">All</SelectItem>
+                                {stores.map(({ id, store_id, store }) => (
+                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex justify-end w-full pt-12">
+                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                        <Filter />
+                    </button>
+                </div>
             </div>
-            <div className="pt-6">
-                        <Select onValueChange={(value) => setSelectedStore(value)}>
-                            <SelectTrigger className="w-[200px] bg-white">
-                                <SelectValue placeholder="Select a store" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Store</SelectLabel>
-                                    <SelectItem value="All">All</SelectItem>
-                                    {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-8 rounded shadoww-lg flex items-center justify-center">
-                            <Filter />
-                        </button>
-                    </div>
+
+            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+                {headers.map((header, index) => (
+                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        {header}
+                    </p>
+                ))}
             </div>
 
                 <div className="flex flex-col items-center justify-center pt-20">
@@ -193,54 +224,53 @@ export const LifetimeValueReport = () => {
         );
     }
 
-    // Display filtered data when available
-    
-
-
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            <div className="">
+            {/* <div className="">
                 <h4 className="text-xl font-bold">Redemption Rate</h4>
                 <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div>
+            </div> */}
             <div className='flex gap-4'>
-            <div className="pt-6">
-                <Select onValueChange={(value) => setSelectedMonth(value)}>
-                    <SelectTrigger className="w-[180px] bg-white">
-                        <SelectValue placeholder="Select a month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>Month</SelectLabel>
-                            <SelectItem value="All">All</SelectItem>
-                            {enrollmentRate.map(({ month }) => (
-                                <SelectItem key={month} value={month}>{month.charAt(0).toUpperCase() + month.slice(1)}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="pt-6">
-                        <Select onValueChange={(value) => setSelectedStore(value)}>
-                            <SelectTrigger className="w-[200px] bg-white">
-                                <SelectValue placeholder="Select a store" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Store</SelectLabel>
-                                    <SelectItem value="All">All</SelectItem>
-                                    {stores.map(({ id, store_id, store }) => (
-                                        <SelectItem key={id} value={store_id}>{store}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                <div className="pt-6">
+                    <div className="flex gap-4">
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Start Date:
+                            </Label>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                End Date:
+                            </Label>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
                     </div>
-                    <div className="pt-6">
-                        <button className="bg-red hover:bg-black text-white w-20 h-9 rounded shadoww-lg flex items-center justify-center">
-                            <Filter />
-                        </button>
-                    </div>
+                </div>
+                <div className="pt-6">
+                    <Label htmlFor="username" className="text-left">
+                        Store:
+                    </Label>
+                    <Select onValueChange={(value) => setSelectedStore(value)}>
+                        <SelectTrigger className="w-[200px] bg-white">
+                            <SelectValue placeholder="Select a store" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Store</SelectLabel>
+                                <SelectItem value="All">All</SelectItem>
+                                {stores.map(({ id, store_id, store }) => (
+                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex justify-end w-full pt-12">
+                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                        <Filter />
+                    </button>
+                </div>
             </div>
 
             <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
@@ -252,13 +282,15 @@ export const LifetimeValueReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map((item, index) => (
-                    <div key={index} className="bg-white flex flex-col p-3 rounded shadow-lg">
+                {filteredData.map(({ store_id, store_name, date, average_purchase_value, average_purchase_frequency, ltv_estimate }) => (
+                    <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{item.store_id}</p>
-                            <p className="text-sm flex-1 text-center">{item.store}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{item.month}</p>
-                            <p className="text-sm flex-1 text-center">{item.newMembers}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{date}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{average_purchase_value}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{average_purchase_frequency}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{ltv_estimate}%</p>
                         </div>
                     </div>
                 ))}
