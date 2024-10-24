@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
 
-
 interface RedemptionFrequency {
     store_id: string;
     store_name: string;
@@ -19,6 +18,7 @@ interface RedemptionFrequency {
     average_redemptions_per_member: number;
 }
 
+
 const redemptionFrequencyData: RedemptionFrequency[] = [
     { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-09-10', total_redemptions: 200, total_active_members: 1500, average_redemptions_per_member: 0.13 },
     { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-08-20', total_redemptions: 150, total_active_members: 1200, average_redemptions_per_member: 0.125 },
@@ -27,7 +27,6 @@ const redemptionFrequencyData: RedemptionFrequency[] = [
     { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-07-01', total_redemptions: 190, total_active_members: 1300, average_redemptions_per_member: 0.146 },
     { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-06-10', total_redemptions: 175, total_active_members: 1400, average_redemptions_per_member: 0.125 },
 ];
-
 
 
 const stores = [
@@ -46,35 +45,34 @@ const stores = [
 ];
 
 
-
 export const RedemptionFrequencyReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Average Time to First Redemption (Days)', 'Total New Members', 'Count of First Redemptions'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Redemptions', 'Total Active Members', 'Average Redemptions per Member'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<RedemptionFrequency[]>([]); // Explicitly typed state
-    const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
-    const [isError, setIsError] = useState(false); // Error state to handle no data
+    const [filteredData, setFilteredData] = useState<RedemptionFrequency[]>([]); 
+    const [isLoading, setIsLoading] = useState(false); 
+    const [isError, setIsError] = useState(false); 
 
-    // Filter function to handle filtering by date range and store
+    
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = redemptionFrequencyData;  // Start with full data set
+        let filtered = redemptionFrequencyData;
         
-        // Filter by selected date range (startDate and endDate)
+
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-        // Filter by selected store if not "All"
+
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered);  // Set filtered data to state
+        setFilteredData(filtered); 
 
-        // Handle case when no data matches the filters
+
         if (filtered.length === 0) {
             setIsError(true);
             toast.error('No data found for the selected filters!', {
@@ -85,17 +83,13 @@ export const RedemptionFrequencyReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);  // Disable loader after filtering
+        setIsLoading(false);  
     };
 
-    // Display loading screen if data is being fetched
+
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -155,14 +149,10 @@ export const RedemptionFrequencyReport = () => {
         );
     }
 
-    // Show error message if there is no data for the selected month
+
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -224,10 +214,6 @@ export const RedemptionFrequencyReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">

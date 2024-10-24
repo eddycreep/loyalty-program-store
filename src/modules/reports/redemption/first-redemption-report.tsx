@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
 
-// Interface for promotionalImpactData
 interface FirstRedemptionData {
     store_id: string;
     store_name: string;
@@ -18,6 +17,7 @@ interface FirstRedemptionData {
     total_new_members: number;
     count_of_first_redemptions: number;
 }
+
 
 const firstRedemptionData: FirstRedemptionData[] = [
     { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-09-01', average_time_to_first_redemption: 5, total_new_members: 100, count_of_first_redemptions: 80 },
@@ -46,7 +46,7 @@ const stores = [
 
 
 export const FirstRedemptionReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Average Time to First Redemption (Days)', 'Total New Members', 'Count of First Redemptions'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Avg. Time to First Redemption (Days)', 'Total New Members', 'Count of First Redemptions'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -58,7 +58,7 @@ export const FirstRedemptionReport = () => {
     // Filter function to handle filtering by date range and store
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = firstRedemptionData;  // Start with full data set
+        let filtered = firstRedemptionData; 
         
         // Filter by selected date range (startDate and endDate)
         if (startDate && endDate) {
@@ -86,14 +86,10 @@ export const FirstRedemptionReport = () => {
         setIsLoading(false);  // Disable loader after filtering
     };
 
-    // Display loading screen if data is being fetched
+
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -153,14 +149,10 @@ export const FirstRedemptionReport = () => {
         );
     }
 
-    // Show error message if there is no data for the selected month
+
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -222,10 +214,6 @@ export const FirstRedemptionReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">

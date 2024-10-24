@@ -26,9 +26,6 @@ const discountCostnRevenueData: DiscountCostnRevenueData[] = [
     { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', total_discounts_given: 7000, total_revenue_from_discounts: 45000, net_revenue_after_discounts: 38000 },
 ];
 
-
-
-
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
@@ -44,19 +41,17 @@ const stores = [
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-
-
 export const CostvsDiscountedRevenueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Average Time to First Redemption (Days)', 'Total New Members', 'Count of First Redemptions'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Given', 'Total Revenue from Discounts', 'Net Revenue After Discounts'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<DiscountCostnRevenueData[]>([]); // Explicitly typed state
-    const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
-    const [isError, setIsError] = useState(false); // Error state to handle no data
+    const [filteredData, setFilteredData] = useState<DiscountCostnRevenueData[]>([]); 
+    const [isLoading, setIsLoading] = useState(false); 
+    const [isError, setIsError] = useState(false); 
 
-    // Filter function to handle filtering by date range and store
+    
     const handleFilter = () => {
         setIsLoading(true);
         let filtered = discountCostnRevenueData;  // Start with full data set
