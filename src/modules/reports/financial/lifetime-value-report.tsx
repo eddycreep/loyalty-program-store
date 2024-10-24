@@ -50,33 +50,33 @@ const stores = [
 
 
 export const LifetimeValueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Average Time to First Redemption (Days)', 'Total New Members', 'Count of First Redemptions'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Average Purchase Value', 'Average Purchase Frequency', 'LTV Estimate'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<LifetimeData[]>([]); // Explicitly typed state
-    const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
-    const [isError, setIsError] = useState(false); // Error state to handle no data
+    const [filteredData, setFilteredData] = useState<LifetimeData[]>([]); 
+    const [isLoading, setIsLoading] = useState(false); 
+    const [isError, setIsError] = useState(false); 
 
-    // Filter function to handle filtering by date range and store
+
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = lifetimeData;  // Start with full data set
+        let filtered = lifetimeData;  
         
-        // Filter by selected date range (startDate and endDate)
+
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-        // Filter by selected store if not "All"
+
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered);  // Set filtered data to state
+        setFilteredData(filtered); 
 
-        // Handle case when no data matches the filters
+
         if (filtered.length === 0) {
             setIsError(true);
             toast.error('No data found for the selected filters!', {
@@ -87,17 +87,13 @@ export const LifetimeValueReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);  // Disable loader after filtering
+        setIsLoading(false);  
     };
 
-    // Display loading screen if data is being fetched
+
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -157,14 +153,10 @@ export const LifetimeValueReport = () => {
         );
     }
 
-    // Show error message if there is no data for the selected month
+
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -226,10 +218,6 @@ export const LifetimeValueReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">

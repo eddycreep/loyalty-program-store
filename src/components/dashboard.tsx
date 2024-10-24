@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
+import { ActiveMembersCard } from "@/components/component/cards/customer-engagement/active-members-card"
 
 // Dummy data for charts
 const activeMembers = [
@@ -208,6 +209,20 @@ export default function Dashboard() {
           <TabsTrigger value="performance">Product Performance</TabsTrigger>
         </TabsList>
         <TabsContent value="customer-engagement" className="space-y-4">
+            <div className="flex justify-between">
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+            </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -285,6 +300,20 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="financial" className="space-y-4">
+            <div className="flex justify-between">
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+            </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
               <CardHeader>
@@ -368,6 +397,17 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="redemption" className="space-y-4">
+            <div className="flex justify-between">
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+            </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -445,6 +485,20 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="satisfaction" className="space-y-4">
+            <div className="flex justify-between">
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+            </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
             <CardHeader>
@@ -522,6 +576,20 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="effectiveness" className="space-y-4">
+            <div className="flex justify-between">
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+            </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -587,6 +655,20 @@ export default function Dashboard() {
         </TabsContent>
         {/* product performance */}
         <TabsContent value="performance" className="space-y-4">
+            <div className="flex justify-between">
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+                <div className="">
+                  <ActiveMembersCard />
+                </div>
+            </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>

@@ -14,6 +14,9 @@ import { EnrollmentRateReport } from "./customer-engagement/enrollment-rate-repo
 import { RetentionRateReport } from "./customer-engagement/retention-rate-report"
 import { RedemptionRateReport } from "./customer-engagement/redemption-rate-report"
 
+// cards
+import { ActiveMembersCard } from "@/components/component/cards/customer-engagement/active-members-card"
+
 // FINANCIAL
 import { RevenueReport } from "./financial/revenue-report"
 import { LifetimeValueReport } from "./financial/lifetime-value-report"
@@ -65,102 +68,102 @@ export const ReportsModule = () => {
         <div className='w-full h-screen flex flex-col px-4 py-4 gap-4 rounded-lg overflow-y-auto m2b-4'>
             <h1 className="text-3xl font-bold mb-4">Reports</h1>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="customer-engagement">Customer Engagement</TabsTrigger>
-          <TabsTrigger value="financial">Financial</TabsTrigger>
-          <TabsTrigger value="redemption">Redemption</TabsTrigger>
-          <TabsTrigger value="satisfaction">Satisfaction</TabsTrigger>
-          <TabsTrigger value="effectiveness">Effectiveness</TabsTrigger>
-          {/* <TabsTrigger value="performance">Product Performance</TabsTrigger> */}
-        </TabsList>
-        <TabsContent value="customer-engagement" className="space-y-4">
-            <div className="pl-2">
-                <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
-                    <button onClick={() => setCurrentTab('members')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'members'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Active Members</button>
-                    <button onClick={() => setCurrentTab('enrollment')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'enrollment'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Enrollment Rate</button>
-                    <button onClick={() => setCurrentTab('retention')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'retention'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Retention Rate</button>
-                    <button onClick={() => setCurrentTab('redemption')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'redemption'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Redemption Rate</button>
+              <TabsList>
+                <TabsTrigger value="customer-engagement">Customer Engagement</TabsTrigger>
+                <TabsTrigger value="financial">Financial</TabsTrigger>
+                <TabsTrigger value="redemption">Redemption</TabsTrigger>
+                <TabsTrigger value="satisfaction">Satisfaction</TabsTrigger>
+                <TabsTrigger value="effectiveness">Effectiveness</TabsTrigger>
+                {/* <TabsTrigger value="performance">Product Performance</TabsTrigger> */}
+              </TabsList>
+              <TabsContent value="customer-engagement" className="space-y-4">
+                  <div className="pl-2">
+                      <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                          <button onClick={() => setCurrentTab('members')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'members'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Active Members</button>
+                          <button onClick={() => setCurrentTab('enrollment')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'enrollment'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Enrollment Rate</button>
+                          <button onClick={() => setCurrentTab('retention')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'retention'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Retention Rate</button>
+                          <button onClick={() => setCurrentTab('redemption')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'redemption'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Redemption Rate</button>
+                      </div>
+                  </div>
+                  {currentTab === 'members' && <ActiveMembersReport />}
+                  {currentTab === 'enrollment' && <EnrollmentRateReport />}
+                  {currentTab === 'retention' && <RetentionRateReport />}
+                  {currentTab === 'redemption' && <RedemptionRateReport />}
+              </TabsContent>
+              <TabsContent value="financial" className="space-y-4">
+                  <div className="pl-2">
+                      <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                          <button onClick={() => setCurrentTab('revenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'revenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Revenue</button>
+                          <button onClick={() => setCurrentTab('lifetime')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'lifetime'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Lifetime Value</button>
+                          <button onClick={() => setCurrentTab('costRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'costRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cost vs Revenue</button>
+                          <button onClick={() => setCurrentTab('costDiscountRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'costDiscountRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cost vs Discounted Rev</button>
+                      </div>
+                  </div>
+                  {currentTab === 'revenue' && <RevenueReport />}
+                  {currentTab === 'lifetime' && <LifetimeValueReport />}
+                  {currentTab === 'costRevenue' && <CostvsRevenueReport />}
+                  {currentTab === 'costDiscountRevenue' && <CostvsDiscountedRevenueReport />}
+              </TabsContent>
+              <TabsContent value="redemption" className="space-y-4">
+                <div className="pl-2">
+                      <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                          <button onClick={() => setCurrentTab('firstRedemtion')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'firstRedemtion'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Avg. First Redemption</button>
+                          <button onClick={() => setCurrentTab('redemptionFrequency')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'redemptionFrequency'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Redemption Frequency</button>
+                          <button onClick={() => setCurrentTab('usedSpecials')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'usedSpecials'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Unused Specials</button>
+                      </div>
+                  </div>
+                  {currentTab === 'firstRedemtion' && <FirstRedemptionReport />}
+                  {currentTab === 'redemptionFrequency' && <RedemptionFrequencyReport />}
+                  {currentTab === 'usedSpecials' && <UnsusedLoyaltyReport />}
+              </TabsContent>
+              <TabsContent value="satisfaction" className="space-y-4">
+                <div className="pl-2">
+                      <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                          <button onClick={() => setCurrentTab('satisfaction')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'satisfaction'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Customer Satisfaction</button>
+                          <button onClick={() => setCurrentTab('npc')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'npc'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>NPS</button>
+                          <button onClick={() => setCurrentTab('avgTransaction')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'avgTransaction'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Avg. Spend Transaction</button>
+                          <button onClick={() => setCurrentTab('crossSell')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'crossSell'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cross-Sell/Upsell Rate</button>
+                      </div>
+                  </div>
+                  {currentTab === 'satisfaction' && <CustomerSatisfactionReport />}
+                  {currentTab === 'npc' && <NetPromotoerScoreReport />}
+                  {currentTab === 'avgTransaction' && <AvgSpendPerTransactionReport />}
+                  {currentTab === 'crossSell' && <CrossvsUpsellReport />}
+              </TabsContent>
+              <TabsContent value="effectiveness" className="space-y-4">
+                <div className="pl-2">
+                      <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                          <button onClick={() => setCurrentTab('memberConversion')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'memberConversion'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>MemberConversion Rate</button>
+                          <button onClick={() => setCurrentTab('promotionalImpact')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'promotionalImpact'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Promotional Impact</button>
+                      </div>
+                  </div>
+                  {currentTab === 'memberConversion' && <MemberConversionReport />} 
+                  {currentTab === 'promotionalImpact' && <PromotionalImpactReport />}
+              </TabsContent>
+              {/* product performance
+              {/* <TabsContent value="performance" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Member Conversion Rate</CardTitle>
+                      <CardDescription>Percentage of non-members joining the loyalty program</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                    Member Conversion Rate
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Promotional Impact</CardTitle>
+                      <CardDescription>Effectiveness of special promotions on sales</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                    Promotional Impact
+                    </CardContent>
+                  </Card>
                 </div>
-            </div>
-            {currentTab === 'members' && <ActiveMembersReport />}
-            {currentTab === 'enrollment' && <EnrollmentRateReport />}
-            {currentTab === 'retention' && <RetentionRateReport />}
-            {currentTab === 'redemption' && <RedemptionRateReport />}
-        </TabsContent>
-        <TabsContent value="financial" className="space-y-4">
-            <div className="pl-2">
-                <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
-                    <button onClick={() => setCurrentTab('revenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'revenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Revenue</button>
-                    <button onClick={() => setCurrentTab('lifetime')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'lifetime'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Lifetime Value</button>
-                    <button onClick={() => setCurrentTab('costRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'costRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cost vs Revenue</button>
-                    <button onClick={() => setCurrentTab('costDiscountRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'costDiscountRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cost vs Discounted Revenue</button>
-                </div>
-            </div>
-            {currentTab === 'revenue' && <RevenueReport />}
-            {currentTab === 'lifetime' && <LifetimeValueReport />}
-            {currentTab === 'costRevenue' && <CostvsRevenueReport />}
-            {currentTab === 'costDiscountRevenue' && <CostvsDiscountedRevenueReport />}
-        </TabsContent>
-        <TabsContent value="redemption" className="space-y-4">
-          <div className="pl-2">
-                <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
-                    <button onClick={() => setCurrentTab('firstRedemtion')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'firstRedemtion'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>AVG First Redemption</button>
-                    <button onClick={() => setCurrentTab('redemptionFrequency')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'redemptionFrequency'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Redemption Frequencye</button>
-                    <button onClick={() => setCurrentTab('usedSpecials')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'usedSpecials'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Unused Specials</button>
-                </div>
-            </div>
-            {currentTab === 'firstRedemtion' && <FirstRedemptionReport />}
-            {currentTab === 'redemptionFrequency' && <RedemptionFrequencyReport />}
-            {currentTab === 'usedSpecials' && <UnsusedLoyaltyReport />}
-        </TabsContent>
-        <TabsContent value="satisfaction" className="space-y-4">
-          <div className="pl-2">
-                <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
-                    <button onClick={() => setCurrentTab('satisfaction')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'satisfaction'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Customer Satisfaction</button>
-                    <button onClick={() => setCurrentTab('npc')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'npc'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Net Promoter Score (NPS)</button>
-                    <button onClick={() => setCurrentTab('avgTransaction')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'avgTransaction'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>AVG Spend p/ Transaction</button>
-                    <button onClick={() => setCurrentTab('crossSell')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'crossSell'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cross-Sell/Upsell Rate</button>
-                </div>
-            </div>
-            {currentTab === 'satisfaction' && <CustomerSatisfactionReport />}
-            {currentTab === 'npc' && <NetPromotoerScoreReport />}
-            {currentTab === 'avgTransaction' && <AvgSpendPerTransactionReport />}
-            {currentTab === 'crossSell' && <CrossvsUpsellReport />}
-        </TabsContent>
-        <TabsContent value="effectiveness" className="space-y-4">
-          <div className="pl-2">
-                <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
-                    <button onClick={() => setCurrentTab('memberConversion')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'memberConversion'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>MemberConversion Rate</button>
-                    <button onClick={() => setCurrentTab('promotionalImpact')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'promotionalImpact'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Promotional Impact</button>
-                </div>
-            </div>
-            {currentTab === 'memberConversion' && <MemberConversionReport />} 
-            {currentTab === 'promotionalImpact' && <PromotionalImpactReport />}
-        </TabsContent>
-        {/* product performance
-        {/* <TabsContent value="performance" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Member Conversion Rate</CardTitle>
-                <CardDescription>Percentage of non-members joining the loyalty program</CardDescription>
-              </CardHeader>
-              <CardContent>
-              Member Conversion Rate
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Promotional Impact</CardTitle>
-                <CardDescription>Effectiveness of special promotions on sales</CardDescription>
-              </CardHeader>
-              <CardContent>
-              Promotional Impact
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent> */}
-      </Tabs>
+              </TabsContent> */}
+            </Tabs>
         </div>
     );
 }

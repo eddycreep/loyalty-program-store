@@ -18,6 +18,7 @@ interface CostPerMemberData {
     cost_per_member: number;
 }
 
+
 const costPerMemberData: CostPerMemberData[] = [
     { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', total_program_costs: 20000, total_active_members: 1500, cost_per_member: 13.33 },
     { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-10-01', total_program_costs: 15000, total_active_members: 1200, cost_per_member: 12.50 },
@@ -26,7 +27,6 @@ const costPerMemberData: CostPerMemberData[] = [
     { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', total_program_costs: 22000, total_active_members: 1600, cost_per_member: 13.75 },
     { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-09-27', total_program_costs: 21000, total_active_members: 1400, cost_per_member: 15.00 },
 ];
-
 
 
 const stores = [
@@ -45,35 +45,34 @@ const stores = [
 ];
 
 
-
 export const CostvsRevenueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Average Time to First Redemption (Days)', 'Total New Members', 'Count of First Redemptions'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Program Costs', 'Total Active Members', 'Cost per Member'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<CostPerMemberData[]>([]); // Explicitly typed state
-    const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
-    const [isError, setIsError] = useState(false); // Error state to handle no data
+    const [filteredData, setFilteredData] = useState<CostPerMemberData[]>([]); 
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false); 
 
-    // Filter function to handle filtering by date range and store
+
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = costPerMemberData;  // Start with full data set
+        let filtered = costPerMemberData;  
         
-        // Filter by selected date range (startDate and endDate)
+
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-        // Filter by selected store if not "All"
+
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered);  // Set filtered data to state
+        setFilteredData(filtered);  
 
-        // Handle case when no data matches the filters
+
         if (filtered.length === 0) {
             setIsError(true);
             toast.error('No data found for the selected filters!', {
@@ -84,17 +83,13 @@ export const CostvsRevenueReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);  // Disable loader after filtering
+        setIsLoading(false);  
     };
 
-    // Display loading screen if data is being fetched
+
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -154,14 +149,10 @@ export const CostvsRevenueReport = () => {
         );
     }
 
-    // Show error message if there is no data for the selected month
+
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -223,10 +214,6 @@ export const CostvsRevenueReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">

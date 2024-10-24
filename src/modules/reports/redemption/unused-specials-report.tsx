@@ -13,19 +13,21 @@ interface UnusedSpecials {
     store_id: string;
     store_name: string;
     date: string;
-    total_points_earned: number;
-    total_points_redeemed: number;
-    total_unused_points: number;
+    total_unused_specials: number;
+    total_unused_rewards: number;
+    total_unused_discounts: number;
 }
 
+
 const unusedSpecialsData: UnusedSpecials[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', total_points_earned: 10000, total_points_redeemed: 3000, total_unused_points: 7000 },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-09-15', total_points_earned: 8000, total_points_redeemed: 2000, total_unused_points: 6000 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-08-01', total_points_earned: 12000, total_points_redeemed: 6000, total_unused_points: 6000 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-07-10', total_points_earned: 9500, total_points_redeemed: 4000, total_unused_points: 5500 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-06-25', total_points_earned: 11000, total_points_redeemed: 5000, total_unused_points: 6000 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-05-30', total_points_earned: 13000, total_points_redeemed: 8000, total_unused_points: 5000 },
+    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', total_unused_specials: 10000, total_unused_rewards: 3000, total_unused_discounts: 7000 },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-09-15', total_unused_specials: 8000, total_unused_rewards: 2000, total_unused_discounts: 6000 },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-08-01', total_unused_specials: 12000, total_unused_rewards: 6000, total_unused_discounts: 6000 },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-07-10', total_unused_specials: 9500, total_unused_rewards: 4000, total_unused_discounts: 5500 },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-06-25', total_unused_specials: 11000, total_unused_rewards: 5000, total_unused_discounts: 6000 },
+    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-05-30', total_unused_specials: 13000, total_unused_rewards: 8000, total_unused_discounts: 5000 },
 ];
+
 
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
@@ -43,19 +45,16 @@ const stores = [
 ];
 
 
-
-
 export const UnsusedLoyaltyReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Average Time to First Redemption (Days)', 'Total New Members', 'Count of First Redemptions'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Unused Specials ', 'Total Unused Rewards', 'Total Unused Discounts'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<UnusedSpecials[]>([]); // Explicitly typed state
-    const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
-    const [isError, setIsError] = useState(false); // Error state to handle no data
+    const [filteredData, setFilteredData] = useState<UnusedSpecials[]>([]);
+    const [isLoading, setIsLoading] = useState(false); 
+    const [isError, setIsError] = useState(false); 
 
-    // Filter function to handle filtering by date range and store
     const handleFilter = () => {
         setIsLoading(true);
         let filtered = unusedSpecialsData;  // Start with full data set
@@ -86,14 +85,10 @@ export const UnsusedLoyaltyReport = () => {
         setIsLoading(false);  // Disable loader after filtering
     };
 
-    // Display loading screen if data is being fetched
+
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -153,14 +148,10 @@ export const UnsusedLoyaltyReport = () => {
         );
     }
 
-    // Show error message if there is no data for the selected month
+
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -222,10 +213,6 @@ export const UnsusedLoyaltyReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -278,15 +265,15 @@ export const UnsusedLoyaltyReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_points_earned, total_points_redeemed, total_unused_points }) => (
+                {filteredData.map(({ store_id, store_name, date, total_unused_specials, total_unused_rewards, total_unused_discounts }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_points_earned}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_points_redeemed}</p>
-                            <p className={`text-sm flex-1 text-center ${total_unused_points >= 50 ? 'text-green' : 'text-red'}`}>{total_unused_points}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{total_unused_specials}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{total_unused_rewards}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{total_unused_discounts}%</p>
                         </div>
                     </div>
                 ))}

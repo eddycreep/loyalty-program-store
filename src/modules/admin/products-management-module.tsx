@@ -14,6 +14,7 @@ import { EditProductGroupSpecials } from "@/components/component/edit-productGro
 import { ApiError } from "next/dist/server/api-utils";
 import { IconTooltip } from "@/components/component/icon-tooltip";
 import { XIconTooltip } from "@/components/component/x-icon-tooltip";
+import { CombinedSpecialsManagerComponent } from "@/components/combined-specials-manager"
 
 interface ProductProps {
     idx: number,
@@ -142,6 +143,9 @@ export const ProductsManModule = () => {
     //all product specials
     const [allProductSpecials, setAllProductSpecials] = useState<GetSpecialsResponse>([]);
     const [allGroupSpecials, setAllGroupSpecials] = useState<GetGroupSpecialsResponse>([]);
+
+    //toggler combined specials
+    const [ combinedSpecialsComponent, setCombinedSpecialsComponent ] = useState(false);
 
 
     const headers = ['ID',	'Product',	'Special',	'Special Value',	'Start Date',	'Expiry Date',	'Status', 'Action']
@@ -318,6 +322,10 @@ export const ProductsManModule = () => {
         setEditGroupProductsPopup(!editGroupProductsPopup);
     };
 
+    const toggleCombinedSpecials = () => {
+        setCombinedSpecialsComponent(!combinedSpecialsComponent);
+    }
+
     // || ----- ----- ----- GET REQUESTS FOR ACTIVE x UPCOMING SPECIALS ----- ----- ----- ||
     const getAllProductSpecials = async () => {
         try{
@@ -461,6 +469,7 @@ export const ProductsManModule = () => {
                                                     onChange={(e) => setStoreID(e.target.value)}
                                                 >
                                                         <option>Select Store ID</option>
+                                                        <option value="All">All</option>
                                                         <option value="S001">S001</option>
                                                         <option value="S002">S002</option>
                                                         <option value="S003">S003</option>
@@ -570,6 +579,7 @@ export const ProductsManModule = () => {
                 </div>
             </div>
             {/* GROUP SPECIALS */}
+            {combinedSpecialsComponent && (<CombinedSpecialsManagerComponent />)}
             <div className="pb-16">
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
@@ -577,7 +587,10 @@ export const ProductsManModule = () => {
                         <p className="text-gray-500">Assign exclusive combo specials that customers can purchase</p>
                     </div>
                 <div className='flex gap-2 pt-8 pr-2'>
-                        <Dialog>
+                        <button onClick={ toggleCombinedSpecials } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                            Add Special
+                        </button>
+                        {/* <Dialog>
                             <DialogTrigger asChild>
                                 <Button className="bg-black text-white p-2 w-40 rounded-lg hover:bg-red">Add Group Special</Button>
                             </DialogTrigger>
@@ -695,7 +708,7 @@ export const ProductsManModule = () => {
                                     </button>
                                 </DialogFooter>
                             </DialogContent>
-                        </Dialog>
+                        </Dialog> */}
                 </div>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">

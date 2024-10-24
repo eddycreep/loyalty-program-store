@@ -45,12 +45,12 @@ export const RewardsModule = () => {
     const [editProductsPopup, setEditProductsPopup] = useState(false);
     const headers = ['Title', 'Task', 'Reward', 'Type', 'Amount', 'Action']
 
-
     const [title, setRewardTitle] = useState('')
     const [description, setRewardDescription] = useState('')
     const [expiryDate, setRewardExpiryDate] = useState('')
     const [reward, setReward] = useState('')
     const [rewardType, setRewardType] = useState('')
+    const [storeID, setStoreID] = useState('') //add store id to the backend as well
     const [rewardPrice, setRewardPrice] = useState(0)
     const [isActive, setRewardIsActive] = useState(false)
     
@@ -122,7 +122,7 @@ export const RewardsModule = () => {
                                     </DialogDescription>
                                     </DialogHeader>
                                     <div className="grid gap-4 py-4">
-                                        <div className="flex flex-col gap-2">
+                                        <div className="flex gap-2">
                                             <div className="w-full">
                                                 <Label htmlFor="name" className="text-left pt-4">
                                                     Title:
@@ -136,7 +136,7 @@ export const RewardsModule = () => {
                                                 <input onChange={(e) => setRewardDescription(e.target.value)} type="input" placeholder="complete a review on store products" className='w-full p-2 rounded-lg border border-gray-300'/>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col gap-2">
+                                        <div className="flex gap-2">
                                             <div className="w-full">
                                                 <Label htmlFor="name" className="text-left pt-4">
                                                     Reward:
@@ -149,6 +149,8 @@ export const RewardsModule = () => {
                                                 </Label>
                                                 <input onChange={(e) => setRewardPrice(Number(e.target.value))} type="input" placeholder="10" className='w-full p-2 rounded-lg border border-gray-300'/>
                                             </div>
+                                        </div>
+                                        <div className="flex gap-2">
                                             <div className="w-full">
                                                 <Label htmlFor="name" className="text-left pt-4">
                                                     Type:
@@ -160,6 +162,23 @@ export const RewardsModule = () => {
                                                         <option>Select Type</option>
                                                             <option value="Percentage">Percentage</option>
                                                             <option value="Amount">Amount</option>
+                                                </select>
+                                            </div>
+                                            <div className="w-full">
+                                                <Label htmlFor="name" className="text-left pt-4">
+                                                    Store ID:
+                                                </Label>
+                                                <select 
+                                                    className="w-full p-2 rounded-lg border border-gray-300"
+                                                    onChange={(e) => setStoreID(e.target.value)}
+                                                >
+                                                        <option>Select Store ID</option>
+                                                        <option value="All">All</option>
+                                                        <option value="S001">S001</option>
+                                                        <option value="S002">S002</option>
+                                                        <option value="S003">S003</option>
+                                                        <option value="S004">S004</option>
+                                                        <option value="S005">S005</option>
                                                 </select>
                                             </div>
                                         </div>
