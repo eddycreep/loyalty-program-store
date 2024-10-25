@@ -1,13 +1,17 @@
 'use client'
 
+import { useState } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+
+
 import { Star, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from 'react-hot-toast';
 import { useQuery } from "@/hooks/useQuery";
 import * as React from "react";
-import {useState, useEffect } from 'react';
 import axios from 'axios';
 import { ReviewCards } from '@/components/component/review-cards';
 import { SuccessCard } from "@/components/component/cards/success-card"
@@ -26,6 +30,7 @@ interface ReviewProps {
 
 
 type ReviewResponse = ReviewProps[]
+
 
 const reviews = [
   // High rating (4-5 stars)
@@ -125,75 +130,34 @@ const reviews = [
   }
 ];
 
-
-
 export const ReviewsModule = () => {
-  // Filter reviews based on their ratings
-  const lowRatingReviews = reviews.filter((review) => review.rating >= 1 && review.rating <= 2);
-  const fairRatingReviews = reviews.filter((review) => review.rating === 3);
-  const highRatingReviews = reviews.filter((review) => review.rating >= 4 && review.rating <= 5);
+  const [activeTab, setActiveTab] = useState('customer-engagement')
 
-  const renderReviews = (reviews: ReviewProps[]) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-      {reviews.map((review: ReviewProps) => (
-        <Card key={review.id} className="flex flex-col">
-          <CardHeader className="flex flex-row items-center gap-4">
-            <Avatar>
-              <AvatarImage
-                src={review.avatar}
-                alt={review.name}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-            </Avatar>
-            <div className="flex flex-col">
-              <CardTitle className="text-lg">{review.name}</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                {new Date(review.date).toDateString()}
-              </p>
-            </div>
-          </CardHeader>
-          <CardContent className="flex-grow flex flex-col">
-            <div className="flex justify-between items-center mb-2">
-              <Badge variant="secondary">{review.product}</Badge>
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${i < review.rating ? "text-yellow fill-yellow" : "text-gray-300"}`}
-                  />
-                ))}
-              </div>
-            </div>
-            <p className="text-sm flex-grow">{review.comment}</p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
 
   return (
-    <div className="min-h-screen overflow-y-auto mb-56">
-      <div>
-        <h2 className="text-2xl text-center mb-4 font-bold text-gray-500">Customer Product Reviews</h2>
-        <SuccessCard />
-        
-        <div className="pt-10">
-          <h5 className="text-xl text-gray-500">Low Product Rating Reviews</h5>
-          {renderReviews(lowRatingReviews)}
-        </div>
-
-        <div className="pt-10">
-          <h5 className="text-xl text-gray-500">Fair Product Rating Reviews</h5>
-          {renderReviews(fairRatingReviews)}
-        </div>
-
-        <div className="pt-10">
-          <h5 className="text-xl text-gray-500">High Product Rating Reviews</h5>
-          {renderReviews(highRatingReviews)}
-        </div>
-      </div>
+    <div className="h-screen overflow-y-auto mb-56">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 pt-4">
+        <TabsList>
+          <TabsTrigger value="product" className='text-md'>Product</TabsTrigger>
+          <TabsTrigger value="store">Store</TabsTrigger>
+          <TabsTrigger value="redemption">Staff</TabsTrigger>
+        </TabsList>
+        <TabsContent value="product" className="space-y-4">
+            <div className="flex justify-between gap-2">
+                PRODUCTS
+            </div>
+        </TabsContent>
+        <TabsContent value="store" className="space-y-4">
+            <div className="flex justify-between gap-2">
+                Store
+            </div>
+        </TabsContent>
+        <TabsContent value="staff" className="space-y-4">
+            <div className="flex justify-between gap-2">
+                Staff
+            </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

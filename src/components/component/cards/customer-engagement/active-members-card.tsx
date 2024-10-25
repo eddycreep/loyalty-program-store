@@ -3,7 +3,7 @@
 export const ActiveMembersCard = () => {
     return (
         /* From Uiverse.io by LeryLey */ 
-        <article className="w-96 bg-white shadow-lg p-4 space-y-2 rounded-md hover:-translate-y-2 duration-300">
+        <article className="w-96 h-60 bg-white shadow-lg p-4 space-y-2 rounded-md hover:-translate-y-2 duration-300">
             <div className="flex justify-between">
                 <h6 className="text-xl font-bold">Loyalty Members</h6>
                 <svg 

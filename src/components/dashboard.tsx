@@ -6,6 +6,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import { ActiveMembersCard } from "@/components/component/cards/customer-engagement/active-members-card"
+// import { EngagementRateCard } from "@/components/component/cards/customer-engagement/engagement-rate-card"
+import { CommonRedeemedSpecialsChart } from "@/components/component/cards/customer-engagement/chart/common-redeemed-specials"
+import { CommonRedeemedRewardsChart } from "@/components/component/cards/customer-engagement/chart/common-redeemed-rewards"
+import LoyaltyTierMembersChart  from "@/components/component/cards/customer-engagement/chart/tier-members-chart"
+import { LoyaltyMembersChart } from "@/components/component/cards/customer-engagement/chart/loyalty-members-chart"
+import { SurveysCompletedChart } from "@/components/component/cards/customer-engagement/chart/common-surveys-completed"
 
 // Dummy data for charts
 const activeMembers = [
@@ -209,18 +215,18 @@ export default function Dashboard() {
           <TabsTrigger value="performance">Product Performance</TabsTrigger>
         </TabsList>
         <TabsContent value="customer-engagement" className="space-y-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
                 <div className="">
-                  <ActiveMembersCard />
+                  <LoyaltyMembersChart/>
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedSpecialsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedRewardsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <SurveysCompletedChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
