@@ -15,6 +15,9 @@ import * as React from "react";
 import axios from 'axios';
 import { ReviewCards } from '@/components/component/review-cards';
 import { SuccessCard } from "@/components/component/cards/success-card"
+import { ProductReviews } from "./reviews/product-reviews"
+import { StoreReviews } from "./reviews/store-reviews"
+import { StaffReviews } from "./reviews/staff-reviews"
 
 interface ReviewProps {
   id: number,
@@ -135,26 +138,26 @@ export const ReviewsModule = () => {
 
 
   return (
-    <div className="h-screen overflow-y-auto mb-56">
+    <div className="h-screen mb-56">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 pt-4">
         <TabsList>
-          <TabsTrigger value="product" className='text-md'>Product</TabsTrigger>
-          <TabsTrigger value="store">Store</TabsTrigger>
-          <TabsTrigger value="redemption">Staff</TabsTrigger>
+          <TabsTrigger value="product" className='text-md'>Product Reviews</TabsTrigger>
+          <TabsTrigger value="store">Store Reviews</TabsTrigger>
+          <TabsTrigger value="staff">Staff Reviews</TabsTrigger>
         </TabsList>
         <TabsContent value="product" className="space-y-4">
-            <div className="flex justify-between gap-2">
-                PRODUCTS
+            <div className="flex justify-between gap-2 pl-2">
+                <ProductReviews />
             </div>
         </TabsContent>
         <TabsContent value="store" className="space-y-4">
-            <div className="flex justify-between gap-2">
-                Store
+            <div className="flex justify-between gap-2 pl-2">
+                <StoreReviews />
             </div>
         </TabsContent>
         <TabsContent value="staff" className="space-y-4">
-            <div className="flex justify-between gap-2">
-                Staff
+            <div className="flex justify-between gap-2 pl-2">
+                <StaffReviews />
             </div>
         </TabsContent>
       </Tabs>
