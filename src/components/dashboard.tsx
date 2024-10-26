@@ -306,18 +306,18 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="financial" className="space-y-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
                 <div className="">
-                  <ActiveMembersCard />
+                  <LoyaltyMembersChart/>
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedSpecialsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedRewardsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <SurveysCompletedChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -403,15 +403,15 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="redemption" className="space-y-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
                 <div className="">
-                  <ActiveMembersCard />
+                  <LoyaltyMembersChart/>
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedSpecialsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedRewardsChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -491,18 +491,18 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="satisfaction" className="space-y-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
                 <div className="">
-                  <ActiveMembersCard />
+                  <LoyaltyMembersChart/>
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedSpecialsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedRewardsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <SurveysCompletedChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -582,18 +582,12 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="effectiveness" className="space-y-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
                 <div className="">
-                  <ActiveMembersCard />
+                  <LoyaltyMembersChart/>
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
-                </div>
-                <div className="">
-                  <ActiveMembersCard />
-                </div>
-                <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedSpecialsChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -661,18 +655,18 @@ export default function Dashboard() {
         </TabsContent>
         {/* product performance */}
         <TabsContent value="performance" className="space-y-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
                 <div className="">
-                  <ActiveMembersCard />
+                  <LoyaltyMembersChart/>
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedSpecialsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <CommonRedeemedRewardsChart />
                 </div>
                 <div className="">
-                  <ActiveMembersCard />
+                  <SurveysCompletedChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
