@@ -3,68 +3,62 @@
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 // import { Badge } from "@/components/ui/badge"
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-// import { CheckCircle, Clock, DollarSign, PlusCircle, ShoppingCart, Users, FileText, Gift, Mail, TrendingUp } from 'lucide-react'
+// import { CheckCircle, Clock, DollarSign, PlusCircle, ShoppingCart, Users, FileText, Gift, Mail, TrendingUp, Gem, Box } from 'lucide-react'
+// import { PercentDiamond, Coins, Coffee } from 'lucide-react'
+// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // export default function HomePage() {
 //   const [activeTab, setActiveTab] = useState("active")
 
 //   return (
-//     <div className="h-screen bg-gray-100">
+//     <div className="min-h-screen bg-gray-100">
 //       {/* Main content */}
-//       <main className="py-8 px-4 overflow-auto">
-//         <div className="max-w-[1600px] mx-auto">
+//       <main className="py-4 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8">
+//         <div className="max-w-7xl mx-auto">
 //           {/* Header */}
-//           <header className="flex justify-between items-center mb-8">
-//             <h1 className="text-3xl font-bold">Loyalty Program Management</h1>
-//             <div className="flex items-center space-x-4">
-//               <span>Welcome, Store Manager</span>
-//               <Avatar>
-//                 <AvatarImage src="/placeholder.svg?height=32&width=32" alt="Store Manager" />
-//                 <AvatarFallback>SM</AvatarFallback>
-//               </Avatar>
-//             </div>
+//           <header className="mb-6 sm:mb-8">
+//             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Loyalty Program Management</h1>
 //           </header>
 
 //           {/* Summary Cards */}
-//           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+//           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
 //             <SummaryCard 
 //               title="Active Loyalty Members" 
 //               value="15,234" 
-//               icon={<Users className="h-6 w-6" />} 
+//               icon={<Users className="h-5 w-5 sm:h-6 sm:w-6" />} 
 //               increase={234}
 //             />
 //             <SummaryCard 
 //               title="Total Specials Redeemed" 
 //               value="45,678" 
-//               icon={<ShoppingCart className="h-6 w-6" />} 
+//               icon={<ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />} 
 //               increase={1234}
 //             />
 //             <SummaryCard 
 //               title="Rewards Redeemed" 
 //               value="12,345" 
-//               icon={<Gift className="h-6 w-6" />} 
+//               icon={<Gift className="h-5 w-5 sm:h-6 sm:w-6" />} 
 //               increase={543}
 //             />
 //             <SummaryCard 
 //               title="Revenue from Specials" 
 //               value="$234,567" 
-//               icon={<DollarSign className="h-6 w-6" />} 
+//               icon={<DollarSign className="h-5 w-5 sm:h-6 sm:w-6" />} 
 //               increase={12345}
 //               isCurrency={true}
 //             />
 //           </div>
 
 //           {/* Specials Section */}
-//           <section className="mb-8">
-//             <h2 className="text-2xl font-bold mb-4">Specials</h2>
+//           <section className="mb-6 sm:mb-8">
+//             <h2 className="text-xl sm:text-2xl font-bold mb-4">Specials</h2>
 //             <Tabs defaultValue="active" onValueChange={setActiveTab}>
-//               <TabsList>
+//               <TabsList className="mb-4">
 //                 <TabsTrigger value="active">Active Specials</TabsTrigger>
 //                 <TabsTrigger value="upcoming">Upcoming Specials</TabsTrigger>
 //               </TabsList>
 //               <TabsContent value="active">
-//                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
 //                   <SpecialCard
 //                     type="Normal"
 //                     name="Summer Fruit Bonanza"
@@ -73,6 +67,7 @@
 //                     endDate="2023-08-31"
 //                     timesRedeemed={1234}
 //                     isActive={true}
+//                     specialType="Percentage"
 //                   />
 //                   <SpecialCard
 //                     type="Combined"
@@ -82,6 +77,7 @@
 //                     endDate="2023-09-15"
 //                     timesRedeemed={567}
 //                     isActive={true}
+//                     specialType="Amount"
 //                   />
 //                   <SpecialCard
 //                     type="Normal"
@@ -91,6 +87,7 @@
 //                     endDate="2023-09-30"
 //                     timesRedeemed={892}
 //                     isActive={true}
+//                     specialType="Percentage"
 //                   />
 //                   <SpecialCard
 //                     type="Combined"
@@ -100,30 +97,13 @@
 //                     endDate="2023-10-31"
 //                     timesRedeemed={456}
 //                     isActive={true}
-//                   />
-//                   <SpecialCard
-//                     type="Normal"
-//                     name="Healthy Living Discount"
-//                     discount="10% off"
-//                     startDate="2023-06-15"
-//                     endDate="2023-12-31"
-//                     timesRedeemed={1567}
-//                     isActive={true}
-//                   />
-//                   <SpecialCard
-//                     type="Combined"
-//                     name="Breakfast Essentials Pack"
-//                     discount="20% off"
-//                     startDate="2023-07-20"
-//                     endDate="2023-09-20"
-//                     timesRedeemed={723}
-//                     isActive={true}
+//                     specialType="Amount"
 //                   />
 //                   {/* Add more SpecialCards as needed */}
 //                 </div>
 //               </TabsContent>
 //               <TabsContent value="upcoming">
-//                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
 //                   <SpecialCard
 //                     type="Normal"
 //                     name="Fall Harvest Special"
@@ -132,15 +112,17 @@
 //                     endDate="2023-11-30"
 //                     timesRedeemed={0}
 //                     isActive={false}
+//                     specialType="Percentage"
 //                   />
 //                   <SpecialCard
 //                     type="Normal"
 //                     name="Winter Warmers Special"
-//                     discount="25% off"
+//                     discount="Free Item"
 //                     startDate="2023-12-01"
 //                     endDate="2024-02-29"
 //                     timesRedeemed={0}
 //                     isActive={false}
+//                     specialType="Free"
 //                   />
 //                   <SpecialCard
 //                     type="Combined"
@@ -150,6 +132,7 @@
 //                     endDate="2024-03-31"
 //                     timesRedeemed={0}
 //                     isActive={false}
+//                     specialType="Amount"
 //                   />
 //                   {/* Add more upcoming SpecialCards as needed */}
 //                 </div>
@@ -159,18 +142,18 @@
 
 //           {/* Surveys and Rewards Section */}
 //           <section>
-//             <h2 className="text-2xl font-bold mb-4">Active Surveys and Rewards</h2>
-//             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+//             <h2 className="text-xl sm:text-2xl font-bold mb-4">Active Surveys and Rewards</h2>
+//             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
 //               <Card className="shadow-lg">
 //                 <CardHeader>
-//                   <CardTitle>Surveys</CardTitle>
+//                   <CardTitle className="text-lg sm:text-xl">Surveys</CardTitle>
 //                 </CardHeader>
 //                 <CardContent>
-//                   <ul className="space-y-4">
+//                   <ul className="space-y-3 sm:space-y-4">
 //                     <SurveyItem
 //                       name="Customer Satisfaction Survey"
 //                       category="Store"
-//                       type="Percentage"
+//                       type="Free"
 //                       completions={789}
 //                       location="Main Street Store"
 //                       region="North"
@@ -186,7 +169,7 @@
 //                     <SurveyItem
 //                       name="New Product Feedback"
 //                       category="Product"
-//                       type="Amount"
+//                       type="Free"
 //                       completions={324}
 //                       location="All Stores"
 //                       region="West"
@@ -199,16 +182,15 @@
 //                       location="City Center Store"
 //                       region="South"
 //                     />
-//                     {/* Add more SurveyItems as needed */}
 //                   </ul>
 //                 </CardContent>
 //               </Card>
 //               <Card className="shadow-lg">
 //                 <CardHeader>
-//                   <CardTitle>Rewards</CardTitle>
+//                   <CardTitle className="text-lg sm:text-xl">Rewards</CardTitle>
 //                 </CardHeader>
 //                 <CardContent>
-//                   <ul className="space-y-4">
+//                   <ul className="space-y-3 sm:space-y-4">
 //                     <RewardItem
 //                       name="Refer a Friend"
 //                       task="Refer a new customer"
@@ -220,7 +202,7 @@
 //                     <RewardItem
 //                       name="Birthday Surprise"
 //                       task="Shop on your birthday"
-//                       type="Amount"
+//                       type="Free"
 //                       redemptions={654}
 //                       location="All Stores"
 //                       region="All Regions"
@@ -236,12 +218,11 @@
 //                     <RewardItem
 //                       name="Eco-Friendly Shopper"
 //                       task="Use reusable bags 10 times"
-//                       type="Percentage"
+//                       type="Free"
 //                       redemptions={542}
 //                       location="All Stores"
 //                       region="All Regions"
 //                     />
-//                     {/* Add more RewardItems as needed */}
 //                   </ul>
 //                 </CardContent>
 //               </Card>
@@ -259,13 +240,13 @@
 //       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 //         <CardTitle className="text-sm font-medium">{title}</CardTitle>
 //         <div className="p-2 bg-rose-300 rounded-full">
-//           {React.cloneElement(icon, { className: "h-6 w-6 text-red-500" })}
+//           {React.cloneElement(icon, { className: "h-5 w-5 sm:h-6 sm:w-6 text-red-500" })}
 //         </div>
 //       </CardHeader>
 //       <CardContent>
-//         <div className="text-2xl font-bold">{value}</div>
-//         <div className="flex items-center mt-2 text-gray-400 text-sm">
-//           <TrendingUp className="h-4 w-4 mr-1" />
+//         <div className="text-xl sm:text-2xl font-bold">{value}</div>
+//         <div className="flex items-center mt-2 text-gray-400 text-xs sm:text-sm">
+//           <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
 //           <span>
 //             {isCurrency ? '+$' : '+'}
 //             {increase.toLocaleString()} from last month
@@ -276,33 +257,59 @@
 //   )
 // }
 
-// function SpecialCard({ type, name, discount, startDate, endDate, timesRedeemed, isActive }) {
+// function SpecialCard({ type, name, discount, startDate, endDate, timesRedeemed, isActive, specialType }) {
+//   const getSpecialTypeIcon = () => {
+//     switch (specialType) {
+//       case 'Percentage':
+//         return <DiamondPercent className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />;
+//       case 'Amount':
+//         return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />;
+//       case 'Free':
+//         return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500" />; // Changed from text-green-500 to text-purple-500
+//       default:
+//         return null;
+//     }
+//   };
+
 //   return (
 //     <Card className="shadow-lg">
 //       <CardHeader>
 //         <div className="flex justify-between items-center">
-//           <CardTitle>{name}</CardTitle>
+//           <div className="flex items-center space-x-2">
+//             <CardTitle className="text-base sm:text-lg">{name}</CardTitle>
+//             <TooltipProvider>
+//               <Tooltip>
+//                 <TooltipTrigger>
+//                   {getSpecialTypeIcon()}
+//                 </TooltipTrigger>
+//                 <TooltipContent>
+//                   <p>{specialType}</p>
+//                 </TooltipContent>
+//               </Tooltip>
+//             </TooltipProvider>
+//           </div>
 //           {isActive ? (
-//             <CheckCircle className="h-5 w-5 text-green-500" />
+//             <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
 //           ) : (
-//             <Clock className="h-5 w-5 text-yellow-500" />
+//             <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500" />
 //           )}
 //         </div>
 //         <Badge 
 //           variant="secondary"
-//           className="mt-2 w-fit bg-gray-200 text-gray-800 hover:bg-gray-300"
+//           className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2"
 //         >
 //           {type}
 //         </Badge>
 //       </CardHeader>
 //       <CardContent>
-//         <p className="font-bold text-lg">{discount}</p>
-//         <p className="text-sm text-muted-foreground">
-//           {startDate} - {endDate}
+//         <p className="font-bold text-base sm:text-lg">{discount}</p>
+//         <p className="text-xs sm:text-sm text-muted-foreground">
+//           Valid From: {startDate} - {endDate}
 //         </p>
-//         <div className="mt-2 flex items-center text-gray-400">
-//           <Users className="h-4 w-4 mr-1" />
-//           <span>Redemptions: {timesRedeemed}</span>
+//         <div className="mt-2 flex items-center">
+//           <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-gray-400" />
+//           <span className="text-xs sm:text-sm text-gray-400">Redemptions: </span>
+//           <span className="text-xs sm:text-sm text-purple-600 font-semibold">{timesRedeemed}</span>
 //         </div>
 //       </CardContent>
 //     </Card>
@@ -311,19 +318,20 @@
 
 // function SurveyItem({ name, category, type, completions, location, region }) {
 //   return (
-//     <li className="flex items-center justify-between">
+//     <li className="flex flex-col sm:flex-row sm:items-center justify-between">
 //       <div>
-//         <p className="font-semibold">{name}</p>
-//         <p className="text-sm text-muted-foreground">{category} | {location} | {region}</p>
+//         <p className="font-semibold text-sm sm:text-base">{name}</p>
+//         <p className="text-xs sm:text-sm text-muted-foreground">{category} | {location} | {region}</p>
 //       </div>
-//       <div className="flex items-center space-x-2">
+//       <div className="flex items-center space-x-2 mt-1 sm:mt-0">
 //         <Badge 
 //           variant="secondary"
-//           className="bg-gray-200 text-gray-800 hover:bg-gray-300"
+//           className={`text-xs ${type === 'Free' ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
 //         >
 //           {type}
 //         </Badge>
-//         <span>{completions} completions</span>
+//         <span className="text-xs sm:text-sm">{completions} completions</span>
+//         <Box className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
 //       </div>
 //     </li>
 //   )
@@ -331,21 +339,21 @@
 
 // function RewardItem({ name, task, type, redemptions, location, region }) {
 //   return (
-//     <li className="flex items-center justify-between">
+//     <li className="flex flex-col sm:flex-row sm:items-center justify-between">
 //       <div>
-//         <p className="font-semibold">{name}</p>
-//         <p className="text-sm text-muted-foreground">{task}</p>
-//         <p className="text-sm text-muted-foreground">{location} | {region}</p>
+//         <p className="font-semibold text-sm sm:text-base">{name}</p>
+//         <p className="text-xs sm:text-sm text-muted-foreground">{task}</p>
+//         <p className="text-xs sm:text-sm text-muted-foreground">{location} | {region}</p>
 //       </div>
-//       <div className="flex items-center space-x-2">
+//       <div className="flex items-center space-x-2 mt-1 sm:mt-0">
 //         <Badge 
 //           variant="secondary"
-//           className="bg-gray-200 text-gray-800 hover:bg-gray-300"
+//           className={`text-xs ${type === 'Free' ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
 //         >
 //           {type}
 //         </Badge>
-//         <span>{redemptions} redemptions</span>
-//         <Mail className="h-4 w-4 text-muted-foreground" />
+//         <span className="text-xs sm:text-sm">{redemptions} redemptions</span>
+//         <Gem className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
 //       </div>
 //     </li>
 //   )
