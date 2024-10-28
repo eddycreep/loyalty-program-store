@@ -1,11 +1,6 @@
 'use client'
 
-import axios from 'axios';
-import { useQuery } from "@/hooks/useQuery";
-import { apiEndPoint, colors } from '@/utils/colors';
-import { toast } from 'react-hot-toast';
-import { useState, useEffect } from 'react';
-import MultiColorLoader from '@/lib/loaders';
+import { useState } from 'react';
 import { RewardsModule } from './rewards-module';
 import { ProductsManModule } from './products-management-module';
 import { ReviewsModule } from './reviews-module';

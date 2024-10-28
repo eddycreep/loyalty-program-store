@@ -4,63 +4,64 @@ import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
-import { Check, X, Search, PlusCircle } from 'lucide-react';
+import { X, Search, Check, PlusCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 //specials
 interface Specials {
-  special_id: number,
-  special_name: string,
-  special: string,
-  special_type: string,
-  store_id: string,
-  start_date: string,
-  expiry_date: string,
-  special_value: string,
-  isActive: number
+    special_id: number,
+    special_name: string,
+    special: string,
+    special_type: string,
+    store_id: string,
+    start_date: string,
+    expiry_date: string,
+    special_value: string,
+    isActive: number
 }
 
 
 //special items - individual x combined
 interface SpecialItems {
-  special_id: number,
-  special_group_id: string,
-  product_description: string,
-  special_price: string
+    special_id: number,
+    special_group_id: string,
+    product_description: string,
+    special_price: string
 }
 
 //get special id
 interface SpecialIDProps {
-  special_id: number
+    special_id: number
 }
 
+
 type Product = {
-  id: string
-  name: string
-  price: number
-  item_code: string
+    id: string
+    name: string
+    price: number
+    item_code: string
 }
 
 type SpecialProduct = Product & {
-  groupId: string
+    
 }
 
 type CombinedSpecial = {
-  id: string
-  name: string
-  special: string
-  products: SpecialProduct[]
-  specialPrice: number
-  specialValue: 'Percentage' | 'Amount'
-  storeId: string
-  startDate: string
-  endDate: string
-  isActive: boolean
+    id: string
+    name: string
+    special: string
+    products: SpecialProduct[]
+    specialPrice: number
+    specialValue: 'Percentage' | 'Amount'
+    storeId: string
+    startDate: string
+    endDate: string
+    isActive: boolean
 }
 
 const stores = [
@@ -78,7 +79,7 @@ const stores = [
   { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-export function CombinedSpecialsComponent() {
+export function ProductsSpecialsComponent() {
   const [specials, setSpecials] = useState<CombinedSpecial[]>([])
   const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
     id: '',
@@ -118,11 +119,12 @@ export function CombinedSpecialsComponent() {
   const displayedProducts = filteredProducts.slice(0, 3); // Modified to limit products to 3
 
   const addProductToSpecial = (product: Product) => {
-    if (currentSpecial.products.length < 5) {
-      setCurrentSpecial(prev => ({
+    // Allow adding only one product
+    if (currentSpecial.products.length === 0) {
+        setCurrentSpecial(prev => ({
         ...prev,
-        products: [...prev.products, { ...product, groupId: '' }]
-      }))
+        products: [{ ...product, groupId: '' }]
+        }))
     }
   }
 
@@ -133,18 +135,9 @@ export function CombinedSpecialsComponent() {
     }))
   }
 
-  const updateProductGroupId = (productId: string, groupId: string) => {
-    setCurrentSpecial(prev => ({
-      ...prev,
-      products: prev.products.map(p =>
-        p.id === productId ? { ...p, groupId } : p
-      )
-    }))
-  }
-
   const saveSpecial = async () => {
     try {
-        const specialType = 'Combined Special'
+        const specialType = 'Special'
         
         const payload = {
             specialName: currentSpecial.name,
@@ -230,7 +223,7 @@ export function CombinedSpecialsComponent() {
                 </button>
               </div>
           <CardHeader>
-            <CardTitle>Create New Combined Special</CardTitle>
+            <CardTitle>Create Special</CardTitle>
             <CardDescription>
               Set the special with the required fields and assign all the products linked to the special. Click Save Special once completed.
             </CardDescription>
@@ -262,7 +255,7 @@ export function CombinedSpecialsComponent() {
                   <Label htmlFor="special-type">Special Type</Label>
                   <Select
                     value={currentSpecial.specialValue}
-                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, specialType: value as 'Percentage' | 'Amount' }))}
+                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, specialValue: value as 'Percentage' | 'Amount' }))}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select special type" />
@@ -361,33 +354,27 @@ export function CombinedSpecialsComponent() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {displayedProducts.map((product) => (
-                  <Button
+              {displayedProducts.map((product) => (
+                <Button
                     key={product.id}
                     variant="outline"
                     onClick={() => addProductToSpecial(product)}
-                    disabled={currentSpecial.products.length >= 5 || currentSpecial.products.some(p => p.id === product.id)}
+                    disabled={currentSpecial.products.length >= 1 || currentSpecial.products.some(p => p.id === product.id)}
                     className="justify-start"
-                  >
+                    >
                     <PlusCircle className="h-4 w-4 mr-2" />
                     {product.name}
-                  </Button>
+                </Button>
                 ))}
               </div>
 
               <div className="mt-4">
-                <Label>Products (Max 5)</Label>
+                <Label>Product</Label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {currentSpecial.products.map((product) => (
                     <Card key={product.id} className="p-2 flex justify-between items-center">
                       <span>{product.name}</span>
                       <div className="flex items-center space-x-2">
-                        <Input
-                          value={product.groupId}
-                          onChange={(e) => updateProductGroupId(product.id, e.target.value)}
-                          placeholder="Group ID"
-                          className="w-32"
-                        />
                         <Button
                           variant="ghost"
                           size="icon"
@@ -401,7 +388,8 @@ export function CombinedSpecialsComponent() {
                 </div>
               </div>
 
-              <Button onClick={ saveSpecial } 
+              <Button 
+                onClick={ saveSpecial } 
                 // disabled={currentSpecial.products.length === 0 || !currentSpecial.name || currentSpecial.specialPrice <= 0 || !currentSpecial.storeId || !currentSpecial.startDate || !currentSpecial.endDate}
               >
                   Save Special
@@ -409,43 +397,7 @@ export function CombinedSpecialsComponent() {
             </div>
           </CardContent>
         </Card>
-
-        {/* <Card>
-          <CardHeader>
-            <CardTitle>Existing Combined Specials</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {specials.length === 0 ? (
-              <p>No specials created yet.</p>
-            ) : (
-              <div className="space-y-4">
-                {specials.map((special) => (
-                  <Card key={special.id} className="p-4">
-                    <h3 className="font-semibold">{special.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Special {special.specialType}: {special.specialType === 'Percentage' ? `${special.specialPrice}%` : `${special.specialPrice.toFixed(2)}`}
-                    </p>
-                    <p className="text-sm text-muted-foreground">Store ID: {special.storeId}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Date: {special.startDate} to {special.endDate}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Status: {special.isActive ? 'Active' : 'Inactive'}
-                    </p>
-                    <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {special.products.map((product) => (
-                        <div key={product.id} className="text-sm">
-                          {product.name} (Group: {product.groupId})
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card> */}
         </div>
-      </div>
+    </div>
   )
 }
