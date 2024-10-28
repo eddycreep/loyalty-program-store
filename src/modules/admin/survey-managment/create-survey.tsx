@@ -11,10 +11,26 @@ interface Question {
     options?: string[];
 }
 
+const stores = [
+    { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
+    { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
+    { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
+    { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
+    { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
+  ];
+
 export const CreateSurveys = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [surveyName, setSurveyName] = useState<string>("");
     const [surveyCategory, setSurveyCategory] = useState<string>("");
+    const [selectedStore, setSelectedStore] = useState<string>("");
 
     const addQuestion = () => {
         const newQuestionNumber = questions.length + 1;
@@ -44,25 +60,43 @@ export const CreateSurveys = () => {
     return (
         <div className="mb-52">
             <div className="flex gap-4">
-                <div className="w-[500px] flex flex-col pt-4">
-                    <label>Survey Name</label>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <label>Survey Title</label>
                     <input
                         type="input"
-                        placeholder="Product Reviews"
+                        placeholder="enter survey title"
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={surveyName}
                         onChange={(e) => setSurveyName(e.target.value)}
                     />
                 </div>
-                <div className="w-[500px] flex flex-col pt-4">
+                <div className="w-[300px] flex flex-col pt-4">
                     <label>Survey Category</label>
-                    <input
-                        type="input"
-                        placeholder="Product Reviews"
+                    <select
                         className="w-full p-2 rounded-lg border border-gray-300"
-                        value={surveyCategory}
                         onChange={(e) => setSurveyCategory(e.target.value)}
-                    />
+                    >
+                        <option value="All">All</option>
+                        <option value="Products">Products</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Store">Store</option>
+                    </select>
+                </div>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <label>Store ID</label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedStore}
+                        onChange={(e) => setSelectedStore(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {stores.map((store) => (
+                            <option key={store.id} value={store.store_id}>
+                                {/* {store.store}  */}
+                                {store.store_id}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex gap-2">
                     <div className="pt-10">

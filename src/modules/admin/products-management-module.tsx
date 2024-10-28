@@ -14,7 +14,8 @@ import { EditProductGroupSpecials } from "@/components/component/edit-productGro
 import { ApiError } from "next/dist/server/api-utils";
 import { IconTooltip } from "@/components/component/icon-tooltip";
 import { XIconTooltip } from "@/components/component/x-icon-tooltip";
-import { CombinedSpecialsManagerComponent } from "@/components/combined-specials-manager"
+import { CombinedSpecialsComponent } from "@/components/combined-specials-manager";
+import { ProductsSpecialsComponent } from "@/components/product-specials-manager";
 
 interface ProductProps {
     idx: number,
@@ -78,7 +79,7 @@ interface SpecialProps {
 type SpecialResponse = SpecialProps[]
 
 
-//getAllProductsOnSpecial
+//get-all-active-product-specials
 interface GetSpecialsProps {
     special_id: string,
     special: string,
@@ -142,14 +143,17 @@ export const ProductsManModule = () => {
 
     //all product specials
     const [allProductSpecials, setAllProductSpecials] = useState<GetSpecialsResponse>([]);
-    const [allGroupSpecials, setAllGroupSpecials] = useState<GetGroupSpecialsResponse>([]);
+    const [allCombinedSpecials, setAllCombinedSpecials] = useState<GetGroupSpecialsResponse>([]);
 
-    //toggler combined specials
-    const [ combinedSpecialsComponent, setCombinedSpecialsComponent ] = useState(false);
+    //toggle product specials
+    const [productSpecialsComponent, setProductSpecialsComponent] = useState(false);
+
+    //toggle combined specials
+    const [combinedSpecialsComponent, setCombinedSpecialsComponent] = useState(false);
 
 
-    const headers = ['ID',	'Product',	'Special',	'Special Value',	'Start Date',	'Expiry Date',	'Status', 'Action']
-    const groupHeaders = ['Special ID',	'Group ID', 'Product',	'Special',	'Special Price',	'Start Date',	'Expiry Date',	'Status', 'Action']
+    const headers = ['ID',	'Special Name',	'Special',	'Product', 'Special Value',	'Start Date',	'Expiry Date',	'Status', 'Action']
+    const combinedHeaders = ['Special ID',	'Group ID', 'Special Name',	'Special',	'Product',	'Special Price',	'Start Date',	'Expiry Date',	'Status', 'Action']
 
     const url = `products/getproducts`;
     const { data, loading, error } = useQuery<ProductResponse>(url);
@@ -322,12 +326,21 @@ export const ProductsManModule = () => {
         setEditGroupProductsPopup(!editGroupProductsPopup);
     };
 
+    //individual specials
+    const toggleProductSpecials = () => {
+        setProductSpecialsComponent(!productSpecialsComponent);
+    }
+
+    //combined specials
     const toggleCombinedSpecials = () => {
         setCombinedSpecialsComponent(!combinedSpecialsComponent);
     }
 
     // || ----- ----- ----- GET REQUESTS FOR ACTIVE x UPCOMING SPECIALS ----- ----- ----- ||
-    const getAllProductSpecials = async () => {
+
+    
+    //get-active-product-specials
+    const getActiveProductSpecials = async () => {
         try{
             //http://localhost:4200/products/getproductspecials
             const url = `products/getproductspecials`
@@ -340,13 +353,13 @@ export const ProductsManModule = () => {
         }
     }
 
-    //getallgroupspecials
-    const getAllGroupSpecials = async () => {
+    //get-active-combined-specials
+    const getActiveCombinedSpecials = async () => {
         try{
             //getactivegroupspecials
             const url = `products/getallgroupspecials`
             const response = await axios.get<GetGroupSpecialsResponse>(`${apiEndPoint}/${url}`)
-            setAllGroupSpecials(response?.data)
+            setAllCombinedSpecials(response?.data)
             console.log("RETRIEVED ALL ACTIVE GROUP SPECIALS:", response)
 
         } catch (error) {
@@ -355,398 +368,114 @@ export const ProductsManModule = () => {
     }
 
 
-    const updateGroupSpecial = async () => {
-        try {
-            const url = `products/updategroupspecial/:special_id`
-            const response = await axios.patch(`${apiEndPoint}/${url}`)
-            console.log("UPDATED GROUP SPECIAL:", response)
+    // const updateGroupSpecial = async () => {
+    //     try {
+    //         const url = `products/updategroupspecial/:special_id`
+    //         const response = await axios.patch(`${apiEndPoint}/${url}`)
+    //         console.log("UPDATED GROUP SPECIAL:", response)
 
-        } catch (error) {
-            console.log("AN ERROR OCCURED WHEN UPDATING GROUP SPECIAL:", error)
-        }
-    }
+    //     } catch (error) {
+    //         console.log("AN ERROR OCCURED WHEN UPDATING GROUP SPECIAL:", error)
+    //     }
+    // }
 
-    const updateGroupSpecialProduct = async () => {
-        try {
-            const url = `products/updategroupspecialproduct/:special_id`
-            const response = await axios.patch(`${apiEndPoint}/${url}`)
-            console.log("UPDATED GROUP SPECIAL:", response)
+    // const updateGroupSpecialProduct = async () => {
+    //     try {
+    //         const url = `products/updategroupspecialproduct/:special_id`
+    //         const response = await axios.patch(`${apiEndPoint}/${url}`)
+    //         console.log("UPDATED GROUP SPECIAL:", response)
 
-        } catch (error) {
-            console.log("AN ERROR OCCURED WHEN UPDATING GROUP SPECIAL:", error)
-        }
-    }
+    //     } catch (error) {
+    //         console.log("AN ERROR OCCURED WHEN UPDATING GROUP SPECIAL:", error)
+    //     }
+    // }
 
     useEffect(() => {
-        getAllProductSpecials();
-        getAllGroupSpecials();
+        getActiveProductSpecials();
+        getActiveCombinedSpecials();
     }, []);
 
 
     return (
         <div className='w-full h-screen overflow-y-auto mb-4 pr-4 space-y-6 pb-6'>
             <div>
+            {productSpecialsComponent && (<ProductsSpecialsComponent />)}
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
                         <h4 className="text-2xl font-semibold text-red">Product Specials</h4>
                         <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button className="bg-black text-white p-2 w-40 rounded-lg hover:bg-red">Add Special</Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[600px]">
-                                    <DialogHeader>
-                                    <DialogTitle>Set New Product Special</DialogTitle>
-                                    <DialogDescription>
-                                        Select the product and set the special with the required fields. Click save once completed.
-                                    </DialogDescription>
-                                    </DialogHeader>
-                                    <div className="grid gap-4 py-4">
-                                        <div className="flex gap-4">
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Product
-                                                </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    onChange={(e) => setProduct(e.target.value)} // Store the selected product idx
-                                                >
-                                                        <option value="" className="dash-text">Select Product</option>
-                                                        {data?.map(({ idx, Product_Description }) =>
-                                                            <option key={idx} value={Product_Description}>{Product_Description}</option> //store idx instead of product description
-                                                        )}
-                                                </select>
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Special:
-                                                </Label>
-                                                <input type="input" placeholder="10" onChange={(e) => setProductSpecial(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-4">
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Special Price:
-                                                </Label>
-                                                <input type="input" placeholder="10" onChange={(e) => setSpecialPrice(Number(e.target.value))} className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Special Type:
-                                                </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    onChange={(e) => setSpecialType(e.target.value)}
-                                                >
-                                                        <option>Select Type</option>
-                                                            <option value="Special">Special</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-4">
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Special Value:
-                                                </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    onChange={(e) => setSpecialValue(e.target.value)}
-                                                >
-                                                        <option>Select Value</option>
-                                                            <option value="Percentage">Percentage</option>
-                                                            <option value="Amount">Amount</option>
-                                                </select>
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Store ID:
-                                                </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    onChange={(e) => setStoreID(e.target.value)}
-                                                >
-                                                        <option>Select Store ID</option>
-                                                        <option value="All">All</option>
-                                                        <option value="S001">S001</option>
-                                                        <option value="S002">S002</option>
-                                                        <option value="S003">S003</option>
-                                                        <option value="S004">S004</option>
-                                                        <option value="S005">S005</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-4">
-                                            <div className="w-[270px]">
-                                                <Label htmlFor="username" className="text-left pt-4">
-                                                    Start Date:
-                                                </Label>
-                                                <input type="date" onChange={(e) => setSpecialStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                            <div className="w-[270px]">
-                                                <Label htmlFor="username" className="text-left pt-4">
-                                                    Expiry Date:
-                                                </Label>
-                                                <input type="date" onChange={(e) => setSpecialExpDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col">
-                                                <Label htmlFor="isactive" className="text-left p-1">
-                                                    Active/Inactive:
-                                                </Label>
-                                                <div className="checkbox-apple">
-                                                    <input className="yep" 
-                                                    id="check-apple" 
-                                                    type="checkbox" 
-                                                    onClick={ handleSpecialToggle }
-                                                />
-                                                    <label htmlFor="check-apple"></label>
-                                                </div>
-                                            </div>
-                                    </div>
-                                    <DialogFooter>
-                                        <button onClick={ saveSpecial } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
-                                            Save
-                                        </button>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                        <button onClick={ toggleProductSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                            Add Special
+                        </button>
                     </div>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (
-                    <p
-                        key={index}
-                        className={`text-xs uppercase font-medium flex-1 text-center ${
-                        index === 1 ? 'hidden lg:block' : ''
-                        }`}
-                    >
-                        {header}
-                    </p>
+                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
                     ))}
                 </div>
+                {/* {allProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
                 <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">1</p>
-                                    <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
-                                    <p className="text-sm flex-1 text-center">GET 10% OFF PRODDCT</p>
-                                    <p className="text-sm flex-1 text-center">56.99</p>
-                                    <p className="text-sm flex-1 text-center">
-                                        {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                        2023-11-15
-                                    </p>
-                                    <p className="text-sm flex-1 text-center">
-                                        {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                        2023-11-15
-                                    </p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                                        {/* <XIconTooltip /> */}
-                                        Active
-                                    </p>
-                                    {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
-                                    <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
-                                        <Edit />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">2</p>
-                                    <p className="text-sm flex-1 text-center">MIXED FRUIT PACK</p>
-                                    <p className="text-sm flex-1 text-center">GET 10% OFF PRODDCT</p>
-                                    <p className="text-sm flex-1 text-center">20.99</p>
-                                    <p className="text-sm flex-1 text-center">
-                                        {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                        2023-11-15
-                                    </p>
-                                    <p className="text-sm flex-1 text-center">
-                                        {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                        2023-11-15
-                                    </p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                                        {/* <XIconTooltip /> */}
-                                        Active
-                                    </p>
-                                    {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
-                                    <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
-                                        <Edit />
-                                    </button>
-                                </div>
-                            </div>
+                    <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
+                        <div className="flex items-center justify-between">
+                            <p className="text-sm flex-1 text-center text-red">1</p>
+                            <p className="text-sm flex-1 text-center">Special Drinks</p>
+                            <p className="text-sm flex-1 text-center">GET 10% OFF PRODDCT</p>
+                            <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
+                            <p className="text-sm flex-1 text-center">56.99</p>
+                            <p className="text-sm flex-1 text-center">2023-11-15</p>
+                            <p className="text-sm flex-1 text-center">
+                                {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
+                                2023-11-15
+                            </p>
+                            <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p>
+                            {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
+                            <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
+                                <Edit />
+                            </button>
+                        </div>
+                    </div>
                 </div>
+                {/* ))} */}
             </div>
             {/* GROUP SPECIALS */}
-            {combinedSpecialsComponent && (<CombinedSpecialsManagerComponent />)}
+            {combinedSpecialsComponent && (<CombinedSpecialsComponent />)}
             <div className="pb-16">
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Group Specials</h4>
-                        <p className="text-gray-500">Assign exclusive combo specials that customers can purchase</p>
+                        <h4 className="text-2xl font-semibold text-red">Combined Specials</h4>
+                        <p className="text-gray-500">Assign exclusive combined specials that customers can purchase</p>
                     </div>
-                <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleCombinedSpecials } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                    <div className='flex gap-2 pt-8 pr-2'>
+                        <button onClick={ toggleCombinedSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
                             Add Special
                         </button>
-                        {/* <Dialog>
-                            <DialogTrigger asChild>
-                                <Button className="bg-black text-white p-2 w-40 rounded-lg hover:bg-red">Add Group Special</Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-[600px]">
-                                <DialogHeader>
-                                <DialogTitle>Add New Group Special</DialogTitle>
-                                <DialogDescription>
-                                    Select the product and set the special with the required fields. Click save once completed.
-                                </DialogDescription>
-                                </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                    <div className="flex gap-4">
-                                        <div className="w-full">
-                                            <Label htmlFor="name" className="text-left pt-4">
-                                                Special ID:
-                                            </Label>
-                                            <select 
-                                                className="w-full p-2 rounded-lg border border-gray-300"
-                                                onChange={(e) => setSpecialGroupId(Number(e.target.value))} // Store the selected product idx
-                                            >
-                                                    <option value="" className="dash-text">Select Special</option>
-                                                        <option value="1">Buy 3 Get 20% Off</option>
-                                                        <option value="2">Buy 1 Get 5% Off</option>
-                                                        <option value="3">Buy 4 Get 15% Off</option>
-                                                        <option value="4">Buy 2 Get R20 Off</option>
-                                                        <option value="5">Buy 3 Get R50 Off</option>
-                                            </select>
-                                        </div>
-                                        <div className="w-full">
-                                            <Label htmlFor="name" className="text-left pt-4">
-                                                Product:
-                                            </Label>
-                                            <select 
-                                                className="w-full p-2 rounded-lg border border-gray-300"
-                                                onChange={(e) => setGroupProduct(e.target.value)}
-                                            >
-                                                    {data?.map(({ idx, Product_Description }) =>
-                                                        <option key={idx} value={Product_Description}>{Product_Description}</option>
-                                                    )}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <div className="w-full">
-                                            <Label htmlFor="name" className="text-left pt-4">
-                                                Special:
-                                            </Label>
-                                            <input type="input" placeholder="buy 2 and get 20% off next purchase" onChange={(e) => setGroupSpecial(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                                        </div>
-                                        <div className="w-full">
-                                            <Label htmlFor="name" className="text-left pt-4">
-                                                Special Price:
-                                            </Label>
-                                            <input type="input" placeholder="10.99" onChange={(e) => setGroupSpecialPrice(Number(e.target.value))} className='w-full p-2 rounded-lg border border-gray-300'/>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <div className="w-full">
-                                            <Label htmlFor="name" className="text-left pt-4">
-                                                Special Type:
-                                            </Label>
-                                            <select 
-                                                className="w-full p-2 rounded-lg border border-gray-300"
-                                                onChange={(e) => setSpecialGroupType(e.target.value)}
-                                            >
-                                                    <option>Select Type</option>
-                                                        <option value="Combined Special">Combined Special</option>
-                                            </select>
-                                        </div>
-                                        <div className="w-full">
-                                            <Label htmlFor="name" className="text-left pt-4">
-                                                Special Value:
-                                            </Label>
-                                            <select 
-                                                className="w-full p-2 rounded-lg border border-gray-300"
-                                                onChange={(e) => setSpecialType(e.target.value)}
-                                            >
-                                                    <option>Select Value</option>
-                                                        <option value="Percentage">Percentage</option>
-                                                        <option value="Amount">Amount</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <div className="w-full">
-                                            <Label htmlFor="username" className="text-left pt-4">
-                                                Start Date:
-                                            </Label>
-                                            <input type="date" onChange={(e) => setGroupSpecialStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                                        </div>
-                                        <div className="w-full">
-                                            <Label htmlFor="username" className="text-left pt-4">
-                                                Expiry Date:
-                                            </Label>
-                                            <input type="date" onChange={(e) => setGroupSpecialExpDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col w-full">
-                                            <Label htmlFor="isactive" className="text-left pt-4">
-                                                Active/Inactive:
-                                            </Label>
-                                            <div className="checkbox-apple">
-                                                <input className="yep" 
-                                                id="check-apple" 
-                                                type="checkbox" 
-                                                onClick={ handleGroupSpecialToggle }
-                                            />
-                                                <label htmlFor="check-apple"></label>
-                                            </div>
-                                        </div>
-                                </div>
-                                <DialogFooter>
-                                    <button onClick={ saveProductGroupSpecial } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
-                                        Save
-                                    </button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog> */}
-                </div>
+                    </div>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                    {groupHeaders?.map((header, index) => (
-                    <p
-                        key={index}
-                        className={`text-xs uppercase font-medium flex-1 text-center ${
-                        index === 1 ? 'hidden lg:block' : ''
-                        }`}
-                    >
-                        {header}
-                    </p>
+                    {combinedHeaders?.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
                     ))}
                 </div>
                 <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
-                {/* {allGroupSpecials?.map(({ special_id, special_group_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => {
-                    const currentDate = new Date();
-                    const specialStartDate = new Date(start_date); */}
-
-                    {/* return ( */}
-                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                {/* {allCombinedSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
+                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
                             <div className="flex items-center justify-between">
                                 <p className="text-sm flex-1 text-center text-red">19</p>
                                 <p className="text-sm flex-1 text-center">1</p>
+                                <p className="text-sm flex-1 text-center">Summer Breeze Special</p>
+                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
                                 <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
-                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
                                 <p className="text-sm flex-1 text-center">56.99</p>
-                                <p className="text-sm flex-1 text-center">
-                                    {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                    2023-11-15
-                                </p>
-                                <p className="text-sm flex-1 text-center">
-                                    {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                    2023-11-15
-                                </p>
-                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                                    Active
-                                </p>
+                                <p className="text-sm flex-1 text-center">2023-11-15</p>
+                                <p className="text-sm flex-1 text-center">2023-11-15</p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p>
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
                                 <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
                                     <Edit />
@@ -757,76 +486,20 @@ export const ProductsManModule = () => {
                             <div className="flex items-center justify-between">
                                 <p className="text-sm flex-1 text-center text-red">19</p>
                                 <p className="text-sm flex-1 text-center">1</p>
+                                <p className="text-sm flex-1 text-center">Summer Breeze Special</p>
+                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
                                 <p className="text-sm flex-1 text-center">KINGSLEY 2LTR ASST</p>
-                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
                                 <p className="text-sm flex-1 text-center">20.99</p>
-                                <p className="text-sm flex-1 text-center">
-                                    {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                    2023-11-15
-                                </p>
-                                <p className="text-sm flex-1 text-center">
-                                    {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                    2023-11-15
-                                </p>
-                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                                    Active
-                                </p>
+                                <p className="text-sm flex-1 text-center">2023-11-15</p>
+                                <p className="text-sm flex-1 text-center">2023-11-15</p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p>
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
                                 <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
                                     <Edit />
                                 </button>
                             </div>
                         </div>
-                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                            <div className="flex items-center justify-between">
-                                <p className="text-sm flex-1 text-center text-red">19</p>
-                                <p className="text-sm flex-1 text-center">2</p>
-                                <p className="text-sm flex-1 text-center">DORITOS</p>
-                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
-                                <p className="text-sm flex-1 text-center">23.99</p>
-                                <p className="text-sm flex-1 text-center">
-                                    {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                    2023-11-15
-                                </p>
-                                <p className="text-sm flex-1 text-center">
-                                    {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                    2023-11-15
-                                </p>
-                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                                    Active
-                                </p>
-                                {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
-                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
-                                    <Edit />
-                                </button>
-                            </div>
-                        </div>
-                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                            <div className="flex items-center justify-between">
-                                <p className="text-sm flex-1 text-center text-red">19</p>
-                                <p className="text-sm flex-1 text-center">2</p>
-                                <p className="text-sm flex-1 text-center">LAYS</p>
-                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
-                                <p className="text-sm flex-1 text-center">23.99</p>
-                                <p className="text-sm flex-1 text-center">
-                                    {/* {start_date ? specialStartDate.toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                    2023-11-15
-                                </p>
-                                <p className="text-sm flex-1 text-center">
-                                    {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                    2023-11-15
-                                </p>
-                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green"> 
-                                    Active
-                                </p>
-                                {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
-                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
-                                    <Edit />
-                                </button>
-                            </div>
-                        </div>
-                    {/* );
-                })} */}
+                    {/* })} */}
                 </div>
             </div>
         </div>

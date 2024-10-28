@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, Clock, DollarSign, PlusCircle, ShoppingCart, Users, FileText, Gift, Mail, TrendingUp, Gem, Box } from 'lucide-react'
+import { CheckCircle, Clock, DollarSign, PlusCircle, ShoppingCart, Users, FileText, Gift, Mail, TrendingUp, Gem, BadgeCheck, NotepadText } from 'lucide-react'
 import { PercentDiamond, Coins, Coffee } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
@@ -13,11 +13,10 @@ export function Homepage() {
   const [activeTab, setActiveTab] = useState("active")
 
   return (
-    <div className="h-screen bg-gray-100 overflow-y-auto pb-14">
+    <div className="h-screen bg-gray-100 overflow-y-auto pb-20">
       {/* Main content */}
       <main className="py-4 sm:py-6 md:py-8 px-2s sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
+        <div className="w-full mx-auto">
           <header className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Loyalty Program Management</h1>
           </header>
@@ -217,14 +216,6 @@ export function Homepage() {
                       location="All Stores"
                       region="All Regions"
                     />
-                    <RewardItem
-                      name="Eco-Friendly Shopper"
-                      task="Use reusable bags 10 times"
-                      type="Free"
-                      redemptions={542}
-                      location="All Stores"
-                      region="All Regions"
-                    />
                   </ul>
                 </CardContent>
               </Card>
@@ -241,7 +232,7 @@ function SummaryCard({ title, value, icon, increase, isCurrency = false }: any) 
     <Card className="shadow-lg">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <div className="p-2 bg-rose-300 rounded-full">
+        <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
           {React.cloneElement(icon, { className: "h-5 w-5 sm:h-6 sm:w-6 text-red-500" })}
         </div>
       </CardHeader>
@@ -263,11 +254,11 @@ function SpecialCard({ type, name, discount, startDate, endDate, timesRedeemed, 
   const getSpecialTypeIcon = () => {
     switch (specialType) {
       case 'Percentage':
-        return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />;
+        return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />;
       case 'Amount':
-        return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />;
+        return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />;
       case 'Free':
-        return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500" />; // Changed from text-green-500 to text-purple-500
+        return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />; // Changed from text-green-500 to text-purple-500
       default:
         return null;
     }
@@ -285,15 +276,33 @@ function SpecialCard({ type, name, discount, startDate, endDate, timesRedeemed, 
                   {getSpecialTypeIcon()}
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{specialType}</p>
+                  <p>{specialType === 'Free' ? 'Free Item' : specialType}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
           {isActive ? (
-            <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <BadgeCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Active</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ) : (
-            <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500" />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Upcoming</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
         <Badge 
@@ -311,7 +320,7 @@ function SpecialCard({ type, name, discount, startDate, endDate, timesRedeemed, 
         <div className="mt-2 flex items-center">
           <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-gray-400" />
           <span className="text-xs sm:text-sm text-gray-400">Redemptions: </span>
-          <span className="text-xs sm:text-sm text-purple-600 font-semibold">{timesRedeemed}</span>
+          <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">{timesRedeemed}</span>
         </div>
       </CardContent>
     </Card>
@@ -328,12 +337,12 @@ function SurveyItem({ name, category, type, completions, location, region }: any
       <div className="flex items-center space-x-2 mt-1 sm:mt-0">
         <Badge 
           variant="secondary"
-          className={`text-xs ${type === 'Free' ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+          className={`text-xs ${type === 'Free' ? 'bg-green text-white hover:bg-emerald-300 cursor-pointer' : 'bg-gray-200 text-gray-800 hover:bg-gray-300  cursor-pointer'}`}
         >
           {type}
         </Badge>
         <span className="text-xs sm:text-sm">{completions} completions</span>
-        <Box className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
+        <NotepadText className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
       </div>
     </li>
   )
@@ -350,7 +359,7 @@ function RewardItem({ name, task, type, redemptions, location, region }: any) {
       <div className="flex items-center space-x-2 mt-1 sm:mt-0">
         <Badge 
           variant="secondary"
-          className={`text-xs ${type === 'Free' ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+          className={`text-xs ${type === 'Free' ? 'bg-green text-white hover:bg-emerald-300 cursor-pointer' : 'bg-gray-200 text-gray-800 hover:bg-gray-300 cursor-pointer'}`}
         >
           {type}
         </Badge>
