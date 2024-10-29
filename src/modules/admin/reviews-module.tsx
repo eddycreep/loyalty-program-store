@@ -1,10 +1,3 @@
-'use client'
-
-import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-
 "use client"
 
 import axios from 'axios';
