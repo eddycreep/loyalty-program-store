@@ -5,7 +5,7 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Check, X, Edit } from "lucide-react";
+import { Check, X, Edit, Expand, Trash } from "lucide-react";
 import { EditProductSpecials } from "@/components/component/edit-product-specials";
 import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
 import { CombinedSpecialsComponent } from "@/components/combined-specials-manager";
@@ -425,9 +425,17 @@ export const ProductsManModule = () => {
                             <p className="text-sm flex-1 text-center">2023-11-15</p>
                             <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
                             {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
-                            <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
-                                <Edit />
-                            </button>
+                                <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                    <button className="flex items-center justify-center cursor-pointer">
+                                        <Expand />
+                                    </button>
+                                    <button className="flex items-center justify-center cursor-pointer" onClick={toggleEditProductPage}>
+                                        <Edit /> 
+                                    </button>
+                                    <button className="flex items-center justify-center cursor-pointer">
+                                        <Trash /> 
+                                    </button>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -435,7 +443,7 @@ export const ProductsManModule = () => {
             </div>
             {/* GROUP SPECIALS */}
             {combinedSpecialsComponent && (<CombinedSpecialsComponent />)}
-            <div className="pb-16">
+            <div className="pb-16 pt-24">
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
                         <h4 className="text-2xl font-semibold text-red">Combined Specials</h4>
@@ -468,9 +476,17 @@ export const ProductsManModule = () => {
                                 <p className="text-sm flex-1 text-center">2023-11-15</p>
                                 <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
-                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
-                                    <Edit />
-                                </button>
+                                <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                    <button className="flex items-center justify-center cursor-pointer">
+                                        <Expand />
+                                    </button>
+                                    <button className="flex items-center justify-center cursor-pointer" onClick={toggleEditProductPage}>
+                                        <Edit /> 
+                                    </button>
+                                    <button className="flex items-center justify-center cursor-pointer">
+                                        <Trash /> 
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
@@ -485,9 +501,17 @@ export const ProductsManModule = () => {
                                 <p className="text-sm flex-1 text-center">2023-11-15</p>
                                 <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
-                                <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
-                                    <Edit />
-                                </button>
+                                <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                    <button className="flex items-center justify-center cursor-pointer">
+                                        <Expand />
+                                    </button>
+                                    <button className="flex items-center justify-center cursor-pointer" onClick={toggleEditProductPage}>
+                                        <Edit /> 
+                                    </button>
+                                    <button className="flex items-center justify-center cursor-pointer">
+                                        <Trash /> 
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     {/* })} */}
