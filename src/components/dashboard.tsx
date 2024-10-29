@@ -13,6 +13,21 @@ import LoyaltyTierMembersChart  from "@/components/component/cards/customer-enga
 import { LoyaltyMembersChart } from "@/components/component/cards/customer-engagement/chart/loyalty-members-chart"
 import { SurveysCompletedChart } from "@/components/component/cards/customer-engagement/chart/common-surveys-completed"
 
+// REDEMPTIONS
+import { LoyaltyRevenueChart } from "@/components/financial/radial-revenue-chart"
+import { SpecialsRedeemedChart } from "@/components/redemption/specials-redeemed-chart"
+import { DiscountRewardsChart } from "@/components/redemption/discount-rewards-chart"
+import { FreeItemsRewardsChart } from "@/components/redemption/free-items-reward-chart"
+
+// satisfaction
+import { TopRatedProducts } from "@/components/satisfaction/top-rated-products"
+import { TopRatedStores } from "@/components/satisfaction/top-rated-stores"
+import { TopRatedStaff } from "@/components/satisfaction/top-rated-staff"
+
+// effectiveness
+import { RedeemedTierRewards } from "@/components/effectiveness/redeemed-rewards-tiers-chart"
+import { RedeemedRewardsCount } from "@/components/effectiveness/redeemed-rewards-count"
+
 // Dummy data for charts
 const activeMembers = [
   { month: 'Jan', members: 5000 },
@@ -203,7 +218,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('customer-engagement')
 
   return (
-    <div className=" p-4">
+    <div className="w-full">
       <h1 className="text-3xl font-bold mb-4">Loyalty Program Dashboard</h1>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
@@ -214,8 +229,9 @@ export default function Dashboard() {
           <TabsTrigger value="effectiveness">Effectiveness</TabsTrigger>
           <TabsTrigger value="performance">Product Performance</TabsTrigger>
         </TabsList>
-        <TabsContent value="customer-engagement" className="space-y-4">
-            <div className="flex justify-between gap-2">
+        <TabsContent value="customer-engagement" className="space-y-4 h-screen w-full">
+          <div className="h-screen w-full">
+          <div className="flex justify-between gap-2">
                 <div className="">
                   <LoyaltyMembersChart/>
                 </div>
@@ -228,7 +244,7 @@ export default function Dashboard() {
                 <div className="">
                   <SurveysCompletedChart />
                 </div>
-            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -304,20 +320,21 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </div>
+          </div>
         </TabsContent>
         <TabsContent value="financial" className="space-y-4">
             <div className="flex justify-between gap-2">
                 <div className="">
-                  <LoyaltyMembersChart/>
+                  <LoyaltyRevenueChart />
                 </div>
                 <div className="">
-                  <CommonRedeemedSpecialsChart />
+                  <LoyaltyRevenueChart />
                 </div>
                 <div className="">
-                  <CommonRedeemedRewardsChart />
+                  <LoyaltyRevenueChart />
                 </div>
                 <div className="">
-                  <SurveysCompletedChart />
+                  <LoyaltyRevenueChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -405,13 +422,13 @@ export default function Dashboard() {
         <TabsContent value="redemption" className="space-y-4">
             <div className="flex justify-between gap-2">
                 <div className="">
-                  <LoyaltyMembersChart/>
+                  <SpecialsRedeemedChart />
                 </div>
                 <div className="">
-                  <CommonRedeemedSpecialsChart />
+                  <DiscountRewardsChart />
                 </div>
                 <div className="">
-                  <CommonRedeemedRewardsChart />
+                  <FreeItemsRewardsChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -493,16 +510,13 @@ export default function Dashboard() {
         <TabsContent value="satisfaction" className="space-y-4">
             <div className="flex justify-between gap-2">
                 <div className="">
-                  <LoyaltyMembersChart/>
+                  <TopRatedProducts />
                 </div>
                 <div className="">
-                  <CommonRedeemedSpecialsChart />
+                  <TopRatedStores />
                 </div>
                 <div className="">
-                  <CommonRedeemedRewardsChart />
-                </div>
-                <div className="">
-                  <SurveysCompletedChart />
+                  <TopRatedStaff />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -584,10 +598,10 @@ export default function Dashboard() {
         <TabsContent value="effectiveness" className="space-y-4">
             <div className="flex justify-between gap-2">
                 <div className="">
-                  <LoyaltyMembersChart/>
+                  <RedeemedTierRewards />
                 </div>
                 <div className="">
-                  <CommonRedeemedSpecialsChart />
+                  <RedeemedRewardsCount />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -653,20 +667,19 @@ export default function Dashboard() {
             </Card>
           </div>
         </TabsContent>
-        {/* product performance */}
         <TabsContent value="performance" className="space-y-4">
             <div className="flex justify-between gap-2">
                 <div className="">
-                  <LoyaltyMembersChart/>
+                  <LoyaltyRevenueChart/>
                 </div>
                 <div className="">
-                  <CommonRedeemedSpecialsChart />
+                  <LoyaltyRevenueChart />
                 </div>
                 <div className="">
-                  <CommonRedeemedRewardsChart />
+                  <LoyaltyRevenueChart />
                 </div>
                 <div className="">
-                  <SurveysCompletedChart />
+                  <LoyaltyRevenueChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

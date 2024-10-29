@@ -5,15 +5,9 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Check, X, Edit, Activity, TrendingUp, Pencil, Bolt } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Check, X, Edit } from "lucide-react";
 import { EditProductSpecials } from "@/components/component/edit-product-specials";
 import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
-import { ApiError } from "next/dist/server/api-utils";
-import { IconTooltip } from "@/components/component/icon-tooltip";
-import { XIconTooltip } from "@/components/component/x-icon-tooltip";
 import { CombinedSpecialsComponent } from "@/components/combined-specials-manager";
 import { ProductsSpecialsComponent } from "@/components/product-specials-manager";
 
@@ -152,8 +146,8 @@ export const ProductsManModule = () => {
     const [combinedSpecialsComponent, setCombinedSpecialsComponent] = useState(false);
 
 
-    const headers = ['ID',	'Special Name',	'Special',	'Product', 'Special Value',	'Start Date',	'Expiry Date',	'Status', 'Action']
-    const combinedHeaders = ['Special ID',	'Group ID', 'Special Name',	'Special',	'Product',	'Special Price',	'Start Date',	'Expiry Date',	'Status', 'Action']
+    const headers = ['ID',	'Special Name',	'Special',	'Product', 'Special Value', 'Action']
+    const combinedHeaders = ['Special ID', 'Special Name',	'Special',	'Product',	'Special Price', 'Action']
 
     const url = `products/getproducts`;
     const { data, loading, error } = useQuery<ProductResponse>(url);
@@ -427,12 +421,9 @@ export const ProductsManModule = () => {
                             <p className="text-sm flex-1 text-center">GET 10% OFF PRODDCT</p>
                             <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
                             <p className="text-sm flex-1 text-center">56.99</p>
+                            {/* <p className="text-sm flex-1 text-center">2023-11-15</p>
                             <p className="text-sm flex-1 text-center">2023-11-15</p>
-                            <p className="text-sm flex-1 text-center">
-                                {/* {expiry_date ? new Date(expiry_date).toString().split(' ').slice(1, 5).join(' ') : '--:--'} */}
-                                2023-11-15
-                            </p>
-                            <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p>
+                            <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
                             {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
                             <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
                                 <Edit />
@@ -468,14 +459,14 @@ export const ProductsManModule = () => {
                         <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
                             <div className="flex items-center justify-between">
                                 <p className="text-sm flex-1 text-center text-red">19</p>
-                                <p className="text-sm flex-1 text-center">1</p>
+                                {/* <p className="text-sm flex-1 text-center">1</p> */}
                                 <p className="text-sm flex-1 text-center">Summer Breeze Special</p>
                                 <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
                                 <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
                                 <p className="text-sm flex-1 text-center">56.99</p>
+                                {/* <p className="text-sm flex-1 text-center">2023-11-15</p>
                                 <p className="text-sm flex-1 text-center">2023-11-15</p>
-                                <p className="text-sm flex-1 text-center">2023-11-15</p>
-                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
                                 <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
                                     <Edit />
@@ -485,14 +476,14 @@ export const ProductsManModule = () => {
                         <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                             <div className="flex items-center justify-between">
                                 <p className="text-sm flex-1 text-center text-red">19</p>
-                                <p className="text-sm flex-1 text-center">1</p>
+                                {/* <p className="text-sm flex-1 text-center">1</p> */}
                                 <p className="text-sm flex-1 text-center">Summer Breeze Special</p>
                                 <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
                                 <p className="text-sm flex-1 text-center">KINGSLEY 2LTR ASST</p>
                                 <p className="text-sm flex-1 text-center">20.99</p>
+                                {/* <p className="text-sm flex-1 text-center">2023-11-15</p>
                                 <p className="text-sm flex-1 text-center">2023-11-15</p>
-                                <p className="text-sm flex-1 text-center">2023-11-15</p>
-                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p>
+                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
                                 <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
                                     <Edit />

@@ -19,6 +19,8 @@ export const colors = {
         orange: '#ff6600',
         overlay: '#0000007f',
         darkblue: '#0038FF',
+        indigo: '#a5b4fc',
+        darkIndigo: '#4f46e5'
     }
 
 
