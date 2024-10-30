@@ -5,11 +5,8 @@ import { useState, useEffect } from "react"
 import { apiEndPoint, colors } from '@/utils/colors';
 import toast from 'react-hot-toast';
 import { Check, Edit, Calendar, Gift, X, Soup, Store, Expand, Trash2} from "lucide-react"
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label";
 import { RewardCards } from "@/components/component/rewards-cards";
-import { AddRewards } from "./rewards/add-reward"
+import { AddNewRewards } from "./rewards/add-rewards";
 import { EditRewards } from "@/components/component/edit-rewards";
 import { DeleteRewardConfirmation } from "@/components/component/delete-reward";
 
@@ -115,7 +112,7 @@ export const RewardsModule = () => {
         <div>
             {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
             {editProductsPopup && <EditRewards onClose={ toggleEditProductPage } />}
-            {addRewardsPopUp && <AddRewards onClose={ toggleAddRewards } />}
+            {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />}
             <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
                 <div>
                     <RewardCards />
