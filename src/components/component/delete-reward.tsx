@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 
-export const DeleteConfirmation = ({ isOpen, onClose }: any) => {
+export const DeleteRewardConfirmation = ({ isOpen, onClose }: any) => {
   if (!isOpen) return null; // Return null if dialog is not open
 
   const deleteReward = async () => {

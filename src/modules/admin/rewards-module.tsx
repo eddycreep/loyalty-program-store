@@ -4,12 +4,14 @@ import axios from 'axios';
 import { useState, useEffect } from "react"
 import { apiEndPoint, colors } from '@/utils/colors';
 import toast from 'react-hot-toast';
-import { Check, Edit, Calendar, Gift, X, Soup, Store} from "lucide-react"
+import { Check, Edit, Calendar, Gift, X, Soup, Store, Expand, Trash2} from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label";
 import { RewardCards } from "@/components/component/rewards-cards";
-import { EditRewards } from "@/components/component/edit-rewards"
+import { AddRewards } from "./rewards/add-reward"
+import { EditRewards } from "@/components/component/edit-rewards";
+import { DeleteRewardConfirmation } from "@/components/component/delete-reward";
 
 // Define the Reward type
 type Reward = {
@@ -42,6 +44,7 @@ interface RewardProps {
 type RewardsResponse = RewardProps[]
 
 export const RewardsModule = () => {
+    const [addRewardsPopUp, setRewardsPopUp] = useState(false);
     const [editProductsPopup, setEditProductsPopup] = useState(false);
     const headers = ['Title', 'Task', 'Reward', 'Type', 'Amount', 'Action']
 
@@ -53,6 +56,8 @@ export const RewardsModule = () => {
     const [storeID, setStoreID] = useState('') //add store id to the backend as well
     const [rewardPrice, setRewardPrice] = useState(0)
     const [isActive, setRewardIsActive] = useState(false)
+
+    const [deletePopUp, setDeletePopUp] = useState(false);
     
     const addReward = async () => {
         try {
@@ -80,8 +85,16 @@ export const RewardsModule = () => {
         setRewardIsActive(!isActive); // Toggle the state
     };
 
+    const toggleAddRewards = () => {
+        setRewardsPopUp(!addRewardsPopUp);
+    }
+
     const toggleEditProductPage = () => {
         setEditProductsPopup(!editProductsPopup);
+    };
+
+    const toggleDeletePage = () => {
+        setDeletePopUp(!deletePopUp);
     };
 
     const rewardSuccessNotification = () => {
@@ -99,110 +112,24 @@ export const RewardsModule = () => {
     };
 
     return (
-        <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+        <div>
+            {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+            {editProductsPopup && <EditRewards onClose={ toggleEditProductPage } />}
+            {addRewardsPopUp && <AddRewards onClose={ toggleAddRewards } />}
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                <div>
+                    <RewardCards />
+                </div>
             <div>
-                <RewardCards />
-            </div>
-            <div>
-            <div className="flex justify-between">
+                <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
                         <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
                         <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button className="bg-black text-white p-2 w-40 rounded-lg hover:bg-red">Add Reward</Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[600px]">
-                                    <DialogHeader>
-                                    <DialogTitle>Add New Rewad</DialogTitle>
-                                    <DialogDescription>
-                                        Add alternative ways customers can redeem rewards
-                                    </DialogDescription>
-                                    </DialogHeader>
-                                    <div className="grid gap-4 py-4">
-                                        <div className="flex gap-2">
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Title:
-                                                </Label>
-                                                <input onChange={(e) => setRewardTitle(e.target.value)} type="input" placeholder="Product Reviews" className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Description:
-                                                </Label>
-                                                <input onChange={(e) => setRewardDescription(e.target.value)} type="input" placeholder="complete a review on store products" className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Reward:
-                                                </Label>
-                                                <input onChange={(e) => setReward(e.target.value)} type="input" placeholder="10% Off Cart" className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Price:
-                                                </Label>
-                                                <input onChange={(e) => setRewardPrice(Number(e.target.value))} type="input" placeholder="10" className='w-full p-2 rounded-lg border border-gray-300'/>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Type:
-                                                </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    onChange={(e) => setRewardType(e.target.value)}
-                                                >
-                                                        <option>Select Type</option>
-                                                            <option value="Percentage">Percentage</option>
-                                                            <option value="Amount">Amount</option>
-                                                </select>
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="name" className="text-left pt-4">
-                                                    Store ID:
-                                                </Label>
-                                                <select 
-                                                    className="w-full p-2 rounded-lg border border-gray-300"
-                                                    onChange={(e) => setStoreID(e.target.value)}
-                                                >
-                                                        <option>Select Store ID</option>
-                                                        <option value="All">All</option>
-                                                        <option value="S001">S001</option>
-                                                        <option value="S002">S002</option>
-                                                        <option value="S003">S003</option>
-                                                        <option value="S004">S004</option>
-                                                        <option value="S005">S005</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col w-full">
-                                                <Label htmlFor="isactive" className="text-left pt-4">
-                                                    Active/Inactive:
-                                                </Label>
-                                                <div className="checkbox-apple">
-                                                    <input className="yep" 
-                                                    id="check-apple" 
-                                                    type="checkbox" 
-                                                    onClick={ handleSpecialToggle }
-                                                />
-                                                    <label htmlFor="check-apple"></label>
-                                                </div>
-                                            </div>
-                                    </div>
-                                    <DialogFooter>
-                                        <button  onClick={ addReward } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
-                                            Save
-                                        </button>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                        <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                            Add Rewards
+                        </button>
                     </div>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
@@ -213,7 +140,7 @@ export const RewardsModule = () => {
                     ))}
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
-                {/* {allProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => { */}
+                    {/* {allProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => { */}
                             <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
@@ -221,51 +148,24 @@ export const RewardsModule = () => {
                                     <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
                                     <p className="text-sm flex-1 text-center">Percentage</p>
                                     <p className="text-sm flex-1 text-center text-green">10</p>
-                                    {editProductsPopup && <EditRewards onClose={ toggleEditProductPage } />}
-                                    <button className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
-                                        <Edit />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Survey Completion</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by completing survys</p>
-                                    <p className="text-sm flex-1 text-center">R50 discount on Cart</p>
-                                    <p className="text-sm flex-1 text-center">Amount</p>
-                                    <p className="text-sm flex-1 text-center text-green">50</p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
-                                        <Edit />
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Client Referral</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards referring new customers to the loyalty program</p>
-                                    <p className="text-sm flex-1 text-center">20% Discount on Cart</p>
-                                    <p className="text-sm flex-1 text-center">Percentage</p>
-                                    <p className="text-sm flex-1 text-center text-green">20</p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
-                                        <Edit />
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Store Event</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards battending events hosted by the company</p>
-                                    <p className="text-sm flex-1 text-center">20% Discount any product</p>
-                                    <p className="text-sm flex-1 text-center">Percentage</p>
-                                    <p className="text-sm flex-1 text-center text-green">20</p>
-                                    <p className="text-sm flex-1 text-center flex items-center justify-center cursor-pointer">
-                                        <Edit />
-                                    </p>
+                                    {/* {editProductsPopup && <EditRewards onClose={ toggleEditProductPage } />} */}
+                                    <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                        <button className="flex items-center justify-center cursor-pointer">
+                                            <Expand  color="gray" />
+                                        </button>
+                                        <button className="flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
+                                            <Edit color="gray" /> 
+                                        </button>
+                                        <button className="flex items-center justify-center cursor-pointer" onClick={ toggleDeletePage }>
+                                            <Trash2 color="red" /> 
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                     {/* })} */}
                 </div>
             </div>
+        </div>
         </div>
     );
 }
