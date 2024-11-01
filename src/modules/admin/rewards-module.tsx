@@ -9,6 +9,7 @@ import { RewardCards } from "@/components/component/rewards-cards";
 import { AddNewRewards } from "./rewards/add-rewards";
 import { EditRewards } from "@/components/component/edit-rewards";
 import { DeleteRewardConfirmation } from "@/components/component/delete-reward";
+import { RewardSummaryCards } from "./rewards/reward-cards"
 
 // Define the Reward type
 type Reward = {
@@ -115,7 +116,7 @@ export const RewardsModule = () => {
             {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />}
             <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
                 <div>
-                    <RewardCards />
+                    <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">

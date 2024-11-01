@@ -215,38 +215,25 @@ export const ProductsManModule = () => {
                                 </button>
                             </div>
                         </div>
-                        {expandedRow === product.special_id && (
-                            <div className="w-full p-4 mr-2 mt-2 mx-2 rounded report-header text-black block">
-                                {/* Flex container to structure the main row content in three columns */}
-                                <div className="flex flex-wrap">
-                                    <div className="w-1/3">
-                                        <div>
-                                            <p className="font-bold">Store ID</p>
-                                            <p className="font-semibold text-gray-400">{product.store_id}</p>
-                                        </div>
-                                        <div className="pb-4 pt-4">
-                                            <p className="font-bold">Start Date</p>
-                                            <p className="font-semibold text-gray-400">{product.start_date}</p>
-                                        </div>
-                                        <div className="mb-4">
-                                            <p className="font-bold">Expiry Date</p>
-                                            <p className="font-semibold text-gray-400">{product.expiry_date}</p>
-                                        </div>
-                                    </div>
-                                    {/* Second Column: Displaying start_date and expiry_date */}
-                                    <div className="w-1/3">
-                                        <div className="mb-4">
-                                            <p className="font-bold">Special Value</p>
-                                            <p className="font-semibold text-gray-400">{product.special_value}</p>
-                                        </div>
-                                        <div className="mb-4">
-                                            <p className="font-bold">Active</p>
-                                            <p className="font-semibold text-gray-400">{product.isActive ? 'Yes' : 'No'}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        {/* Expanded Row: Matches header and main row layout with grid structure */}
+                        {/* Expanded Row: Matches header and main row layout with labels above values */}
+            {expandedRow === product.special_id && (
+                <div className="grid grid-cols-6 p-3 mx-2 rounded shadow-lg mt-2 gap-y-1">
+                    <p className="text-xs uppercase text-gray-500 text-center pr-6">Store ID</p>
+                    <p className="text-xs uppercase text-gray-500 text-center pr-6">Start Date</p>
+                    <p className="text-xs uppercase text-gray-500 text-center pr-2">Expiry Date</p>
+                    <p className="text-xs uppercase text-gray-500 text-center pr-0">Special Value</p>
+                    <p className="text-xs uppercase text-gray-500 text-center pl-4">Status</p>
+                    <p className="text-xs uppercase text-gray-500 text-center"></p>
+
+                    <p className="text-sm text-center text-gray-600 pr-6">{product.store_id}</p>
+                    <p className="text-sm text-center text-gray-600 pr-6">{product.start_date}</p>
+                    <p className="text-sm text-center text-gray-600 pr-2">{product.expiry_date}</p>
+                    <p className="text-sm text-center text-gray-600 p-0">{product.special_value}</p>
+                    <p className="text-sm text-center text-gray-600 pl-4">{product.isActive ? 'Active' : 'Inactive'}</p>
+                    <p className="text-sm text-center text-gray-600"> {/* Empty cell under 'Action' column */}</p>
+                </div>
+            )}
                     </div>
                 </div>
             ))}
