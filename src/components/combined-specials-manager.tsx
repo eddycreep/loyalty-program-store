@@ -12,6 +12,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+interface Props {
+  onClose: () => void;  // Corrected syntax here
+}
+
 //specials
 interface Specials {
   special_id: number,
@@ -78,7 +82,7 @@ const stores = [
   { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-export function CombinedSpecialsComponent() {
+export function CombinedSpecialsComponent({ onClose }: Props) {
   const [specials, setSpecials] = useState<CombinedSpecial[]>([])
   const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
     id: '',
@@ -225,7 +229,7 @@ export function CombinedSpecialsComponent() {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <Card className="mb-6 w-[600px]">
               <div className="flex justify-end pr-4 pt-4">
-                <button>
+                <button onClick={ onClose }>
                   <X className="h-4 w-4" color="red" />
                 </button>
               </div>

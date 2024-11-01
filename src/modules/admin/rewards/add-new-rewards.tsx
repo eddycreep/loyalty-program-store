@@ -12,32 +12,21 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-//specials
-interface Specials {
-    special_id: number,
-    special_name: string,
-    special: string,
-    special_type: string,
-    store_id: string,
-    start_date: string,
-    expiry_date: string,
-    special_value: string,
-    isActive: number
+interface Rewards {
+  reward_title: string,
+  description: string,
+  reward: string,
+  reward_type: string,
+  reward_price: number,
+  store_id: string,
+  region: string,
+  start_date: string,
+  expiry_date: string,
+  isActive: boolean; // Changed from number to boolean
+  loyaltyTier: string,
+  ageGroup: string,
 }
-
-
-//special items - individual x combined
-interface SpecialItems {
-    special_id: number,
-    special_group_id: string,
-    product_description: string,
-    special_price: string
-}
-
-//get special id
-interface SpecialIDProps {
-    special_id: number
-}
+// type RewardsResponse = Rewards[]
 
 
 type Product = {
@@ -47,23 +36,6 @@ type Product = {
     item_code: string
 }
 
-type SpecialProduct = Product & {
-    
-}
-
-type CombinedSpecial = {
-    id: string
-    name: string
-    special: string
-    products: SpecialProduct[]
-    specialPrice: number
-    specialValue: 'Percentage' | 'Amount'
-    storeId: string
-    region: string
-    startDate: string
-    endDate: string
-    isActive: boolean
-}
 
 const stores = [
   { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
@@ -95,24 +67,35 @@ const regions = [
     { id: 12, region_id: 'ROO12', region: 'Garden Route' },
 ];
 
+const loyaltyTiers = [
+  { id: 1, tier: 'Gold' },
+  { id: 2, tier: 'Diamond' },
+  { id: 3, tier: 'Platinum' },
+];
+
+const ageGroup = [
+  { id: 1, age_range: '18-24', name: 'Young Adults' },
+  { id: 2, age_range: '25-34', name: 'Adults' },
+  { id: 3, age_range: '35-44', name: 'Middle-Aged Adults' },
+  { id: 4, age_range: '45-50', name: 'Older Middle-Aged Adults' },
+  { id: 5, age_range: '50+', name: 'Seniors' },
+];
 
 export function AddNewRewards({ onClose }: any) {
-  const [specials, setSpecials] = useState<CombinedSpecial[]>([])
-  const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
-    id: '',
-    name: '',
-    special: '',
-    products: [],
-    specialPrice: 0,
-    specialValue: 'Amount',
-    storeId: '',
+  const [currentReward, setCurrentReward] = useState<Rewards>({
+    reward_title: '',
+    description: '',
+    reward: '',
+    reward_type: '',
+    reward_price: 0,
+    store_id: '',
     region: '',
-    startDate: '',
-    endDate: '',
-    isActive: true
+    start_date: '',
+    expiry_date: '',
+    isActive: false,
+    loyaltyTier: '',
+    ageGroup: '',
   })
-  const [searchTerm, setSearchTerm] = useState('')
-  const [specialID, setSpecialID] = useState(0)
 
   // Mock product data (replace with actual API call in production)
   const allProducts: Product[] = [
@@ -130,101 +113,37 @@ export function AddNewRewards({ onClose }: any) {
     { id: '12', name: 'Carrot', price: 0.4, item_code: 'P012' },
   ]
 
-  const filteredProducts = allProducts.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  const displayedProducts = filteredProducts.slice(0, 3); // Modified to limit products to 3
-
-  const addProductToSpecial = (product: Product) => {
-    // Allow adding only one product
-    if (currentSpecial.products.length === 0) {
-        setCurrentSpecial(prev => ({
-        ...prev,
-        products: [{ ...product, groupId: '' }]
-        }))
-    }
-  }
-
-  const removeProductFromSpecial = (productId: string) => {
-    setCurrentSpecial(prev => ({
-      ...prev,
-      products: prev.products.filter(p => p.id !== productId)
-    }))
-  }
-
-  const saveSpecial = async () => {
+  const saveReward = async () => {
     try {
-        const specialType = 'Special'
-        
         const payload = {
-            specialName: currentSpecial.name,
-            special: currentSpecial.special,
-            specialType: specialType,
-            storeId: currentSpecial.storeId,
-            startDate: currentSpecial.startDate,
-            expiryDate: currentSpecial.endDate,
-            specialValue: currentSpecial.specialValue,
-            isActive: currentSpecial.isActive,
+          reward_title: currentReward.reward_title,
+          description: currentReward.description,
+          reward: currentReward.reward,
+          reward_type: currentReward.reward_type,
+          reward_price: currentReward.reward_price,
+          store_id: currentReward.store_id,
+          region: currentReward.region,
+          start_date: currentReward.start_date,
+          expiry_date: currentReward.expiry_date,
+          isActive: currentReward.isActive,
+          loyaltyTier: currentReward.loyaltyTier,
+          ageGroup: currentReward.ageGroup,
         }
 
-        const url = `admin/savespecial`
-        const response = await axios.post<Specials>(`${apiEndPoint}/${url}`, payload)
+        const url = `admin/savereward`
+        const response = await axios.post<Rewards>(`${apiEndPoint}/${url}`, payload)
         console.log('The Special has been saved successfully:', response.data)
 
         if (response.status === 200) {
-            toast.success('The special has been saved successfully', {
+            toast.success('The Reward has been saved successfully', {
                 icon: <Check color={colors.green} size={24} />,
                 duration: 3000,
             })
         }
-
-        fetchSpecialID() // fetch special id
     } catch (error) {
-        console.error('Error saving special:', error)
+        console.error('Error saving Reward:', error)
         
-        toast.success('There was an error when saving the special', {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        })
-    }
-  }
-
-  const fetchSpecialID = async () => {
-    try {
-        const url = `admin/getspecialid/${currentSpecial.name}`
-        const response = await axios.get<SpecialIDProps>(`${apiEndPoint}/${url}`)
-        console.log('The Special ID has been fetched successfully:', response.data)
-        setSpecialID(response?.data.special_id)
-        saveSpecialItems() //save the item
-    } catch (error) {
-        console.error('Error fetching special ID:', error)
-    }
-  }
-
-  const saveSpecialItems = async () => {
-    try {
-        const payload = {
-            specialid: specialID,
-            productdescription: currentSpecial.products,
-            specialprice: currentSpecial.specialPrice
-        }
-
-        const url = `admin/saveproductspecial`
-        const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
-        console.log('The Special item has been saved with its ID:', response.data)
-
-        if (response.status === 200) {
-            toast.success('The special item has been saved successully', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            })
-        }
-
-    } catch (error) {
-        console.error('Error saving special with its product:', error)
-        
-        toast.success('There was an error when saving the special items', {
+        toast.success('There was an error when saving the Reward', {
             icon: <X color={colors.red} size={24} />,
             duration: 3000,
         })
@@ -250,19 +169,19 @@ export function AddNewRewards({ onClose }: any) {
                 <div className="w-full">
                     <Label htmlFor="special-name">Reward Title</Label>
                     <Input
-                      id="special-name"
-                      value={currentSpecial.name}
-                      onChange={(e) => setCurrentSpecial(prev => ({ ...prev, name: e.target.value }))}
-                      placeholder="Enter special name"
+                      id="reward-title"
+                      value={currentReward.reward_title} // Changed `currentSpecial.name` to `currentReward.reward_title`
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_title: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `name` to `reward_title`
+                      placeholder="Enter reward title"
                     />
                 </div>
                 <div className="w-full">
                     <Label htmlFor="special-name">Description</Label>
                     <Input
                       id="special-name"
-                      value={currentSpecial.special}
-                      onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special: e.target.value }))}
-                      placeholder="Enter special"
+                      value={currentReward.description} // Changed `currentSpecial.special` to `currentReward.description`
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `special` to `description`
+                      placeholder="Enter reward description"
                     />
                 </div>
               </div>
@@ -270,11 +189,11 @@ export function AddNewRewards({ onClose }: any) {
                 <div className="w-full">
                   <Label htmlFor="special-type">Reward Type</Label>
                   <Select
-                    value={currentSpecial.specialValue}
-                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, specialValue: value as 'Percentage' | 'Amount' }))}
+                    value={currentReward.reward_type} // Changed `currentSpecial.specialValue` to `currentReward.reward_type`
+                    onValueChange={(value) => setCurrentReward(prev => ({ ...prev, reward_type: value as 'Percentage' | 'Amount' }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `specialValue` to `reward_type`
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select special type" />
+                      <SelectValue placeholder="Select reward type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Percentage">Percentage</SelectItem>
@@ -285,12 +204,11 @@ export function AddNewRewards({ onClose }: any) {
                 <div className="w-full">
                     <Label htmlFor="special-price">Reward Price</Label>
                     <Input
-                      id="special-price"
-                      // type="number"
-                      value={currentSpecial.specialPrice || ''}
-                      onChange={(e) => setCurrentSpecial(prev => ({ ...prev, specialPrice: parseFloat(e.target.value) }))}
-                      placeholder="Enter special price"
-                    />
+                        id="special-price"
+                        value={currentReward.reward_price || ''} // Changed `currentSpecial.specialPrice` to `currentReward.reward_price`
+                        onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_price: parseFloat(e.target.value) }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `specialPrice` to `reward_price`
+                        placeholder="Enter reward price"
+                      />
                 </div>
               </div>
               <div className="flex gap-4">
@@ -299,8 +217,8 @@ export function AddNewRewards({ onClose }: any) {
                   <Input
                     id="start-date"
                     type="date"
-                    value={currentSpecial.startDate}
-                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, startDate: e.target.value }))}
+                    value={currentReward.start_date} // Changed `currentSpecial.startDate` to `currentReward.start_date`
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, start_date: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `startDate` to `start_date`
                   />
                 </div>
                 <div className="w-full">
@@ -308,8 +226,8 @@ export function AddNewRewards({ onClose }: any) {
                   <Input
                     id="end-date"
                     type="date"
-                    value={currentSpecial.endDate}
-                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, endDate: e.target.value }))}
+                    value={currentReward.expiry_date} // Changed `currentSpecial.endDate` to `currentReward.expiry_date`
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, expiry_date: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `endDate` to `expiry_date`
                   />
                 </div>
               </div>
@@ -318,8 +236,8 @@ export function AddNewRewards({ onClose }: any) {
                     <Label htmlFor="store-id">Store ID</Label>
                     {/* Changed the input field to a select dropdown to display store IDs */}
                       <Select
-                        value={currentSpecial.storeId}
-                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, storeId: value }))}
+                        value={currentReward.store_id}
+                        onValueChange={(value) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select store ID" />
@@ -339,8 +257,8 @@ export function AddNewRewards({ onClose }: any) {
                     <Label htmlFor="store-id">Region</Label>
                     {/* Changed the input field to a select dropdown to display store IDs */}
                       <Select
-                        value={currentSpecial.storeId}
-                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, storeId: value }))}
+                        value={currentReward.region}
+                        onValueChange={(value) => setCurrentReward(prev => ({ ...prev, region: value }))}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select region" />
@@ -357,62 +275,69 @@ export function AddNewRewards({ onClose }: any) {
                       </Select>
                   </div>
               </div>
-
-              {/* <div>
-                <Label htmlFor="product-search">Search Products</Label>
-                <div className="flex space-x-2">
-                  <Input
-                    id="product-search"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search for products"
-                  />
-                  <Button variant="outline" size="icon">
-                    <Search className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {displayedProducts.map((product) => (
-                <Button
-                    key={product.id}
-                    variant="outline"
-                    onClick={() => addProductToSpecial(product)}
-                    disabled={currentSpecial.products.length >= 1 || currentSpecial.products.some(p => p.id === product.id)}
-                    className="justify-start"
+              <div className="flex gap-4">
+                  <div className="w-full">
+                    <Label htmlFor="store-id">Age Group</Label>
+                    <Select
+                      value={currentReward.ageGroup} // Changed `currentSpecial.storeId` to `currentReward.store_id`
+                      onValueChange={(value) => setCurrentReward(prev => ({ ...prev, ageGroup: value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `storeId` to `store_id`
                     >
-                    <PlusCircle className="h-4 w-4 mr-2" />
-                    {product.name}
-                </Button>
-                ))}
-              </div> */}
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Age Group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="All">All</SelectItem>
+                        {ageGroup.map((store) => (
+                          <SelectItem key={store.id} value={store.name}>
+                            {store.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-full">
+                    <Label htmlFor="store-id">Loyalty Tier</Label>
+                    {/* Changed the input field to a select dropdown to display store IDs */}
+                      <Select
+                        value={currentReward.loyaltyTier}
+                        onValueChange={(value) => setCurrentReward(prev => ({ ...prev, loyaltyTier: value }))}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select tier" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {/* Mapping through the stores array to create options for the dropdown */}
+                          <SelectItem value="All">All</SelectItem> {/* Added "All" option */}
+                          {loyaltyTiers.map((loyalty) => (
+                            <SelectItem key={loyalty.id} value={loyalty.tier}>
+                              {loyalty.tier}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                  </div>
+              </div>
+              <div className="flex flex-col space-x-2 pt-2">
+                      {/* Dynamic label based on isActive state */}
 
-              {/* <div className="mt-4">
-                <Label>Product</Label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {currentSpecial.products.map((product) => (
-                    <Card key={product.id} className="p-2 flex justify-between items-center">
-                      <span>{product.name}</span>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeProductFromSpecial(product.id)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
+                      <Label htmlFor="active-toggle">
+                        {/* {currentSpecial.isActive ? 'Active' : 'In-Active'} */}
+                        Active
+                      </Label>
+                      <div className="pt-2">
+                        <Switch
+                          id="active-toggle"
+                          checked={currentReward.isActive}
+                          onCheckedChange={(checked) =>
+                            setCurrentReward(prev => ({ ...prev, isActive: checked }))
+                          }
+                        />
                       </div>
-                    </Card>
-                  ))}
-                </div>
-              </div> */}
+                  </div>
 
               <Button 
-                onClick={ saveSpecial } 
-                // disabled={currentSpecial.products.length === 0 || !currentSpecial.name || currentSpecial.specialPrice <= 0 || !currentSpecial.storeId || !currentSpecial.startDate || !currentSpecial.endDate}
-              >
-                  Save Special
+                onClick={ saveReward }>
+                  Save Reward
               </Button>
             </div>
           </CardContent>
