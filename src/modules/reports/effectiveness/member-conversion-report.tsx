@@ -17,6 +17,19 @@ interface MemberConversion {
     total_non_members: number,
     new_members_joined: number,
     member_conversion_rate: number,
+    total_store_visits: number,
+    avg_spend_non_members: number,
+    conversion_by_category: {
+        grocery: number,
+        electronics: number,
+        clothing: number
+    },
+    new_member_demographics: {
+        age_18_24: number,
+        age_25_34: number,
+        age_35_plus: number
+    },
+    non_member_repeat_visits: number
 }
 
 
@@ -24,98 +37,254 @@ const memberConversionData: MemberConversion[] = [
     {
         store_id: 'SOO1',
         store_name: 'PLUS DC Stellenbosch',
-        date: '2024-09-15', // Random date
+        date: '2024-09-15',
         total_non_members: 1000,
         new_members_joined: 50,
         member_conversion_rate: 5,
+        total_store_visits: 1500,
+        avg_spend_non_members: 250.50,
+        conversion_by_category: {
+            grocery: 45,
+            electronics: 30,
+            clothing: 25
+        },
+        new_member_demographics: {
+            age_18_24: 30,
+            age_25_34: 45,
+            age_35_plus: 25
+        },
+        non_member_repeat_visits: 300
     },
     {
         store_id: 'SOO2',
         store_name: 'PLUS DC Albertin',
-        date: '2024-09-25', // Random date
+        date: '2024-09-25',
         total_non_members: 800,
         new_members_joined: 40,
         member_conversion_rate: 5,
+        total_store_visits: 1200,
+        avg_spend_non_members: 200.00,
+        conversion_by_category: {
+            grocery: 35,
+            electronics: 25,
+            clothing: 20
+        },
+        new_member_demographics: {
+            age_18_24: 25,
+            age_25_34: 35,
+            age_35_plus: 20
+        },
+        non_member_repeat_visits: 250
     },
     {
         store_id: 'SOO3',
         store_name: 'PLUS DC Bellville',
-        date: '2024-10-05', // Random date
+        date: '2024-10-05',
         total_non_members: 1200,
         new_members_joined: 60,
         member_conversion_rate: 5,
+        total_store_visits: 1800,
+        avg_spend_non_members: 275.00,
+        conversion_by_category: {
+            grocery: 40,
+            electronics: 30,
+            clothing: 25
+        },
+        new_member_demographics: {
+            age_18_24: 30,
+            age_25_34: 40,
+            age_35_plus: 25
+        },
+        non_member_repeat_visits: 350
     },
     {
         store_id: 'SOO4',
         store_name: 'PLUS DC Nelspruit',
-        date: '2024-08-20', // New data with random date
+        date: '2024-08-20',
         total_non_members: 950,
         new_members_joined: 48,
         member_conversion_rate: 5.05,
+        total_store_visits: 1400,
+        avg_spend_non_members: 240.00,
+        conversion_by_category: {
+            grocery: 38,
+            electronics: 28,
+            clothing: 24
+        },
+        new_member_demographics: {
+            age_18_24: 28,
+            age_25_34: 38,
+            age_35_plus: 24
+        },
+        non_member_repeat_visits: 280
     },
     {
         store_id: 'SOO5',
         store_name: 'PLUS DC Durbanville',
-        date: '2024-07-30', // New data with random date
+        date: '2024-07-30',
         total_non_members: 1100,
         new_members_joined: 52,
         member_conversion_rate: 4.73,
+        total_store_visits: 1600,
+        avg_spend_non_members: 260.00,
+        conversion_by_category: {
+            grocery: 37,
+            electronics: 27,
+            clothing: 23
+        },
+        new_member_demographics: {
+            age_18_24: 27,
+            age_25_34: 37,
+            age_35_plus: 23
+        },
+        non_member_repeat_visits: 320
     },
     {
         store_id: 'SOO6',
         store_name: 'PLUS DC Bloemfontein',
-        date: '2024-06-14', // New data with random date
+        date: '2024-06-14',
         total_non_members: 890,
         new_members_joined: 45,
         member_conversion_rate: 5.06,
+        total_store_visits: 1300,
+        avg_spend_non_members: 230.00,
+        conversion_by_category: {
+            grocery: 36,
+            electronics: 26,
+            clothing: 21
+        },
+        new_member_demographics: {
+            age_18_24: 26,
+            age_25_34: 36,
+            age_35_plus: 21
+        },
+        non_member_repeat_visits: 270
     },
     {
         store_id: 'SOO7',
         store_name: 'PLUS DC Cape Town',
-        date: '2024-05-22', // New data with random date
+        date: '2024-05-22',
         total_non_members: 1300,
         new_members_joined: 65,
         member_conversion_rate: 5,
+        total_store_visits: 1900,
+        avg_spend_non_members: 280.00,
+        conversion_by_category: {
+            grocery: 40,
+            electronics: 30,
+            clothing: 25
+        },
+        new_member_demographics: {
+            age_18_24: 30,
+            age_25_34: 40,
+            age_35_plus: 25
+        },
+        non_member_repeat_visits: 360
     },
     {
         store_id: 'SOO8',
         store_name: 'PLUS DC Pietermaritzburg',
-        date: '2024-04-10', // New data with random date
+        date: '2024-04-10',
         total_non_members: 1040,
         new_members_joined: 54,
         member_conversion_rate: 5.19,
+        total_store_visits: 1700,
+        avg_spend_non_members: 260.00,
+        conversion_by_category: {
+            grocery: 39,
+            electronics: 29,
+            clothing: 24
+        },
+        new_member_demographics: {
+            age_18_24: 29,
+            age_25_34: 39,
+            age_35_plus: 24
+        },
+        non_member_repeat_visits: 300
     },
     {
         store_id: 'SOO9',
         store_name: 'PLUS DC East London',
-        date: '2024-03-28', // New data with random date
+        date: '2024-03-28',
         total_non_members: 970,
         new_members_joined: 47,
         member_conversion_rate: 4.85,
+        total_store_visits: 1500,
+        avg_spend_non_members: 240.00,
+        conversion_by_category: {
+            grocery: 37,
+            electronics: 27,
+            clothing: 22
+        },
+        new_member_demographics: {
+            age_18_24: 27,
+            age_25_34: 37,
+            age_35_plus: 22
+        },
+        non_member_repeat_visits: 290
     },
     {
         store_id: 'SOO10',
         store_name: 'PLUS DC Pretoria',
-        date: '2024-02-17', // New data with random date
+        date: '2024-02-17',
         total_non_members: 1020,
         new_members_joined: 51,
         member_conversion_rate: 5,
+        total_store_visits: 1600,
+        avg_spend_non_members: 250.00,
+        conversion_by_category: {
+            grocery: 38,
+            electronics: 28,
+            clothing: 23
+        },
+        new_member_demographics: {
+            age_18_24: 28,
+            age_25_34: 38,
+            age_35_plus: 23
+        },
+        non_member_repeat_visits: 310
     },
     {
         store_id: 'SOO11',
         store_name: 'PLUS DC Germiston',
-        date: '2024-01-05', // New data with random date
+        date: '2024-01-05',
         total_non_members: 1140,
         new_members_joined: 58,
         member_conversion_rate: 5.09,
+        total_store_visits: 1800,
+        avg_spend_non_members: 270.00,
+        conversion_by_category: {
+            grocery: 40,
+            electronics: 30,
+            clothing: 25
+        },
+        new_member_demographics: {
+            age_18_24: 30,
+            age_25_34: 40,
+            age_35_plus: 25
+        },
+        non_member_repeat_visits: 340
     },
     {
         store_id: 'SOO12',
         store_name: 'PLUS DC Polokwane',
-        date: '2024-09-11', // New data with random date
+        date: '2024-09-11',
         total_non_members: 980,
         new_members_joined: 49,
         member_conversion_rate: 5,
+        total_store_visits: 1400,
+        avg_spend_non_members: 230.00,
+        conversion_by_category: {
+            grocery: 36,
+            electronics: 26,
+            clothing: 21
+        },
+        new_member_demographics: {
+            age_18_24: 26,
+            age_25_34: 36,
+            age_35_plus: 21
+        },
+        non_member_repeat_visits: 290
     },
 ];
 
@@ -137,7 +306,7 @@ const stores = [
 
 
 export const MemberConversionReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Non-Members', 'New Members Joined', 'Member Conversion Rate (%)'];
+    const headers = [ 'Store ID', 'Store Name', 'Date', 'Total Non-Members', 'New Members Joined', 'Member Conversion Rate (%)', 'Total Store Visits', 'Average Spend of Non-Members', 'Conversion Rate by Product Category', 'Customer Demographics of New Members', 'Non-Member Repeat Visits'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -369,19 +538,23 @@ export const MemberConversionReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_non_members, new_members_joined, member_conversion_rate }) => (
+                {filteredData.map(({ store_id, store_name, date, total_non_members, new_members_joined, member_conversion_rate, 
+                    total_store_visits, avg_spend_non_members, conversion_by_category, new_member_demographics, non_member_repeat_visits }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_non_members}</p>
-                            <p className="text-sm flex-1 text-center">
-                                {new_members_joined}
-                            </p>
+                            <p className="text-sm flex-1 text-center">{new_members_joined}</p>
                             <p className={`text-sm flex-1 text-center ${member_conversion_rate >= 50 ? 'text-green' : 'text-red'}`}>
                                 {member_conversion_rate}%
                             </p>
+                            <p className="text-sm flex-1 text-center">{total_store_visits}</p>
+                            <p className="text-sm flex-1 text-center">R{avg_spend_non_members}</p>
+                            <p className="text-sm flex-1 text-center">{`G:${conversion_by_category.grocery}% E:${conversion_by_category.electronics}% C:${conversion_by_category.clothing}%`}</p>
+                            <p className="text-sm flex-1 text-center">{`18-24:${new_member_demographics.age_18_24}% 25-34:${new_member_demographics.age_25_34}% 35+:${new_member_demographics.age_35_plus}%`}</p>
+                            <p className="text-sm flex-1 text-center">{non_member_repeat_visits}</p>
                         </div>
                     </div>
                 ))}

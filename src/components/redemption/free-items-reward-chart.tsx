@@ -53,7 +53,7 @@ export function FreeItemsRewardsChart() {
 
 
   return (
-    <Card className="flex flex-col w-[350px] h-[350px]">
+    <Card className="flex flex-col w-full h-[350px]">
       <CardHeader>
         <div className="flex justify-between">
           <div className="">

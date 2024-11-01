@@ -214,6 +214,44 @@ const promotionalImpact = [
 ];
 
 
+// Add these new data structures for product performance metrics
+const productPerformanceData = [
+  { product: 'Product A', sales: 1200, growth: 15, engagement: 85 },
+  { product: 'Product B', sales: 980, growth: 8, engagement: 72 },
+  { product: 'Product C', sales: 1500, growth: 25, engagement: 90 },
+  { product: 'Product D', sales: 750, growth: -5, engagement: 65 },
+  { product: 'Product E', sales: 1100, growth: 12, engagement: 78 },
+];
+
+const customerDemographics = {
+  ageGroups: [
+    { group: '18-24', percentage: 15 },
+    { group: '25-34', percentage: 30 },
+    { group: '35-44', percentage: 25 },
+    { group: '45-54', percentage: 20 },
+    { group: '55+', percentage: 10 },
+  ],
+  gender: [
+    { category: 'Male', value: 45 },
+    { category: 'Female', value: 52 },
+    { category: 'Other', value: 3 },
+  ],
+  purchaseFrequency: [
+    { frequency: 'Weekly', count: 2000 },
+    { frequency: 'Bi-weekly', count: 3500 },
+    { frequency: 'Monthly', count: 4500 },
+    { frequency: 'Quarterly', count: 2500 },
+    { frequency: 'Annually', count: 1000 },
+  ],
+  customerSegments: [
+    { segment: 'Value Seekers', percentage: 35 },
+    { segment: 'Premium Buyers', percentage: 25 },
+    { segment: 'Occasional Shoppers', percentage: 20 },
+    { segment: 'Loyal Customers', percentage: 20 },
+  ],
+};
+
+
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('customer-engagement')
 
@@ -231,20 +269,20 @@ export default function Dashboard() {
         </TabsList>
         <TabsContent value="customer-engagement" className="space-y-4 h-screen w-full">
           <div className="h-screen w-full">
-          <div className="flex justify-between gap-2">
-                <div className="">
-                  <LoyaltyMembersChart/>
-                </div>
-                <div className="">
-                  <CommonRedeemedSpecialsChart />
-                </div>
-                <div className="">
-                  <CommonRedeemedRewardsChart />
-                </div>
-                <div className="">
-                  <SurveysCompletedChart />
-                </div>
-          </div>
+            <div className="flex justify-between gap-2 pb-2">
+                  <div className="">
+                    <LoyaltyMembersChart/>
+                  </div>
+                  <div className="">
+                    <CommonRedeemedSpecialsChart />
+                  </div>
+                  <div className="">
+                    <CommonRedeemedRewardsChart />
+                  </div>
+                  <div className="">
+                    <SurveysCompletedChart />
+                  </div>
+            </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -322,102 +360,101 @@ export default function Dashboard() {
           </div>
           </div>
         </TabsContent>
-        <TabsContent value="financial" className="space-y-4">
-            <div className="flex justify-between gap-2">
-                <div className="">
-                  <LoyaltyRevenueChart />
-                </div>
-                <div className="">
-                  <LoyaltyRevenueChart />
-                </div>
-                <div className="">
-                  <LoyaltyRevenueChart />
-                </div>
-                {/* <div className="">
-                  <LoyaltyRevenueChart />
-                </div> */}
+        <TabsContent value="financial" className="space-y-4 h-screen w-full pb-64">
+          {/* <div className="h-screen w-full"> */}
+            <div className="flex justify-between gap-2 pb-2">
+              <div className="w-1/3">
+                <LoyaltyRevenueChart />
+              </div>
+              <div className="w-1/3">
+                <LoyaltyRevenueChart />
+              </div>
+              <div className="w-1/3">
+                <LoyaltyRevenueChart />
+              </div>
             </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card>
-              <CardHeader>
-                <CardTitle>Revenue per Member</CardTitle>
-                <CardDescription>Average revenue by customer segment</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={revenuePerMember}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="segment" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="revenue" fill="hsl(var(--chart-5))" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Lifetime Value (LTV)</CardTitle>
-                <CardDescription>Estimated total revenue per customer segment</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={{ value: { label: "LTV", color: "hsl(var(--chart-8))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={ltv}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Revenue per Member</CardTitle>
+                  <CardDescription>Average revenue by customer segment</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={revenuePerMember}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="segment" />
                       <YAxis />
-                      <ChartTooltip  content={<ChartTooltipContent />} />
-                      <Bar dataKey="value" fill="var(--color-value)" />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="revenue" fill="hsl(var(--chart-5))" />
                     </BarChart>
                   </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Cost vs. Revenue</CardTitle>
-                <CardDescription>Comparison of costs and revenue generated</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={{ cost: { label: "Cost", color: "hsl(var(--chart-9))" }, revenue: { label: "Revenue", color: "hsl(var(--chart-10))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={costVsRevenue}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="cost" fill="var(--color-cost)" />
-                      <Bar dataKey="revenue" fill="var(--color-revenue)" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Discount Cost vs Revenue</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={{ 
-                  discountCost: { label: "Discount Cost", color: "hsl(var(--chart-4))" },
-                  revenue: { label: "Revenue", color: "hsl(var(--chart-5))" }
-                }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={discountCostVsRevenue}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="discountCost" stroke="var(--color-discountCost)" strokeWidth={2} />
-                      <Line type="monotone" dataKey="revenue" stroke="var(--color-revenue)" strokeWidth={2} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-          </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Lifetime Value (LTV)</CardTitle>
+                  <CardDescription>Estimated total revenue per customer segment</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={{ value: { label: "LTV", color: "hsl(var(--chart-8))" } }} className="h-[300px] w-[800px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={ltv}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="segment" />
+                        <YAxis />
+                        <ChartTooltip  content={<ChartTooltipContent />} />
+                        <Bar dataKey="value" fill="var(--color-value)" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Cost vs. Revenue</CardTitle>
+                  <CardDescription>Comparison of costs and revenue generated</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={{ cost: { label: "Cost", color: "hsl(var(--chart-9))" }, revenue: { label: "Revenue", color: "hsl(var(--chart-10))" } }} className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={costVsRevenue}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="cost" fill="var(--color-cost)" />
+                        <Bar dataKey="revenue" fill="var(--color-revenue)" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Discount Cost vs Revenue</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={{ 
+                    discountCost: { label: "Discount Cost", color: "hsl(var(--chart-4))" },
+                    revenue: { label: "Revenue", color: "hsl(var(--chart-5))" }
+                  }} className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={discountCostVsRevenue}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Line type="monotone" dataKey="discountCost" stroke="var(--color-discountCost)" strokeWidth={2} />
+                        <Line type="monotone" dataKey="revenue" stroke="var(--color-revenue)" strokeWidth={2} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </div>
+          {/* </div> */}
         </TabsContent>
         <TabsContent value="redemption" className="space-y-4">
             <div className="flex justify-between gap-2">
@@ -438,7 +475,7 @@ export default function Dashboard() {
                 <CardDescription>Average time for new members to redeem first reward</CardDescription>
               </CardHeader>
               <CardContent>
-                <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-13))" } }} className="h-[300px]">
+                <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-13))" } }} className="h-[300px] w-[800px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={timeToFirstRedemption}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -579,7 +616,7 @@ export default function Dashboard() {
                 <CardDescription>Success rate of additional product purchases</CardDescription>
               </CardHeader>
               <CardContent>
-                <ChartContainer config={{ crossSell: { label: "Cross-Sell", color: "hsl(var(--chart-18))" }, upSell: { label: "Up-Sell", color: "hsl(var(--chart-19))" } }} className="h-[300px]">
+                <ChartContainer config={{ crossSell: { label: "Cross-Sell", color: "hsl(var(--chart-18))" }, upSell: { label: "Up-Sell", color: "hsl(var(--chart-19))" } }} className="h-[300px] w-[800px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={crossSellUpsellRate}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -603,126 +640,271 @@ export default function Dashboard() {
                 <div className="">
                   <RedeemedRewardsCount />
                 </div>
+                <div className="">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Points Utilization Rate</CardTitle>
+                      <CardDescription>How effectively members are using their earned points</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <PieChart>
+                          <Pie
+                            data={[
+                              { name: 'Used Points', value: 65 },
+                              { name: 'Expired Points', value: 15 },
+                              { name: 'Unused Points', value: 20 }
+                            ]}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={80}
+                          />
+                          <Tooltip />
+                          <Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+                </div>
             </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Reward Redemption by Tier</CardTitle>
+                    <CardDescription>Distribution of rewards across membership tiers</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={[
+                        { tier: 'Bronze', rewards: 150, avgValue: 25 },
+                        { tier: 'Silver', rewards: 280, avgValue: 40 },
+                        { tier: 'Gold', rewards: 420, avgValue: 75 },
+                        { tier: 'Platinum', rewards: 320, avgValue: 120 }
+                      ]}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="tier" />
+                        <YAxis yAxisId="left" />
+                        <YAxis yAxisId="right" orientation="right" />
+                        <Tooltip />
+                        <Legend />
+                        <Bar yAxisId="left" dataKey="rewards" fill="var(--color-rewards)" name="Number of Redemptions" />
+                        <Line yAxisId="right" type="monotone" dataKey="avgValue" stroke="var(--color-value)" name="Avg. Value" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Member Engagement Score</CardTitle>
+                    <CardDescription>Composite score based on program participation</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart data={[
+                        { month: 'Jan', score: 72 },
+                        { month: 'Feb', score: 75 },
+                        { month: 'Mar', score: 78 },
+                        { month: 'Apr', score: 76 },
+                        { month: 'May', score: 80 },
+                        { month: 'Jun', score: 82 }
+                      ]}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis domain={[0, 100]} />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="score" stroke="var(--color-score)" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Time to Next Tier</CardTitle>
+                    <CardDescription>Average days for members to reach next tier</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={[
+                        { tier: 'Bronze to Silver', days: 45 },
+                        { tier: 'Silver to Gold', days: 90 },
+                        { tier: 'Gold to Platinum', days: 180 }
+                      ]}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="tier" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="days" fill="var(--color-days)" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Member Conversion Rate</CardTitle>
+                    <CardDescription>Percentage of non-members joining the loyalty program</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={{ value: { label: "Conversion", color: "hsl(var(--chart-20))" } }} className="h-[300px] w-[800px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={memberConversionRate}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="stage" />
+                          <YAxis />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Area type="monotone" dataKey="value" fill="var(--color-value)" stroke="var(--color-value)" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Promotional Impact</CardTitle>
+                    <CardDescription>Effectiveness of special promotions on sales</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={{ sales: { label: "Sales", color: "hsl(var(--chart-22))" } }} className="h-[300px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={promotionalImpact}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Bar dataKey="sales" fill="var(--color-sales)">
+                            {promotionalImpact.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.promotion ? "var(--color-promotion)" : "var(--color-sales)"} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+            </div>
+        </TabsContent>
+        <TabsContent value="performance" className="space-y-4 h-screen w-full">
+          <div className="flex justify-between gap-4 w-full">
+            <Card className="flex-1">
               <CardHeader>
-                <CardTitle>Member Conversion Rate</CardTitle>
-                <CardDescription>Percentage of non-members joining the loyalty program</CardDescription>
+                <CardTitle>Age Distribution</CardTitle>
+                <CardDescription>Customer age demographics</CardDescription>
               </CardHeader>
               <CardContent>
-                <ChartContainer config={{ value: { label: "Conversion", color: "hsl(var(--chart-20))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={memberConversionRate}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="stage" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Area type="monotone" dataKey="value" fill="var(--color-value)" stroke="var(--color-value)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-            {/* <Card>
-              <CardHeader>
-                <CardTitle>Program ROI</CardTitle>
-                <CardDescription>Return on Investment over years</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={programROI}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="year" />
-                    <YAxis />
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={customerDemographics.ageGroups}
+                      dataKey="percentage"
+                      nameKey="group"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                    >
+                      {customerDemographics.ageGroups.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={`hsl(${index * 45}, 70%, 50%)`} />
+                      ))}
+                    </Pie>
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="roi" fill="hsl(var(--chart-11))" />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+            <Card className="flex-1">
+              <CardHeader>
+                <CardTitle>Gender Distribution</CardTitle>
+                <CardDescription>Customer gender breakdown</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={customerDemographics.gender}
+                      dataKey="value"
+                      nameKey="category"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                    >
+                      {customerDemographics.gender.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={`hsl(${index * 120}, 70%, 50%)`} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+            <Card className="flex-1">
+              <CardHeader>
+                <CardTitle>Customer Segments</CardTitle>
+                <CardDescription>Distribution of customer types</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={customerDemographics.customerSegments}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="segment" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="percentage" fill="var(--color-primary)">
+                      {customerDemographics.customerSegments.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={`hsl(${index * 90}, 70%, 50%)`} />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
-            </Card> */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Promotional Impact</CardTitle>
-                <CardDescription>Effectiveness of special promotions on sales</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={{ sales: { label: "Sales", color: "hsl(var(--chart-22))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={promotionalImpact}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="sales" fill="var(--color-sales)">
-                        {promotionalImpact.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.promotion ? "var(--color-promotion)" : "var(--color-sales)"} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
             </Card>
           </div>
-        </TabsContent>
-        <TabsContent value="performance" className="space-y-4">
-            <div className="flex justify-between gap-2">
-                <div className="">
-                  <LoyaltyRevenueChart/>
-                </div>
-                <div className="">
-                  <LoyaltyRevenueChart />
-                </div>
-                <div className="">
-                  <LoyaltyRevenueChart />
-                </div>
-                <div className="">
-                  <LoyaltyRevenueChart />
-                </div>
-            </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
+          <div className="grid grid-cols-2 gap-4 w-full">
+            <Card className="w-full">
               <CardHeader>
-                <CardTitle>Member Conversion Rate</CardTitle>
-                <CardDescription>Percentage of non-members joining the loyalty program</CardDescription>
+                <CardTitle>Product Performance Matrix</CardTitle>
+                <CardDescription>Sales, growth, and engagement metrics</CardDescription>
               </CardHeader>
               <CardContent>
-                <ChartContainer config={{ value: { label: "Conversion", color: "hsl(var(--chart-20))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={memberConversionRate}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="stage" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Area type="monotone" dataKey="value" fill="var(--color-value)" stroke="var(--color-value)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={productPerformanceData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="product" />
+                    <YAxis yAxisId="left" />
+                    <YAxis yAxisId="right" orientation="right" />
+                    <Tooltip />
+                    <Legend />
+                    <Bar yAxisId="left" dataKey="sales" fill="var(--color-primary)" />
+                    <Bar yAxisId="left" dataKey="growth" fill="var(--color-secondary)" />
+                    <Line yAxisId="right" type="monotone" dataKey="engagement" stroke="var(--color-accent)" />
+                  </BarChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="w-full">
               <CardHeader>
-                <CardTitle>Promotional Impact</CardTitle>
-                <CardDescription>Effectiveness of special promotions on sales</CardDescription>
+                <CardTitle>Purchase Frequency</CardTitle>
+                <CardDescription>How often customers make purchases</CardDescription>
               </CardHeader>
               <CardContent>
-                <ChartContainer config={{ sales: { label: "Sales", color: "hsl(var(--chart-22))" } }} className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={promotionalImpact}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="sales" fill="var(--color-sales)">
-                        {promotionalImpact.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.promotion ? "var(--color-promotion)" : "var(--color-sales)"} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={customerDemographics.purchaseFrequency}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="frequency" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area
+                      type="monotone"
+                      dataKey="count"
+                      stroke="var(--color-primary)"
+                      fill="var(--color-primary-light)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
           </div>

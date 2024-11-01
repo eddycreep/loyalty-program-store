@@ -42,7 +42,7 @@ const stores = [
 ];
 
 export const CostvsDiscountedRevenueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Given', 'Total Revenue from Discounts', 'Net Revenue After Discounts'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Given', 'Total Revenue from Discounts', 'Net Revenue After Discounts', 'Discount Redemption Rate', 'Top Discounted Products', 'Member Segment Discount Usage', 'Profit Margin After Discounts', 'Discount ROI'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');

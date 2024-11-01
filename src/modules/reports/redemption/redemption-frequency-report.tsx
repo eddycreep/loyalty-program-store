@@ -16,16 +16,39 @@ interface RedemptionFrequency {
     total_redemptions: number;
     total_active_members: number;
     average_redemptions_per_member: number;
+    member_retention_rate: number;
+    top_redeemed_items: string[];
+    redemption_type_breakdown: {
+        points: number;
+        vouchers: number;
+        discounts: number;
+    };
+    incentive_effectiveness: number;
 }
 
 
 const redemptionFrequencyData: RedemptionFrequency[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-09-10', total_redemptions: 200, total_active_members: 1500, average_redemptions_per_member: 0.13 },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-08-20', total_redemptions: 150, total_active_members: 1200, average_redemptions_per_member: 0.125 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-07-15', total_redemptions: 300, total_active_members: 1800, average_redemptions_per_member: 0.17 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-25', total_redemptions: 220, total_active_members: 1600, average_redemptions_per_member: 0.137 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-07-01', total_redemptions: 190, total_active_members: 1300, average_redemptions_per_member: 0.146 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-06-10', total_redemptions: 175, total_active_members: 1400, average_redemptions_per_member: 0.125 },
+    { 
+        store_id: 'SOO1', 
+        store_name: 'PLUS DC Stellenbosch', 
+        date: '2024-09-10', 
+        total_redemptions: 200, 
+        total_active_members: 1500, 
+        average_redemptions_per_member: 0.13,
+        member_retention_rate: 85,
+        top_redeemed_items: ['Coffee', 'Bread', 'Milk'],
+        redemption_type_breakdown: {
+            points: 45,
+            vouchers: 35,
+            discounts: 20
+        },
+        incentive_effectiveness: 78
+    },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-08-20', total_redemptions: 150, total_active_members: 1200, average_redemptions_per_member: 0.125, member_retention_rate: 80, top_redeemed_items: ['Bread', 'Milk'], redemption_type_breakdown: { points: 30, vouchers: 25, discounts: 15 }, incentive_effectiveness: 75 },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-07-15', total_redemptions: 300, total_active_members: 1800, average_redemptions_per_member: 0.17, member_retention_rate: 82, top_redeemed_items: ['Coffee', 'Bread', 'Milk'], redemption_type_breakdown: { points: 50, vouchers: 40, discounts: 20 }, incentive_effectiveness: 79 },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-25', total_redemptions: 220, total_active_members: 1600, average_redemptions_per_member: 0.137, member_retention_rate: 83, top_redeemed_items: ['Bread', 'Milk'], redemption_type_breakdown: { points: 35, vouchers: 28, discounts: 17 }, incentive_effectiveness: 77 },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-07-01', total_redemptions: 190, total_active_members: 1300, average_redemptions_per_member: 0.146, member_retention_rate: 84, top_redeemed_items: ['Coffee', 'Bread'], redemption_type_breakdown: { points: 38, vouchers: 30, discounts: 12 }, incentive_effectiveness: 76 },
+    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-06-10', total_redemptions: 175, total_active_members: 1400, average_redemptions_per_member: 0.125, member_retention_rate: 81, top_redeemed_items: ['Milk'], redemption_type_breakdown: { points: 25, vouchers: 20, discounts: 10 }, incentive_effectiveness: 74 },
 ];
 
 
@@ -46,7 +69,7 @@ const stores = [
 
 
 export const RedemptionFrequencyReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Redemptions', 'Total Active Members', 'Average Redemptions per Member'];
+    const headers = ["Store ID", "Store Name", "Date", "Total Redemptions", "Total Active Members", "Average Redemptions per Member", "Member Retention Rate", "Top Redeemed Items", "Redemption Type Breakdown", "Incentive Effectiveness"]
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -266,7 +289,7 @@ export const RedemptionFrequencyReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_redemptions, total_active_members, average_redemptions_per_member }) => (
+                {filteredData.map(({ store_id, store_name, date, total_redemptions, total_active_members, average_redemptions_per_member, member_retention_rate, top_redeemed_items, redemption_type_breakdown, incentive_effectiveness }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
@@ -275,6 +298,10 @@ export const RedemptionFrequencyReport = () => {
                             <p className="text-sm flex-1 text-center uppercase">{total_redemptions}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_active_members}</p>
                             <p className="text-sm flex-1 text-center uppercase">{average_redemptions_per_member}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{member_retention_rate}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{top_redeemed_items.join(', ')}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{redemption_type_breakdown.points} points, {redemption_type_breakdown.vouchers} vouchers, {redemption_type_breakdown.discounts} discounts</p>
+                            <p className="text-sm flex-1 text-center uppercase">{incentive_effectiveness}%</p>
                         </div>
                     </div>
                 ))}

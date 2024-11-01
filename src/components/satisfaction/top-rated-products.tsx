@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { TrendingUp } from "lucide-react"
+import { Popcorn } from "lucide-react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
 import {
@@ -29,26 +29,26 @@ import {
 export const description = "A stacked area chart with expand stacking"
 
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80, other: 45 },
-  { month: "February", desktop: 305, mobile: 200, other: 100 },
-  { month: "March", desktop: 237, mobile: 120, other: 150 },
-  { month: "April", desktop: 73, mobile: 190, other: 50 },
-  { month: "May", desktop: 209, mobile: 130, other: 100 },
-  { month: "June", desktop: 214, mobile: 140, other: 160 },
+  { month: "January", cocacola: 4.8, lays: 4.5, notebooks: 4.2 },
+  { month: "February", cocacola: 4.9, lays: 4.6, notebooks: 4.3 },
+  { month: "March", cocacola: 4.7, lays: 4.8, notebooks: 4.4 },
+  { month: "April", cocacola: 4.8, lays: 4.7, notebooks: 4.6 },
+  { month: "May", cocacola: 4.9, lays: 4.6, notebooks: 4.7 },
+  { month: "June", cocacola: 4.8, lays: 4.7, notebooks: 4.5 },
 ]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "#a5b4fc",
+  cocacola: {
+    label: "Coca-Cola 2L",
+    color: "#a5b4fc", // Red color
   },
-  mobile: {
-    label: "Mobile",
-    color: "#00d384",
+  lays: {
+    label: "Lay's Classic",
+    color: "#00d384", // Yellow color
   },
-  other: {
-    label: "Other",
-    color: "#1ec3ff",
+  notebooks: {
+    label: "School Notebooks",
+    color: "#1ec3ff", // Blue color
   },
 } satisfies ChartConfig
 
@@ -69,11 +69,11 @@ export function TopRatedProducts() {
         <div className="flex justify-between">
           <div className="">
             <h5 className="font-bold">Top Rated Products</h5>
-            <p className="text-sm text-gray-400">Total Revenue made by specials</p>
+            <p className="text-sm text-gray-400">Top Rated Products within the program</p>
           </div>
           <Select value={activeCategory} onValueChange={setActiveCategory}>
             <SelectTrigger
-              className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
+              className="ml-auto h-7 w-[200px] rounded-lg pl-2.5"
               aria-label="Select a value"
             >
               <SelectValue placeholder="Select category" />
@@ -135,37 +135,37 @@ export function TopRatedProducts() {
               content={<ChartTooltipContent indicator="line" />}
             />
             <Area
-              dataKey="other"
+              dataKey="cocacola"
               type="natural"
-              fill="var(--color-other)"
-              fillOpacity={0.1}
-              stroke="var(--color-other)"
+              fill={chartConfig.cocacola.color}
+              fillOpacity={0.4}
+              stroke={chartConfig.cocacola.color}
               stackId="a"
             />
             <Area
-              dataKey="mobile"
+              dataKey="lays"
               type="natural"
-              fill="var(--color-mobile)"
+              fill={chartConfig.lays.color}
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke={chartConfig.lays.color}
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="notebooks"
               type="natural"
-              fill="var(--color-desktop)"
+              fill={chartConfig.notebooks.color}
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke={chartConfig.notebooks.color}
               stackId="a"
             />
           </AreaChart>
         </ChartContainer>
       </CardContent>
       <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
+        <div className="flex w-full items-center gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+              Showing the Top 3 Highest Rated Products <Popcorn className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
               January - June 2024

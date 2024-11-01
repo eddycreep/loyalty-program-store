@@ -6,47 +6,60 @@ import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
 import { Check, X, BadgeAlert, AlertTriangle, Filter } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import SquareCircleLoader from "@/lib/square-circle-loader"
+import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Label } from "@/components/ui/label";
-
 
 interface EnrollmentRateData {
     store_id: string;
     store_name: string;
-    date: string;
-    new_members_enrolled: number;
-    total_members: number;
-    enrollment_rate: number;
+    customer_age_group: string;
+    gender: string;
+    preferred_category: string;
+    enrollment_source: string;
+    avg_basket_size: number;
+    membership_type: string;
+    customers_enrolled: number;
+    date: string
 }
 
 const enrollmentRateReport: EnrollmentRateData[] = [
     {
         store_id: 'SOO1',
         store_name: 'PLUS DC Stellenbosch',
-        date: '2024-10-01',
-        new_members_enrolled: 50,
-        total_members: 2000,
-        enrollment_rate: 2.5,
+        customer_age_group: '25-34',
+        gender: 'Female',
+        preferred_category: 'Groceries',
+        enrollment_source: 'In-Store',
+        avg_basket_size: 450.75,
+        membership_type: 'Premium',
+        customers_enrolled: 50,
+        date: '2024-03-01'  // Add dates to each entry
     },
     {
         store_id: 'SOO2',
         store_name: 'PLUS DC Albertin',
-        date: '2024-10-01',
-        new_members_enrolled: 30,
-        total_members: 1500,
-        enrollment_rate: 2.0,
+        customer_age_group: '35-44',
+        gender: 'Male',
+        preferred_category: 'Electronics',
+        enrollment_source: 'Online',
+        avg_basket_size: 675.50,
+        membership_type: 'Standard',
+        customers_enrolled: 30,
+        date: '2024-03-01'  // Add dates to each entry
     },
     {
         store_id: 'SOO3',
         store_name: 'PLUS DC Bellville',
-        date: '2024-10-01',
-        new_members_enrolled: 70,
-        total_members: 2200,
-        enrollment_rate: 3.2,
-    },
-    // Add more stores as needed...
-];
-
+        customer_age_group: '18-24',
+        gender: 'Female',
+        preferred_category: 'Fashion',
+        enrollment_source: 'Mobile App',
+        avg_basket_size: 325.25,
+        membership_type: 'Premium',
+        customers_enrolled: 70,
+        date: '2024-03-01'  // Add dates to each entry
+    }
+]
 
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
@@ -63,10 +76,8 @@ const stores = [
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-
-
 export const EnrollmentRateReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'New Members Enrolled', 'Total Members', 'Enrollment Rate (%)'];
+    const headers = ['Store ID', 'Store Name', 'Customer Age Group', 'Gender', 'Preferred Category', 'Enrollment Source', 'Avg Basket Size at Enrollment', 'Membership Type', 'No. of Customers Enrolled'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -217,7 +228,6 @@ export const EnrollmentRateReport = () => {
         );
     }
 
-
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
             {/* <div className="">
@@ -273,19 +283,18 @@ export const EnrollmentRateReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, new_members_enrolled, total_members, enrollment_rate }) => (
+                {filteredData.map(({ store_id, store_name, customer_age_group, gender, preferred_category, enrollment_source, avg_basket_size, membership_type, customers_enrolled }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
-                            <p className="text-sm flex-1 text-center text">{store_name}</p>
-                            <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{new_members_enrolled}</p>
-                            <p className="text-sm flex-1 text-center">
-                                {total_members}
-                            </p>
-                            <p className="text-sm flex-1 text-center">
-                                {enrollment_rate}
-                            </p>
+                            <p className="text-sm flex-1 text-center">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{customer_age_group}</p>
+                            <p className="text-sm flex-1 text-center">{gender}</p>
+                            <p className="text-sm flex-1 text-center">{preferred_category}</p>
+                            <p className="text-sm flex-1 text-center">{enrollment_source}</p>
+                            <p className="text-sm flex-1 text-center">R{avg_basket_size.toFixed(2)}</p>
+                            <p className="text-sm flex-1 text-center">{membership_type}</p>
+                            <p className="text-sm flex-1 text-center">{customers_enrolled}</p>
                         </div>
                     </div>
                 ))}
