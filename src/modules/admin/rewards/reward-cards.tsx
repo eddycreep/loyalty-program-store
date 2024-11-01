@@ -95,7 +95,7 @@ const staffReviews = [
 ];
 
 
-export function LoyaltyReviews() {
+export function RewardSummaryCards() {
   const [activeTab, setActiveTab] = useState("product")
 
   const renderStars = (rating: any) => {
@@ -142,95 +142,11 @@ export function LoyaltyReviews() {
     ))
   }
 
-  const renderReviewCards = (reviews: Review[]): JSX.Element => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-      {reviews.map((review) => (
-        <Card key={review.id} className="flex flex-col">
-          <CardHeader className="flex flex-row items-center gap-4">
-            <Avatar>
-              <AvatarImage
-                src={review.avatar}
-                alt={review.customerName}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-            </Avatar>
-            <div className="flex flex-col">
-              <CardTitle className="text-lg">{review.customerName}</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                {new Date(review.date).toDateString()}
-              </p>
-            </div>
-          </CardHeader>
-          <CardContent className="flex-grow flex flex-col">
-            <div className="flex justify-between items-center mb-2">
-              <Badge variant="secondary">
-                {"productName" in review
-                  ? review.productName
-                  : "storeName" in review
-                  ? review.storeName
-                  : review.staffName}
-              </Badge>
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${i < review.rating ? "text-yellow fill-yellow" : "text-gray-300"}`}
-                  />
-                ))}
-              </div>
-            </div>
-            <p className="text-sm text-muted-foreground">{review.comment}</p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-
   return (
-    <div className=" p-4 dark:bg-gray-900 h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">Customer Reviews</h1>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3 rounded-lg bg-gray-200 dark:bg-gray-700 p-1">
-          <TabsTrigger value="product" className="rounded-md py-2 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100">
-            Product Reviews
-          </TabsTrigger>
-          <TabsTrigger value="store" className="rounded-md py-2 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100">
-            Store Reviews
-          </TabsTrigger>
-          <TabsTrigger value="staff" className="rounded-md py-2 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100">
-            Staff Reviews
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="product" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+    <div className="">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {renderSummaryCards('product')}
           </div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Product Reviews</h2>
-          <ScrollArea className="h-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-            {renderReviewCards(productReviews)}
-          </ScrollArea>
-        </TabsContent>
-        <TabsContent value="store" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-            {renderSummaryCards('store')}
-          </div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Store Reviews</h2>
-          <ScrollArea className="h-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-            {renderReviewCards(storeReviews)}
-          </ScrollArea>
-        </TabsContent>
-        <TabsContent value="staff" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-            {renderSummaryCards('staff')}
-          </div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Staff Reviews</h2>
-          <ScrollArea className="h-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-            {renderReviewCards(staffReviews)}
-          </ScrollArea>
-        </TabsContent>
-      </Tabs>
     </div>
   )
 }

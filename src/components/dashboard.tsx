@@ -333,9 +333,9 @@ export default function Dashboard() {
                 <div className="">
                   <LoyaltyRevenueChart />
                 </div>
-                <div className="">
+                {/* <div className="">
                   <LoyaltyRevenueChart />
-                </div>
+                </div> */}
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
