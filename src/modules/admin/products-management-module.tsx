@@ -92,6 +92,7 @@ export const ProductsManModule = () => {
     const [deletePopUp, setDeletePopUp] = useState(false);
     const [combinedDeletePopUp, setCombinedDeletePopUp] = useState(false);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
+    
 
     //all specials
     const [allProductSpecials, setAllProductSpecials] = useState<GetSpecialsResponse>([]);
@@ -170,9 +171,10 @@ export const ProductsManModule = () => {
 
     return (
         <div>
-            {productSpecialsComponent && (<ProductsSpecialsComponent />)}
+            {productSpecialsComponent && (<ProductsSpecialsComponent onClose={ toggleProductSpecials } />)}
             {deletePopUp && (<DeleteConfirmation isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
             {combinedDeletePopUp && (<CombinedDeleteConfirmation isOpen={combinedDeletePopUp} onClose={toggleCombinedDeletePage}/> )}
+            {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
             <div className='w-full h-screen overflow-y-auto mb-4 pr-4 space-y-6 pb-6'>
             <div>
                 <div className="flex justify-between">
@@ -202,7 +204,6 @@ export const ProductsManModule = () => {
                             <p className="text-sm flex-1 text-center">{product.special}</p>
                             <p className="text-sm flex-1 text-center">{product.product_description}</p>
                             <p className="text-sm flex-1 text-center">{product.special_price}</p>
-                            {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
                             <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                 <button onClick={() => handleExpandClick(product.special_id)} className="flex items-center justify-center cursor-pointer">
                                     <Expand color="gray" />
@@ -215,31 +216,29 @@ export const ProductsManModule = () => {
                                 </button>
                             </div>
                         </div>
-                        {/* Expanded Row: Matches header and main row layout with grid structure */}
-                        {/* Expanded Row: Matches header and main row layout with labels above values */}
-            {expandedRow === product.special_id && (
-                <div className="grid grid-cols-6 p-3 mx-2 rounded shadow-lg mt-2 gap-y-1">
-                    <p className="text-xs uppercase text-gray-500 text-center pr-6">Store ID</p>
-                    <p className="text-xs uppercase text-gray-500 text-center pr-6">Start Date</p>
-                    <p className="text-xs uppercase text-gray-500 text-center pr-2">Expiry Date</p>
-                    <p className="text-xs uppercase text-gray-500 text-center pr-0">Special Value</p>
-                    <p className="text-xs uppercase text-gray-500 text-center pl-4">Status</p>
-                    <p className="text-xs uppercase text-gray-500 text-center"></p>
+                        {expandedRow === product.special_id && (
+                            <div className="grid grid-cols-6 p-3 mx-2 rounded shadow-lg mt-2 gap-y-1">
+                                <p className="text-xs uppercase text-gray-500 text-center pr-6">Store ID</p>
+                                <p className="text-xs uppercase text-gray-500 text-center pr-6">Start Date</p>
+                                <p className="text-xs uppercase text-gray-500 text-center pr-2">Expiry Date</p>
+                                <p className="text-xs uppercase text-gray-500 text-center pr-0">Special Value</p>
+                                <p className="text-xs uppercase text-gray-500 text-center pl-4">Status</p>
+                                <p className="text-xs uppercase text-gray-500 text-center"></p>
 
-                    <p className="text-sm text-center text-gray-600 pr-6">{product.store_id}</p>
-                    <p className="text-sm text-center text-gray-600 pr-6">{product.start_date}</p>
-                    <p className="text-sm text-center text-gray-600 pr-2">{product.expiry_date}</p>
-                    <p className="text-sm text-center text-gray-600 p-0">{product.special_value}</p>
-                    <p className="text-sm text-center text-gray-600 pl-4">{product.isActive ? 'Active' : 'Inactive'}</p>
-                    <p className="text-sm text-center text-gray-600"> {/* Empty cell under 'Action' column */}</p>
-                </div>
-            )}
+                                <p className="text-sm text-center text-gray-600 pr-6">{product.store_id}</p>
+                                <p className="text-sm text-center text-gray-600 pr-6">{product.start_date}</p>
+                                <p className="text-sm text-center text-gray-600 pr-2">{product.expiry_date}</p>
+                                <p className="text-sm text-center text-gray-600 p-0">{product.special_value}</p>
+                                <p className="text-sm text-center text-gray-600 pl-4">{product.isActive ? 'Active' : 'Inactive'}</p>
+                                <p className="text-sm text-center text-gray-600"> {/* Empty cell under 'Action' column */}</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}
             </div>
             {/* GROUP SPECIALS */}
-            {combinedSpecialsComponent && (<CombinedSpecialsComponent />)}
+            {combinedSpecialsComponent && (<CombinedSpecialsComponent onClose={ toggleCombinedSpecials } />)}
             <div className="pb-16 pt-20">
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
@@ -277,7 +276,7 @@ export const ProductsManModule = () => {
                                     <button className="flex items-center justify-center cursor-pointer">
                                         <Expand color="gray" />
                                     </button>
-                                    <button className="flex items-center justify-center cursor-pointer" onClick={toggleEditProductPage}>
+                                    <button className="flex items-center justify-center cursor-pointer" onClick={toggleEditProductPage} >
                                         <Edit color="gray" /> 
                                     </button>
                                     <button className="flex items-center justify-center cursor-pointer" onClick={ toggleCombinedDeletePage }>

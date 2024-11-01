@@ -6,88 +6,75 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import toast from 'react-hot-toast';
 import { Check, Edit, Calendar, Gift, X, Soup, Store, Expand, Trash2} from "lucide-react"
 import { RewardCards } from "@/components/component/rewards-cards";
-import { AddNewRewards } from "./rewards/add-rewards";
+import { AddNewRewards } from "./rewards/add-new-rewards";
 import { EditRewards } from "@/components/component/edit-rewards";
 import { DeleteRewardConfirmation } from "@/components/component/delete-reward";
 import { RewardSummaryCards } from "./rewards/reward-cards"
 
-// Define the Reward type
-type Reward = {
-    id: number
-    task: string
-    reward: string
-    type: 'percentage' | 'fixed'
-    icon: JSX.Element
-}
-
-// Define the initial rewards
-const initialRewards: Reward[] = [
-        // { id: 1, task: 'Share product on social media', reward: '10% off next purchase', type: 'percentage', icon: <Share2 className="h-6 w-6" /> },
-        { id: 1, task: 'Attend in-store event', reward: '$5 store credit', type: 'fixed', icon: <Calendar className="h-6 w-6" /> },
-        { id: 2, task: 'Refer a friend', reward: 'Free gift with next purchase', type: 'fixed', icon: <Gift className="h-6 w-6" /> },
-        // { id: 4, task: 'Join loyalty program', reward: '15% off first purchase', type: 'percentage', icon: <Users className="h-6 w-6" /> },
-        { id: 3, task: 'Complete a Product Review', reward: '5% off reviewed product', type: 'percentage', icon: <Soup className="h-6 w-6" /> },
-]
-
-interface RewardProps {
-    uid: number,
-    reward_title: string,
-    description: string,
-    expiry_date: string,
-    reward: string,
-    reward_type: string,
-    rewardPrice: number,
-    isActive: number
-}
-type RewardsResponse = RewardProps[]
+const rewards = [
+    {
+      uid: 2,
+      reward_title: 'Product Survey',
+      description: 'Complete a survey on products within the store',
+      reward: '5% Off Product',
+      reward_type: 'Percentage',
+      reward_price: '25.99',
+      store_id: 'S001',
+      region: 'Gauteng',
+      start_date: '2023-11-15',
+      expiry_date: '2023-11-25',
+      isActive: '1'
+    },
+    {
+      uid: 3,
+      reward_title: 'Product Reviews',
+      description: 'Complete a review on products within the store',
+      reward: '10% Off Cart',
+      reward_type: 'Amount',
+      reward_price: '18.00',
+      store_id: 'S002',
+      region: 'Western Cape',
+      start_date: '2023-11-15',
+      expiry_date: '2023-11-25',
+      isActive: '0'
+    },
+    {
+      uid: 4,
+      reward_title: 'Refer New Customer',
+      description: 'Invite a friend to join the loyalty program',
+      reward: '10% Off Cart',
+      reward_type: 'Percentage',
+      reward_price: '18.00',
+      store_id: 'All',
+      region: 'Gauteng',
+      start_date: '2023-11-15',
+      expiry_date: '2023-11-25',
+      isActive: '1'
+    }
+];
 
 export const RewardsModule = () => {
     const [addRewardsPopUp, setRewardsPopUp] = useState(false);
     const [editProductsPopup, setEditProductsPopup] = useState(false);
-    const headers = ['Title', 'Task', 'Reward', 'Type', 'Amount', 'Action']
+    const [selectedReward, setSelectedReward] = useState(null);
 
-    const [title, setRewardTitle] = useState('')
-    const [description, setRewardDescription] = useState('')
-    const [expiryDate, setRewardExpiryDate] = useState('')
-    const [reward, setReward] = useState('')
-    const [rewardType, setRewardType] = useState('')
-    const [storeID, setStoreID] = useState('') //add store id to the backend as well
-    const [rewardPrice, setRewardPrice] = useState(0)
-    const [isActive, setRewardIsActive] = useState(false)
+
+
+    const headers = ['ID', 'Title', 'Task', 'Reward', 'Amount', 'Action']
 
     const [deletePopUp, setDeletePopUp] = useState(false);
-    
-    const addReward = async () => {
-        try {
-            const payload = {
-                rewardTitle: title,
-                description: description,
-                expiryDate: expiryDate,
-                reward: reward,
-                rewardType: rewardType,
-                rewardPrice: rewardPrice,
-                isActive: isActive
-            }
+    const [expandedRow, setExpandedRow] = useState<number | null>(null);
 
-            const url = `products/setreward`
-            const response = await axios.post<RewardsResponse>(`${apiEndPoint}/${url}`, payload)
-            console.log("The reward has been added successfully", response.data)
-            rewardSuccessNotification()
-        } catch (error) {
-            console.error('Failed to add reward:', error);
-            rewardErrorNotification();
-        }
-    }
-
-    const handleSpecialToggle = () => {
-        setRewardIsActive(!isActive); // Toggle the state
+    const handleExpandClick = (id: number) => {
+        setExpandedRow(expandedRow === id ? null : id);
     };
 
     const toggleAddRewards = () => {
         setRewardsPopUp(!addRewardsPopUp);
     }
 
-    const toggleEditProductPage = () => {
+    const toggleEditProductPage = (reward: any) => {
+        setSelectedReward(reward);  // Set selected reward data
         setEditProductsPopup(!editProductsPopup);
     };
 
@@ -95,24 +82,10 @@ export const RewardsModule = () => {
         setDeletePopUp(!deletePopUp);
     };
 
-    const rewardSuccessNotification = () => {
-        toast.success('The reward has been saved to the database', {
-            icon: <Check color={colors.green} size={24} />,
-            duration: 3000,
-        });
-    };
-
-    const rewardErrorNotification = () => {
-        toast.error('There was an error was setting the new reward', {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
-    };
-
     return (
         <div>
             {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
-            {editProductsPopup && <EditRewards onClose={ toggleEditProductPage } />}
+            {editProductsPopup && <EditRewards rewardData={selectedReward} onClose={ toggleEditProductPage } />}
             {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />}
             <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
                 <div>
@@ -138,18 +111,17 @@ export const RewardsModule = () => {
                     ))}
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
-                    {/* {allProductSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => { */}
-                            <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                {rewards?.map(({ uid, reward_title, description, reward, reward_type, reward_price, store_id, region, start_date, expiry_date, isActive,}) => (
+                            <div key={uid} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">Product Reviews</p>
-                                    <p className="text-sm flex-1 text-center">Customers can earn rewards by completing product reviews</p>
-                                    <p className="text-sm flex-1 text-center">10% Discount on Cart</p>
-                                    <p className="text-sm flex-1 text-center">Percentage</p>
-                                    <p className="text-sm flex-1 text-center text-green">10</p>
-                                    {/* {editProductsPopup && <EditRewards onClose={ toggleEditProductPage } />} */}
+                                    <p className="text-sm flex-1 text-center text-red">{uid}</p>
+                                    <p className="text-sm flex-1 text-center">{reward_title}</p>
+                                    <p className="text-sm flex-1 text-center">{description}</p>
+                                    <p className="text-sm flex-1 text-center">{reward}</p>
+                                    <p className="text-sm flex-1 text-center">{reward_type}</p>
                                     <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                        <button className="flex items-center justify-center cursor-pointer">
-                                            <Expand  color="gray" />
+                                        <button className="flex items-center justify-center cursor-pointer" onClick={() => handleExpandClick(uid)}>
+                                            <Expand color="gray" />
                                         </button>
                                         <button className="flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
                                             <Edit color="gray" /> 
@@ -160,7 +132,7 @@ export const RewardsModule = () => {
                                     </div>
                                 </div>
                             </div>
-                    {/* })} */}
+                        ))}
                 </div>
             </div>
         </div>
