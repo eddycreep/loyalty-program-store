@@ -42,7 +42,7 @@ const stores = [
 ];
 
 export const CostvsDiscountedRevenueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Given', 'Total Revenue from Discounts', 'Net Revenue After Discounts'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Given', 'Total Revenue from Discounts', 'Net Revenue After Discounts', 'Discount Redemption Rate', 'Top Discounted Products', 'Member Segment Discount Usage', 'Profit Margin After Discounts', 'Discount ROI'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -86,10 +86,6 @@ export const CostvsDiscountedRevenueReport = () => {
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -149,14 +145,10 @@ export const CostvsDiscountedRevenueReport = () => {
         );
     }
 
-    // Show error message if there is no data for the selected month
+
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">
@@ -218,10 +210,6 @@ export const CostvsDiscountedRevenueReport = () => {
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
-            {/* <div className="">
-                <h4 className="text-xl font-bold">Redemption Rate</h4>
-                <p className="text-sm text-gray-500">Percentage of redeemed vs unredeemed discounts</p>
-            </div> */}
             <div className='flex gap-4'>
                 <div className="pt-6">
                     <div className="flex gap-4">

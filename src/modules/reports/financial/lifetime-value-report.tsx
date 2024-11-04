@@ -16,19 +16,24 @@ interface LifetimeData {
     average_purchase_value: number;
     average_purchase_frequency: number;
     ltv_estimate: number;
+    customer_tenure: string;
+    member_demographics: string;
+    predicted_churn_rate: number;
+    lifetime_revenue: number;
+    top_products: string[];
 }
 
 const lifetimeData: LifetimeData[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', average_purchase_value: 50, average_purchase_frequency: 6, ltv_estimate: 300 },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-10-01', average_purchase_value: 40, average_purchase_frequency: 5, ltv_estimate: 200 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', average_purchase_value: 60, average_purchase_frequency: 7, ltv_estimate: 420 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-28', average_purchase_value: 55, average_purchase_frequency: 6, ltv_estimate: 330 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', average_purchase_value: 65, average_purchase_frequency: 7, ltv_estimate: 455 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-09-27', average_purchase_value: 70, average_purchase_frequency: 8, ltv_estimate: 560 },
-    { store_id: 'SOO7', store_name: 'PLUS DC Cape Town', date: '2024-09-25', average_purchase_value: 62, average_purchase_frequency: 6, ltv_estimate: 372 },
-    { store_id: 'SOO8', store_name: 'PLUS DC Pietermaritzburg', date: '2024-09-29', average_purchase_value: 58, average_purchase_frequency: 5, ltv_estimate: 290 },
-    { store_id: 'SOO9', store_name: 'PLUS DC East London', date: '2024-09-26', average_purchase_value: 52, average_purchase_frequency: 6, ltv_estimate: 312 },
-    { store_id: 'SOO10', store_name: 'PLUS DC Pretoria', date: '2024-09-23', average_purchase_value: 68, average_purchase_frequency: 7, ltv_estimate: 476 },
+    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', average_purchase_value: 50, average_purchase_frequency: 6, ltv_estimate: 300, customer_tenure: '6 months', member_demographics: 'Male', predicted_churn_rate: 0.1, lifetime_revenue: 1800, top_products: ['Product A', 'Product B'] },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-10-01', average_purchase_value: 40, average_purchase_frequency: 5, ltv_estimate: 200, customer_tenure: '5 months', member_demographics: 'Female', predicted_churn_rate: 0.15, lifetime_revenue: 1000, top_products: ['Product C', 'Product D'] },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', average_purchase_value: 60, average_purchase_frequency: 7, ltv_estimate: 420, customer_tenure: '7 months', member_demographics: 'Male', predicted_churn_rate: 0.2, lifetime_revenue: 2520, top_products: ['Product E', 'Product F'] },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-28', average_purchase_value: 55, average_purchase_frequency: 6, ltv_estimate: 330, customer_tenure: '6 months', member_demographics: 'Female', predicted_churn_rate: 0.18, lifetime_revenue: 1980, top_products: ['Product G', 'Product H'] },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', average_purchase_value: 65, average_purchase_frequency: 7, ltv_estimate: 455, customer_tenure: '7 months', member_demographics: 'Male', predicted_churn_rate: 0.22, lifetime_revenue: 2775, top_products: ['Product I', 'Product J'] },
+    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-09-27', average_purchase_value: 70, average_purchase_frequency: 8, ltv_estimate: 560, customer_tenure: '8 months', member_demographics: 'Female', predicted_churn_rate: 0.25, lifetime_revenue: 3920, top_products: ['Product K', 'Product L'] },
+    { store_id: 'SOO7', store_name: 'PLUS DC Cape Town', date: '2024-09-25', average_purchase_value: 62, average_purchase_frequency: 6, ltv_estimate: 372, customer_tenure: '6 months', member_demographics: 'Male', predicted_churn_rate: 0.19, lifetime_revenue: 2232, top_products: ['Product M', 'Product N'] },
+    { store_id: 'SOO8', store_name: 'PLUS DC Pietermaritzburg', date: '2024-09-29', average_purchase_value: 58, average_purchase_frequency: 5, ltv_estimate: 290, customer_tenure: '5 months', member_demographics: 'Female', predicted_churn_rate: 0.16, lifetime_revenue: 1450, top_products: ['Product O', 'Product P'] },
+    { store_id: 'SOO9', store_name: 'PLUS DC East London', date: '2024-09-26', average_purchase_value: 52, average_purchase_frequency: 6, ltv_estimate: 312, customer_tenure: '6 months', member_demographics: 'Male', predicted_churn_rate: 0.17, lifetime_revenue: 1872, top_products: ['Product Q', 'Product R'] },
+    { store_id: 'SOO10', store_name: 'PLUS DC Pretoria', date: '2024-09-23', average_purchase_value: 68, average_purchase_frequency: 7, ltv_estimate: 476, customer_tenure: '7 months', member_demographics: 'Female', predicted_churn_rate: 0.21, lifetime_revenue: 3332, top_products: ['Product S', 'Product T'] },
 ];
 
 
@@ -50,7 +55,7 @@ const stores = [
 
 
 export const LifetimeValueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Average Purchase Value', 'Average Purchase Frequency', 'LTV Estimate'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Average Purchase Value', 'Average Purchase Frequency', 'LTV Estimate', 'Customer Tenure', 'Member Demographics', 'Predicted Churn Rate', 'Lifetime Revenue', 'Top Products Purchased'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -270,7 +275,7 @@ export const LifetimeValueReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, average_purchase_value, average_purchase_frequency, ltv_estimate }) => (
+                {filteredData.map(({ store_id, store_name, date, average_purchase_value, average_purchase_frequency, ltv_estimate, customer_tenure, member_demographics, predicted_churn_rate, lifetime_revenue, top_products }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
@@ -279,6 +284,11 @@ export const LifetimeValueReport = () => {
                             <p className="text-sm flex-1 text-center uppercase">{average_purchase_value}</p>
                             <p className="text-sm flex-1 text-center uppercase">{average_purchase_frequency}</p>
                             <p className="text-sm flex-1 text-center uppercase">{ltv_estimate}%</p>
+                            <p className="text-sm flex-1 text-center">{customer_tenure}</p>
+                            <p className="text-sm flex-1 text-center">{member_demographics}</p>
+                            <p className="text-sm flex-1 text-center">{predicted_churn_rate}%</p>
+                            <p className="text-sm flex-1 text-center">R{lifetime_revenue}</p>
+                            <p className="text-sm flex-1 text-center">{top_products.join(', ')}</p>
                         </div>
                     </div>
                 ))}

@@ -6,111 +6,133 @@ import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
 import { Check, X, BadgeAlert, AlertTriangle, Filter } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import SquareCircleLoader from "@/lib/square-circle-loader"
+import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Label } from "@/components/ui/label";
 
-// Updated RetentionRate interface with the new property 'members_churned'
+// Updated RetentionRate interface with new properties
 interface RetentionRate {
     store_id: string;            
     store_name: string;             
     date: string;                   
-    total_members_at_start: number; 
+    total_members_at_start: number;
+    new_members: number;
     members_retained: number;      
     members_churned: number;        
-    retention_rate: number;       
+    retention_rate: number;
+    churn_rate: number;
 }
 
-// Updated retentionRate array with additional data and 'members_churned' property
+// Updated retentionRate array with additional data
 const retentionRate: RetentionRate[] = [
     {
         store_id: 'SOO1',
         store_name: 'PLUS DC Stellenbosch',
         date: '2024-08-15',            
         total_members_at_start: 2000,
+        new_members: 150,
         members_retained: 1800,
         members_churned: 200,          
         retention_rate: 90,
+        churn_rate: 10
     },
     {
         store_id: 'SOO2',
         store_name: 'PLUS DC Albertin',
         date: '2024-08-16',            
         total_members_at_start: 1500,
+        new_members: 100,
         members_retained: 1200,
         members_churned: 300,          
         retention_rate: 80,
+        churn_rate: 20
     },
     {
         store_id: 'SOO3',
         store_name: 'PLUS DC Bellville',
         date: '2024-09-10',            
         total_members_at_start: 2200,
+        new_members: 100,
         members_retained: 2100,
         members_churned: 100,          
         retention_rate: 95.5,
+        churn_rate: 5
     },
     {
         store_id: 'SOO4',
         store_name: 'PLUS DC Nelspruit',
         date: '2024-09-15',            
         total_members_at_start: 1800,
+        new_members: 100,
         members_retained: 1600,
         members_churned: 200,          
         retention_rate: 88.9,
+        churn_rate: 10
     },
     {
         store_id: 'SOO5',
         store_name: 'PLUS DC Durbanville',
         date: '2024-09-20',            
         total_members_at_start: 2400,
+        new_members: 100,
         members_retained: 2300,
         members_churned: 100,          
         retention_rate: 95.8,
+        churn_rate: 5
     },
     {
         store_id: 'SOO6',
         store_name: 'PLUS DC Bloemfontein',
         date: '2024-09-25',            
         total_members_at_start: 1600,
+        new_members: 100,
         members_retained: 1400,
         members_churned: 200,          
         retention_rate: 87.5,
+        churn_rate: 10
     },
     {
         store_id: 'SOO7',
         store_name: 'PLUS DC Cape Town',
         date: '2024-09-28',            
         total_members_at_start: 3000,
+        new_members: 100,
         members_retained: 2850,
         members_churned: 150,          
         retention_rate: 95,
+        churn_rate: 5
     },
     {
         store_id: 'SOO8',
         store_name: 'PLUS DC Pietermaritzburg',
         date: '2024-10-01',            
         total_members_at_start: 2100,
+        new_members: 100,
         members_retained: 1900,
         members_churned: 200,          
         retention_rate: 90.5,
+        churn_rate: 10
     },
     {
         store_id: 'SOO9',
         store_name: 'PLUS DC East London',
         date: '2024-10-05',            
         total_members_at_start: 1700,
+        new_members: 100,
         members_retained: 1500,
         members_churned: 200,          
         retention_rate: 88.2,
+        churn_rate: 10
     },
     {
         store_id: 'SOO10',
         store_name: 'PLUS DC Pretoria',
         date: '2024-10-10',            
         total_members_at_start: 2500,
+        new_members: 100,
         members_retained: 2300,
         members_churned: 200,          
         retention_rate: 92,
+        churn_rate: 10
     },
 ];
 
@@ -130,8 +152,19 @@ const stores = [
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
+
 export const RetentionRateReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Starting Members', 'Members Retained', 'Members Churned', 'Retention Rate (%)'];
+    const headers = [
+        'Store ID', 
+        'Store Name', 
+        'Date', 
+        'Starting Members',
+        'New Members', 
+        'Members Retained', 
+        'Members Churned', 
+        'Retention Rate (%)',
+        'Churn Rate (%)'
+    ];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -340,21 +373,31 @@ export const RetentionRateReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_members_at_start, members_retained, members_churned, retention_rate }) => (
+                {filteredData.map(({ 
+                    store_id, 
+                    store_name, 
+                    date, 
+                    total_members_at_start, 
+                    new_members,
+                    members_retained, 
+                    members_churned, 
+                    retention_rate,
+                    churn_rate 
+                }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_members_at_start}</p>
-                            <p className="text-sm flex-1 text-center">
-                                {members_retained}
-                            </p>
-                            <p className="text-sm flex-1 text-center text-red">
-                                {members_churned}
-                            </p>
+                            <p className="text-sm flex-1 text-center text-blue">{new_members}</p>
+                            <p className="text-sm flex-1 text-center">{members_retained}</p>
+                            <p className="text-sm flex-1 text-center text-red">{members_churned}</p>
                             <p className={`text-sm flex-1 text-center ${retention_rate >= 50 ? 'text-green' : 'text-red'}`}>
                                 {retention_rate}%
+                            </p>
+                            <p className={`text-sm flex-1 text-center ${churn_rate <= 50 ? 'text-green' : 'text-red'}`}>
+                                {churn_rate}%
                             </p>
                         </div>
                     </div>

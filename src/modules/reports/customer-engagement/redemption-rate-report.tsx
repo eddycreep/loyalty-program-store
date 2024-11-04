@@ -118,8 +118,6 @@ const redemptionRate: RedemptionRate[] = [
     },
 ];
 
-
-
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
@@ -136,7 +134,7 @@ const stores = [
 ];
 
 export const RedemptionRateReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Redeemed', 'Specials Redeemed', 'Redemption Rate (%)'];
+    const headers = ['Redemption Channel', 'Product Category for Redemption', 'Customer Age Group', 'Customer Gender', 'Average Discount Value Redeemed', 'Redemption Frequency per Member', 'Time of Redemption'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
 import { Check, X, BadgeAlert, AlertTriangle, Filter } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import SquareCircleLoader from "@/lib/square-circle-loader"
+import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Label } from "@/components/ui/label";
 
 interface RevenuePerMemberData {
@@ -16,15 +16,34 @@ interface RevenuePerMemberData {
     total_revenue: number;
     total_active_members: number;
     revenue_per_member: number;
+    new_members: number;
+    churned_members: number;
+    revenue_new_members: number;
+    revenue_returning_members: number;
+    top_selling_categories: string[];
+    avg_transaction_value: number;
 }
 
 
 const revenuePerMemberData: RevenuePerMemberData[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', total_revenue: 30000, total_active_members: 1500, revenue_per_member: 20 },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-10-01', total_revenue: 25000, total_active_members: 1200, revenue_per_member: 20.83 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', total_revenue: 40000, total_active_members: 1800, revenue_per_member: 22.22 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-28', total_revenue: 35000, total_active_members: 1600, revenue_per_member: 21.88 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', total_revenue: 45000, total_active_members: 1700, revenue_per_member: 26.47 },
+    { 
+        store_id: 'SOO1', 
+        store_name: 'PLUS DC Stellenbosch', 
+        date: '2024-10-01', 
+        total_revenue: 30000, 
+        total_active_members: 1500, 
+        revenue_per_member: 20,
+        new_members: 150,
+        churned_members: 45,
+        revenue_new_members: 2250,
+        revenue_returning_members: 27750,
+        top_selling_categories: ['Electronics', 'Groceries', 'Home'],
+        avg_transaction_value: 85.50
+    },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-10-01', total_revenue: 25000, total_active_members: 1200, revenue_per_member: 20.83, new_members: 120, churned_members: 30, revenue_new_members: 12000, revenue_returning_members: 10000, top_selling_categories: ['Category1', 'Category3'], avg_transaction_value: 105 },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', total_revenue: 40000, total_active_members: 1800, revenue_per_member: 22.22, new_members: 180, churned_members: 50, revenue_new_members: 18000, revenue_returning_members: 12000, top_selling_categories: ['Category2', 'Category4'], avg_transaction_value: 110 },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-28', total_revenue: 35000, total_active_members: 1600, revenue_per_member: 21.88, new_members: 160, churned_members: 40, revenue_new_members: 16000, revenue_returning_members: 10000, top_selling_categories: ['Category1', 'Category3'], avg_transaction_value: 100 },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', total_revenue: 45000, total_active_members: 1700, revenue_per_member: 26.47, new_members: 170, churned_members: 50, revenue_new_members: 17000, revenue_returning_members: 12000, top_selling_categories: ['Category2', 'Category4'], avg_transaction_value: 115 },
 ];
 
 
@@ -45,14 +64,14 @@ const stores = [
 
 
 export const RevenueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue from Members', 'Total Active Members', 'Revenue per Member'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue from Members', 'Total Active Members', 'Revenue per Member', 'New Members', 'Churned Members', 'Revenue from New Members', 'Revenue from Returning Members', 'Top-Selling Categories', 'Average Transaction Value'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<RevenuePerMemberData[]>([]); 
+    const [selectedStore, setSelectedStore] = useState('All');
+    const [filteredData, setFilteredData] = useState<RevenuePerMemberData[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false); 
+    const [isError, setIsError] = useState(false);
 
 
     const handleFilter = () => {
@@ -264,15 +283,34 @@ export const RevenueReport = () => {
                 ))}
             </div>
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_revenue, total_active_members, revenue_per_member }) => (
+                {filteredData.map(({ 
+                    store_id, 
+                    store_name, 
+                    date, 
+                    total_revenue, 
+                    total_active_members, 
+                    revenue_per_member,
+                    new_members,
+                    churned_members,
+                    revenue_new_members,
+                    revenue_returning_members,
+                    top_selling_categories,
+                    avg_transaction_value
+                }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_revenue}</p>
+                            <p className="text-sm flex-1 text-center uppercase">R{total_revenue}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_active_members}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{revenue_per_member}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">R{revenue_per_member}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{new_members}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{churned_members}</p>
+                            <p className="text-sm flex-1 text-center uppercase">R{revenue_new_members}</p>
+                            <p className="text-sm flex-1 text-center uppercase">R{revenue_returning_members}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{top_selling_categories.join(', ')}</p>
+                            <p className="text-sm flex-1 text-center uppercase">R{avg_transaction_value}</p>
                         </div>
                     </div>
                 ))}

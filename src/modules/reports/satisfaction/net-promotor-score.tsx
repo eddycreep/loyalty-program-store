@@ -16,21 +16,25 @@ interface NpsData {
     promoters_count: number;
     detractors_count: number;
     nps_score: number;
+    passive_responses: number;
+    nps_trends: string;
+    response_rate: number;
+    staff_engagement_rate: number;
 }
 
 const npsData: NpsData[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-09-12', promoters_count: 110, detractors_count: 30, nps_score: 80 },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-08-08', promoters_count: 95, detractors_count: 20, nps_score: 75 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-07-29', promoters_count: 130, detractors_count: 15, nps_score: 85 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-06-17', promoters_count: 120, detractors_count: 25, nps_score: 79 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-05-26', promoters_count: 100, detractors_count: 15, nps_score: 85 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-04-15', promoters_count: 110, detractors_count: 20, nps_score: 82 },
-    { store_id: 'SOO7', store_name: 'PLUS DC Cape Town', date: '2024-03-19', promoters_count: 150, detractors_count: 20, nps_score: 87 },
-    { store_id: 'SOO8', store_name: 'PLUS DC Pietermaritzburg', date: '2024-02-10', promoters_count: 90, detractors_count: 25, nps_score: 72 },
-    { store_id: 'SOO9', store_name: 'PLUS DC East London', date: '2024-01-18', promoters_count: 120, detractors_count: 15, nps_score: 85 },
-    { store_id: 'SOO10', store_name: 'PLUS DC Pretoria', date: '2024-05-02', promoters_count: 140, detractors_count: 30, nps_score: 78 },
-    { store_id: 'SOO11', store_name: 'PLUS DC Germiston', date: '2024-09-14', promoters_count: 130, detractors_count: 20, nps_score: 83 },
-    { store_id: 'SOO12', store_name: 'PLUS DC Polokwane', date: '2024-06-24', promoters_count: 110, detractors_count: 25, nps_score: 77 },
+    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-09-12', promoters_count: 110, detractors_count: 30, nps_score: 80, passive_responses: 20, nps_trends: "Positive", response_rate: 88, staff_engagement_rate: 75 },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-08-08', promoters_count: 95, detractors_count: 20, nps_score: 75, passive_responses: 25, nps_trends: "Neutral", response_rate: 76, staff_engagement_rate: 82 },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-07-29', promoters_count: 130, detractors_count: 15, nps_score: 85, passive_responses: 18, nps_trends: "Positive", response_rate: 92, staff_engagement_rate: 80 },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-06-17', promoters_count: 120, detractors_count: 25, nps_score: 79, passive_responses: 22, nps_trends: "Positive", response_rate: 84, staff_engagement_rate: 78 },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-05-26', promoters_count: 100, detractors_count: 15, nps_score: 85, passive_responses: 15, nps_trends: "Neutral", response_rate: 81, staff_engagement_rate: 70 },
+    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-04-15', promoters_count: 110, detractors_count: 20, nps_score: 82, passive_responses: 18, nps_trends: "Negative", response_rate: 75, staff_engagement_rate: 65 },
+    { store_id: 'SOO7', store_name: 'PLUS DC Cape Town', date: '2024-03-19', promoters_count: 150, detractors_count: 20, nps_score: 87, passive_responses: 20, nps_trends: "Positive", response_rate: 90, staff_engagement_rate: 88 },
+    { store_id: 'SOO8', store_name: 'PLUS DC Pietermaritzburg', date: '2024-02-10', promoters_count: 90, detractors_count: 25, nps_score: 72, passive_responses: 25, nps_trends: "Negative", response_rate: 73, staff_engagement_rate: 62 },
+    { store_id: 'SOO9', store_name: 'PLUS DC East London', date: '2024-01-18', promoters_count: 120, detractors_count: 15, nps_score: 85, passive_responses: 19, nps_trends: "Positive", response_rate: 85, staff_engagement_rate: 79 },
+    { store_id: 'SOO10', store_name: 'PLUS DC Pretoria', date: '2024-05-02', promoters_count: 140, detractors_count: 30, nps_score: 78, passive_responses: 24, nps_trends: "Neutral", response_rate: 80, staff_engagement_rate: 74 },
+    { store_id: 'SOO11', store_name: 'PLUS DC Germiston', date: '2024-09-14', promoters_count: 130, detractors_count: 20, nps_score: 83, passive_responses: 17, nps_trends: "Positive", response_rate: 88, staff_engagement_rate: 76 },
+    { store_id: 'SOO12', store_name: 'PLUS DC Polokwane', date: '2024-06-24', promoters_count: 110, detractors_count: 25, nps_score: 77, passive_responses: 21, nps_trends: "Neutral", response_rate: 77, staff_engagement_rate: 69 },
 ];
 
 
@@ -50,8 +54,8 @@ const stores = [
 ];
 
 
-export const NetPromotoerScoreReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Promoters Count', 'Detractors Count', 'NPS Score'];
+export const NetPromoterScoreReport = () => {
+    const headers = ["Store ID", "Store Name", "Date", "Promoters Count", "Detractors Count", "NPS Score", "Passive Responses", "NPS Trends", "Response Rate", "Staff Engagement Rate"];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -270,7 +274,7 @@ export const NetPromotoerScoreReport = () => {
                 ))}
             </div>
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, promoters_count, detractors_count, nps_score }) => (
+                {filteredData.map(({ store_id, store_name, date, promoters_count, detractors_count, nps_score, passive_responses, nps_trends, response_rate, staff_engagement_rate }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
@@ -279,6 +283,10 @@ export const NetPromotoerScoreReport = () => {
                             <p className="text-sm flex-1 text-center uppercase">{promoters_count}</p>
                             <p className="text-sm flex-1 text-center uppercase">{detractors_count}</p>
                             <p className="text-sm flex-1 text-center uppercase">{nps_score}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{passive_responses}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{nps_trends}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{response_rate}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{staff_engagement_rate}%</p>
                         </div>
                     </div>
                 ))}

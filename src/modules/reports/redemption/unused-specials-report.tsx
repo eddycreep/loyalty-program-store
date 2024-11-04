@@ -13,32 +13,126 @@ interface UnusedSpecials {
     store_id: string;
     store_name: string;
     date: string;
+    total_specials_issued: number;
     total_unused_specials: number;
-    total_unused_rewards: number;
-    total_unused_discounts: number;
+    total_redemptions: number;
+    redemption_rate: {
+        rewards: number;
+        discounts: number;
+    };
+    popular_unused: string[];
+    expiry_influence: number;
+    customer_rating: number;
+    total_unused_rewards?: number; // Adding the optional property
+    total_unused_discounts?: number; // Adding the optional property
 }
 
 
 const unusedSpecialsData: UnusedSpecials[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', total_unused_specials: 10000, total_unused_rewards: 3000, total_unused_discounts: 7000 },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-09-15', total_unused_specials: 8000, total_unused_rewards: 2000, total_unused_discounts: 6000 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-08-01', total_unused_specials: 12000, total_unused_rewards: 6000, total_unused_discounts: 6000 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-07-10', total_unused_specials: 9500, total_unused_rewards: 4000, total_unused_discounts: 5500 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-06-25', total_unused_specials: 11000, total_unused_rewards: 5000, total_unused_discounts: 6000 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-05-30', total_unused_specials: 13000, total_unused_rewards: 8000, total_unused_discounts: 5000 },
+    { 
+        store_id: 'SOO1', 
+        store_name: 'PLUS DC Stellenbosch', 
+        date: '2024-10-01', 
+        total_specials_issued: 15000,
+        total_unused_specials: 10000, 
+        total_redemptions: 5000,
+        redemption_rate: {
+            rewards: 65,
+            discounts: 35
+        },
+        popular_unused: ['10% Off Electronics', '3-for-2 Groceries'],
+        expiry_influence: 75,
+        customer_rating: 4.2
+    },
+    { 
+        store_id: 'SOO2', 
+        store_name: 'PLUS DC Albertin', 
+        date: '2024-09-15', 
+        total_specials_issued: 12000,
+        total_unused_specials: 8000, 
+        total_redemptions: 4000,
+        redemption_rate: {
+            rewards: 55,
+            discounts: 45
+        },
+        popular_unused: ['Buy 1 Get 1 Free', '15% Off Fresh Produce'],
+        expiry_influence: 60,
+        customer_rating: 3.8
+    },
+    { 
+        store_id: 'SOO3', 
+        store_name: 'PLUS DC Bellville', 
+        date: '2024-08-01', 
+        total_specials_issued: 10000,
+        total_unused_specials: 12000, 
+        total_redemptions: 4000,
+        redemption_rate: {
+            rewards: 50,
+            discounts: 50
+        },
+        popular_unused: ['20% Off Clothing', 'Buy 2 Get 3 Snacks'],
+        expiry_influence: 65,
+        customer_rating: 4.0
+    },
+    { 
+        store_id: 'SOO4', 
+        store_name: 'PLUS DC Nelspruit', 
+        date: '2024-07-10', 
+        total_specials_issued: 8000,
+        total_unused_specials: 9500, 
+        total_redemptions: 3000,
+        redemption_rate: {
+            rewards: 40,
+            discounts: 60
+        },
+        popular_unused: ['5% Off Home Goods', 'Free Sample Packs'],
+        expiry_influence: 50,
+        customer_rating: 3.9
+    },
+    { 
+        store_id: 'SOO5', 
+        store_name: 'PLUS DC Durbanville', 
+        date: '2024-06-25', 
+        total_specials_issued: 9000,
+        total_unused_specials: 11000, 
+        total_redemptions: 3500,
+        redemption_rate: {
+            rewards: 45,
+            discounts: 55
+        },
+        popular_unused: ['Back-to-School Deals', '20% Off Essentials'],
+        expiry_influence: 70,
+        customer_rating: 4.1
+    },
+    { 
+        store_id: 'SOO6', 
+        store_name: 'PLUS DC Bloemfontein', 
+        date: '2024-05-30', 
+        total_specials_issued: 11000,
+        total_unused_specials: 13000, 
+        total_redemptions: 3000,
+        redemption_rate: {
+            rewards: 60,
+            discounts: 40
+        },
+        popular_unused: ['Bundle Discounts', 'Discounted Fresh Goods'],
+        expiry_influence: 55,
+        customer_rating: 4.0
+    }
 ];
+
 
 
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' }, 
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' }, 
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' }, 
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' }, 
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
@@ -46,7 +140,7 @@ const stores = [
 
 
 export const UnsusedLoyaltyReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Unused Specials ', 'Total Unused Rewards', 'Total Unused Discounts'];
+    const headers = ["Store ID", "Store Name", "Date", "Total Specials Issued", "Unused Specials Count", "Total Redemptions", "Redemption Rate per Offer Type", "Popular Unused Specials", "Expiry Influence", "Customer Feedback Rating"]
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -265,15 +359,30 @@ export const UnsusedLoyaltyReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_unused_specials, total_unused_rewards, total_unused_discounts }) => (
+                {filteredData.map(({ 
+                    store_id, 
+                    store_name, 
+                    date, 
+                    total_specials_issued,
+                    total_unused_specials, 
+                    total_redemptions,
+                    redemption_rate,
+                    popular_unused,
+                    expiry_influence,
+                    customer_rating 
+                }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
-                            <p className="text-sm flex-1 text-center text">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_unused_specials}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_unused_rewards}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_unused_discounts}%</p>
+                            <p className="text-sm flex-1 text-center">{total_specials_issued}</p>
+                            <p className="text-sm flex-1 text-center">{total_unused_specials}</p>
+                            <p className="text-sm flex-1 text-center">{total_redemptions}</p>
+                            <p className="text-sm flex-1 text-center">R: {redemption_rate.rewards}% D: {redemption_rate.discounts}%</p>
+                            <p className="text-sm flex-1 text-center">{popular_unused.join(', ')}</p>
+                            <p className="text-sm flex-1 text-center">{expiry_influence}%</p>
+                            <p className="text-sm flex-1 text-center">{customer_rating}/5</p>
                         </div>
                     </div>
                 ))}

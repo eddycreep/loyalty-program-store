@@ -9,94 +9,106 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Label } from "@/components/ui/label";
 
-interface EnrollmentRateData {
+interface LowPerformingProductData {
     store_id: string;
     store_name: string;
-    customer_age_group: string;
-    gender: string;
-    preferred_category: string;
-    enrollment_source: string;
-    avg_basket_size: number;
-    membership_type: string;
-    customers_enrolled: number;
-    date: string
+    product_id: string;
+    product_name: string;
+    category: string;
+    total_sales: number;
+    total_revenue: number;
+    total_discount_amount: number;
+    discount_usage_rate: number;
+    avg_discount: number;
+    gross_margin: number;
+    customer_count: number;
+    date: string;
 }
 
-const enrollmentRateReport: EnrollmentRateData[] = [
+const lowPerformingProductsReport: LowPerformingProductData[] = [
     {
         store_id: 'SOO1',
         store_name: 'PLUS DC Stellenbosch',
-        customer_age_group: '25-34',
-        gender: 'Female',
-        preferred_category: 'Groceries',
-        enrollment_source: 'In-Store',
-        avg_basket_size: 450.75,
-        membership_type: 'Premium',
-        customers_enrolled: 50,
-        date: '2024-03-01'  // Add dates to each entry
+        product_id: 'P001',
+        product_name: 'Apple',
+        category: 'Groceries',
+        total_sales: 120,
+        total_revenue: 3000.50,
+        total_discount_amount: 150.25,
+        discount_usage_rate: 12.5,
+        avg_discount: 5.0,
+        gross_margin: 20.0,
+        customer_count: 60,
+        date: '2024-10-01',
     },
     {
         store_id: 'SOO2',
         store_name: 'PLUS DC Albertin',
-        customer_age_group: '35-44',
-        gender: 'Male',
-        preferred_category: 'Electronics',
-        enrollment_source: 'Online',
-        avg_basket_size: 675.50,
-        membership_type: 'Standard',
-        customers_enrolled: 30,
-        date: '2024-03-01'  // Add dates to each entry
+        product_id: 'P002',
+        product_name: 'Switch 440ML',
+        category: 'Electronics',
+        total_sales: 80,
+        total_revenue: 5000.75,
+        total_discount_amount: 200.50,
+        discount_usage_rate: 10.0,
+        avg_discount: 8.0,
+        gross_margin: 25.0,
+        customer_count: 40,
+        date: '2024-10-02',
     },
     {
         store_id: 'SOO3',
         store_name: 'PLUS DC Bellville',
-        customer_age_group: '18-24',
-        gender: 'Female',
-        preferred_category: 'Fashion',
-        enrollment_source: 'Mobile App',
-        avg_basket_size: 325.25,
-        membership_type: 'Premium',
-        customers_enrolled: 70,
-        date: '2024-03-01'  // Add dates to each entry
+        product_id: 'P003',
+        product_name: 'Chips',
+        category: 'Fashion',
+        total_sales: 90,
+        total_revenue: 4000.00,
+        total_discount_amount: 100.75,
+        discount_usage_rate: 9.5,
+        avg_discount: 6.0,
+        gross_margin: 18.0,
+        customer_count: 55,
+        date: '2024-10-03',
     }
-]
+];
 
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-export const EnrollmentRateReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Customer Age Group', 'Gender', 'Preferred Category', 'Enrollment Source', 'Avg Basket Size', 'Membership Type', 'No. of Customers Enrolled'];
+export const LowPerformingProductsReport = () => {
+    const headers = ['Store ID', 'Store Name', 'Product ID', 'Product Name', 'Category', 'Date', 'Total Sales', 'Total Revenue', 'Total Discount Amount', 'Usage Rate (%)', 'Avg. Discount (%)', 'Customer Count'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<EnrollmentRateData[]>([]); 
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [filteredData, setFilteredData] = useState<LowPerformingProductData[]>([]);
+    const [isLoading, setIsLoading] = useState(false); 
+    const [isError, setIsError] = useState(false); 
 
 
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = enrollmentRateReport;
+        let filtered = lowPerformingProductsReport;
 
-
+        // Filter by date range
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-
+        // Filter by selected store
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
@@ -271,18 +283,22 @@ export const EnrollmentRateReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, customer_age_group, gender, preferred_category, enrollment_source, avg_basket_size, membership_type, customers_enrolled }) => (
+                {filteredData.map(({ store_id, store_name, product_id, product_name, category, total_sales, total_revenue, total_discount_amount, discount_usage_rate, avg_discount, gross_margin, customer_count, date }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center">{store_name}</p>
-                            <p className="text-sm flex-1 text-center">{customer_age_group}</p>
-                            <p className="text-sm flex-1 text-center">{gender}</p>
-                            <p className="text-sm flex-1 text-center">{preferred_category}</p>
-                            <p className="text-sm flex-1 text-center">{enrollment_source}</p>
-                            <p className="text-sm flex-1 text-center">R{avg_basket_size.toFixed(2)}</p>
-                            <p className="text-sm flex-1 text-center">{membership_type}</p>
-                            <p className="text-sm flex-1 text-center">{customers_enrolled}</p>
+                            <p className="text-sm flex-1 text-center">{product_id}</p>
+                            <p className="text-sm flex-1 text-center">{product_name}</p>
+                            <p className="text-sm flex-1 text-center">{category}</p>
+                            <p className="text-sm flex-1 text-center">{date}</p>
+                            <p className="text-sm flex-1 text-center">{total_sales}</p>
+                            <p className="text-sm flex-1 text-center">R{total_revenue}</p>
+                            <p className="text-sm flex-1 text-center">R{total_discount_amount}</p>
+                            <p className="text-sm flex-1 text-center">{discount_usage_rate}</p>
+                            <p className="text-sm flex-1 text-center">{avg_discount}</p>
+                            {/* <p className="text-sm flex-1 text-center">{gross_margin}</p> */}
+                            <p className="text-sm flex-1 text-center">{customer_count}</p>
                         </div>
                     </div>
                 ))}

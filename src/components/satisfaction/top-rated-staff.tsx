@@ -29,25 +29,25 @@ import {
 export const description = "A stacked area chart with expand stacking"
 
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80, other: 45 },
-  { month: "February", desktop: 305, mobile: 200, other: 100 },
-  { month: "March", desktop: 237, mobile: 120, other: 150 },
-  { month: "April", desktop: 73, mobile: 190, other: 50 },
-  { month: "May", desktop: 209, mobile: 130, other: 100 },
-  { month: "June", desktop: 214, mobile: 140, other: 160 },
+  { month: "January", smith: 95, jones: 82, williams: 78 },
+  { month: "February", smith: 88, jones: 90, williams: 85 },
+  { month: "March", smith: 92, jones: 85, williams: 89 },
+  { month: "April", smith: 86, jones: 93, williams: 82 },
+  { month: "May", smith: 90, jones: 88, williams: 91 },
+  { month: "June", smith: 94, jones: 86, williams: 88 },
 ]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  smith: {
+    label: "Sarah Smith",
     color: "#a5b4fc",
   },
-  mobile: {
-    label: "Mobile",
+  jones: {
+    label: "Mike Jones",
     color: "#00d384",
   },
-  other: {
-    label: "Other",
+  williams: {
+    label: "Emma Williams",
     color: "#1ec3ff",
   },
 } satisfies ChartConfig
@@ -55,8 +55,8 @@ const chartConfig = {
 export function TopRatedStaff() {
     
 
-      // State for active category, initially set to "special"
-  const [activeCategory, setActiveCategory] = React.useState("special")
+      // State for active category, initially set to "smith"
+  const [activeCategory, setActiveCategory] = React.useState("smith")
 
   // Map categories from chartConfig keys for the dropdown
   const categories = React.useMemo(() => Object.keys(chartConfig), [])
@@ -64,16 +64,16 @@ export function TopRatedStaff() {
 
 
   return (
-    <Card>
+    <Card className="w-[400px] h-[380px]">
       <CardHeader>
         <div className="flex justify-between">
           <div className="">
             <h5 className="font-bold">Top Rated Staff</h5>
-            <p className="text-sm text-gray-400">Total Revenue made by specials</p>
+            <p className="text-sm text-gray-400">Top Rated Products within the program</p>
           </div>
-          <Select value={activeCategory} onValueChange={setActiveCategory}>
+          {/* <Select value={activeCategory} onValueChange={setActiveCategory}>
             <SelectTrigger
-              className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
+              className="ml-auto h-7 w-[200px] rounded-lg pl-2.5"
               aria-label="Select a value"
             >
               <SelectValue placeholder="Select category" />
@@ -107,7 +107,7 @@ export function TopRatedStaff() {
                 )
               })}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </CardHeader>
       <CardContent>
@@ -135,27 +135,27 @@ export function TopRatedStaff() {
               content={<ChartTooltipContent indicator="line" />}
             />
             <Area
-              dataKey="other"
+              dataKey="williams"
               type="natural"
-              fill="var(--color-other)"
+              fill="var(--color-williams)"
               fillOpacity={0.1}
-              stroke="var(--color-other)"
+              stroke="var(--color-williams)"
               stackId="a"
             />
             <Area
-              dataKey="mobile"
+              dataKey="jones"
               type="natural"
-              fill="var(--color-mobile)"
+              fill="var(--color-jones)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke="var(--color-jones)"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="smith"
               type="natural"
-              fill="var(--color-desktop)"
+              fill="var(--color-smith)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="var(--color-smith)"
               stackId="a"
             />
           </AreaChart>

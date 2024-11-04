@@ -28,35 +28,37 @@ import {
 
 export const description = "A stacked area chart with expand stacking"
 
+// Updated chart data with more dramatic fluctuations between stores
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80, other: 45 },
-  { month: "February", desktop: 305, mobile: 200, other: 100 },
-  { month: "March", desktop: 237, mobile: 120, other: 150 },
-  { month: "April", desktop: 73, mobile: 190, other: 50 },
-  { month: "May", desktop: 209, mobile: 130, other: 100 },
-  { month: "June", desktop: 214, mobile: 140, other: 160 },
+  { month: "January", stellenbosch: 95, albertin: 65, bellville: 82 },
+  { month: "February", stellenbosch: 72, albertin: 88, bellville: 65 },
+  { month: "March", stellenbosch: 89, albertin: 63, bellville: 91 },
+  { month: "April", stellenbosch: 68, albertin: 92, bellville: 73 },
+  { month: "May", stellenbosch: 93, albertin: 71, bellville: 88 },
+  { month: "June", stellenbosch: 75, albertin: 89, bellville: 67 },
 ]
 
+// Reverted to original colors but updated for PLUS DC stores
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "#a5b4fc",
+  stellenbosch: {
+    label: "PLUS DC Stellenbosch",
+    color: "#a5b4fc",  // Original 'desktop' color
   },
-  mobile: {
-    label: "Mobile",
-    color: "#00d384",
+  albertin: {
+    label: "PLUS DC Albertin",
+    color: "#00d384",  // Original 'mobile' color
   },
-  other: {
-    label: "Other",
-    color: "#1ec3ff",
+  bellville: {
+    label: "PLUS DC Bellville",
+    color: "#1ec3ff",  // Original 'other' color
   },
 } satisfies ChartConfig
 
 export function TopRatedStores() {
     
 
-      // State for active category, initially set to "special"
-  const [activeCategory, setActiveCategory] = React.useState("special")
+      // Updated initial category
+  const [activeCategory, setActiveCategory] = React.useState("stellenbosch")
 
   // Map categories from chartConfig keys for the dropdown
   const categories = React.useMemo(() => Object.keys(chartConfig), [])
@@ -64,16 +66,16 @@ export function TopRatedStores() {
 
 
   return (
-    <Card>
+    <Card className="w-[400px] h-[380px]">
       <CardHeader>
         <div className="flex justify-between">
           <div className="">
             <h5 className="font-bold">Top Rated Stores</h5>
-            <p className="text-sm text-gray-400">Total Revenue made by specials</p>
+            <p className="text-sm text-gray-400">Top Rated Products within the program</p>
           </div>
-          <Select value={activeCategory} onValueChange={setActiveCategory}>
+          {/* <Select value={activeCategory} onValueChange={setActiveCategory}>
             <SelectTrigger
-              className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
+              className="ml-auto h-7 w-[200px] rounded-lg pl-2.5"
               aria-label="Select a value"
             >
               <SelectValue placeholder="Select category" />
@@ -107,7 +109,7 @@ export function TopRatedStores() {
                 )
               })}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </CardHeader>
       <CardContent>
@@ -135,27 +137,27 @@ export function TopRatedStores() {
               content={<ChartTooltipContent indicator="line" />}
             />
             <Area
-              dataKey="other"
+              dataKey="bellville"
               type="natural"
-              fill="var(--color-other)"
+              fill="var(--color-bellville)"
               fillOpacity={0.1}
-              stroke="var(--color-other)"
+              stroke="var(--color-bellville)"
               stackId="a"
             />
             <Area
-              dataKey="mobile"
+              dataKey="albertin"
               type="natural"
-              fill="var(--color-mobile)"
+              fill="var(--color-albertin)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke="var(--color-albertin)"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="stellenbosch"
               type="natural"
-              fill="var(--color-desktop)"
+              fill="var(--color-stellenbosch)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="var(--color-stellenbosch)"
               stackId="a"
             />
           </AreaChart>
@@ -165,7 +167,7 @@ export function TopRatedStores() {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+              Showing the Top 3 Highest Rated Stores <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
               January - June 2024

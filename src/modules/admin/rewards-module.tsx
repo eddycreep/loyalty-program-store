@@ -118,11 +118,11 @@ export const RewardsModule = () => {
                                     <p className="text-sm flex-1 text-center">{reward_title}</p>
                                     <p className="text-sm flex-1 text-center">{description}</p>
                                     <p className="text-sm flex-1 text-center">{reward}</p>
-                                    <p className="text-sm flex-1 text-center">{reward_type}</p>
+                                    <p className="text-sm flex-1 text-center">{reward_price}</p>
                                     <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                        <button className="flex items-center justify-center cursor-pointer" onClick={() => handleExpandClick(uid)}>
+                                        {/* <button className="flex items-center justify-center cursor-pointer" onClick={() => handleExpandClick(uid)}>
                                             <Expand color="gray" />
-                                        </button>
+                                        </button> */}
                                         <button className="flex items-center justify-center cursor-pointer" onClick={ toggleEditProductPage }>
                                             <Edit color="gray" /> 
                                         </button>

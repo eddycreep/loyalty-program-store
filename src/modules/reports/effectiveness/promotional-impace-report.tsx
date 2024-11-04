@@ -17,6 +17,12 @@ interface PromotionalImpact {
     sales_during_promotion: number;
     sales_before_promotion: number;
     promotional_impact: number;
+    revenue_growth: number;
+    units_sold: number;
+    most_redeemed: string;
+    promotion_spend: number;
+    promotion_roi: number;
+    avg_basket_increase: number;
 }
 
 // Updated promotionalImpactData with random dates and more rows
@@ -28,6 +34,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 35000,
         sales_before_promotion: 30000,
         promotional_impact: 16.67,
+        revenue_growth: 5000,
+        units_sold: 1200,
+        most_redeemed: 'Fresh Produce',
+        promotion_spend: 2000,
+        promotion_roi: 150,
+        avg_basket_increase: 25.5
     },
     {
         store_id: 'SOO2',
@@ -36,6 +48,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 30000,
         sales_before_promotion: 25000,
         promotional_impact: 20,
+        revenue_growth: 5000,
+        units_sold: 850,
+        most_redeemed: 'Dairy Products',
+        promotion_spend: 1800,
+        promotion_roi: 177.8,
+        avg_basket_increase: 22.3
     },
     {
         store_id: 'SOO3',
@@ -44,6 +62,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 45000,
         sales_before_promotion: 40000,
         promotional_impact: 12.5,
+        revenue_growth: 5000,
+        units_sold: 1000,
+        most_redeemed: 'Bakery Products',
+        promotion_spend: 2000,
+        promotion_roi: 125,
+        avg_basket_increase: 20.5
     },
     {
         store_id: 'SOO4',
@@ -52,6 +76,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 25000,
         sales_before_promotion: 22000,
         promotional_impact: 13.64,
+        revenue_growth: 5000,
+        units_sold: 900,
+        most_redeemed: 'Fruit and Vegetables',
+        promotion_spend: 1800,
+        promotion_roi: 136.4,
+        avg_basket_increase: 20.5
     },
     {
         store_id: 'SOO5',
@@ -60,6 +90,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 33000,
         sales_before_promotion: 29000,
         promotional_impact: 13.79,
+        revenue_growth: 5000,
+        units_sold: 1100,
+        most_redeemed: 'Meat and Poultry',
+        promotion_spend: 2000,
+        promotion_roi: 137.9,
+        avg_basket_increase: 25.5
     },
     {
         store_id: 'SOO6',
@@ -68,6 +104,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 29000,
         sales_before_promotion: 26000,
         promotional_impact: 11.54,
+        revenue_growth: 5000,
+        units_sold: 950,
+        most_redeemed: 'Dairy Products',
+        promotion_spend: 1800,
+        promotion_roi: 115.4,
+        avg_basket_increase: 22.3
     },
     {
         store_id: 'SOO7',
@@ -76,6 +118,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 41000,
         sales_before_promotion: 36000,
         promotional_impact: 13.89,
+        revenue_growth: 5000,
+        units_sold: 1050,
+        most_redeemed: 'Bakery Products',
+        promotion_spend: 2000,
+        promotion_roi: 138.9,
+        avg_basket_increase: 25.5
     },
     {
         store_id: 'SOO8',
@@ -84,6 +132,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 37000,
         sales_before_promotion: 33000,
         promotional_impact: 12.12,
+        revenue_growth: 5000,
+        units_sold: 950,
+        most_redeemed: 'Fruit and Vegetables',
+        promotion_spend: 1800,
+        promotion_roi: 121.2,
+        avg_basket_increase: 20.5
     },
     {
         store_id: 'SOO9',
@@ -92,6 +146,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 28000,
         sales_before_promotion: 24000,
         promotional_impact: 16.67,
+        revenue_growth: 5000,
+        units_sold: 800,
+        most_redeemed: 'Meat and Poultry',
+        promotion_spend: 2000,
+        promotion_roi: 166.7,
+        avg_basket_increase: 25.5
     },
     {
         store_id: 'SOO10',
@@ -100,6 +160,12 @@ const promotionalImpactData: PromotionalImpact[] = [
         sales_during_promotion: 39000,
         sales_before_promotion: 35000,
         promotional_impact: 11.43,
+        revenue_growth: 5000,
+        units_sold: 900,
+        most_redeemed: 'Dairy Products',
+        promotion_spend: 1800,
+        promotion_roi: 114.3,
+        avg_basket_increase: 22.3
     },
 ];
 
@@ -121,7 +187,7 @@ const stores = [
 
 
 export const PromotionalImpactReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Sales During Promotion', 'Sales Before Promotion', 'Promotional Impact (%)'];
+    const headers = ["Store ID", "Store Name", "Date", "Sales During Promotion", "Sales Before Promotion", "Promotional Impact (%)", "Revenue Growth During Promotion", "Units Sold During Promotion", "Most Redeemed Products", "Promotion Spend", "Promotion ROI", "Average Basket Size Increase"];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -353,15 +419,36 @@ export const PromotionalImpactReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, sales_during_promotion, sales_before_promotion, promotional_impact }) => (
+                {filteredData.map(({ 
+                    store_id, 
+                    store_name, 
+                    date, 
+                    sales_during_promotion, 
+                    sales_before_promotion, 
+                    promotional_impact,
+                    revenue_growth,
+                    units_sold,
+                    most_redeemed,
+                    promotion_spend,
+                    promotion_roi,
+                    avg_basket_increase 
+                }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
-                            <p className="text-sm flex-1 text-center text">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{sales_during_promotion}</p>
-                            <p className="text-sm flex-1 text-center">{sales_before_promotion}</p>
-                            <p className={`text-sm flex-1 text-center ${promotional_impact >= 50 ? 'text-green' : 'text-red'}`}>{promotional_impact}%</p>
+                            <p className="text-sm flex-1 text-center">R{sales_during_promotion.toLocaleString()}</p>
+                            <p className="text-sm flex-1 text-center">R{sales_before_promotion.toLocaleString()}</p>
+                            <p className={`text-sm flex-1 text-center ${promotional_impact >= 50 ? 'text-green' : 'text-red'}`}>
+                                {promotional_impact}%
+                            </p>
+                            <p className="text-sm flex-1 text-center">R{revenue_growth.toLocaleString()}</p>
+                            <p className="text-sm flex-1 text-center">{units_sold.toLocaleString()}</p>
+                            <p className="text-sm flex-1 text-center">{most_redeemed}</p>
+                            <p className="text-sm flex-1 text-center">R{promotion_spend.toLocaleString()}</p>
+                            <p className="text-sm flex-1 text-center">{promotion_roi}%</p>
+                            <p className="text-sm flex-1 text-center">{avg_basket_increase}%</p>
                         </div>
                     </div>
                 ))}

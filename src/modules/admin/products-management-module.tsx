@@ -103,7 +103,7 @@ export const ProductsManModule = () => {
     const [combinedSpecialsComponent, setCombinedSpecialsComponent] = useState(false);
 
     const headers = ['ID',	'Special Name',	'Special',	'Product', 'Special Value', 'Action']
-    const combinedHeaders = ['Special ID', 'Group ID', 'Special Name',	'Special',	'Product',	'Special Price', 'Action']
+    const combinedHeaders = ['Special ID', 'Special Name', 'Group ID',	'Special',	'Products',	'Special Price', 'Action']
 
     const url = `products/getproducts`;
     const { data, loading, error } = useQuery<ProductResponse>(url);
@@ -205,9 +205,9 @@ export const ProductsManModule = () => {
                             <p className="text-sm flex-1 text-center">{product.product_description}</p>
                             <p className="text-sm flex-1 text-center">{product.special_price}</p>
                             <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                <button onClick={() => handleExpandClick(product.special_id)} className="flex items-center justify-center cursor-pointer">
+                                {/* <button onClick={() => handleExpandClick(product.special_id)} className="flex items-center justify-center cursor-pointer">
                                     <Expand color="gray" />
-                                </button>
+                                </button> */}
                                 <button onClick={toggleEditProductPage} className="flex items-center justify-center cursor-pointer">
                                     <Edit color="gray" />
                                 </button>
@@ -263,8 +263,9 @@ export const ProductsManModule = () => {
                         <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
                             <div className="flex items-center justify-between">
                                 <p className="text-sm flex-1 text-center text-red">19</p>
-                                <p className="text-sm flex-1 text-center">1</p>
                                 <p className="text-sm flex-1 text-center">Summer Breeze Special</p>
+                                <p className="text-sm flex-1 text-center">1</p>
+                                {/* <p className="text-sm flex-1 text-center">1</p> */}
                                 <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
                                 <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
                                 <p className="text-sm flex-1 text-center">56.99</p>
@@ -273,9 +274,9 @@ export const ProductsManModule = () => {
                                 <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
                                 <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                    <button className="flex items-center justify-center cursor-pointer">
+                                    {/* <button className="flex items-center justify-center cursor-pointer">
                                         <Expand color="gray" />
-                                    </button>
+                                    </button> */}
                                     <button className="flex items-center justify-center cursor-pointer" onClick={toggleEditProductPage} >
                                         <Edit color="gray" /> 
                                     </button>

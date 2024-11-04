@@ -9,109 +9,12 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
 
-// const activeMembers = [
-//     {
-//         store_id: 'SOO1',
-//         store_name: 'PLUS DC Stellenbosch',
-//         date: '2024-10-01',
-//         total_active_members: 1500,
-//         percentage_active_members: 75,
-//         loyalty_tier: 'Platinum'
-//     },
-//     {
-//         store_id: 'SOO2',
-//         store_name: 'PLUS DC Albertin',
-//         date: '2024-10-01',
-//         total_active_members: 1200,
-//         percentage_active_members: 60,
-//         loyalty_tier: 'Platinum'
-//     },
-//     {
-//         store_id: 'SOO3',
-//         store_name: 'PLUS DC Bellville',
-//         date: '2024-10-01',
-//         total_active_members: 1800,
-//         percentage_active_members: 90,
-//         loyalty_tier: 'Diamond'
-//     },
-//     {
-//         store_id: 'SOO4',
-//         store_name: 'PLUS DC Nelspruit',
-//         date: '2024-10-01',
-//         total_active_members: 800,
-//         percentage_active_members: 40,
-//         loyalty_tier: 'Gold'
-//     },
-//     {
-//         store_id: 'SOO5',
-//         store_name: 'PLUS DC Durbanville',
-//         date: '2024-10-01',
-//         total_active_members: 1300,
-//         percentage_active_members: 65,
-//         loyalty_tier: 'Platinum'
-//     },
-//     {
-//         store_id: 'SOO6',
-//         store_name: 'PLUS DC Bloemfontein',
-//         date: '2024-10-01',
-//         total_active_members: 900,
-//         percentage_active_members: 45,
-//         loyalty_tier: 'Gold'
-//     },
-//     {
-//         store_id: 'SOO7',
-//         store_name: 'PLUS DC Cape Town',
-//         date: '2024-10-01',
-//         total_active_members: 2000,
-//         percentage_active_members: 100,
-//         loyalty_tier: 'Diamond'
-//     },
-//     {
-//         store_id: 'SOO8',
-//         store_name: 'PLUS DC Pietermaritzburg',
-//         date: '2024-10-01',
-//         total_active_members: 1100,
-//         percentage_active_members: 55,
-//         loyalty_tier: 'Platinum'
-//     },
-//     {
-//         store_id: 'SOO9',
-//         store_name: 'PLUS DC East London',
-//         date: '2024-10-01',
-//         total_active_members: 750,
-//         percentage_active_members: 37.5,
-//         loyalty_tier: 'Gold'
-//     },
-//     {
-//         store_id: 'SOO10',
-//         store_name: 'PLUS DC Pretoria',
-//         date: '2024-10-01',
-//         total_active_members: 1600,
-//         percentage_active_members: 80,
-//         loyalty_tier: 'Diamond'
-//     },
-//     {
-//         store_id: 'SOO11',
-//         store_name: 'PLUS DC Germiston',
-//         date: '2024-10-01',
-//         total_active_members: 950,
-//         percentage_active_members: 47.5,
-//         loyalty_tier: 'Gold'
-//     },
-//     {
-//         store_id: 'SOO12',
-//         store_name: 'PLUS DC Polokwane',
-//         date: '2024-10-01',
-//         total_active_members: 500,
-//         percentage_active_members: 25,
-//         loyalty_tier: 'Gold'
-//     },
-// ];
 const activeMembers = [
     {
         storeId: 'SOO1',
         storeName: 'PLUS DC Stellenbosch',
         activeMembers: 120,
+        date: '2023-10-01',
         ageGroupEngagementRate: { "18-24": 35, "25-34": 45, "35-44": 15, "45+": 5 },
         genderEngagementRate: { Male: 48, Female: 50, PreferNotToSay: 1 },
         spendingTierDemographic: { Gold: 55, Diamond: 35, Platinum: 10 }
@@ -120,6 +23,7 @@ const activeMembers = [
         storeId: 'SOO2',
         storeName: 'PLUS DC Albertin',
         activeMembers: 95,
+        date: '2023-10-05',
         ageGroupEngagementRate: { "18-24": 25, "25-34": 30, "35-44": 25, "45+": 20 },
         genderEngagementRate: { Male: 52, Female: 46, PreferNotToSay: 1 },
         spendingTierDemographic: { Gold: 40, Diamond: 45, Platinum: 15 }
@@ -128,6 +32,7 @@ const activeMembers = [
         storeId: 'SOO3',
         storeName: 'PLUS DC Bellville',
         activeMembers: 110,
+        date: '2023-10-10',
         ageGroupEngagementRate: { "18-24": 20, "25-34": 30, "35-44": 30, "45+": 20 },
         genderEngagementRate: { Male: 45, Female: 53, PreferNotToSay: 1 },
         spendingTierDemographic: { Gold: 30, Diamond: 50, Platinum: 20 }
@@ -136,6 +41,7 @@ const activeMembers = [
         storeId: 'SOO4',
         storeName: 'PLUS DC Nelspruit',
         activeMembers: 100,
+        date: '2023-10-15',
         ageGroupEngagementRate: { "18-24": 15, "25-34": 35, "35-44": 35, "45+": 15 },
         genderEngagementRate: { Male: 49, Female: 49, PreferNotToSay: 1 },
         spendingTierDemographic: { Gold: 25, Diamond: 55, Platinum: 20 }
@@ -144,11 +50,13 @@ const activeMembers = [
         storeId: 'SOO5',
         storeName: 'PLUS DC Durbanville',
         activeMembers: 100,
+        date: '2023-10-20',
         ageGroupEngagementRate: { "18-24": 30, "25-34": 40, "35-44": 20, "45+": 10 },
         genderEngagementRate: { Male: 51, Female: 47, NonBinary: 1, PreferNotToSay: 1 },
         spendingTierDemographic: { Gold: 50, Diamond: 30, Platinum: 20 }
     }
 ];
+
 
 
 const stores = [
@@ -181,52 +89,54 @@ export const ActiveMembersReport = () => {
 
 
     // Function to handle filtering based on selected dates and store
-    // const handleFilter = () => {
-    //     setIsLoading(true);
+    const handleFilter = () => {
+        setIsLoading(true);
 
-    //     let filtered = activeMembers;
+        let filtered = activeMembers;
 
-    //     // Parse the selected dates
-    //     const start = new Date(startdate);
-    //     const end = new Date(enddate);
+        // Parse the selected dates
+        const start = new Date(startdate);
+        const end = new Date(enddate);
 
-    //     // Validate dates: Ensure start date is not after end date
-    //     if (startdate && enddate && start > end) {
-    //     toast.error('Start date cannot be after end date!', {
-    //         icon: <X color={colors.red} size={24} />,
-    //         duration: 3000,
-    //     });
-    //     setIsLoading(false);
-    //     return;
-    //     }
+        // Validate dates: Ensure start date is not after end date
+        if (startdate && enddate && start > end) {
+        toast.error('Start date cannot be after end date!', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+        setIsLoading(false);
+        return;
+        }
 
-    //     // Filter by start date and end date if both are selected
-    //     if (startdate && enddate) {
-    //     filtered = filtered.filter((item) => {
-    //         const itemDate = new Date(item.date);
-    //         return itemDate >= start && itemDate <= end;
-    //     });
-    //     }
+        // Filter by start date and end date if both are selected
+        if (startdate && enddate) {
+        filtered = filtered.filter((item) => {
+            const itemDate = new Date(item.date);
+            return itemDate >= start && itemDate <= end;
+        });
+        }
 
-    //     // Filter by store if selected
-    //     if (selectedStore && selectedStore !== 'All') {
-    //     filtered = filtered.filter((item) => item.store_id === selectedStore);
-    //     }
+        // Filter by store if selected
+        if (selectedStore && selectedStore !== 'All') {
+        filtered = filtered.filter((item) => item.storeId === selectedStore);
+        }
 
-    //     setFilteredData(filtered);
+        setFilteredData(filtered);
 
-    //     if (filtered.length === 0) {
-    //     setIsError(true);
-    //     toast.error('No data found for the selected filters!', {
-    //         icon: <X color={colors.red} size={24} />,
-    //         duration: 3000,
-    //     });
-    //     } else {
-    //     setIsError(false);
-    //     }
+        if (filtered.length === 0) {
+        setIsError(true);
+        toast.error('No data found for the selected filters!', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+        } else {
+        setIsError(false);
+        }
 
-    //     setIsLoading(false);
-    // };
+        setIsLoading(false);
+    };
+
+    
 
 
     if (isLoading) {

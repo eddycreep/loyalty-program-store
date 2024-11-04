@@ -9,94 +9,131 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Label } from "@/components/ui/label";
 
-interface EnrollmentRateData {
+interface CommonDiscountProductsData {
     store_id: string;
     store_name: string;
+    product_id: string;
+    product_name: string;
+    category: string;
     customer_age_group: string;
     gender: string;
-    preferred_category: string;
-    enrollment_source: string;
-    avg_basket_size: number;
-    membership_type: string;
-    customers_enrolled: number;
-    date: string
+    geographic_location: string;
+    purchase_time_trends: string;
+    date: string;
 }
 
-const enrollmentRateReport: EnrollmentRateData[] = [
+const commonDiscountProductsReport: CommonDiscountProductsData[] = [
     {
         store_id: 'SOO1',
         store_name: 'PLUS DC Stellenbosch',
+        product_id: 'P001',
+        product_name: 'Organic Apples',
+        category: 'Groceries',
         customer_age_group: '25-34',
         gender: 'Female',
-        preferred_category: 'Groceries',
-        enrollment_source: 'In-Store',
-        avg_basket_size: 450.75,
-        membership_type: 'Premium',
-        customers_enrolled: 50,
-        date: '2024-03-01'  // Add dates to each entry
+        geographic_location: 'Stellenbosch',
+        purchase_time_trends: 'Morning',
+        date: '2024-03-01'
     },
     {
         store_id: 'SOO2',
-        store_name: 'PLUS DC Albertin',
+        store_name: 'PLUS DC Cape Town',
+        product_id: 'P002',
+        product_name: 'Whole Wheat Bread',
+        category: 'Bakery',
         customer_age_group: '35-44',
         gender: 'Male',
-        preferred_category: 'Electronics',
-        enrollment_source: 'Online',
-        avg_basket_size: 675.50,
-        membership_type: 'Standard',
-        customers_enrolled: 30,
-        date: '2024-03-01'  // Add dates to each entry
+        geographic_location: 'Cape Town',
+        purchase_time_trends: 'Afternoon',
+        date: '2024-03-02'
     },
     {
         store_id: 'SOO3',
-        store_name: 'PLUS DC Bellville',
+        store_name: 'PLUS DC Durban',
+        product_id: 'P003',
+        product_name: 'Almond Milk',
+        category: 'Dairy Alternatives',
         customer_age_group: '18-24',
         gender: 'Female',
-        preferred_category: 'Fashion',
-        enrollment_source: 'Mobile App',
-        avg_basket_size: 325.25,
-        membership_type: 'Premium',
-        customers_enrolled: 70,
-        date: '2024-03-01'  // Add dates to each entry
+        geographic_location: 'Durban',
+        purchase_time_trends: 'Evening',
+        date: '2024-03-03'
+    },
+    {
+        store_id: 'SOO4',
+        store_name: 'PLUS DC Pretoria',
+        product_id: 'P004',
+        product_name: 'Chicken Breasts',
+        category: 'Meat',
+        customer_age_group: '45-54',
+        gender: 'Male',
+        geographic_location: 'Pretoria',
+        purchase_time_trends: 'Morning',
+        date: '2024-03-04'
+    },
+    {
+        store_id: 'SOO5',
+        store_name: 'PLUS DC Johannesburg',
+        product_id: 'P005',
+        product_name: 'Granola Bars',
+        category: 'Snacks',
+        customer_age_group: '25-34',
+        gender: 'Female',
+        geographic_location: 'Johannesburg',
+        purchase_time_trends: 'Afternoon',
+        date: '2024-03-05'
+    },
+    {
+        store_id: 'SOO6',
+        store_name: 'PLUS DC Bloemfontein',
+        product_id: 'P006',
+        product_name: 'Orange Juice',
+        category: 'Beverages',
+        customer_age_group: '55-64',
+        gender: 'Male',
+        geographic_location: 'Bloemfontein',
+        purchase_time_trends: 'Evening',
+        date: '2024-03-06'
     }
-]
+];
+
 
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-export const EnrollmentRateReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Customer Age Group', 'Gender', 'Preferred Category', 'Enrollment Source', 'Avg Basket Size', 'Membership Type', 'No. of Customers Enrolled'];
+export const DiscountedProductsReport = () => {
+    const headers = ['Store ID', 'Store Name', 'Product ID', 'Product Name', 'Category', 'Age Group of Discount Users', 'Gender Split', 'Geographic Location', 'Purchase Time Trends with Discounts'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<EnrollmentRateData[]>([]); 
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [filteredData, setFilteredData] = useState<CommonDiscountProductsData[]>([]);
+    const [isLoading, setIsLoading] = useState(false); 
+    const [isError, setIsError] = useState(false); 
 
 
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = enrollmentRateReport;
+        let filtered = commonDiscountProductsReport;
 
-
+        // Filter by date range
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-
+        // Filter by selected store
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
@@ -271,18 +308,19 @@ export const EnrollmentRateReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, customer_age_group, gender, preferred_category, enrollment_source, avg_basket_size, membership_type, customers_enrolled }) => (
+                {filteredData.map(({ store_id, store_name, product_id, product_name, category, customer_age_group, gender, geographic_location, purchase_time_trends, date }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{product_id}</p>
+                            <p className="text-sm flex-1 text-center">{product_name}</p>
+                            <p className="text-sm flex-1 text-center">{category}</p>
+                            <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center">{customer_age_group}</p>
-                            <p className="text-sm flex-1 text-center">{gender}</p>
-                            <p className="text-sm flex-1 text-center">{preferred_category}</p>
-                            <p className="text-sm flex-1 text-center">{enrollment_source}</p>
-                            <p className="text-sm flex-1 text-center">R{avg_basket_size.toFixed(2)}</p>
-                            <p className="text-sm flex-1 text-center">{membership_type}</p>
-                            <p className="text-sm flex-1 text-center">{customers_enrolled}</p>
+                            <p className="text-sm flex-1 text-center">R{gender}</p>
+                            <p className="text-sm flex-1 text-center">{geographic_location}</p>
+                            <p className="text-sm flex-1 text-center">{purchase_time_trends}</p>
                         </div>
                     </div>
                 ))}

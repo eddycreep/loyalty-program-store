@@ -60,7 +60,7 @@ export function RedeemedTierRewards() {
     const categories = React.useMemo(() => Object.keys(chartConfig), [])
 
   return (
-    <Card>
+    <Card className="w-[400px] h-[380px]">
       <CardHeader>
         <div className="flex justify-between">
           <div className="">

@@ -30,13 +30,18 @@ import { UnsusedLoyaltyReport } from "./redemption/unused-specials-report"
 
 //SATISFACTION
 import { CustomerSatisfactionReport } from "./satisfaction/customer-satisfaction-report"
-import { NetPromotoerScoreReport } from "./satisfaction/net-promotor-score"
+import { NetPromoterScoreReport } from "./satisfaction/net-promotor-score"
 import { AvgSpendPerTransactionReport } from "./satisfaction/avg-spend-per-transaction"
 import { CrossvsUpsellReport } from "./satisfaction/crossSell-vs-upSell-report"
 
 //EFFECTIVENESS
 import { MemberConversionReport } from "./effectiveness/member-conversion-report"
 import { PromotionalImpactReport } from "./effectiveness/promotional-impace-report"
+
+//Performance
+import { TopPerformingProductsReport } from "./product-performance/top-performing-products-report"
+import { LowPerformingProductsReport } from "./product-performance/low-performing-products-report"
+import { DiscountedProductsReport } from "./product-performance/discounted-products-report"
 
 
 interface LoyaltyClientsProps {
@@ -73,7 +78,7 @@ export const ReportsModule = () => {
                 <TabsTrigger value="redemption">Redemption</TabsTrigger>
                 <TabsTrigger value="satisfaction">Satisfaction</TabsTrigger>
                 <TabsTrigger value="effectiveness">Effectiveness</TabsTrigger>
-                {/* <TabsTrigger value="performance">Product Performance</TabsTrigger> */}
+                <TabsTrigger value="performance">Product Performance</TabsTrigger>
               </TabsList>
               <TabsContent value="customer-engagement" className="space-y-4">
                   <div className="pl-2">
@@ -125,7 +130,7 @@ export const ReportsModule = () => {
                       </div>
                   </div>
                   {currentTab === 'satisfaction' && <CustomerSatisfactionReport />}
-                  {currentTab === 'npc' && <NetPromotoerScoreReport />}
+                  {currentTab === 'npc' && <NetPromoterScoreReport />}
                   {currentTab === 'avgTransaction' && <AvgSpendPerTransactionReport />}
                   {currentTab === 'crossSell' && <CrossvsUpsellReport />}
               </TabsContent>
@@ -139,29 +144,19 @@ export const ReportsModule = () => {
                   {currentTab === 'memberConversion' && <MemberConversionReport />} 
                   {currentTab === 'promotionalImpact' && <PromotionalImpactReport />}
               </TabsContent>
-              {/* product performance
-              {/* <TabsContent value="performance" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Member Conversion Rate</CardTitle>
-                      <CardDescription>Percentage of non-members joining the loyalty program</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                    Member Conversion Rate
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Promotional Impact</CardTitle>
-                      <CardDescription>Effectiveness of special promotions on sales</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                    Promotional Impact
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent> */}
+              {/* product performance*/}
+              <TabsContent value="performance" className="space-y-4">
+                  <div className="pl-2">
+                      <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
+                          <button onClick={() => setCurrentTab('topPerforming')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'topPerforming'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Top Performing</button>
+                          <button onClick={() => setCurrentTab('lowPerforming')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'lowPerforming'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Low Performing</button>
+                          {/* <button onClick={() => setCurrentTab('discountedProducts')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'discountedProducts'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Discounted Products</button> */}
+                      </div>
+                  </div>
+                  {currentTab === 'topPerforming' && <TopPerformingProductsReport />}
+                  {currentTab === 'lowPerforming' && <LowPerformingProductsReport />}
+                  {/* {currentTab === 'discountedProducts' && <DiscountedProductsReport />} */}
+              </TabsContent> 
             </Tabs>
         </div>
     );
