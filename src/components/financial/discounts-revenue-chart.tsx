@@ -29,7 +29,7 @@ import {
 
 export const description = "A radial chart with stacked sections"
 
-const chartData = [{ month: "special", cart: 1260, product: 570 }]
+const chartData = [{ month: "cart", cart: 220, product: 340 }]
 
 const chartConfig = {
   cart: {
@@ -42,10 +42,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function FreeItemsRewardsChart() {
+export function DiscountsRevenueChart() {
   const totalVisitors = chartData[0].cart + chartData[0].product
 
-  // State for active category, initially set to "special"
+  // State for active category, initially set to "cart"
   const [activeCategory, setActiveCategory] = React.useState("cart")
 
   // Map categories from chartConfig keys for the dropdown
@@ -53,14 +53,14 @@ export function FreeItemsRewardsChart() {
 
 
   return (
-    <Card className="flex flex-col w-[400px] h-[350px]">
+    <Card className="flex flex-col w-[350px] h-[350px]">
       <CardHeader>
         <div className="flex justify-between">
           <div className="">
-            <h5 className="font-bold">Common Items Redeemed</h5>
-            <p className="text-sm text-gray-400">Total specials redeemed by customers</p>
+            <h5 className="font-bold">Discounts Revenue</h5>
+            <p className="text-sm text-gray-400">Total Revenue made by discounts</p>
           </div>
-          {/* <Select value={activeCategory} onValueChange={setActiveCategory}>
+          <Select value={activeCategory} onValueChange={setActiveCategory}>
             <SelectTrigger
               className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
               aria-label="Select a value"
@@ -96,7 +96,7 @@ export function FreeItemsRewardsChart() {
                 )
               })}
             </SelectContent>
-          </Select> */}
+          </Select>
         </div>
       </CardHeader>
       {/* Limit height of CardContent to ensure footer visibility */}
@@ -133,7 +133,7 @@ export function FreeItemsRewardsChart() {
                           y={(viewBox.cy || 0) + 4}
                           className="fill-muted-foreground"
                         >
-                          Redemptions
+                          Total Revenue
                         </tspan>
                       </text>
                     )
@@ -142,15 +142,15 @@ export function FreeItemsRewardsChart() {
               />
             </PolarRadiusAxis>
             <RadialBar
-              dataKey="cart"
+              dataKey="special"
               stackId="a"
               cornerRadius={5}
-              fill="var(--color-cart)"
+              fill="var(--color-special)"
               className="stroke-transparent stroke-2"
             />
             <RadialBar
-              dataKey="product"
-              fill="var(--color-product)"
+              dataKey="combined"
+              fill="var(--color-combined)"
               stackId="a"
               cornerRadius={5}
               className="stroke-transparent stroke-2"
@@ -163,7 +163,7 @@ export function FreeItemsRewardsChart() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total revenue made by special
+          Showing total revenue made by specials
         </div>
       </CardFooter>
     </Card>

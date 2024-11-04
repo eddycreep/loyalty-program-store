@@ -16,6 +16,10 @@ interface CrossSellUpsellData {
     total_transactions_with_cross_sell: number;
     total_transactions: number;
     cross_sell_upsell_rate: number;
+    top_cross_sold_items: string;
+    conversion_rate_of_cross_sell_offers: number;
+    customer_segment_impact: string;
+    zone_engagement: string;
 }
 
 
@@ -27,6 +31,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 200,
         total_transactions: 1500,
         cross_sell_upsell_rate: 13.33,
+        top_cross_sold_items: 'Chips, Soda, Chocolate Bar',
+        conversion_rate_of_cross_sell_offers: 8.2,
+        customer_segment_impact: 'Youth',
+        zone_engagement: 'Zone 1: 5 mins, Zone 2: 3 mins',
     },
     {
         store_id: 'SOO2',
@@ -34,7 +42,11 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         date: '2024-10-01',
         total_transactions_with_cross_sell: 150,
         total_transactions: 1200,
-        cross_sell_upsell_rate: 12.50,
+        cross_sell_upsell_rate: 12.5,
+        top_cross_sold_items: 'Energy Drink, Protein Bar',
+        conversion_rate_of_cross_sell_offers: 7.5,
+        customer_segment_impact: 'Families',
+        zone_engagement: 'Zone 1: 6 mins, Zone 2: 4 mins',
     },
     {
         store_id: 'SOO3',
@@ -43,6 +55,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 300,
         total_transactions: 1800,
         cross_sell_upsell_rate: 16.67,
+        top_cross_sold_items: 'Cookies, Fresh Juice, Granola Bar',
+        conversion_rate_of_cross_sell_offers: 9.0,
+        customer_segment_impact: 'Adults',
+        zone_engagement: 'Zone 1: 4 mins, Zone 2: 5 mins',
     },
     {
         store_id: 'SOO4',
@@ -51,6 +67,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 180,
         total_transactions: 1400,
         cross_sell_upsell_rate: 12.86,
+        top_cross_sold_items: 'Bottled Water, Sandwich',
+        conversion_rate_of_cross_sell_offers: 6.8,
+        customer_segment_impact: 'Seniors',
+        zone_engagement: 'Zone 1: 7 mins, Zone 2: 2 mins',
     },
     {
         store_id: 'SOO5',
@@ -59,6 +79,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 250,
         total_transactions: 1600,
         cross_sell_upsell_rate: 15.63,
+        top_cross_sold_items: 'Fruit Cup, Yoghurt',
+        conversion_rate_of_cross_sell_offers: 8.7,
+        customer_segment_impact: 'Teens',
+        zone_engagement: 'Zone 1: 6 mins, Zone 2: 4 mins',
     },
     {
         store_id: 'SOO6',
@@ -67,6 +91,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 350,
         total_transactions: 2250,
         cross_sell_upsell_rate: 15.56,
+        top_cross_sold_items: 'Trail Mix, Muffin',
+        conversion_rate_of_cross_sell_offers: 7.9,
+        customer_segment_impact: 'Professionals',
+        zone_engagement: 'Zone 1: 3 mins, Zone 2: 6 mins',
     },
     {
         store_id: 'SOO7',
@@ -75,6 +103,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 400,
         total_transactions: 3000,
         cross_sell_upsell_rate: 13.33,
+        top_cross_sold_items: 'Pretzels, Smoothie, Popcorn',
+        conversion_rate_of_cross_sell_offers: 10.0,
+        customer_segment_impact: 'Young Adults',
+        zone_engagement: 'Zone 1: 5 mins, Zone 2: 5 mins',
     },
     {
         store_id: 'SOO8',
@@ -83,6 +115,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 170,
         total_transactions: 1350,
         cross_sell_upsell_rate: 12.59,
+        top_cross_sold_items: 'Baguette, Cheese Slice',
+        conversion_rate_of_cross_sell_offers: 6.2,
+        customer_segment_impact: 'Retirees',
+        zone_engagement: 'Zone 1: 4 mins, Zone 2: 3 mins',
     },
     {
         store_id: 'SOO9',
@@ -91,6 +127,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 220,
         total_transactions: 1800,
         cross_sell_upsell_rate: 12.22,
+        top_cross_sold_items: 'Nuts, Salad Bowl',
+        conversion_rate_of_cross_sell_offers: 9.3,
+        customer_segment_impact: 'Families',
+        zone_engagement: 'Zone 1: 5 mins, Zone 2: 4 mins',
     },
     {
         store_id: 'SOO10',
@@ -99,6 +139,10 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 280,
         total_transactions: 2450,
         cross_sell_upsell_rate: 11.43,
+        top_cross_sold_items: 'Apple, Orange Juice',
+        conversion_rate_of_cross_sell_offers: 8.4,
+        customer_segment_impact: 'Professionals',
+        zone_engagement: 'Zone 1: 7 mins, Zone 2: 3 mins',
     },
     {
         store_id: 'SOO11',
@@ -106,7 +150,11 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         date: '2024-10-20',
         total_transactions_with_cross_sell: 200,
         total_transactions: 1550,
-        cross_sell_upsell_rate: 12.90,
+        cross_sell_upsell_rate: 12.9,
+        top_cross_sold_items: 'Yoghurt Drink, Donut',
+        conversion_rate_of_cross_sell_offers: 7.2,
+        customer_segment_impact: 'Youth',
+        zone_engagement: 'Zone 1: 4 mins, Zone 2: 6 mins',
     },
     {
         store_id: 'SOO12',
@@ -115,8 +163,13 @@ const crossSellUpsellData: CrossSellUpsellData[] = [
         total_transactions_with_cross_sell: 230,
         total_transactions: 2050,
         cross_sell_upsell_rate: 11.22,
+        top_cross_sold_items: 'Ice Cream, Fruit Salad',
+        conversion_rate_of_cross_sell_offers: 9.1,
+        customer_segment_impact: 'Adults',
+        zone_engagement: 'Zone 1: 5 mins, Zone 2: 4 mins',
     },
 ];
+
 
 
 const stores = [
@@ -136,33 +189,33 @@ const stores = [
 
 
 export const CrossvsUpsellReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Transactions with Cross-Sell/Upsell', 'Total Transactions', 'Cross-Sell/Upsell Rate (%)'];
+    const headers = ["Store ID", "Store Name", "Date", "Total Transactions with Cross-Sell/Upsell", "Total Transactions", "Cross-Sell/Upsell Rate (%)", "Top Cross-Sold Items", "Conversion Rate of Cross-Sell Offers", "Customer Segment Impact", "Zone Engagement (Dwell Time by Zone)"];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [filteredData, setFilteredData] = useState<CrossSellUpsellData[]>([]); // Explicitly typed state
-    const [isLoading, setIsLoading] = useState(false); // Loading state to control the loader
-    const [isError, setIsError] = useState(false); // Error state to handle no data
+    const [filteredData, setFilteredData] = useState<CrossSellUpsellData[]>([]); 
+    const [isLoading, setIsLoading] = useState(false); 
+    const [isError, setIsError] = useState(false); 
 
     // Filter function to handle filtering by date range and store
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = crossSellUpsellData;  // Start with full data set
+        let filtered = crossSellUpsellData;  
         
-        // Filter by selected date range (startDate and endDate)
+        
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-        // Filter by selected store if not "All"
+        
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered);  // Set filtered data to state
+        setFilteredData(filtered);  
 
-        // Handle case when no data matches the filters
+        
         if (filtered.length === 0) {
             setIsError(true);
             toast.error('No data found for the selected filters!', {
@@ -173,10 +226,10 @@ export const CrossvsUpsellReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);  // Disable loader after filtering
+        setIsLoading(false); 
     };
 
-    // Display loading screen if data is being fetched
+
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
@@ -239,7 +292,7 @@ export const CrossvsUpsellReport = () => {
         );
     }
 
-    // Show error message if there is no data for the selected month
+
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
@@ -355,7 +408,7 @@ export const CrossvsUpsellReport = () => {
                 ))}
             </div>
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_transactions_with_cross_sell, total_transactions, cross_sell_upsell_rate }) => (
+                {filteredData.map(({ store_id, store_name, date, total_transactions_with_cross_sell, total_transactions, cross_sell_upsell_rate, top_cross_sold_items, conversion_rate_of_cross_sell_offers, customer_segment_impact, zone_engagement }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
@@ -364,6 +417,10 @@ export const CrossvsUpsellReport = () => {
                             <p className="text-sm flex-1 text-center uppercase">{total_transactions_with_cross_sell}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_transactions}</p>
                             <p className="text-sm flex-1 text-center uppercase">{cross_sell_upsell_rate}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{top_cross_sold_items}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{conversion_rate_of_cross_sell_offers}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{customer_segment_impact}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{zone_engagement}</p>
                         </div>
                     </div>
                 ))}

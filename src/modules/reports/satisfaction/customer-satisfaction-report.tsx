@@ -16,22 +16,25 @@ interface CustomerSatisfactionData {
     total_surveys_collected: number;
     total_positive_responses: number;
     csat_score: number;
+    negative_responses: number;
+    time_to_response: number; // measured in minutes
+    customer_service_interactions: number;
+    product_satisfaction_ratings: number; // out of 5
 }
 
-
 const customerSatisfactionData: CustomerSatisfactionData[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-09-15', total_surveys_collected: 220, total_positive_responses: 200, csat_score: 91 },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-08-10', total_surveys_collected: 180, total_positive_responses: 150, csat_score: 83 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-07-25', total_surveys_collected: 270, total_positive_responses: 245, csat_score: 91 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-06-05', total_surveys_collected: 210, total_positive_responses: 190, csat_score: 90 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-05-18', total_surveys_collected: 160, total_positive_responses: 140, csat_score: 88 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-04-22', total_surveys_collected: 190, total_positive_responses: 170, csat_score: 89 },
-    { store_id: 'SOO7', store_name: 'PLUS DC Cape Town', date: '2024-03-15', total_surveys_collected: 300, total_positive_responses: 280, csat_score: 93 },
-    { store_id: 'SOO8', store_name: 'PLUS DC Pietermaritzburg', date: '2024-02-28', total_surveys_collected: 220, total_positive_responses: 190, csat_score: 86 },
-    { store_id: 'SOO9', store_name: 'PLUS DC East London', date: '2024-01-09', total_surveys_collected: 250, total_positive_responses: 225, csat_score: 90 },
-    { store_id: 'SOO10', store_name: 'PLUS DC Pretoria', date: '2024-05-21', total_surveys_collected: 300, total_positive_responses: 260, csat_score: 87 },
-    { store_id: 'SOO11', store_name: 'PLUS DC Germiston', date: '2024-09-02', total_surveys_collected: 240, total_positive_responses: 220, csat_score: 92 },
-    { store_id: 'SOO12', store_name: 'PLUS DC Polokwane', date: '2024-06-11', total_surveys_collected: 230, total_positive_responses: 210, csat_score: 91 },
+    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-09-15', total_surveys_collected: 220, total_positive_responses: 200, csat_score: 91, negative_responses: 20, time_to_response: 15, customer_service_interactions: 30, product_satisfaction_ratings: 4 },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-08-10', total_surveys_collected: 180, total_positive_responses: 150, csat_score: 83, negative_responses: 30, time_to_response: 20, customer_service_interactions: 25, product_satisfaction_ratings: 4 },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-07-25', total_surveys_collected: 270, total_positive_responses: 245, csat_score: 91, negative_responses: 25, time_to_response: 18, customer_service_interactions: 40, product_satisfaction_ratings: 5 },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-06-05', total_surveys_collected: 210, total_positive_responses: 190, csat_score: 90, negative_responses: 20, time_to_response: 17, customer_service_interactions: 35, product_satisfaction_ratings: 4 },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-05-18', total_surveys_collected: 160, total_positive_responses: 140, csat_score: 88, negative_responses: 20, time_to_response: 22, customer_service_interactions: 20, product_satisfaction_ratings: 4 },
+    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-04-22', total_surveys_collected: 190, total_positive_responses: 170, csat_score: 89, negative_responses: 20, time_to_response: 19, customer_service_interactions: 27, product_satisfaction_ratings: 3 },
+    { store_id: 'SOO7', store_name: 'PLUS DC Cape Town', date: '2024-03-15', total_surveys_collected: 300, total_positive_responses: 280, csat_score: 93, negative_responses: 20, time_to_response: 15, customer_service_interactions: 50, product_satisfaction_ratings: 5 },
+    { store_id: 'SOO8', store_name: 'PLUS DC Pietermaritzburg', date: '2024-02-28', total_surveys_collected: 220, total_positive_responses: 190, csat_score: 86, negative_responses: 30, time_to_response: 24, customer_service_interactions: 20, product_satisfaction_ratings: 3 },
+    { store_id: 'SOO9', store_name: 'PLUS DC East London', date: '2024-01-09', total_surveys_collected: 250, total_positive_responses: 225, csat_score: 90, negative_responses: 25, time_to_response: 16, customer_service_interactions: 30, product_satisfaction_ratings: 4 },
+    { store_id: 'SOO10', store_name: 'PLUS DC Pretoria', date: '2024-05-21', total_surveys_collected: 300, total_positive_responses: 260, csat_score: 87, negative_responses: 40, time_to_response: 20, customer_service_interactions: 30, product_satisfaction_ratings: 4 },
+    { store_id: 'SOO11', store_name: 'PLUS DC Germiston', date: '2024-09-02', total_surveys_collected: 240, total_positive_responses: 220, csat_score: 92, negative_responses: 20, time_to_response: 15, customer_service_interactions: 28, product_satisfaction_ratings: 5 },
+    { store_id: 'SOO12', store_name: 'PLUS DC Polokwane', date: '2024-06-11', total_surveys_collected: 230, total_positive_responses: 210, csat_score: 91, negative_responses: 20, time_to_response: 17, customer_service_interactions: 33, product_satisfaction_ratings: 5 },
 ];
 
 
@@ -52,7 +55,7 @@ const stores = [
 
 
 export const CustomerSatisfactionReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Surveys Collected', 'Total Positive Responses', 'CSAT Score (%)'];
+    const headers = ["Store ID", "Store Name", "Date", "Total Surveys Collected", "Total Positive Responses", "CSAT Score (%)", "Negative Responses", "Time to Response",  "Customer Service Interactions", "Product Satisfaction Ratings"];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -271,7 +274,7 @@ export const CustomerSatisfactionReport = () => {
                 ))}
             </div>
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_surveys_collected, total_positive_responses, csat_score }) => (
+                {filteredData.map(({ store_id, store_name, date, total_surveys_collected, total_positive_responses, csat_score, negative_responses, time_to_response, customer_service_interactions, product_satisfaction_ratings }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
@@ -280,6 +283,10 @@ export const CustomerSatisfactionReport = () => {
                             <p className="text-sm flex-1 text-center uppercase">{total_surveys_collected}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_positive_responses}</p>
                             <p className="text-sm flex-1 text-center uppercase">{csat_score}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{negative_responses}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{time_to_response}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{customer_service_interactions}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{product_satisfaction_ratings}</p>
                         </div>
                     </div>
                 ))}

@@ -64,14 +64,14 @@ export function TopRatedProducts() {
 
 
   return (
-    <Card>
+    <Card className="w-[400px] h-[380px]">
       <CardHeader>
         <div className="flex justify-between">
           <div className="">
             <h5 className="font-bold">Top Rated Products</h5>
             <p className="text-sm text-gray-400">Top Rated Products within the program</p>
           </div>
-          <Select value={activeCategory} onValueChange={setActiveCategory}>
+          {/* <Select value={activeCategory} onValueChange={setActiveCategory}>
             <SelectTrigger
               className="ml-auto h-7 w-[200px] rounded-lg pl-2.5"
               aria-label="Select a value"
@@ -107,7 +107,7 @@ export function TopRatedProducts() {
                 )
               })}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </CardHeader>
       <CardContent>

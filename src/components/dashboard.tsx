@@ -13,6 +13,12 @@ import LoyaltyTierMembersChart  from "@/components/component/cards/customer-enga
 import { LoyaltyMembersChart } from "@/components/component/cards/customer-engagement/chart/loyalty-members-chart"
 import { SurveysCompletedChart } from "@/components/component/cards/customer-engagement/chart/common-surveys-completed"
 
+// Financial
+import { StoreRevenueChart } from "@/components/financial/store-revenue-chart"
+import { DiscountsRevenueChart } from "@/components/financial/discounts-revenue-chart"
+// import { LoyaltyRevenueChart } from "@/components/financial/radial-revenue-chart"
+
+
 // REDEMPTIONS
 import { LoyaltyRevenueChart } from "@/components/financial/radial-revenue-chart"
 import { SpecialsRedeemedChart } from "@/components/redemption/specials-redeemed-chart"
@@ -81,16 +87,16 @@ const loyaltyTiers = [
 ]
 
 const revenuePerMember = [
-  { segment: 'New', revenue: 50 },
-  { segment: 'Regular', revenue: 100 },
-  { segment: 'VIP', revenue: 200 },
+  { segment: 'Gold', revenue: 50 },
+  { segment: 'Diamond', revenue: 100 },
+  { segment: 'Platinum', revenue: 200 },
 ]
 
 const ltv = [
   { segment: 'New', value: 500 },
-  { segment: '1-2 Years', value: 1200 },
-  { segment: '3-5 Years', value: 2500 },
-  { segment: '5+ Years', value: 4000 },
+  { segment: '1-2 Months', value: 1200 },
+  { segment: '3-5 Months', value: 2500 },
+  { segment: '5+ Months', value: 4000 },
 ]
 
 const costVsRevenue = [
@@ -256,7 +262,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('customer-engagement')
 
   return (
-    <div className="w-full">
+    <div className="w-full mb-72">
       <h1 className="text-3xl font-bold mb-4">Loyalty Program Dashboard</h1>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
@@ -367,10 +373,10 @@ export default function Dashboard() {
                 <LoyaltyRevenueChart />
               </div>
               <div className="w-1/3">
-                <LoyaltyRevenueChart />
+                <DiscountsRevenueChart />
               </div>
               <div className="w-1/3">
-                <LoyaltyRevenueChart />
+                <StoreRevenueChart />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -509,7 +515,7 @@ export default function Dashboard() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Unused Points Liability</CardTitle>
+                <CardTitle>Unused Discounts Liability</CardTitle>
                 <CardDescription>Total number of points earned but not redeemed</CardDescription>
               </CardHeader>
               <CardContent className="flex items-center justify-center">
@@ -633,42 +639,14 @@ export default function Dashboard() {
           </div>
         </TabsContent>
         <TabsContent value="effectiveness" className="space-y-4">
-            <div className="flex justify-between gap-2">
+            {/* <div className="flex justify-between gap-2">
                 <div className="">
                   <RedeemedTierRewards />
                 </div>
                 <div className="">
                   <RedeemedRewardsCount />
                 </div>
-                <div className="">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Points Utilization Rate</CardTitle>
-                      <CardDescription>How effectively members are using their earned points</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <ResponsiveContainer width="100%" height={200}>
-                        <PieChart>
-                          <Pie
-                            data={[
-                              { name: 'Used Points', value: 65 },
-                              { name: 'Expired Points', value: 15 },
-                              { name: 'Unused Points', value: 20 }
-                            ]}
-                            dataKey="value"
-                            nameKey="name"
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={80}
-                          />
-                          <Tooltip />
-                          <Legend />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </CardContent>
-                  </Card>
-                </div>
-            </div>
+            </div> */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card>
                   <CardHeader>
@@ -678,9 +656,9 @@ export default function Dashboard() {
                   <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
                       <BarChart data={[
-                        { tier: 'Bronze', rewards: 150, avgValue: 25 },
-                        { tier: 'Silver', rewards: 280, avgValue: 40 },
-                        { tier: 'Gold', rewards: 420, avgValue: 75 },
+                        // { tier: 'Bronze', rewards: 150, avgValue: 25 },
+                        { tier: 'Gold', rewards: 280, avgValue: 40 },
+                        { tier: 'Diamond', rewards: 420, avgValue: 75 },
                         { tier: 'Platinum', rewards: 320, avgValue: 120 }
                       ]}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -721,7 +699,7 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
 
-                <Card>
+                {/* <Card>
                   <CardHeader>
                     <CardTitle>Time to Next Tier</CardTitle>
                     <CardDescription>Average days for members to reach next tier</CardDescription>
@@ -741,7 +719,7 @@ export default function Dashboard() {
                       </BarChart>
                     </ResponsiveContainer>
                   </CardContent>
-                </Card>
+                </Card> */}
                 <Card>
                   <CardHeader>
                     <CardTitle>Member Conversion Rate</CardTitle>
@@ -788,125 +766,55 @@ export default function Dashboard() {
             </div>
         </TabsContent>
         <TabsContent value="performance" className="space-y-4 h-screen w-full">
-          <div className="flex justify-between gap-4 w-full">
-            <Card className="flex-1">
-              <CardHeader>
-                <CardTitle>Age Distribution</CardTitle>
-                <CardDescription>Customer age demographics</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={200}>
-                  <PieChart>
-                    <Pie
-                      data={customerDemographics.ageGroups}
-                      dataKey="percentage"
-                      nameKey="group"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                    >
-                      {customerDemographics.ageGroups.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={`hsl(${index * 45}, 70%, 50%)`} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <Card className="flex-1">
-              <CardHeader>
-                <CardTitle>Gender Distribution</CardTitle>
-                <CardDescription>Customer gender breakdown</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={200}>
-                  <PieChart>
-                    <Pie
-                      data={customerDemographics.gender}
-                      dataKey="value"
-                      nameKey="category"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                    >
-                      {customerDemographics.gender.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={`hsl(${index * 120}, 70%, 50%)`} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <Card className="flex-1">
-              <CardHeader>
-                <CardTitle>Customer Segments</CardTitle>
-                <CardDescription>Distribution of customer types</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={200}>
-                  <BarChart data={customerDemographics.customerSegments}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="segment" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="percentage" fill="var(--color-primary)">
-                      {customerDemographics.customerSegments.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={`hsl(${index * 90}, 70%, 50%)`} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid grid-cols-2 gap-4 w-full">
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Product Performance Matrix</CardTitle>
-                <CardDescription>Sales, growth, and engagement metrics</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={productPerformanceData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="product" />
-                    <YAxis yAxisId="left" />
-                    <YAxis yAxisId="right" orientation="right" />
-                    <Tooltip />
-                    <Legend />
-                    <Bar yAxisId="left" dataKey="sales" fill="var(--color-primary)" />
-                    <Bar yAxisId="left" dataKey="growth" fill="var(--color-secondary)" />
-                    <Line yAxisId="right" type="monotone" dataKey="engagement" stroke="var(--color-accent)" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Purchase Frequency</CardTitle>
-                <CardDescription>How often customers make purchases</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={customerDemographics.purchaseFrequency}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="frequency" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area
-                      type="monotone"
-                      dataKey="count"
-                      stroke="var(--color-primary)"
-                      fill="var(--color-primary-light)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+          <div className="flex gap-4">
+              <Card className="w-[800px]">
+                  <CardHeader>
+                      <CardTitle>Top Performing Products</CardTitle>
+                      <CardDescription>Products with the highest special redemptions</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                          <BarChart data={[
+                              { product: 'Organic Apples', redemptions: 320, store: 'Store A' },
+                              { product: 'Whole Wheat Bread', redemptions: 290, store: 'Store B' },
+                              { product: 'Almond Milk', redemptions: 260, store: 'Store C' },
+                              { product: 'Granola Bars', redemptions: 240, store: 'Store A' },
+                              { product: 'Chicken Breasts', redemptions: 220, store: 'Store B' }
+                          ]}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="product" />
+                              <YAxis />
+                              <Tooltip formatter={(value, name, props) => [`${value}`, `Store: ${props.payload.store}`]} />
+                              <Legend />
+                              <Bar dataKey="redemptions" fill="var(--color-high-performance)" name="Redemptions" />
+                          </BarChart>
+                      </ResponsiveContainer>
+                  </CardContent>
+              </Card>
+              <Card className="w-[800px]">
+                  <CardHeader>
+                      <CardTitle>Low Performing Products</CardTitle>
+                      <CardDescription>Products with the lowest special redemptions</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                          <BarChart data={[
+                              { product: 'Orange Juice', redemptions: 100, store: 'Store C' },
+                              { product: 'Instant Coffee', redemptions: 90, store: 'Store A' },
+                              { product: 'Rice Cakes', redemptions: 80, store: 'Store B' },
+                              { product: 'Diet Soda', redemptions: 70, store: 'Store C' },
+                              { product: 'Canned Beans', redemptions: 65, store: 'Store B' }
+                          ]}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="product" />
+                              <YAxis />
+                              <Tooltip formatter={(value, name, props) => [`${value}`, `Store: ${props.payload.store}`]} />
+                              <Legend />
+                              <Bar dataKey="redemptions" fill="var(--color-low-performance)" name="Redemptions" />
+                          </BarChart>
+                      </ResponsiveContainer>
+                  </CardContent>
+              </Card>
           </div>
         </TabsContent>
       </Tabs>

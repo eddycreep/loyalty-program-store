@@ -53,14 +53,14 @@ export function SpecialsRedeemedChart() {
 
 
   return (
-    <Card className="flex flex-col w-full h-[350px]">
+    <Card className="flex flex-col w-[400px] h-[350px]">
       <CardHeader>
         <div className="flex justify-between">
           <div className="">
             <h5 className="font-bold">Redeemed Specials</h5>
-            <p className="text-sm text-gray-400">Total specials redeemed by customerss</p>
+            <p className="text-sm text-gray-400">Total specials redeemed by customers</p>
           </div>
-          <Select value={activeCategory} onValueChange={setActiveCategory}>
+          {/* <Select value={activeCategory} onValueChange={setActiveCategory}>
             <SelectTrigger
               className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
               aria-label="Select a value"
@@ -96,7 +96,7 @@ export function SpecialsRedeemedChart() {
                 )
               })}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </CardHeader>
       {/* Limit height of CardContent to ensure footer visibility */}

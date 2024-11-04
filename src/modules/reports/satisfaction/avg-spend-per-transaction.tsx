@@ -16,6 +16,10 @@ interface AverageSpendData {
     total_revenue: number;
     total_transactions: number;
     average_spend_per_transaction: number;
+    basket_size: number;
+    spend_per_customer_segment: number;
+    dwell_time: number;
+    promotion_impact: number;
 }
 
 const averageSpendData: AverageSpendData[] = [
@@ -26,6 +30,10 @@ const averageSpendData: AverageSpendData[] = [
         total_revenue: 30000,
         total_transactions: 1500,
         average_spend_per_transaction: 20,
+        basket_size: 5,
+        spend_per_customer_segment: 35.76,
+        dwell_time: 45,
+        promotion_impact: 0.82,
     },
     {
         store_id: 'SOO2',
@@ -34,6 +42,10 @@ const averageSpendData: AverageSpendData[] = [
         total_revenue: 25000,
         total_transactions: 1200,
         average_spend_per_transaction: 20.83,
+        basket_size: 7,
+        spend_per_customer_segment: 47.32,
+        dwell_time: 39,
+        promotion_impact: 0.67,
     },
     {
         store_id: 'SOO3',
@@ -42,79 +54,119 @@ const averageSpendData: AverageSpendData[] = [
         total_revenue: 40000,
         total_transactions: 1800,
         average_spend_per_transaction: 22.22,
+        basket_size: 6,
+        spend_per_customer_segment: 40.15,
+        dwell_time: 53,
+        promotion_impact: 0.59,
     },
     {
         store_id: 'SOO4',
-        store_name: 'PLUS DC Nelspruit',
-        date: '2024-10-05',
-        total_revenue: 28000,
-        total_transactions: 1400,
+        store_name: 'PLUS DC Pretoria',
+        date: '2024-10-01',
+        total_revenue: 18000,
+        total_transactions: 900,
         average_spend_per_transaction: 20,
+        basket_size: 8,
+        spend_per_customer_segment: 42.90,
+        dwell_time: 47,
+        promotion_impact: 0.71,
     },
     {
         store_id: 'SOO5',
-        store_name: 'PLUS DC Durbanville',
-        date: '2024-10-07',
-        total_revenue: 32000,
-        total_transactions: 1600,
+        store_name: 'PLUS DC Durban',
+        date: '2024-10-01',
+        total_revenue: 22000,
+        total_transactions: 1100,
         average_spend_per_transaction: 20,
+        basket_size: 4,
+        spend_per_customer_segment: 31.42,
+        dwell_time: 36,
+        promotion_impact: 0.84,
     },
     {
         store_id: 'SOO6',
-        store_name: 'PLUS DC Bloemfontein',
-        date: '2024-10-10',
-        total_revenue: 45000,
-        total_transactions: 2250,
+        store_name: 'PLUS DC Cape Town',
+        date: '2024-10-01',
+        total_revenue: 35000,
+        total_transactions: 1750,
         average_spend_per_transaction: 20,
+        basket_size: 9,
+        spend_per_customer_segment: 54.23,
+        dwell_time: 50,
+        promotion_impact: 0.63,
     },
     {
         store_id: 'SOO7',
-        store_name: 'PLUS DC Cape Town',
-        date: '2024-10-12',
-        total_revenue: 60000,
-        total_transactions: 3000,
-        average_spend_per_transaction: 20,
-    },
-    {
-        store_id: 'SOO8',
-        store_name: 'PLUS DC Pietermaritzburg',
-        date: '2024-10-14',
+        store_name: 'PLUS DC Johannesburg',
+        date: '2024-10-01',
         total_revenue: 27000,
         total_transactions: 1350,
         average_spend_per_transaction: 20,
+        basket_size: 3,
+        spend_per_customer_segment: 37.89,
+        dwell_time: 43,
+        promotion_impact: 0.77,
+    },
+    {
+        store_id: 'SOO8',
+        store_name: 'PLUS DC Bloemfontein',
+        date: '2024-10-01',
+        total_revenue: 29000,
+        total_transactions: 1450,
+        average_spend_per_transaction: 20,
+        basket_size: 5,
+        spend_per_customer_segment: 29.99,
+        dwell_time: 48,
+        promotion_impact: 0.69,
     },
     {
         store_id: 'SOO9',
         store_name: 'PLUS DC East London',
-        date: '2024-10-15',
-        total_revenue: 36000,
-        total_transactions: 1800,
+        date: '2024-10-01',
+        total_revenue: 24000,
+        total_transactions: 1200,
         average_spend_per_transaction: 20,
+        basket_size: 4,
+        spend_per_customer_segment: 33.87,
+        dwell_time: 42,
+        promotion_impact: 0.74,
     },
     {
-        store_id: 'SOO10',
-        store_name: 'PLUS DC Pretoria',
-        date: '2024-10-18',
-        total_revenue: 49000,
-        total_transactions: 2450,
+        store_id: 'SO10',
+        store_name: 'PLUS DC Port Elizabeth',
+        date: '2024-10-01',
+        total_revenue: 32000,
+        total_transactions: 1600,
         average_spend_per_transaction: 20,
+        basket_size: 6,
+        spend_per_customer_segment: 45.62,
+        dwell_time: 46,
+        promotion_impact: 0.68,
     },
     {
-        store_id: 'SOO11',
-        store_name: 'PLUS DC Germiston',
-        date: '2024-10-20',
-        total_revenue: 31000,
-        total_transactions: 1550,
+        store_id: 'SO11',
+        store_name: 'PLUS DC George',
+        date: '2024-10-01',
+        total_revenue: 21000,
+        total_transactions: 1050,
         average_spend_per_transaction: 20,
+        basket_size: 7,
+        spend_per_customer_segment: 39.45,
+        dwell_time: 40,
+        promotion_impact: 0.79,
     },
     {
-        store_id: 'SOO12',
-        store_name: 'PLUS DC Polokwane',
-        date: '2024-10-22',
-        total_revenue: 41000,
-        total_transactions: 2050,
+        store_id: 'SO12',
+        store_name: 'PLUS DC Nelspruit',
+        date: '2024-10-01',
+        total_revenue: 26000,
+        total_transactions: 1300,
         average_spend_per_transaction: 20,
-    },
+        basket_size: 5,
+        spend_per_customer_segment: 36.21,
+        dwell_time: 44,
+        promotion_impact: 0.72,
+    }
 ];
 
 
@@ -135,7 +187,7 @@ const stores = [
 
 
 export const AvgSpendPerTransactionReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue', 'Total Transactions', 'Avg. Spend per Transaction'];
+    const headers = ["Store ID", "Store Name", "Date", "Total Revenue",  "Total Transactions",  "Avg. Spend per Transaction", "Basket Size",  "Spend per Customer Segment", "Time in Store (Dwell Time)", "Promotion Impact"];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -354,7 +406,7 @@ export const AvgSpendPerTransactionReport = () => {
                 ))}
             </div>
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_revenue, total_transactions, average_spend_per_transaction }) => (
+                {filteredData.map(({ store_id, store_name, date, total_revenue, total_transactions, average_spend_per_transaction, basket_size, spend_per_customer_segment, dwell_time, promotion_impact }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
@@ -363,6 +415,10 @@ export const AvgSpendPerTransactionReport = () => {
                             <p className="text-sm flex-1 text-center uppercase">{total_revenue}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_transactions}</p>
                             <p className="text-sm flex-1 text-center uppercase">{average_spend_per_transaction}%</p>
+                            <p className="text-sm flex-1 text-center uppercase">{basket_size}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{spend_per_customer_segment}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{dwell_time}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{promotion_impact}</p>
                         </div>
                     </div>
                 ))}
