@@ -60,7 +60,7 @@ export function DiscountsRevenueChart() {
             <h5 className="font-bold">Discounts Revenue</h5>
             <p className="text-sm text-gray-400">Total Revenue made by discounts</p>
           </div>
-          <Select value={activeCategory} onValueChange={setActiveCategory}>
+          {/* <Select value={activeCategory} onValueChange={setActiveCategory}>
             <SelectTrigger
               className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
               aria-label="Select a value"
@@ -96,7 +96,7 @@ export function DiscountsRevenueChart() {
                 )
               })}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </CardHeader>
       {/* Limit height of CardContent to ensure footer visibility */}
