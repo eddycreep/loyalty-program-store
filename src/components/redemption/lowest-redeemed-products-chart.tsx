@@ -9,14 +9,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/co
 import { ChartConfig, ChartContainer, ChartStyle, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export const description = "An interactive pie chart showing top-redeemed products with special types by count.";
+export const description = "An interactive pie chart showing lowest redeemed products with special types by count and revenue.";
 
 const productData = [
-  { product: "Coke 2L", count: 200, fill: "#ff2257", revenue: 15000, specialType: "Percentage" },
-  { product: "Lay's Chips", count: 150, fill: "#00d384", revenue: 12000, specialType: "Amount" },
-  { product: "Red Bull", count: 100, fill: "#ffa726", revenue: 18000, specialType: "Percentage" },
-  { product: "Oreo Cookies", count: 120, fill: "#1ec3ff", revenue: 10000, specialType: "Amount" },
-  { product: "Pepsi 2L", count: 90, fill: "#D4D4D4", revenue: 14000, specialType: "Percentage" },
+  { product: "Oreo Cookies", count: 50, fill: "#1ec3ff", revenue: 5000, specialType: "Amount" },
+  { product: "Pepsi 2L", count: 70, fill: "#D4D4D4", revenue: 6000, specialType: "Percentage" },
+  { product: "Lay's Chips", count: 100, fill: "#00d384", revenue: 7000, specialType: "Amount" },
+  { product: "Coke 2L", count: 120, fill: "#ff2257", revenue: 8000, specialType: "Percentage" },
+  { product: "Red Bull", count: 140, fill: "#ffa726", revenue: 9000, specialType: "Percentage" },
 ];
 
 const chartConfig = {
@@ -34,7 +34,7 @@ function getChartConfigKey(specialType: string): keyof typeof chartConfig {
   return specialType === "Percentage" ? "Percentage" : "Amount";
 }
 
-export function CommonRedeemedProductsChart() {
+export function LowestRedeemedProductsChart() {
   const id = "pie-products-chart";
   const [activeCategory, setActiveCategory] = React.useState(productData[0].product);
 
@@ -48,8 +48,8 @@ export function CommonRedeemedProductsChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Top Redeemed Products</h5>
-          <CardDescription>Total Redemption Count with Special Types</CardDescription>
+          <h5>Lowest Redeemed Products</h5>
+          <CardDescription>Total Redemption for Low Redeemed Products</CardDescription>
         </div>
         <Select value={activeCategory} onValueChange={setActiveCategory}>
           <SelectTrigger
@@ -140,7 +140,7 @@ export function CommonRedeemedProductsChart() {
           Special Types <Trophy className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing redemption counts for top products
+          Showing redemption counts and revenue for products with low engagement
         </div>
         <div className="text-lg font-bold">
           Total Revenue for {activeCategory}: R{productData[activeIndex].revenue.toLocaleString()}

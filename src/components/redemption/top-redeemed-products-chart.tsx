@@ -9,14 +9,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/co
 import { ChartConfig, ChartContainer, ChartStyle, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export const description = "An interactive pie chart showing top products with unredeemed specials by count.";
+export const description = "An interactive pie chart showing top-redeemed products with special types by count.";
 
 const productData = [
-  { product: "Coke 2L", count: 50, fill: "#ff2257", revenue: 15000, specialType: "Percentage" },
-  { product: "Lay's Chips", count: 80, fill: "#00d384", revenue: 12000, specialType: "Amount" },
-  { product: "Red Bull", count: 70, fill: "#ffa726", revenue: 18000, specialType: "Percentage" },
-  { product: "Oreo Cookies", count: 60, fill: "#1ec3ff", revenue: 10000, specialType: "Amount" },
-  { product: "Pepsi 2L", count: 40, fill: "#D4D4D4", revenue: 14000, specialType: "Percentage" },
+  { product: "Coke 2L", count: 200, fill: "#ff2257", revenue: 15000, specialType: "Percentage" },
+  { product: "Lay's Chips", count: 150, fill: "#00d384", revenue: 12000, specialType: "Amount" },
+  { product: "Red Bull", count: 100, fill: "#ffa726", revenue: 18000, specialType: "Percentage" },
+  { product: "Oreo Cookies", count: 120, fill: "#1ec3ff", revenue: 10000, specialType: "Amount" },
+  { product: "Pepsi 2L", count: 90, fill: "#D4D4D4", revenue: 14000, specialType: "Percentage" },
 ];
 
 const chartConfig = {
@@ -34,8 +34,8 @@ function getChartConfigKey(specialType: string): keyof typeof chartConfig {
   return specialType === "Percentage" ? "Percentage" : "Amount";
 }
 
-export function UnusedSpecialsChart() {
-  const id = "pie-unused-specials-chart";
+export function TopRedeemedProductsChart() {
+  const id = "pie-products-chart";
   const [activeCategory, setActiveCategory] = React.useState(productData[0].product);
 
   const activeIndex = React.useMemo(
@@ -48,8 +48,8 @@ export function UnusedSpecialsChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Top Unredeemed Products</h5>
-          <CardDescription>Total Unredeemed Specials Count with Special Types</CardDescription>
+          <h5>Top Redeemed Products</h5>
+          <CardDescription>Total Redemption for Top Redeemed Products</CardDescription>
         </div>
         <Select value={activeCategory} onValueChange={setActiveCategory}>
           <SelectTrigger
@@ -64,11 +64,7 @@ export function UnusedSpecialsChart() {
                 <div className="flex items-center gap-2 text-xs">
                   <span
                     className="flex h-3 w-3 shrink-0 rounded-sm"
-                    style={{
-                      backgroundColor: chartConfig[getChartConfigKey(
-                        productData.find(p => p.product === product)?.specialType || ""
-                      )]?.color,
-                    }}
+                    style={{ backgroundColor: chartConfig[getChartConfigKey(productData.find(p => p.product === product)?.specialType || "")]?.color }}
                   />
                   {product}
                 </div>
@@ -128,7 +124,7 @@ export function UnusedSpecialsChart() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Unredeemed Specials
+                          Redemptions
                         </tspan>
                       </text>
                     );
@@ -144,10 +140,10 @@ export function UnusedSpecialsChart() {
           Special Types <Trophy className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing unredeemed specials counts for top products
+          Showing redemption counts for top products
         </div>
         <div className="text-lg font-bold">
-          Potential Revenue for {activeCategory}: R{productData[activeIndex].revenue.toLocaleString()}
+          Total Revenue for {activeCategory}: R{productData[activeIndex].revenue.toLocaleString()}
         </div>
       </CardFooter>
     </Card>
