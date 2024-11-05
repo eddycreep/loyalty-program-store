@@ -14,21 +14,21 @@ import { LoyaltyMembersChart } from "@/components/component/cards/customer-engag
 import { SurveysCompletedChart } from "@/components/component/cards/customer-engagement/chart/common-surveys-completed"
 
 // Financial
-import { StoreRevenueChart } from "@/components/financial/store-revenue-chart"
-import { DiscountsRevenueChart } from "@/components/financial/discounts-revenue-chart"
+import { SpecialsRevenueChart } from "@/components/financial/specials-revenue-chart"
+import { TopProductsRevenueChart } from "@/components/financial/top-products-revenue-chart"
+import { TiersRevenueChart } from "@/components/financial/tiers-revenue-chart"
 // import { LoyaltyRevenueChart } from "@/components/financial/radial-revenue-chart"
 
 
 // REDEMPTIONS
-import { LoyaltyRevenueChart } from "@/components/financial/radial-revenue-chart"
-import { SpecialsRedeemedChart } from "@/components/redemption/specials-redeemed-chart"
-import { DiscountRewardsChart } from "@/components/redemption/discount-rewards-chart"
-import { FreeItemsRewardsChart } from "@/components/redemption/free-items-reward-chart"
+import { CommonRedeemedProductsChart } from "@/components/redemption/common-redeemed-products-chart"
+import { UnusedSpecialsChart } from "@/components/redemption/unused-specials-chart"
+// import { TopStoresEngagementChart } from "@/components/redemption/top-stores-engagement-chart"
 
 // satisfaction
-import { TopRatedProducts } from "@/components/satisfaction/top-rated-products"
-import { TopRatedStores } from "@/components/satisfaction/top-rated-stores"
-import { TopRatedStaff } from "@/components/satisfaction/top-rated-staff"
+import { TopRatedProductsChart } from "@/components/satisfaction/top-rated-products-chart"
+import { TopRatedStoresChart } from "@/components/satisfaction/top-rated-stores-chart"
+import { TopRatedStaffChart } from "@/components/satisfaction/top-rated-staff-chart"
 
 // effectiveness
 import { RedeemedTierRewards } from "@/components/effectiveness/redeemed-rewards-tiers-chart"
@@ -370,13 +370,13 @@ export default function Dashboard() {
           {/* <div className="h-screen w-full"> */}
             <div className="flex justify-between gap-2 pb-2">
               <div className="w-1/3">
-                <LoyaltyRevenueChart />
+                <SpecialsRevenueChart />
               </div>
               <div className="w-1/3">
-                <DiscountsRevenueChart />
+                <TiersRevenueChart />
               </div>
               <div className="w-1/3">
-                <StoreRevenueChart />
+                <TopProductsRevenueChart />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -465,13 +465,13 @@ export default function Dashboard() {
         <TabsContent value="redemption" className="space-y-4">
             <div className="flex justify-between gap-2">
                 <div className="">
-                  <SpecialsRedeemedChart />
+                  <CommonRedeemedProductsChart />
                 </div>
                 <div className="">
-                  <DiscountRewardsChart />
+                  <UnusedSpecialsChart />
                 </div>
                 <div className="">
-                  <FreeItemsRewardsChart />
+                  {/* <TopStoresEngagementChart /> */}
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -553,13 +553,13 @@ export default function Dashboard() {
         <TabsContent value="satisfaction" className="space-y-4">
             <div className="flex justify-between gap-2">
                 <div className="">
-                  <TopRatedProducts />
+                  <TopRatedProductsChart />
                 </div>
                 <div className="">
-                  <TopRatedStores />
+                  <TopRatedStoresChart />
                 </div>
                 <div className="">
-                  <TopRatedStaff />
+                  <TopRatedStaffChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
