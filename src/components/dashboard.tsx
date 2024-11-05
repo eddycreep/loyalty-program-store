@@ -21,9 +21,9 @@ import { TiersRevenueChart } from "@/components/financial/tiers-revenue-chart"
 
 
 // REDEMPTIONS
-import { CommonRedeemedProductsChart } from "@/components/redemption/common-redeemed-products-chart"
-import { UnusedSpecialsChart } from "@/components/redemption/unused-specials-chart"
-// import { TopStoresEngagementChart } from "@/components/redemption/top-stores-engagement-chart"
+import { TopRedeemedProductsChart } from "@/components/redemption/top-redeemed-products-chart"
+import { TopStoreRedemptionsChart } from "@/components/redemption/top-store-redemptions-chart"
+import { LowestRedeemedProductsChart } from "@/components/redemption/lowest-redeemed-products-chart"
 
 // satisfaction
 import { TopRatedProductsChart } from "@/components/satisfaction/top-rated-products-chart"
@@ -465,13 +465,13 @@ export default function Dashboard() {
         <TabsContent value="redemption" className="space-y-4">
             <div className="flex justify-between gap-2">
                 <div className="">
-                  <CommonRedeemedProductsChart />
+                  <TopRedeemedProductsChart />
                 </div>
                 <div className="">
-                  <UnusedSpecialsChart />
+                  <TopStoreRedemptionsChart />
                 </div>
                 <div className="">
-                  {/* <TopStoresEngagementChart /> */}
+                  <LowestRedeemedProductsChart />
                 </div>
             </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
