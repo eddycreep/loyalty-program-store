@@ -5,7 +5,7 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Edit, Expand, Trash2 } from "lucide-react";
+import { Edit, Expand, Trash2, Minimize2 } from "lucide-react";
 import { EditProductSpecials } from "@/components/component/edit-product-specials";
 import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
 import { CombinedSpecialsComponent } from "@/components/combined-specials-manager";
@@ -48,8 +48,9 @@ type ProductResponse = ProductProps[]
 
 
 //get-all-active-product-specials
-interface GetSpecialsProps {
-    special_id: string,
+interface ProductSpecialsProps {
+    special_id: number,
+    special_name: string,
     special: string,
     special_type: string,
     store_id: string,
@@ -58,33 +59,27 @@ interface GetSpecialsProps {
     special_value: string,
     isActive: number,
     product_description: string,
-    special_price: number
+    special_price: number,
 }
-type GetSpecialsResponse = GetSpecialsProps[]
+type ProductSpecialsResponse = ProductSpecialsProps[]
 
 //get-active-group-specials
 interface CombinedSpecials {
-    special_id: string,
-    special_group_id: string,
+    special_id: number,
+    special_name: string,
     special: string,
-    special_type: string,
+    special_type:string,
     store_id: string,
     start_date: string,
     expiry_date: string,
     special_value: string,
     isActive: number,
+    special_group_id: number,
     product_description: string,
     special_price: number
 }
 type CombinedSpecialsResponse = CombinedSpecials[]
 
-
-//dummy data - pproduct specials
-const productSpecials = [
-    {special_id: 1, special_name: 'Summer Drink Special', special: '10% Off', special_type: 'Special', store_id:'S004', start_date:'2024-11-05 00:00:00', expiry_date: '2024-11-15 00:00:00', special_value: 'Amount', isActive: 1, product_description:'SWITCH 440ML', special_price:'15.99'},
-    {special_id: 2, special_name: 'Chips Special', special: '10% Off', special_type: 'Special', store_id:'S004', start_date:'2024-11-05 00:00:00', expiry_date: '2024-11-15 00:00:00', special_value: 'Amount', isActive: 1, product_description:'SWITCH 440ML', special_price:'15.99'},
-    {special_id: 3, special_name: 'School Special', special: '10% Off', special_type: 'Special', store_id:'S004', start_date:'2024-11-05 00:00:00', expiry_date: '2024-11-15 00:00:00', special_value: 'Amount', isActive: 1, product_description:'SWITCH 440ML', special_price:'15.99'}
-]
 
 export const ProductsManModule = () => {
     const [editProductsPopup, setEditProductsPopup] = useState(false);
@@ -95,14 +90,14 @@ export const ProductsManModule = () => {
     
 
     //all specials
-    const [allProductSpecials, setAllProductSpecials] = useState<GetSpecialsResponse>([]);
+    const [allProductSpecials, setAllProductSpecials] = useState<ProductSpecialsResponse>([]);
     const [allCombinedSpecials, setAllCombinedSpecials] = useState<CombinedSpecialsResponse>([]);
 
     //toggle special components
     const [productSpecialsComponent, setProductSpecialsComponent] = useState(false);
     const [combinedSpecialsComponent, setCombinedSpecialsComponent] = useState(false);
 
-    const headers = ['ID',	'Special Name',	'Special',	'Product', 'Special Value', 'Action']
+    const headers = ['ID',	'Special Name',	'Special',	'Product', 'Special Price', 'Action']
     const combinedHeaders = ['Special ID', 'Special Name', 'Group ID',	'Special',	'Products',	'Special Price', 'Action']
 
     const url = `products/getproducts`;
@@ -142,9 +137,9 @@ export const ProductsManModule = () => {
     const geAllProductSpecials = async () => {
         try{
             const url = `products/getallproductspecials`
-            const response = await axios.get<GetSpecialsResponse>(`${apiEndPoint}/${url}`)
+            const response = await axios.get<ProductSpecialsResponse>(`${apiEndPoint}/${url}`)
             setAllProductSpecials(response?.data)
-            console.log("RETRIEVED ALL PRODUCT SPECIALS:", response)
+            // console.log(RETRIEVED ALL PRODUCT SPECIALS:", response)
 
         } catch (error) {
             console.log("AN ERROR OCCURED WHEN FETCHING PRODUCT SPECIALS:", error)
@@ -171,10 +166,6 @@ export const ProductsManModule = () => {
 
     return (
         <div>
-            {productSpecialsComponent && (<ProductsSpecialsComponent onClose={ toggleProductSpecials } />)}
-            {deletePopUp && (<DeleteConfirmation isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
-            {combinedDeletePopUp && (<CombinedDeleteConfirmation isOpen={combinedDeletePopUp} onClose={toggleCombinedDeletePage}/> )}
-            {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
             <div className='w-full h-screen overflow-y-auto mb-4 pr-4 space-y-6 pb-6'>
             <div>
                 <div className="flex justify-between">
@@ -195,19 +186,19 @@ export const ProductsManModule = () => {
                         </p>
                     ))}
                 </div>
-                {productSpecials.map((product) => (
-                <div key={product.special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
+                {allProductSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => (
+                <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
                     <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
                         <div className="flex items-center justify-between">
-                            <p className="text-sm flex-1 text-center text-red">{product.special_id}</p>
-                            <p className="text-sm flex-1 text-center">{product.special_name}</p>
-                            <p className="text-sm flex-1 text-center">{product.special}</p>
-                            <p className="text-sm flex-1 text-center">{product.product_description}</p>
-                            <p className="text-sm flex-1 text-center">{product.special_price}</p>
+                            <p className="text-sm flex-1 text-center text-red">{special_id}</p>
+                            <p className="text-sm flex-1 text-center">{special_name || '--:--'}</p>
+                            <p className="text-sm flex-1 text-center">{special || '--:--'}</p>
+                            <p className="text-sm flex-1 text-center">{product_description || '--:--'}</p>
+                            <p className="text-sm flex-1 text-center">{special_price || '--:--'}</p>
                             <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                {/* <button onClick={() => handleExpandClick(product.special_id)} className="flex items-center justify-center cursor-pointer">
+                                <button onClick={() => handleExpandClick(special_id)} className="flex items-center justify-center cursor-pointer">
                                     <Expand color="gray" />
-                                </button> */}
+                                </button>
                                 <button onClick={toggleEditProductPage} className="flex items-center justify-center cursor-pointer">
                                     <Edit color="gray" />
                                 </button>
@@ -216,22 +207,50 @@ export const ProductsManModule = () => {
                                 </button>
                             </div>
                         </div>
-                        {expandedRow === product.special_id && (
-                            <div className="grid grid-cols-6 p-3 mx-2 rounded shadow-lg mt-2 gap-y-1">
-                                <p className="text-xs uppercase text-gray-500 text-center pr-6">Store ID</p>
-                                <p className="text-xs uppercase text-gray-500 text-center pr-6">Start Date</p>
-                                <p className="text-xs uppercase text-gray-500 text-center pr-2">Expiry Date</p>
-                                <p className="text-xs uppercase text-gray-500 text-center pr-0">Special Value</p>
-                                <p className="text-xs uppercase text-gray-500 text-center pl-4">Status</p>
-                                <p className="text-xs uppercase text-gray-500 text-center"></p>
-
-                                <p className="text-sm text-center text-gray-600 pr-6">{product.store_id}</p>
-                                <p className="text-sm text-center text-gray-600 pr-6">{product.start_date}</p>
-                                <p className="text-sm text-center text-gray-600 pr-2">{product.expiry_date}</p>
-                                <p className="text-sm text-center text-gray-600 p-0">{product.special_value}</p>
-                                <p className="text-sm text-center text-gray-600 pl-4">{product.isActive ? 'Active' : 'Inactive'}</p>
-                                <p className="text-sm text-center text-gray-600"> {/* Empty cell under 'Action' column */}</p>
+                        {expandedRow === special_id && (
+                            <div>
+                            <div className="w-full p-4 mr-2 mt-2 mx-2 rounded report-header text-black ${state.isOpen && state.expandView === ID? 'block' : 'hidden'">
+                                <div className="flex flex-wrap">
+                                    <div className="w-1/3">
+                                        <div className="pl-16">
+                                            <p className="font-medium reportdetail-headertext text-md">Special Type</p>
+                                            <p className="font-semibold text-md text-purple">{special_type}</p>
+                                        </div>
+                                        <div className="pl-16 pb-4 pt-4">
+                                            <p className="font-medium reportdetail-headertext text-md">Start Date</p>
+                                            <p className="font-semibold text-md uppercase report-text">{start_date}</p>
+                                        </div>
+                                    </div>
+                                    <div className="w-1/3">
+                                        <div className="pb-4">
+                                            <p className="font-medium reportdetail-headertext text-md">Store ID</p>
+                                            <p className="font-semibold text-md uppercase report-text">{store_id}</p>
+                                        </div>
+                                        <div className="pb-4">
+                                            <p className="font-medium reportdetail-headertext text-md">Expiry Date</p>
+                                            <p className="font-semibold text-md uppercase report-text">{expiry_date}</p>
+                                        </div>
+                                    </div>
+                                    <div className="w-1/3">
+                                        <div className="pb-4">
+                                            <p className="font-medium reportdetail-headertext text-md">Special Value</p>
+                                            <p className="font-semibold text-md uppercase report-text">{special_value}</p>
+                                        </div>
+                                        <div className="">
+                                            <p className="font-medium reportdetail-headertext text-md">Status</p>
+                                            <p className={`font-medium reportdetail-headertext text-md ${isActive === 1 ? 'text-green' : 'text-red'}`}>
+                                                {isActive === 1 ? 'Active' : 'Inactive'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex pt-5 gap-4 pl-16">
+                                        <button className="bg-red rounded pr-2 w-12 h-8 text-white flex justify-center items-center pl-2" onClick={() => handleExpandClick(special_id)}>
+                                            <Minimize2 size={18} strokeWidth={2} color="white" className="" />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
                         )}
                     </div>
                 </div>
@@ -258,20 +277,17 @@ export const ProductsManModule = () => {
                         </p>
                     ))}
                 </div>
-                <div className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
-                {/* {allCombinedSpecials?.map(({ special_id, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => ( */}
+                {allCombinedSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, special_group_id, product_description, special_price }) => (
+                <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
                         <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
                             <div className="flex items-center justify-between">
-                                <p className="text-sm flex-1 text-center text-red">19</p>
-                                <p className="text-sm flex-1 text-center">Summer Breeze Special</p>
-                                <p className="text-sm flex-1 text-center">1</p>
-                                {/* <p className="text-sm flex-1 text-center">1</p> */}
-                                <p className="text-sm flex-1 text-center">BUY ANY 2 GET 5% OFF</p>
-                                <p className="text-sm flex-1 text-center">SWITCH 440ML</p>
-                                <p className="text-sm flex-1 text-center">56.99</p>
-                                {/* <p className="text-sm flex-1 text-center">2023-11-15</p>
-                                <p className="text-sm flex-1 text-center">2023-11-15</p>
-                                <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
+                                <p className="text-sm flex-1 text-center text-red">{special_id}</p>
+                                <p className="text-sm flex-1 text-center">{special_name}</p>
+                                <p className="text-sm flex-1 text-center">{special_group_id}</p>
+                                <p className="text-sm flex-1 text-center">{special}</p>
+                                <p className="text-sm flex-1 text-center">{product_description}</p>
+                                <p className="text-sm flex-1 text-center">{special_price}</p>
+                                {/* <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
                                 {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
                                 <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                     {/* <button className="flex items-center justify-center cursor-pointer">
@@ -286,10 +302,14 @@ export const ProductsManModule = () => {
                                 </div>
                             </div>
                         </div>
-                    {/* })} */}
-                </div>
+                    </div>
+                ))}
             </div>
         </div>
+        {productSpecialsComponent && (<ProductsSpecialsComponent onClose={ toggleProductSpecials } />)}
+            {deletePopUp && (<DeleteConfirmation isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
+            {combinedDeletePopUp && (<CombinedDeleteConfirmation isOpen={combinedDeletePopUp} onClose={toggleCombinedDeletePage}/> )}
+            {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
         </div>
     );
 }

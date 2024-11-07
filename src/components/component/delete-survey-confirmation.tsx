@@ -7,24 +7,37 @@ import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 
-export const DeleteRewardConfirmation = ({ isOpen, onClose }: any) => {
-  if (!isOpen) return null; // Return null if dialog is not open
+export const DeleteSurveyConfirmation = ({ isOpen, onClose }: any) => {
+  if (!isOpen) return null;
 
-  const deleteReward = async () => {
+  const deleteSurvey = async () => {
     try{
-      const url = 'admin/deletereward/:uid'
+      const url = 'admin/deletesurvey/:survey_id'
       const response = await axios.delete(`${apiEndPoint}/${url}`)
-      console.log("DELETION SUCCESSFUL:", response)
 
-      toast.success('The reward item has been deleted', {
+
+      deleteSurveyQuestions();
+      console.log("Delete Survey Successful:", response)
+    } catch (error) {
+      console.error('Error deleting survey:', error)
+    }
+  }
+
+  const deleteSurveyQuestions = async () => {
+    try{
+      const url = 'admin/deletesurveyquestions/:survey_id'
+      const response = await axios.delete(`${apiEndPoint}/${url}`)
+      console.log("The Questions linked to survey have been deleted:", response)
+
+      toast.success('The Questions linked to survey have been deleted:', {
         icon: <Check color={colors.green} size={24} />,
         duration: 3000,
       });
 
-      onClose();
+      onClose() 
     } catch (error) {
-      console.error('Error deleting special:', error)
-      toast.error('Error deleting reward', {
+      console.error('Error deleting survey questions', error)
+      toast.error('Error deleting survey questions', {
         icon: <X color={colors.red} size={24} />,
         duration: 3000,
       });
@@ -45,7 +58,7 @@ export const DeleteRewardConfirmation = ({ isOpen, onClose }: any) => {
         </Button>
         <div>
           <div className="text-lg font-semibold mb-2">Confirm Deletion</div>
-          <p className="text-gray-600 mb-4">Are you sure you want to delete this special? This action cannot be undone.</p>
+          <p className="text-gray-600 mb-4">Are you sure you want to delete this survey? This action cannot be undone.</p>
         </div>
         <div className="flex justify-end space-x-2">
           <Button
@@ -56,7 +69,7 @@ export const DeleteRewardConfirmation = ({ isOpen, onClose }: any) => {
             Cancel
           </Button>
           <Button
-            onClick={ deleteReward }
+            onClick={ deleteSurvey }
             className="bg-red text-white hover:bg-red-700 h-8"
           >
             Confirm
