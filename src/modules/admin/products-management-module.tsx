@@ -1,11 +1,12 @@
 'use client'
 
+import React from 'react';
 import { useQuery } from "@/hooks/useQuery";
 import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Edit, Expand, Trash2, Minimize2 } from "lucide-react";
+import { Edit, Expand, Trash2, Shrink} from "lucide-react";
 import { EditProductSpecials } from "@/components/component/edit-product-specials";
 import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
 import { CombinedSpecialsComponent } from "@/components/combined-specials-manager";
@@ -87,6 +88,8 @@ export const ProductsManModule = () => {
     const [deletePopUp, setDeletePopUp] = useState(false);
     const [combinedDeletePopUp, setCombinedDeletePopUp] = useState(false);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
+    const [expandedCombinedRow, setExpandedCombinedRow] = useState<number | null>(null);
+    
     
 
     //all specials
@@ -97,8 +100,9 @@ export const ProductsManModule = () => {
     const [productSpecialsComponent, setProductSpecialsComponent] = useState(false);
     const [combinedSpecialsComponent, setCombinedSpecialsComponent] = useState(false);
 
-    const headers = ['ID',	'Special Name',	'Special',	'Product', 'Special Price', 'Action']
-    const combinedHeaders = ['Special ID', 'Special Name', 'Group ID',	'Special',	'Products',	'Special Price', 'Action']
+    const headers = ['Special ID',	'Special Name',	'Special',	'Product', 'Special Price', 'Special Value', 'Action']
+    //const combinedHeaders = ['Special ID', 'Special Name', 'Special', 'Products', 'Special Price', 'Special Value', 'Action']
+    const combinedHeaders = ['Special ID', 'Special Group ID', 'Products', 'Special Name', 'Special',  'Special Price', 'Special Value', 'Action']
 
     const url = `products/getproducts`;
     const { data, loading, error } = useQuery<ProductResponse>(url);
@@ -115,8 +119,14 @@ export const ProductsManModule = () => {
         setDeletePopUp(!deletePopUp);
     };
 
+    //expand product special
     const handleExpandClick = (id: number) => {
         setExpandedRow(expandedRow === id ? null : id);
+    };
+
+    //expand combined special
+    const handleExpandCombinedClick = (id: number) => {
+        setExpandedCombinedRow(expandedCombinedRow === id ? null : id);
     };
 
     const toggleCombinedDeletePage = () => {
@@ -158,6 +168,17 @@ export const ProductsManModule = () => {
         }
     }
 
+    // Group specials by 'special_id' to only show the first row initially, with an expandable section for additional items
+    const groupedCombinedSpecials = Object.values(
+        allCombinedSpecials.reduce((acc, item) => {
+        if (!acc[item.special_id]) {
+            acc[item.special_id] = { ...item, items: [] }; // Initialize group with first item
+        }
+        acc[item.special_id].items.push(item); // Add item to its group
+        return acc;
+        }, {} as { [key: number]: CombinedSpecials & { items: CombinedSpecials[] } })
+    );
+
     useEffect(() => {
         geAllProductSpecials();
         geAllCombinedSpecials();
@@ -195,9 +216,14 @@ export const ProductsManModule = () => {
                             <p className="text-sm flex-1 text-center">{special || '--:--'}</p>
                             <p className="text-sm flex-1 text-center">{product_description || '--:--'}</p>
                             <p className="text-sm flex-1 text-center">{special_price || '--:--'}</p>
+                            <p className="text-sm flex-1 text-center">{special_value || '--:--'}</p>
                             <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                <button onClick={() => handleExpandClick(special_id)} className="flex items-center justify-center cursor-pointer">
+                                <button className="flex items-center justify-center cursor-pointer" onClick={() => handleExpandClick(special_id)}>
+                                {expandedRow === special_id ? (
+                                    <Shrink color="gray" />
+                                ) : (
                                     <Expand color="gray" />
+                                )}
                                 </button>
                                 <button onClick={toggleEditProductPage} className="flex items-center justify-center cursor-pointer">
                                     <Edit color="gray" />
@@ -210,43 +236,28 @@ export const ProductsManModule = () => {
                         {expandedRow === special_id && (
                             <div>
                             <div className="w-full p-4 mr-2 mt-2 mx-2 rounded report-header text-black ${state.isOpen && state.expandView === ID? 'block' : 'hidden'">
-                                <div className="flex flex-wrap">
-                                    <div className="w-1/3">
-                                        <div className="pl-16">
-                                            <p className="font-medium reportdetail-headertext text-md">Special Type</p>
-                                            <p className="font-semibold text-md text-purple">{special_type}</p>
-                                        </div>
-                                        <div className="pl-16 pb-4 pt-4">
-                                            <p className="font-medium reportdetail-headertext text-md">Start Date</p>
-                                            <p className="font-semibold text-md uppercase report-text">{start_date}</p>
-                                        </div>
+                                <div className="flex flex-wrap pt-4">
+                                    <div className="pl-16">
+                                        <p className="font-medium reportdetail-headertext text-md">Special Type</p>
+                                        <p className="font-semibold text-md">{special_type || '--:--'}</p>
                                     </div>
-                                    <div className="w-1/3">
-                                        <div className="pb-4">
-                                            <p className="font-medium reportdetail-headertext text-md">Store ID</p>
-                                            <p className="font-semibold text-md uppercase report-text">{store_id}</p>
-                                        </div>
-                                        <div className="pb-4">
-                                            <p className="font-medium reportdetail-headertext text-md">Expiry Date</p>
-                                            <p className="font-semibold text-md uppercase report-text">{expiry_date}</p>
-                                        </div>
+                                    <div className="pl-32">
+                                        <p className="font-medium reportdetail-headertext text-md">Store ID</p>
+                                        <p className="font-semibold text-md uppercase report-text">{store_id || '--:--'}</p>
                                     </div>
-                                    <div className="w-1/3">
-                                        <div className="pb-4">
-                                            <p className="font-medium reportdetail-headertext text-md">Special Value</p>
-                                            <p className="font-semibold text-md uppercase report-text">{special_value}</p>
-                                        </div>
-                                        <div className="">
-                                            <p className="font-medium reportdetail-headertext text-md">Status</p>
-                                            <p className={`font-medium reportdetail-headertext text-md ${isActive === 1 ? 'text-green' : 'text-red'}`}>
-                                                {isActive === 1 ? 'Active' : 'Inactive'}
-                                            </p>
-                                        </div>
+                                    <div className="pl-44">
+                                        <p className="font-medium reportdetail-headertext text-md">Status</p>
+                                        <p className={`font-medium reportdetail-headertext text-md ${isActive === 1 ? 'text-green' : 'text-red'}`}>
+                                            {isActive === 1 ? 'Active' : 'Inactive'}
+                                        </p>
                                     </div>
-                                    <div className="flex pt-5 gap-4 pl-16">
-                                        <button className="bg-red rounded pr-2 w-12 h-8 text-white flex justify-center items-center pl-2" onClick={() => handleExpandClick(special_id)}>
-                                            <Minimize2 size={18} strokeWidth={2} color="white" className="" />
-                                        </button>
+                                    <div className="pl-40">
+                                        <p className="font-medium reportdetail-headertext text-md">Start Date</p>
+                                        <p className="font-semibold text-md uppercase report-text">{start_date || '--:--'}</p>
+                                    </div>
+                                    <div className="pl-16">
+                                        <p className="font-medium reportdetail-headertext text-md">Expiry Date</p>
+                                        <p className="font-semibold text-md uppercase report-text text-red">{expiry_date || '--:--'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -277,39 +288,75 @@ export const ProductsManModule = () => {
                         </p>
                     ))}
                 </div>
-                {allCombinedSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, special_group_id, product_description, special_price }) => (
+                {/* Render each grouped special as a row */}
+                {groupedCombinedSpecials.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, items }) => (
                 <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
-                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
-                            <div className="flex items-center justify-between">
-                                <p className="text-sm flex-1 text-center text-red">{special_id}</p>
-                                <p className="text-sm flex-1 text-center">{special_name}</p>
-                                <p className="text-sm flex-1 text-center">{special_group_id}</p>
-                                <p className="text-sm flex-1 text-center">{special}</p>
-                                <p className="text-sm flex-1 text-center">{product_description}</p>
-                                <p className="text-sm flex-1 text-center">{special_price}</p>
-                                {/* <p className="text-sm flex-1 text-center flex items-center justify-center space-x-2 text-green">Active</p> */}
-                                {editGroupProductsPopup && <EditProductGroupSpecials onClose={ toggleEditGroupProductPage } />}
-                                <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                    {/* <button className="flex items-center justify-center cursor-pointer">
-                                        <Expand color="gray" />
-                                    </button> */}
-                                    <button className="flex items-center justify-center cursor-pointer" onClick={toggleEditProductPage} >
-                                        <Edit color="gray" /> 
-                                    </button>
-                                    <button className="flex items-center justify-center cursor-pointer" onClick={ toggleCombinedDeletePage }>
-                                        <Trash2 color="red" /> 
-                                    </button>
-                                </div>
-                            </div>
+                    <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
+                    {/* Header row with grid styling */}
+                    <div className="grid grid-cols-8 gap-2 items-center">
+                        <p className="text-sm text-center text-red">{special_id}</p>
+                        <p className="text-sm text-center">{items[0].special_group_id}</p> {/* Display Special Group ID for the first item */}
+                        <p className="text-sm text-center">{items[0].product_description}</p> {/* Display Product Description for the first item */}
+                        <p className="text-sm text-center">{special_name}</p>
+                        <p className="text-sm text-center">{special}</p>
+                        <p className="text-sm text-center">{items[0].special_price}</p> {/* Display Special Price for the first item */}
+                        <p className="text-sm text-center">{special_value}</p>
+                        <div className="flex items-center justify-center gap-4">
+                        <button className="flex items-center cursor-pointer" onClick={() => handleExpandCombinedClick(special_id)}>
+                            {expandedCombinedRow === special_id ? (
+                            <Shrink color="gray" />
+                            ) : (
+                            <Expand color="gray" />
+                            )}
+                        </button>
+                        <button className="flex items-center cursor-pointer" onClick={toggleEditProductPage}>
+                            <Edit color="gray" /> 
+                        </button>
+                        <button className="flex items-center cursor-pointer" onClick={toggleCombinedDeletePage}>
+                            <Trash2 color="red" /> 
+                        </button>
                         </div>
                     </div>
-                ))}
-            </div>
+
+                    {/* Expanded view with the same grid layout to match headers */}
+                    {expandedCombinedRow === special_id && (
+                        <div className="pt-4">
+                            <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-sm">
+                                {/* Label row to display headers for each column in the expanded view */}
+                                <p></p> {/* Placeholder for alignment */}
+                                <p className="text-center font-semibold text-gray-600">Special Group ID</p>
+                                <p className="text-center font-semibold text-gray-600">Product Description</p>
+                                <p className="text-center font-semibold text-gray-600">Store ID</p>
+                                <p className="text-center font-semibold text-gray-600">Start Date</p>
+                                <p className="text-center font-semibold text-gray-600">Expiry Date</p>
+                                <p className="text-center font-semibold text-gray-600">Status</p>
+                                <p></p> {/* Placeholder for alignment */}
+                            
+                                {/* Data row displaying each item in the expanded view */}
+                                {items.slice(1).map((item) => (
+                                <React.Fragment key={item.special_group_id}>
+                                    <p></p> {/* Placeholder for alignment */}
+                                    <p className="text-center text-sm">{item.special_group_id}</p>
+                                    <p className="text-center text-sm">{item.product_description}</p>
+                                    <p className="text-center text-sm">{item.store_id}</p>
+                                    <p className="text-center text-sm">{item.start_date}</p>
+                                    <p className="text-center text-sm">{item.expiry_date}</p>
+                                    <p className={`text-center text-sm ${item.isActive === 1 ? 'text-green' : 'text-red'}`}>{item.isActive === 1 ? 'Active' : 'Inactive'}</p>
+                                    <p></p> {/* Placeholder for alignment */}
+                                </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    </div>
+                </div>
+            ))}
         </div>
         {productSpecialsComponent && (<ProductsSpecialsComponent onClose={ toggleProductSpecials } />)}
             {deletePopUp && (<DeleteConfirmation isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
             {combinedDeletePopUp && (<CombinedDeleteConfirmation isOpen={combinedDeletePopUp} onClose={toggleCombinedDeletePage}/> )}
             {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
+        </div>
         </div>
     );
 }
