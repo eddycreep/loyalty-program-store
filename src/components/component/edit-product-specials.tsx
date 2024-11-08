@@ -1,7 +1,7 @@
 'use client'
 
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { X, Search, Check, PlusCircle } from 'lucide-react';
@@ -14,11 +14,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 
 interface Props {
-  onClose: () => void;  // Corrected syntax here
+  onClose: () => void;
+  selectedSpecial: Special | null; // Updated to allow null values if no special is selected
 }
 
 //specials
-interface Specials {
+export interface Special {
     special_id: number,
     special_name: string,
     special: string,
@@ -27,13 +28,14 @@ interface Specials {
     start_date: string,
     expiry_date: string,
     special_value: string,
-    isActive: number
+    isActive: boolean,
+    product_description: string | null;
+    special_price: number,
 }
 
 //special items - individual x combined
 interface SpecialItems {
-    special_id: number,
-    special_group_id: string,
+    special_id: number
     product_description: string,
     special_price: string
 }
@@ -55,18 +57,6 @@ type SpecialProduct = Product & {
     
 }
 
-type CombinedSpecial = {
-    id: string
-    name: string
-    special: string
-    products: SpecialProduct[]
-    specialPrice: number
-    specialValue: 'Percentage' | 'Amount'
-    storeId: string
-    startDate: string
-    endDate: string
-    isActive: boolean
-}
 
 const stores = [
   { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
@@ -83,20 +73,40 @@ const stores = [
   { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-export function EditProductSpecials ({ onClose }: Props) {
-  const [specials, setSpecials] = useState<CombinedSpecial[]>([])
-  const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
-    id: '',
-    name: '',
+export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
+  const [specials, setSpecials] = useState<Special[]>([])
+  const [currentSpecial, setCurrentSpecial] = useState<Special>({
+    special_id: 0,
+    special_name: '',
     special: '',
-    products: [],
-    specialPrice: 0,
-    specialValue: 'Amount',
-    storeId: '',
-    startDate: '',
-    endDate: '',
-    isActive: true
+    special_type: '',
+    store_id: '',
+    start_date: '',
+    expiry_date: '',
+    special_value: '',
+    isActive: false,
+    product_description: '',
+    special_price: 0,
   })
+
+ // Synchronize `selectedSpecial` data with `currentSpecial` when `selectedSpecial` changes
+  useEffect(() => {
+    if (selectedSpecial) {
+      setCurrentSpecial(selectedSpecial);
+      toast.success('Theres data within selected specials', {
+        icon: <Check color={colors.green} size={24} />,
+        duration: 3000,
+    })
+    } else {
+      toast.error('Theres no data within selected specials', {
+        icon: <X color={colors.red} size={24} />,
+        duration: 3000,
+    })
+    }
+    console.log('Selected Special Data:', selectedSpecial); // Log to check if `selectedSpecial` is received properly
+  }, [selectedSpecial]);
+
+
   const [searchTerm, setSearchTerm] = useState('')
   const [specialID, setSpecialID] = useState(0)
 
@@ -123,39 +133,37 @@ export function EditProductSpecials ({ onClose }: Props) {
   const displayedProducts = filteredProducts.slice(0, 3); // Modified to limit products to 3
 
   const addProductToSpecial = (product: Product) => {
-    // Allow adding only one product
-    if (currentSpecial.products.length === 0) {
-        setCurrentSpecial(prev => ({
-        ...prev,
-        products: [{ ...product, groupId: '' }]
-        }))
-    }
-  }
-
-  const removeProductFromSpecial = (productId: string) => {
     setCurrentSpecial(prev => ({
       ...prev,
-      products: prev.products.filter(p => p.id !== productId)
-    }))
-  }
+      product_description: product.name,  // Changed to use product name as string
+    }));
+  };
+
+
+  const removeProductFromSpecial = () => {
+    setCurrentSpecial(prev => ({
+      ...prev,
+      product_description: null, // Set to null or empty if no product should be assigned
+    }));
+  };
 
   const saveSpecial = async () => {
     try {
         const specialType = 'Special'
         
         const payload = {
-            specialName: currentSpecial.name,
+            specialName: currentSpecial.special_name,
             special: currentSpecial.special,
             specialType: specialType,
-            storeId: currentSpecial.storeId,
-            startDate: currentSpecial.startDate,
-            expiryDate: currentSpecial.endDate,
-            specialValue: currentSpecial.specialValue,
+            storeId: currentSpecial.store_id,
+            startDate: currentSpecial.start_date,
+            expiryDate: currentSpecial.expiry_date,
+            specialValue: currentSpecial.special_value,
             isActive: currentSpecial.isActive,
         }
 
         const url = `admin/savespecial`
-        const response = await axios.post<Specials>(`${apiEndPoint}/${url}`, payload)
+        const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
         console.log('The Special has been saved successfully:', response.data)
 
         if (response.status === 200) {
@@ -178,7 +186,7 @@ export function EditProductSpecials ({ onClose }: Props) {
 
   const fetchSpecialID = async () => {
     try {
-        const url = `admin/getspecialid/${currentSpecial.name}`
+        const url = `admin/getspecialid/${currentSpecial.special_name}`
         const response = await axios.get<SpecialIDProps>(`${apiEndPoint}/${url}`)
         console.log('The Special ID has been fetched successfully:', response.data)
         setSpecialID(response?.data.special_id)
@@ -192,8 +200,8 @@ export function EditProductSpecials ({ onClose }: Props) {
     try {
         const payload = {
             specialid: specialID,
-            productdescription: currentSpecial.products,
-            specialprice: currentSpecial.specialPrice
+            productdescription: currentSpecial.product_description,
+            specialprice: currentSpecial.special_price
         }
 
         const url = `admin/saveproductspecial`
@@ -217,6 +225,7 @@ export function EditProductSpecials ({ onClose }: Props) {
     }
   }
 
+
   return (
     <div className="container mx-auto p-4 relative">
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -239,8 +248,8 @@ export function EditProductSpecials ({ onClose }: Props) {
                     <Label htmlFor="special-name">Special Name</Label>
                     <Input
                       id="special-name"
-                      value={currentSpecial.name}
-                      onChange={(e) => setCurrentSpecial(prev => ({ ...prev, name: e.target.value }))}
+                      value={currentSpecial.special_name}
+                      onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_name: e.target.value }))}
                       placeholder="Enter special name"
                     />
                 </div>
@@ -258,8 +267,8 @@ export function EditProductSpecials ({ onClose }: Props) {
                 <div className="w-full">
                   <Label htmlFor="special-type">Special Type</Label>
                   <Select
-                    value={currentSpecial.specialValue}
-                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, specialValue: value as 'Percentage' | 'Amount' }))}
+                    value={currentSpecial.special_value}
+                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_value: value as 'Percentage' | 'Amount' }))}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select special type" />
@@ -275,8 +284,8 @@ export function EditProductSpecials ({ onClose }: Props) {
                     <Input
                       id="special-price"
                       // type="number"
-                      value={currentSpecial.specialPrice || ''}
-                      onChange={(e) => setCurrentSpecial(prev => ({ ...prev, specialPrice: parseFloat(e.target.value) }))}
+                      value={currentSpecial.special_price || ''}
+                      onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_price: parseFloat(e.target.value) }))}
                       placeholder="Enter special price"
                     />
                 </div>
@@ -287,8 +296,8 @@ export function EditProductSpecials ({ onClose }: Props) {
                   <Input
                     id="start-date"
                     type="date"
-                    value={currentSpecial.startDate}
-                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, startDate: e.target.value }))}
+                    value={currentSpecial.start_date}
+                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, start_date: e.target.value }))}
                   />
                 </div>
                 <div className="w-full">
@@ -296,8 +305,8 @@ export function EditProductSpecials ({ onClose }: Props) {
                   <Input
                     id="end-date"
                     type="date"
-                    value={currentSpecial.endDate}
-                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, endDate: e.target.value }))}
+                    value={currentSpecial.expiry_date}
+                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, expiry_date: e.target.value }))}
                   />
                 </div>
               </div>
@@ -306,8 +315,8 @@ export function EditProductSpecials ({ onClose }: Props) {
                     <Label htmlFor="store-id">Store ID</Label>
                     {/* Changed the input field to a select dropdown to display store IDs */}
                       <Select
-                        value={currentSpecial.storeId}
-                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, storeId: value }))}
+                        value={currentSpecial.store_id}
+                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, store_id: value }))}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select store ID" />
@@ -363,7 +372,7 @@ export function EditProductSpecials ({ onClose }: Props) {
                     key={product.id}
                     variant="outline"
                     onClick={() => addProductToSpecial(product)}
-                    disabled={currentSpecial.products.length >= 1 || currentSpecial.products.some(p => p.id === product.id)}
+                    disabled={(currentSpecial?.product_description || '').length >= 1} // Disable button if product_description has 1 or more characters
                     className="justify-start"
                     >
                     <PlusCircle className="h-4 w-4 mr-2" />
@@ -375,20 +384,20 @@ export function EditProductSpecials ({ onClose }: Props) {
               <div className="mt-4">
                 <Label>Product</Label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {currentSpecial.products.map((product) => (
-                    <Card key={product.id} className="p-2 flex justify-between items-center">
-                      <span>{product.name}</span>
+                  {/* {currentSpecial.product_description.map((product) => ( */}
+                    <Card className="p-2 flex justify-between items-center">
+                      <span>{currentSpecial.product_description}</span>
                       <div className="flex items-center space-x-2">
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => removeProductFromSpecial(product.id)}
+                          onClick={removeProductFromSpecial}
                         >
                           <X className="h-4 w-4" />
                         </Button>
                       </div>
                     </Card>
-                  ))}
+                  {/* ))} */}
                 </div>
               </div>
 
