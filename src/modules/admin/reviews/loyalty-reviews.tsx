@@ -189,7 +189,7 @@ export function LoyaltyReviews() {
   );
 
   return (
-    <div className=" p-4 dark:bg-gray-900 h-screen">
+    <div className=" p-4 dark:bg-gray-900 h-screen mb-20">
       <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">Customer Reviews</h1>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-3 rounded-lg bg-gray-200 dark:bg-gray-700 p-1">
