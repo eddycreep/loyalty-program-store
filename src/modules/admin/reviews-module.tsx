@@ -9,7 +9,7 @@ export const ReviewsModule = () => {
 
 
   return (
-    <div className="h-screen mb-56">
+    <div className="h-screen mb-20">
       <LoyaltyReviews />
     </div>
   );

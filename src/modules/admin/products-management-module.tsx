@@ -119,9 +119,7 @@ export const ProductsManModule = () => {
         if (selected) {
             setSelectedProductSpecial(selected);
             setEditProductsPopup(true);
-            console.log("No selected product SPECIAL, sumn wrong with the code my nigga:" + selected);
         } else {
-            console.log("No selected product SPECIAL, sumn wrong with the code my nigga:" + selected);
             toast.error('Error passing the product specials!', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
@@ -131,7 +129,6 @@ export const ProductsManModule = () => {
 
     const closeEditProductsPopup = () => {
         setEditProductsPopup(false);
-        setSelectedProductSpecial(null);
     }
 
     const toggleEditGroupProductPage = () => {
@@ -248,10 +245,10 @@ export const ProductsManModule = () => {
                                     <Expand color="gray" />
                                 )}
                                 </button>
-                                <button onClick={() => handleEditProductSpecial(special_id) } className="flex items-center justify-center cursor-pointer">
+                                <button className="flex items-center justify-center cursor-pointer" onClick={() => handleEditProductSpecial(special_id)}>
                                     <Edit color="gray" />
                                 </button>
-                                <button onClick={ toggleDeletePage } className="flex items-center justify-center cursor-pointer">
+                                <button className="flex items-center justify-center cursor-pointer" onClick={ toggleDeletePage }>
                                     <Trash2 color="red" />
                                 </button>
                             </div>
@@ -317,13 +314,13 @@ export const ProductsManModule = () => {
                     <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
                     {/* Header row with grid styling */}
                     <div className="grid grid-cols-8 gap-2 items-center">
-                        <p className="text-sm text-center text-red">{special_id}</p>
-                        <p className="text-sm text-center">{items[0].special_group_id}</p> {/* Display Special Group ID for the first item */}
-                        <p className="text-sm text-center">{items[0].product_description}</p> {/* Display Product Description for the first item */}
-                        <p className="text-sm text-center">{special_name}</p>
-                        <p className="text-sm text-center">{special}</p>
-                        <p className="text-sm text-center">{items[0].special_price}</p> {/* Display Special Price for the first item */}
-                        <p className="text-sm text-center">{special_value}</p>
+                        <p className="text-sm text-center text-red">{special_id || '--:--'}</p>
+                        <p className="text-sm text-center">{items[0].special_group_id || '--:--'}</p> {/* Display Special Group ID for the first item */}
+                        <p className="text-sm text-center">{items[0].product_description || '--:--'}</p> {/* Display Product Description for the first item */}
+                        <p className="text-sm text-center">{special_name || '--:--'}</p>
+                        <p className="text-sm text-center">{special || '--:--'}</p>
+                        <p className="text-sm text-center">{items[0].special_price || '--:--'}</p> {/* Display Special Price for the first item */}
+                        <p className="text-sm text-center">{special_value || '--:--'}</p>
                         <div className="flex items-center justify-center gap-4">
                         <button className="flex items-center cursor-pointer" onClick={() => handleExpandCombinedClick(special_id)}>
                             {expandedCombinedRow === special_id ? (
@@ -345,7 +342,6 @@ export const ProductsManModule = () => {
                     {expandedCombinedRow === special_id && (
                         <div className="pt-4">
                             <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-center text-sm">
-                                {/* Label row to display headers for each column in the expanded view */}
                                 <p></p> {/* Placeholder for alignment */}
                                 <p className="font-semibold text-gray-600">Special Group ID</p>
                                 <p className="font-semibold text-gray-600">Product Description</p>
@@ -353,19 +349,19 @@ export const ProductsManModule = () => {
                                 <p className="font-semibold text-gray-600">Start Date</p>
                                 <p className="font-semibold text-gray-600">Expiry Date</p>
                                 <p className="font-semibold text-gray-600">Status</p>
-                                <p></p> {/* Placeholder for alignment */}
+                                <p></p>
                             
                                 {/* Data row displaying each item in the expanded view */}
                                 {items.slice(1).map((item) => (
                                 <React.Fragment key={item.special_group_id}>
-                                    <p></p> {/* Placeholder for alignment */}
-                                    <p className="text-sm">{item.special_group_id}</p>
-                                    <p className="text-sm">{item.product_description}</p>
-                                    <p className="text-sm">{item.store_id}</p>
-                                    <p className="text-sm">{item.start_date}</p>
-                                    <p className="text-sm">{item.expiry_date}</p>
-                                    <p className={`text-sm ${item.isActive === 1 ? 'text-green' : 'text-red'}`}>{item.isActive === 1 ? 'Active' : 'Inactive'}</p>
-                                    <p></p> {/* Placeholder for alignment */}
+                                    <p></p>
+                                    <p className="text-sm">{item.special_group_id || '--:--'}</p>
+                                    <p className="text-sm">{item.product_description || '--:--'}</p>
+                                    <p className="text-sm">{item.store_id || '--:--'}</p>
+                                    <p className="text-sm">{item.start_date || '--:--'}</p>
+                                    <p className="text-sm">{item.expiry_date || '--:--'}</p>
+                                    <p className={`text-sm ${item.isActive === 1 ? 'text-green' : 'text-red'}`}>{item.isActive === 1 ? 'Active' : 'Inactive'  || '--:--'}</p>
+                                    <p></p>
                                 </React.Fragment>
                                 ))}
                             </div>

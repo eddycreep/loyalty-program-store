@@ -11,29 +11,27 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RewardProps } from "@/modules/admin/rewards-module"
+
+interface Props {
+  onClose: () => void;  // Corrected syntax here
+  selectedReward: RewardProps
+}
 
 interface Rewards {
-  reward_title: string,
-  description: string,
-  reward: string,
-  reward_type: string,
-  reward_price: number,
-  store_id: string,
-  region: string,
-  start_date: string,
-  expiry_date: string,
-  isActive: boolean; // Changed from number to boolean
-  loyaltyTier: string,
-  ageGroup: string,
-}
-// type RewardsResponse = Rewards[]
-
-
-type Product = {
-    id: string
-    name: string
-    price: number
-    item_code: string
+    reward_id: number,
+    reward_title: string,
+    description: string,
+    reward: string,
+    reward_type: string,
+    reward_price: number,
+    store_id: string,
+    region: string,
+    start_date: string,
+    expiry_date: string,
+    loyalty_tier: string,
+    age_group: string,
+    isActive: boolean
 }
 
 
@@ -41,12 +39,12 @@ const stores = [
   { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
   { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
   { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-  { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+  { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },
   { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-  { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+  { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },
   { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-  { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-  { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+  { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },
+  { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },
   { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
   { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
   { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
@@ -76,61 +74,44 @@ const loyaltyTiers = [
 const ageGroup = [
   { id: 1, age_range: '18-24', name: 'Young Adults' },
   { id: 2, age_range: '25-34', name: 'Adults' },
-  { id: 3, age_range: '35-44', name: 'Middle-Aged Adults' },
-  { id: 4, age_range: '45-50', name: 'Older Middle-Aged Adults' },
+  { id: 3, age_range: '35-44', name: 'Middle Aged Adults' },
+  { id: 4, age_range: '45-50', name: 'Older Middle Aged Adults' },
   { id: 5, age_range: '50+', name: 'Seniors' },
 ];
 
-export function EditRewards({ rewardData, onClose }: any) {
+export function EditRewards({ onClose, selectedReward }: any) {
   const [currentReward, setCurrentReward] = useState<Rewards>({
-    reward_title: '',
-    description: '',
-    reward: '',
-    reward_type: '',
-    reward_price: 0,
-    store_id: '',
-    region: '',
-    start_date: '',
-    expiry_date: '',
-    isActive: false,
-    loyaltyTier: '',
-    ageGroup: '',
+      reward_id: 0,
+      reward_title: '',
+      description: '',
+      reward: '',
+      reward_type: '',
+      reward_price: 0,
+      store_id: '',
+      region: '',
+      start_date: '',
+      expiry_date: '',
+      loyalty_tier: '',
+      age_group: '',
+      isActive: false
   })
 
-  // Mock product data (replace with actual API call in production)
-  const allProducts: Product[] = [
-    { id: '1', name: 'Apple', price: 0.5, item_code: 'P001' },
-    { id: '2', name: 'Banana', price: 0.3, item_code: 'P002' },
-    { id: '3', name: 'Orange', price: 0.6, item_code: 'P003' },
-    { id: '4', name: 'Milk', price: 2.5, item_code: 'P004' },
-    { id: '5', name: 'Bread', price: 1.5, item_code: 'P005' },
-    { id: '6', name: 'Eggs', price: 3.0, item_code: 'P006' },
-    { id: '7', name: 'Cheese', price: 4.5, item_code: 'P007' },
-    { id: '8', name: 'Yogurt', price: 1.2, item_code: 'P008' },
-    { id: '9', name: 'Tomato', price: 0.8, item_code: 'P009' },
-    { id: '10', name: 'Potato', price: 0.4, item_code: 'P010' },
-    { id: '11', name: 'Onion', price: 0.3, item_code: 'P011' },
-    { id: '12', name: 'Carrot', price: 0.4, item_code: 'P012' },
-  ]
-
-//   useEffect(() => {
-//     if (rewardData) {
-//       setCurrentReward({
-//         reward_title: rewardData.reward_title || '',
-//         description: rewardData.description || '',
-//         reward: rewardData.reward || '',
-//         reward_type: rewardData.reward_type || '',
-//         reward_price: rewardData.reward_price || 0,
-//         store_id: rewardData.store_id || '',
-//         region: rewardData.region || '',
-//         start_date: rewardData.start_date || '',
-//         expiry_date: rewardData.expiry_date || '',
-//         isActive: rewardData.isActive === '1',  // Convert string to boolean
-//         loyaltyTier: rewardData.loyaltyTier || '',
-//         ageGroup: rewardData.ageGroup || ''
-//       });
-//     }
-//   }, [rewardData]);
+   // Synchronize `selectedReward` data with `currentSpecial` when `selectedReward` changes
+    useEffect(() => {
+      if (selectedReward) {
+        setCurrentReward(selectedReward);
+        toast.success('Theres data within selected reward', {
+          icon: <Check color={colors.green} size={24} />,
+          duration: 3000,
+      })
+      } else {
+        toast.error('Theres no data within selected reward', {
+          icon: <X color={colors.red} size={24} />,
+          duration: 3000,
+      })
+      }
+      console.log('Selected Reward Data:', selectedReward); // Log to check if `selectedReward` is received properly
+    }, [selectedReward]);
 
   const updateReward = async () => {
     try {
@@ -144,25 +125,26 @@ export function EditRewards({ rewardData, onClose }: any) {
           region: currentReward.region,
           start_date: currentReward.start_date,
           expiry_date: currentReward.expiry_date,
+          loyaltyTier: currentReward.loyalty_tier,
+          ageGroup: currentReward.age_group,
           isActive: currentReward.isActive,
-          loyaltyTier: currentReward.loyaltyTier,
-          ageGroup: currentReward.ageGroup,
         }
 
-        const url = `admin/savereward`
-        const response = await axios.post<Rewards>(`${apiEndPoint}/${url}`, payload)
-        console.log('The Special has been saved successfully:', response.data)
+        const url = `admin/updatereward/${currentReward.reward_id}`
+        const response = await axios.patch<Rewards>(`${apiEndPoint}/${url}`, payload)
+        console.log('The Reward has been updated successfully:', response.data)
 
         if (response.status === 200) {
-            toast.success('The Reward has been saved successfully', {
+            toast.success('The Reward has been updated successfully', {
                 icon: <Check color={colors.green} size={24} />,
                 duration: 3000,
             })
         }
+        onClose();
     } catch (error) {
-        console.error('Error saving Reward:', error)
+        console.error('Error updating Reward:', error)
         
-        toast.success('There was an error when saving the Reward', {
+        toast.success('There was an error when updating the Reward', {
             icon: <X color={colors.red} size={24} />,
             duration: 3000,
         })
@@ -179,7 +161,7 @@ export function EditRewards({ rewardData, onClose }: any) {
                 </button>
               </div>
             <div className="pl-6 pb-4">
-                <p className="text-xl font-bold">Add Reward</p>
+                <p className="text-xl font-bold">Edit Reward</p>
                 <p className="text-gray-600">Add alternative ways customers can redeem rewards</p>
             </div>
           <CardContent>
@@ -195,12 +177,12 @@ export function EditRewards({ rewardData, onClose }: any) {
                     />
                 </div>
                 <div className="w-full">
-                    <Label htmlFor="special-name">Description</Label>
+                    <Label htmlFor="special-name">Reward</Label>
                     <Input
                       id="special-name"
-                      value={currentReward.description} // Changed `currentSpecial.special` to `currentReward.description`
-                      onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `special` to `description`
-                      placeholder="Enter reward description"
+                      value={currentReward.reward} // Changed `currentSpecial.special` to `currentReward.reward`
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `special` to `reward`
+                      placeholder="Enter reward"
                     />
                 </div>
               </div>
@@ -295,38 +277,17 @@ export function EditRewards({ rewardData, onClose }: any) {
                   </div>
               </div>
               <div className="flex gap-4">
-                  <div className="w-full">
-                    <Label htmlFor="store-id">Age Group</Label>
-                    <Select
-                      value={currentReward.ageGroup} // Changed `currentSpecial.storeId` to `currentReward.store_id`
-                      onValueChange={(value) => setCurrentReward(prev => ({ ...prev, ageGroup: value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `storeId` to `store_id`
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Age Group" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="All">All</SelectItem>
-                        {ageGroup.map((store) => (
-                          <SelectItem key={store.id} value={store.name}>
-                            {store.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="w-full">
+                <div className="w-full">
                     <Label htmlFor="store-id">Loyalty Tier</Label>
-                    {/* Changed the input field to a select dropdown to display store IDs */}
                       <Select
-                        value={currentReward.loyaltyTier}
-                        onValueChange={(value) => setCurrentReward(prev => ({ ...prev, loyaltyTier: value }))}
+                        value={currentReward.loyalty_tier}
+                        onValueChange={(value) => setCurrentReward(prev => ({ ...prev, loyalty_tier: value }))}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select tier" />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* Mapping through the stores array to create options for the dropdown */}
-                          <SelectItem value="All">All</SelectItem> {/* Added "All" option */}
+                          <SelectItem value="All">All</SelectItem>
                           {loyaltyTiers.map((loyalty) => (
                             <SelectItem key={loyalty.id} value={loyalty.tier}>
                               {loyalty.tier}
@@ -335,12 +296,38 @@ export function EditRewards({ rewardData, onClose }: any) {
                         </SelectContent>
                       </Select>
                   </div>
+                  <div className="w-full">
+                    <Label htmlFor="store-id">Age Group</Label>
+                    <Select
+                      value={currentReward.age_group} 
+                      onValueChange={(value) => setCurrentReward(prev => ({ ...prev, age_group: value }))}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Age Group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="All">All</SelectItem>
+                        {ageGroup.map((age) => (
+                          <SelectItem key={age.id} value={age.name}>
+                            {age.age_range} - {age.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
               </div>
-              <div className="flex flex-col space-x-2 pt-2">
-                      {/* Dynamic label based on isActive state */}
-
+              <div className="flex gap-4">
+                <div className="w-full">
+                    <Label htmlFor="reward">Reward Description</Label>
+                    <Input
+                      id="reward"
+                      value={currentReward.description} 
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `name` to `reward_title`
+                      placeholder="Enter description for reward"
+                    />
+                </div>
+                <div className="flex flex-col space-x-2 pt-2">
                       <Label htmlFor="active-toggle">
-                        {/* {currentSpecial.isActive ? 'Active' : 'In-Active'} */}
                         Active
                       </Label>
                       <div className="pt-2">
@@ -353,6 +340,7 @@ export function EditRewards({ rewardData, onClose }: any) {
                         />
                       </div>
                   </div>
+              </div>
 
               <Button 
                 onClick={ updateReward }>
