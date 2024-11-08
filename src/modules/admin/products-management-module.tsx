@@ -6,13 +6,14 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Edit, Expand, Trash2, Shrink} from "lucide-react";
+import { Edit, Expand, Trash2, Shrink, X, Check } from "lucide-react";
 import { EditProductSpecials } from "@/components/component/edit-product-specials";
 import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
 import { CombinedSpecialsComponent } from "@/components/combined-specials-manager";
-import { ProductsSpecialsComponent } from "@/components/product-specials-manager";
+//import { ProductsSpecialsComponent } from "@/components/product-specials-manager";
 import { DeleteConfirmation } from "@/components/component/delete-confirmation"
-import { CombinedDeleteConfirmation } from "@/components/component/delete-combined-confirmation"
+import { CombinedDeleteConfirmation } from "@/components/component/delete-combined-confirmation";
+import { Special } from "@/components/component/edit-product-specials"
 
 interface ProductProps {
     idx: number,
@@ -87,11 +88,14 @@ export const ProductsManModule = () => {
     const [editGroupProductsPopup, setEditGroupProductsPopup] = useState(false);
     const [deletePopUp, setDeletePopUp] = useState(false);
     const [combinedDeletePopUp, setCombinedDeletePopUp] = useState(false);
+
+    //expandRows state variables
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
     const [expandedCombinedRow, setExpandedCombinedRow] = useState<number | null>(null);
-    
-    
 
+    // Define the type of selectedSpecial to accept either ProductSpecialsProps or null
+    const [selectedProductSpecial, setSelectedProductSpecial] = useState<ProductSpecialsProps | null>(null);
+    
     //all specials
     const [allProductSpecials, setAllProductSpecials] = useState<ProductSpecialsResponse>([]);
     const [allCombinedSpecials, setAllCombinedSpecials] = useState<CombinedSpecialsResponse>([]);
@@ -107,9 +111,28 @@ export const ProductsManModule = () => {
     const url = `products/getproducts`;
     const { data, loading, error } = useQuery<ProductResponse>(url);
 
-    const toggleEditProductPage = () => {
-        setEditProductsPopup(!editProductsPopup);
-    };
+    {/* Updated onClick to pass the selected row data to EditProductSpecials using special_id */}
+    const handleEditProductSpecial = (special_id: any) => {
+        const selected = allProductSpecials.find((item) => item.special_id === special_id) || null;
+        //const selected = allProductSpecials.filter((item) => item.special_id === special_id || null)
+        
+        if (selected) {
+            setSelectedProductSpecial(selected);
+            setEditProductsPopup(true);
+            console.log("No selected product SPECIAL, sumn wrong with the code my nigga:" + selected);
+        } else {
+            console.log("No selected product SPECIAL, sumn wrong with the code my nigga:" + selected);
+            toast.error('Error passing the product specials!', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+        }
+    }; 
+
+    const closeEditProductsPopup = () => {
+        setEditProductsPopup(false);
+        setSelectedProductSpecial(null);
+    }
 
     const toggleEditGroupProductPage = () => {
         setEditGroupProductsPopup(!editGroupProductsPopup);
@@ -225,43 +248,43 @@ export const ProductsManModule = () => {
                                     <Expand color="gray" />
                                 )}
                                 </button>
-                                <button onClick={toggleEditProductPage} className="flex items-center justify-center cursor-pointer">
+                                <button onClick={() => handleEditProductSpecial(special_id) } className="flex items-center justify-center cursor-pointer">
                                     <Edit color="gray" />
                                 </button>
-                                <button onClick={toggleDeletePage} className="flex items-center justify-center cursor-pointer">
+                                <button onClick={ toggleDeletePage } className="flex items-center justify-center cursor-pointer">
                                     <Trash2 color="red" />
                                 </button>
                             </div>
                         </div>
                         {expandedRow === special_id && (
-                            <div>
-                            <div className="w-full p-4 mr-2 mt-2 mx-2 rounded report-header text-black ${state.isOpen && state.expandView === ID? 'block' : 'hidden'">
-                                <div className="flex flex-wrap pt-4">
-                                    <div className="pl-16">
-                                        <p className="font-medium reportdetail-headertext text-md">Special Type</p>
-                                        <p className="font-semibold text-md">{special_type || '--:--'}</p>
-                                    </div>
-                                    <div className="pl-32">
-                                        <p className="font-medium reportdetail-headertext text-md">Store ID</p>
-                                        <p className="font-semibold text-md uppercase report-text">{store_id || '--:--'}</p>
-                                    </div>
-                                    <div className="pl-44">
-                                        <p className="font-medium reportdetail-headertext text-md">Status</p>
-                                        <p className={`font-medium reportdetail-headertext text-md ${isActive === 1 ? 'text-green' : 'text-red'}`}>
-                                            {isActive === 1 ? 'Active' : 'Inactive'}
-                                        </p>
-                                    </div>
-                                    <div className="pl-40">
-                                        <p className="font-medium reportdetail-headertext text-md">Start Date</p>
-                                        <p className="font-semibold text-md uppercase report-text">{start_date || '--:--'}</p>
-                                    </div>
-                                    <div className="pl-16">
-                                        <p className="font-medium reportdetail-headertext text-md">Expiry Date</p>
-                                        <p className="font-semibold text-md uppercase report-text text-red">{expiry_date || '--:--'}</p>
-                                    </div>
+                            <div className="pt-4">
+                                {/* Displaying labels and values in a grid */}
+                                <div className="grid grid-cols-7 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
+                                    <p className="font-medium text-gray-600"></p>
+                                <div>
+                                    <p className="font-medium text-gray-600">Special Type</p>
+                                    <p className="text-sm">{special_type || '--:--'}</p>
+                                </div>
+                                <div>
+                                    <p className="font-medium text-gray-600">Store ID</p>
+                                    <p className="text-sm uppercase">{store_id || '--:--'}</p>
+                                </div>
+                                <div>
+                                    <p className="font-medium text-gray-600">Start Date</p>
+                                    <p className="text-sm uppercase">{start_date || '--:--'}</p>
+                                </div>
+                                <div>
+                                    <p className="font-medium text-gray-600">Expiry Date</p>
+                                    <p className="text-sm uppercase text-red">{expiry_date || '--:--'}</p>
+                                </div>
+                                <div>
+                                    <p className="font-medium text-gray-600">Status</p>
+                                    <p className={`text-sm ${isActive === 1 ? 'text-green' : 'text-red'}`}>
+                                        {isActive === 1 ? 'Active' : 'Inactive'}
+                                    </p>
                                 </div>
                             </div>
-                        </div>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -309,7 +332,7 @@ export const ProductsManModule = () => {
                             <Expand color="gray" />
                             )}
                         </button>
-                        <button className="flex items-center cursor-pointer" onClick={toggleEditProductPage}>
+                        <button className="flex items-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
                             <Edit color="gray" /> 
                         </button>
                         <button className="flex items-center cursor-pointer" onClick={toggleCombinedDeletePage}>
@@ -321,27 +344,27 @@ export const ProductsManModule = () => {
                     {/* Expanded view with the same grid layout to match headers */}
                     {expandedCombinedRow === special_id && (
                         <div className="pt-4">
-                            <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-sm">
+                            <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-center text-sm">
                                 {/* Label row to display headers for each column in the expanded view */}
                                 <p></p> {/* Placeholder for alignment */}
-                                <p className="text-center font-semibold text-gray-600">Special Group ID</p>
-                                <p className="text-center font-semibold text-gray-600">Product Description</p>
-                                <p className="text-center font-semibold text-gray-600">Store ID</p>
-                                <p className="text-center font-semibold text-gray-600">Start Date</p>
-                                <p className="text-center font-semibold text-gray-600">Expiry Date</p>
-                                <p className="text-center font-semibold text-gray-600">Status</p>
+                                <p className="font-semibold text-gray-600">Special Group ID</p>
+                                <p className="font-semibold text-gray-600">Product Description</p>
+                                <p className="font-semibold text-gray-600">Store ID</p>
+                                <p className="font-semibold text-gray-600">Start Date</p>
+                                <p className="font-semibold text-gray-600">Expiry Date</p>
+                                <p className="font-semibold text-gray-600">Status</p>
                                 <p></p> {/* Placeholder for alignment */}
                             
                                 {/* Data row displaying each item in the expanded view */}
                                 {items.slice(1).map((item) => (
                                 <React.Fragment key={item.special_group_id}>
                                     <p></p> {/* Placeholder for alignment */}
-                                    <p className="text-center text-sm">{item.special_group_id}</p>
-                                    <p className="text-center text-sm">{item.product_description}</p>
-                                    <p className="text-center text-sm">{item.store_id}</p>
-                                    <p className="text-center text-sm">{item.start_date}</p>
-                                    <p className="text-center text-sm">{item.expiry_date}</p>
-                                    <p className={`text-center text-sm ${item.isActive === 1 ? 'text-green' : 'text-red'}`}>{item.isActive === 1 ? 'Active' : 'Inactive'}</p>
+                                    <p className="text-sm">{item.special_group_id}</p>
+                                    <p className="text-sm">{item.product_description}</p>
+                                    <p className="text-sm">{item.store_id}</p>
+                                    <p className="text-sm">{item.start_date}</p>
+                                    <p className="text-sm">{item.expiry_date}</p>
+                                    <p className={`text-sm ${item.isActive === 1 ? 'text-green' : 'text-red'}`}>{item.isActive === 1 ? 'Active' : 'Inactive'}</p>
                                     <p></p> {/* Placeholder for alignment */}
                                 </React.Fragment>
                                 ))}
@@ -352,10 +375,10 @@ export const ProductsManModule = () => {
                 </div>
             ))}
         </div>
-        {productSpecialsComponent && (<ProductsSpecialsComponent onClose={ toggleProductSpecials } />)}
+        {/* {productSpecialsComponent && (<ProductsSpecialsComponent onClose={ toggleProductSpecials } />)} */}
             {deletePopUp && (<DeleteConfirmation isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
             {combinedDeletePopUp && (<CombinedDeleteConfirmation isOpen={combinedDeletePopUp} onClose={toggleCombinedDeletePage}/> )}
-            {editProductsPopup && <EditProductSpecials onClose={ toggleEditProductPage } />}
+            {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial as unknown as Special} />}
         </div>
         </div>
     );

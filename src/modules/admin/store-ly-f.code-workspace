@@ -7,5 +7,7 @@
 			"path": "../../../../store-ly-b"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "store-ly-f"
+	}
 }
