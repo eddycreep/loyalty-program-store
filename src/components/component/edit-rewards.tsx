@@ -100,15 +100,6 @@ export function EditRewards({ onClose, selectedReward }: any) {
     useEffect(() => {
       if (selectedReward) {
         setCurrentReward(selectedReward);
-        toast.success('Theres data within selected reward', {
-          icon: <Check color={colors.green} size={24} />,
-          duration: 3000,
-      })
-      } else {
-        toast.error('Theres no data within selected reward', {
-          icon: <X color={colors.red} size={24} />,
-          duration: 3000,
-      })
       }
       console.log('Selected Reward Data:', selectedReward); // Log to check if `selectedReward` is received properly
     }, [selectedReward]);

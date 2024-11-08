@@ -93,17 +93,7 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
   useEffect(() => {
     if (selectedSpecial) {
       setCurrentSpecial(selectedSpecial);
-      toast.success('Theres data within selected specials', {
-        icon: <Check color={colors.green} size={24} />,
-        duration: 3000,
-    })
-    } else {
-      toast.error('Theres no data within selected specials', {
-        icon: <X color={colors.red} size={24} />,
-        duration: 3000,
-    })
     }
-    console.log('Selected Special Data:', selectedSpecial); // Log to check if `selectedSpecial` is received properly
   }, [selectedSpecial]);
 
 
