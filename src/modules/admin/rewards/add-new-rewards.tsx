@@ -179,9 +179,9 @@ export function AddNewRewards({ onClose }: any) {
                     <Label htmlFor="special-name">Description</Label>
                     <Input
                       id="special-name"
-                      value={currentReward.description} // Changed `currentSpecial.special` to `currentReward.description`
-                      onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `special` to `description`
-                      placeholder="Enter reward description"
+                      value={currentReward.reward} // Changed `currentSpecial.special` to `currentReward.description`
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `special` to `description`
+                      placeholder="Enter reward"
                     />
                 </div>
               </div>
@@ -317,11 +317,18 @@ export function AddNewRewards({ onClose }: any) {
                       </Select>
                   </div>
               </div>
-              <div className="flex flex-col space-x-2 pt-2">
-                      {/* Dynamic label based on isActive state */}
-
+              <div className="flex gap-4">
+                <div className="w-full">
+                    <Label htmlFor="reward">Reward Description</Label>
+                    <Input
+                      id="reward"
+                      value={currentReward.description} 
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `name` to `reward_title`
+                      placeholder="Enter description for reward"
+                    />
+                </div>
+                <div className="flex flex-col space-x-2 pt-2">
                       <Label htmlFor="active-toggle">
-                        {/* {currentSpecial.isActive ? 'Active' : 'In-Active'} */}
                         Active
                       </Label>
                       <div className="pt-2">
@@ -334,6 +341,7 @@ export function AddNewRewards({ onClose }: any) {
                         />
                       </div>
                   </div>
+              </div>
 
               <Button 
                 onClick={ saveReward }>

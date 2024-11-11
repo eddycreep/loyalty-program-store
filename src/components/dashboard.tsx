@@ -34,6 +34,11 @@ import { TopRatedStaffChart } from "@/components/satisfaction/top-rated-staff-ch
 import { RedeemedTierRewards } from "@/components/effectiveness/redeemed-rewards-tiers-chart"
 import { RedeemedRewardsCount } from "@/components/effectiveness/redeemed-rewards-count"
 
+// product performance
+import { TopPerformanceProductsChart } from "@/components/product-performance/top-performing-products-chart"
+import { LowPerformanceProductsChart } from "@/components/product-performance/low-performing-prodcuts-chart"
+
+
 // Dummy data for charts
 const activeMembers = [
   { month: 'Jan', members: 5000 },
@@ -766,6 +771,14 @@ export default function Dashboard() {
             </div>
         </TabsContent>
         <TabsContent value="performance" className="space-y-4 h-screen w-full">
+        <div className="flex justify-between gap-2">
+                <div className="">
+                  <TopPerformanceProductsChart />
+                </div>
+                <div className="">
+                  <LowPerformanceProductsChart />
+                </div>
+            </div>
           <div className="flex gap-4">
               <Card className="w-[800px]">
                   <CardHeader>
