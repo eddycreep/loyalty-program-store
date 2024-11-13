@@ -3,7 +3,7 @@
 import { SurveyChart } from "./survey-chart"
 
 
-export const ViewDeatiledSurvey = () => {
+export const ViewDetailedSurvey = () => {
 
     return (
         <div className="h-screen w-full">

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { toast } from "react-hot-toast";
 import { Edit, Trash2 } from "lucide-react";
-import { ViewDeatiledSurvey } from "./view-detailed-survey";
+import { ViewDetailedSurvey } from "./view-detailed-survey";
 import { useRouter } from 'next/navigation';
 import { DeleteSurveyConfirmation  } from '@/components/component/delete-survey-confirmation'
 
@@ -29,7 +29,8 @@ export const ViewSurveys = () => {
     const router = useRouter();
 
     const handleSurveyClick = (surveyId: string) => {
-        router.push(`/survey/${surveyId}`); 
+        //router.push(`/survey/${surveyId}`); 
+        router.push(`/admin/survey-management/${surveyId}`);
     };
 
     const toggleSurveyDeletePage = () => {
@@ -59,7 +60,7 @@ export const ViewSurveys = () => {
                 <h4 className="text-red font-bold">Active Surveys</h4>
             </div>
             <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
-                {headers?.map((header, index) => (<p key={index}className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
+                {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
             </div>
             <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
             {surveys?.map(({ survey_id, survey_title, survey_category, store_id, region, start_date, expiry_date, isActive }) => (
