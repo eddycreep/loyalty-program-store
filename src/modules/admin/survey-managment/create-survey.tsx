@@ -24,13 +24,27 @@ const stores = [
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
-  ];
+];
+
+//const regions = ['Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo', 'Mpumalanga', 'Northern Cape', 'North West', 'Western Cape'];
+const storeRegions = [
+    { id: 1, region: 'Eastern Cape'}, 
+    { id: 2, region: 'Free State'}, 
+    { id: 3, region: 'Gauteng'},
+    { id: 4, region: 'KwaZulu-Natal'},
+    { id: 5, region: 'Limpopo'}, 
+    { id: 6, region: 'Mpumalanga'},
+    { id: 7, region: 'Northern Cape'},
+    { id: 8, region: 'North West'},
+    { id: 9, region: 'Western Cape'}
+];
 
 export const CreateSurveys = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [surveyName, setSurveyName] = useState<string>("");
     const [surveyCategory, setSurveyCategory] = useState<string>("");
     const [selectedStore, setSelectedStore] = useState<string>("");
+    const [selectedRegion, setSelectedRegion] = useState("");
 
     const addQuestion = () => {
         const newQuestionNumber = questions.length + 1;
@@ -94,6 +108,21 @@ export const CreateSurveys = () => {
                             <option key={store.id} value={store.store_id}>
                                 {/* {store.store}  */}
                                 {store.store_id}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <label>Regions</label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {storeRegions.map((region) => (
+                            <option key={region.id} value={region.region}>
+                                {region.region}
                             </option>
                         ))}
                     </select>

@@ -1,48 +1,15 @@
-import {
-    Label,
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-    ResponsiveContainer,
-} from 'recharts';
+"use client"
+
+import { Label, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
 export const SurveyChart = () => {
 
     const data = [
-        {
-            name: 'Question 1',
-            No: 40,
-            Yes: 24,
-            Maybe: 24,
-        },
-        {
-            name: 'Question 2',
-            No: 30,
-            Yes: 18,
-            Maybe: 3,
-        },
-        {
-            name: 'Question 3',
-            No: 20,
-            Yes: 8,
-            Maybe: 9,
-        },
-        {
-            name: 'Question 4',
-            No: 27,
-            Yes: 8,
-            Maybe: 2,
-        },
-        {
-            name: 'Question 5',
-            No: 19,
-            Yes: 48,
-            Maybe: 26,
-        },
+        { name: 'Question 1', No: 40, Yes: 24, Maybe: 24 },
+        { name: 'Question 2', No: 30, Yes: 18, Maybe: 3 },
+        { name: 'Question 3', No: 20, Yes: 8, Maybe: 9 },
+        { name: 'Question 4', No: 27, Yes: 8, Maybe: 2 },
+        { name: 'Question 5', No: 19, Yes: 48, Maybe: 26},
     ];
 
     return (

@@ -8,9 +8,9 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Edit, Expand, Trash2, Shrink, X, Check } from "lucide-react";
 import { EditProductSpecials } from "@/components/component/edit-product-specials";
-import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
+// import { EditProductGroupSpecials } from "@/components/component/edit-productGroup-specials";
 import { CombinedSpecialsComponent } from "@/components/combined-specials-manager";
-//import { ProductsSpecialsComponent } from "@/components/product-specials-manager";
+import { ProductsSpecialsComponent } from "@/components/product-specials-manager";
 import { DeleteConfirmation } from "@/components/component/delete-confirmation"
 import { CombinedDeleteConfirmation } from "@/components/component/delete-combined-confirmation";
 import { Special } from "@/components/component/edit-product-specials"
@@ -105,7 +105,6 @@ export const ProductsManModule = () => {
     const [combinedSpecialsComponent, setCombinedSpecialsComponent] = useState(false);
 
     const headers = ['Special ID',	'Special Name',	'Special',	'Product', 'Special Price', 'Special Value', 'Action']
-    //const combinedHeaders = ['Special ID', 'Special Name', 'Special', 'Products', 'Special Price', 'Special Value', 'Action']
     const combinedHeaders = ['Special ID', 'Special Group ID', 'Products', 'Special Name', 'Special',  'Special Price', 'Special Value', 'Action']
 
     const url = `products/getproducts`;
@@ -206,15 +205,15 @@ export const ProductsManModule = () => {
 
 
     return (
-        <div>
-            <div className='w-full h-screen overflow-y-auto mb-4 pr-4 space-y-6 pb-6'>
+        <div className="">
+            <div className='w-full h-screenmb-4 pr-4 space-y-6 pb-6'>
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
                         <h4 className="text-2xl font-semibold text-red">Product Specials</h4>
                         <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
-                    <div className='flex gap-2 pt-8 pr-2'>
+                    <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
                         <button onClick={ toggleProductSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
                             Add Special
                         </button>
@@ -222,7 +221,7 @@ export const ProductsManModule = () => {
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
                             {header}
                         </p>
                     ))}
@@ -234,8 +233,10 @@ export const ProductsManModule = () => {
                             <p className="text-sm flex-1 text-center text-red">{special_id}</p>
                             <p className="text-sm flex-1 text-center">{special_name || '--:--'}</p>
                             <p className="text-sm flex-1 text-center">{special || '--:--'}</p>
-                            <p className="text-sm flex-1 text-center">{product_description || '--:--'}</p>
-                            <p className="text-sm flex-1 text-center">{special_price || '--:--'}</p>
+                            {/* <p className="text-sm flex-1 text-center">{product_description || '--:--'}</p>
+                            <p className="text-sm flex-1 text-center">{special_price || '--:--'}</p> */}
+                            <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{product_description || '--:--'}</p>
+                            <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{special_price || '--:--'}</p>
                             <p className="text-sm flex-1 text-center">{special_value || '--:--'}</p>
                             <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                 <button className="flex items-center justify-center cursor-pointer" onClick={() => handleExpandClick(special_id)}>
@@ -310,68 +311,64 @@ export const ProductsManModule = () => {
                 </div>
                 {/* Render each grouped special as a row */}
                 {groupedCombinedSpecials.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, items }) => (
-                <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
-                    <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
-                    {/* Header row with grid styling */}
-                    <div className="grid grid-cols-8 gap-2 items-center">
-                        <p className="text-sm text-center text-red">{special_id || '--:--'}</p>
-                        <p className="text-sm text-center">{items[0].special_group_id || '--:--'}</p> {/* Display Special Group ID for the first item */}
-                        <p className="text-sm text-center">{items[0].product_description || '--:--'}</p> {/* Display Product Description for the first item */}
-                        <p className="text-sm text-center">{special_name || '--:--'}</p>
-                        <p className="text-sm text-center">{special || '--:--'}</p>
-                        <p className="text-sm text-center">{items[0].special_price || '--:--'}</p> {/* Display Special Price for the first item */}
-                        <p className="text-sm text-center">{special_value || '--:--'}</p>
-                        <div className="flex items-center justify-center gap-4">
-                        <button className="flex items-center cursor-pointer" onClick={() => handleExpandCombinedClick(special_id)}>
-                            {expandedCombinedRow === special_id ? (
-                            <Shrink color="gray" />
-                            ) : (
-                            <Expand color="gray" />
-                            )}
-                        </button>
-                        <button className="flex items-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
-                            <Edit color="gray" /> 
-                        </button>
-                        <button className="flex items-center cursor-pointer" onClick={toggleCombinedDeletePage}>
-                            <Trash2 color="red" /> 
-                        </button>
-                        </div>
-                    </div>
-
-                    {/* Expanded view with the same grid layout to match headers */}
-                    {expandedCombinedRow === special_id && (
-                        <div className="pt-4">
-                            <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-center text-sm">
-                                <p></p> {/* Placeholder for alignment */}
-                                <p className="font-semibold text-gray-600">Special Group ID</p>
-                                <p className="font-semibold text-gray-600">Product Description</p>
-                                <p className="font-semibold text-gray-600">Store ID</p>
-                                <p className="font-semibold text-gray-600">Start Date</p>
-                                <p className="font-semibold text-gray-600">Expiry Date</p>
-                                <p className="font-semibold text-gray-600">Status</p>
-                                <p></p>
-                            
-                                {/* Data row displaying each item in the expanded view */}
-                                {items.slice(1).map((item) => (
-                                <React.Fragment key={item.special_group_id}>
-                                    <p></p>
-                                    <p className="text-sm">{item.special_group_id || '--:--'}</p>
-                                    <p className="text-sm">{item.product_description || '--:--'}</p>
-                                    <p className="text-sm">{item.store_id || '--:--'}</p>
-                                    <p className="text-sm">{item.start_date || '--:--'}</p>
-                                    <p className="text-sm">{item.expiry_date || '--:--'}</p>
-                                    <p className={`text-sm ${item.isActive === 1 ? 'text-green' : 'text-red'}`}>{item.isActive === 1 ? 'Active' : 'Inactive'  || '--:--'}</p>
-                                    <p></p>
-                                </React.Fragment>
-                                ))}
+                    <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
+                        <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
+                            <div className="grid grid-cols-8 gap-2 items-center">
+                                <p className="text-sm text-center text-red">{special_id || '--:--'}</p>
+                                <p className="text-sm text-center">{items[0].special_group_id || '--:--'}</p>
+                                <p className="text-sm text-center">{items[0].product_description || '--:--'}</p>
+                                <p className="text-sm text-center">{special_name || '--:--'}</p>
+                                <p className="text-sm text-center">{special || '--:--'}</p>
+                                <p className="text-sm text-center">{items[0].special_price || '--:--'}</p>
+                                <p className="text-sm text-center">{special_value || '--:--'}</p>
+                                <div className="flex items-center justify-center gap-4">
+                                <button className="flex items-center cursor-pointer" onClick={() => handleExpandCombinedClick(special_id)}>
+                                    {expandedCombinedRow === special_id ? (
+                                    <Shrink color="gray" />
+                                    ) : (
+                                    <Expand color="gray" />
+                                    )}
+                                </button>
+                                <button className="flex items-center cursor-pointer" onClick={ toggleEditGroupProductPage }>
+                                    <Edit color="gray" /> 
+                                </button>
+                                <button className="flex items-center cursor-pointer" onClick={toggleCombinedDeletePage}>
+                                    <Trash2 color="red" /> 
+                                </button>
+                                </div>
                             </div>
+                            {expandedCombinedRow === special_id && (
+                                <div className="pt-4">
+                                    <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-center text-sm">
+                                        <p></p>
+                                        <p className="font-semibold text-gray-600">Special Group ID</p>
+                                        <p className="font-semibold text-gray-600">Product Description</p>
+                                        <p className="font-semibold text-gray-600">Store ID</p>
+                                        <p className="font-semibold text-gray-600">Start Date</p>
+                                        <p className="font-semibold text-gray-600">Expiry Date</p>
+                                        <p className="font-semibold text-gray-600">Status</p>
+                                        <p></p>
+                                        {/* Data row displaying each item in the expanded view */}
+                                        {items.slice(1).map((item) => (
+                                        <React.Fragment key={item.special_group_id}>
+                                            <p></p>
+                                            <p className="text-sm">{item.special_group_id || '--:--'}</p>
+                                            <p className="text-sm">{item.product_description || '--:--'}</p>
+                                            <p className="text-sm">{item.store_id || '--:--'}</p>
+                                            <p className="text-sm">{item.start_date || '--:--'}</p>
+                                            <p className="text-sm">{item.expiry_date || '--:--'}</p>
+                                            <p className={`text-sm ${item.isActive === 1 ? 'text-green' : 'text-red'}`}>{item.isActive === 1 ? 'Active' : 'Inactive'  || '--:--'}</p>
+                                            <p></p>
+                                        </React.Fragment>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    )}
                     </div>
-                </div>
-            ))}
-        </div>
-        {/* {productSpecialsComponent && (<ProductsSpecialsComponent onClose={ toggleProductSpecials } />)} */}
+                ))}
+            </div>
+            {productSpecialsComponent && (<ProductsSpecialsComponent onClose={ toggleProductSpecials } />)}
             {deletePopUp && (<DeleteConfirmation isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
             {combinedDeletePopUp && (<CombinedDeleteConfirmation isOpen={combinedDeletePopUp} onClose={toggleCombinedDeletePage}/> )}
             {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial as unknown as Special} />}

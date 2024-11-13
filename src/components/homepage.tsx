@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -8,9 +9,100 @@ import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Clock, DollarSign, PlusCircle, ShoppingCart, Users, FileText, Gift, Mail, TrendingUp, Gem, BadgeCheck, NotepadText } from 'lucide-react'
 import { PercentDiamond, Coins, Coffee } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { apiEndPoint } from '@/utils/colors'
+
+import { LoyaltySummaryCards } from '@/components/loyalty-summary-cards'
+import { ActiveSpecialCards } from '@/modules/home/components/active-specials-card'
+import { UpcomingSpecialCards } from '@/modules/home/components/upcoming-specials-card'
+
+
+interface RewardProps {
+  reward_id: number,
+  reward_title: string,
+  description: string,
+  reward: string,
+  reward_type: string,
+  reward_price: number,
+  store_id: string,
+  region: string,
+  start_date: string,
+  expiry_date: string,
+  loyalty_tier: string,
+  age_group: string,
+  isActive: number
+}
+type RewardResponse = RewardProps[]
+
+interface SurveyProps {
+  survey_id: number,
+  survey_title: string,
+  survey_category: string,
+  store_id: string,
+  region: string,
+  start_date: string,
+  expiry_date: string,
+  isActive: number,
+}
+type SurveyResponse = SurveyProps[]
+
 
 export function Homepage() {
   const [activeTab, setActiveTab] = useState("active")
+
+  //state variables to hold data
+  const [activeRewards, setActiveRewards] = useState<RewardResponse>([])
+  const [activeSurveys, setActiveSurveys] = useState<SurveyResponse>([])
+
+  //states for active rewards
+  const [activeRewardsLoading, setActiveRewardsLoading] = useState(false);
+  const [activeRewardsErrors, setActiveRewardsErrors] = useState(false);
+
+  //states for active surveys
+  const [activeSurveysLoading, setActiveSurveysLoading] = useState(false);
+  const [activeSurveysErrors, setActiveSurveysErrors] = useState(false);
+
+  // /getactivesurveys - /getactiverewards
+
+  const getActiveRewards = async () => {
+    setActiveRewardsLoading(true);
+
+    try {
+      const url = `products/getactiverewards`
+      const response = await axios.get<RewardResponse>(`${apiEndPoint}/${url}`);
+      setActiveRewards(response?.data);
+      console.log('Active Rewards: ', response.data);
+
+    } catch (error) {
+      console.log("An error occurred when fetching the active rewards");
+      setActiveRewardsErrors(true);
+    }
+
+    setActiveRewardsLoading(false);
+  }
+
+  const getActiveSurveys = async () => {
+    setActiveSurveysLoading(true);
+
+    try {
+      const url = `products/getactivesurveys`
+      const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
+      setActiveSurveys(response?.data);
+      console.log('Active Surveys: ', response.data);
+
+    } catch (error) {
+      console.log("An error occurred when fetching the active surveys");
+      setActiveSurveysErrors(true);
+    }
+
+    setActiveSurveysLoading(false);
+  }
+
+  useEffect(() => {
+    getActiveRewards();
+    getActiveSurveys();
+  }, []);
+
+
 
   return (
     <div className="h-screen bg-gray-100 overflow-y-auto pb-20">
@@ -22,32 +114,8 @@ export function Homepage() {
           </header>
 
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-            <SummaryCard 
-              title="Active Loyalty Members" 
-              value="15,234" 
-              icon={<Users className="h-5 w-5 sm:h-6 sm:w-6" />} 
-              increase={234}
-            />
-            <SummaryCard 
-              title="Total Specials Redeemed" 
-              value="45,678" 
-              icon={<ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />} 
-              increase={1234}
-            />
-            <SummaryCard 
-              title="Rewards Redeemed" 
-              value="12,345" 
-              icon={<Gift className="h-5 w-5 sm:h-6 sm:w-6" />} 
-              increase={543}
-            />
-            <SummaryCard 
-              title="Revenue from Specials" 
-              value="$234,567" 
-              icon={<DollarSign className="h-5 w-5 sm:h-6 sm:w-6" />} 
-              increase={12345}
-              isCurrency={true}
-            />
+          <div className="gap-4 sm:gap-6 pb-6 sm:pb-8">
+            <LoyaltySummaryCards />
           </div>
 
           {/* Specials Section */}
@@ -59,83 +127,13 @@ export function Homepage() {
                 <TabsTrigger value="upcoming">Upcoming Specials</TabsTrigger>
               </TabsList>
               <TabsContent value="active">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                  <SpecialCard
-                    type="Normal"
-                    name="Summer Fruit Bonanza"
-                    discount="20% off"
-                    startDate="2023-06-01"
-                    endDate="2023-08-31"
-                    timesRedeemed={1234}
-                    isActive={true}
-                    specialType="Percentage"
-                  />
-                  <SpecialCard
-                    type="Combined"
-                    name="Back to School Bundle"
-                    discount="$10 off"
-                    startDate="2023-07-15"
-                    endDate="2023-09-15"
-                    timesRedeemed={567}
-                    isActive={true}
-                    specialType="Amount"
-                  />
-                  <SpecialCard
-                    type="Normal"
-                    name="Midweek Madness"
-                    discount="15% off"
-                    startDate="2023-07-01"
-                    endDate="2023-09-30"
-                    timesRedeemed={892}
-                    isActive={true}
-                    specialType="Percentage"
-                  />
-                  <SpecialCard
-                    type="Combined"
-                    name="Family Movie Night Bundle"
-                    discount="$5 off"
-                    startDate="2023-08-01"
-                    endDate="2023-10-31"
-                    timesRedeemed={456}
-                    isActive={true}
-                    specialType="Amount"
-                  />
-                  {/* Add more SpecialCards as needed */}
+                <div className="w-full">
+                  <ActiveSpecialCards />
                 </div>
               </TabsContent>
               <TabsContent value="upcoming">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                  <SpecialCard
-                    type="Normal"
-                    name="Fall Harvest Special"
-                    discount="15% off"
-                    startDate="2023-09-01"
-                    endDate="2023-11-30"
-                    timesRedeemed={0}
-                    isActive={false}
-                    specialType="Percentage"
-                  />
-                  <SpecialCard
-                    type="Normal"
-                    name="Winter Warmers Special"
-                    discount="Free Item"
-                    startDate="2023-12-01"
-                    endDate="2024-02-29"
-                    timesRedeemed={0}
-                    isActive={false}
-                    specialType="Free"
-                  />
-                  <SpecialCard
-                    type="Combined"
-                    name="New Year Health Kick"
-                    discount="$15 off"
-                    startDate="2024-01-01"
-                    endDate="2024-03-31"
-                    timesRedeemed={0}
-                    isActive={false}
-                    specialType="Amount"
-                  />
-                  {/* Add more upcoming SpecialCards as needed */}
+                <div className="w-full">
+                  <UpcomingSpecialCards />
                 </div>
               </TabsContent>
             </Tabs>
@@ -227,105 +225,105 @@ export function Homepage() {
   )
 }
 
-function SummaryCard({ title, value, icon, increase, isCurrency = false }: any) {
-  return (
-    <Card className="shadow-lg">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
-          {React.cloneElement(icon, { className: "h-5 w-5 sm:h-6 sm:w-6 text-red-500" })}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="text-xl sm:text-2xl font-bold">{value}</div>
-        <div className="flex items-center mt-2 text-gray-400 text-xs sm:text-sm">
-          <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-          <span>
-            {isCurrency ? '+$' : '+'}
-            {increase.toLocaleString()} from last month
-          </span>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
+// function SummaryCard({ title, value, icon, increase, isCurrency = false }: any) {
+//   return (
+//     <Card className="shadow-lg">
+//       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//         <CardTitle className="text-sm font-medium">{title}</CardTitle>
+//         <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
+//           {React.cloneElement(icon, { className: "h-5 w-5 sm:h-6 sm:w-6 text-red-500" })}
+//         </div>
+//       </CardHeader>
+//       <CardContent>
+//         <div className="text-xl sm:text-2xl font-bold">{value}</div>
+//         <div className="flex items-center mt-2 text-gray-400 text-xs sm:text-sm">
+//           <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+//           <span>
+//             {isCurrency ? '+$' : '+'}
+//             {increase.toLocaleString()} from last month
+//           </span>
+//         </div>
+//       </CardContent>
+//     </Card>
+//   )
+// }
 
-function SpecialCard({ type, name, discount, startDate, endDate, timesRedeemed, isActive, specialType }: any) {
-  const getSpecialTypeIcon = () => {
-    switch (specialType) {
-      case 'Percentage':
-        return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />;
-      case 'Amount':
-        return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />;
-      case 'Free':
-        return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />; // Changed from text-green-500 to text-purple-500
-      default:
-        return null;
-    }
-  };
+// function SpecialCard({ type, name, discount, startDate, endDate, timesRedeemed, isActive, specialType }: any) {
+//   const getSpecialTypeIcon = () => {
+//     switch (specialType) {
+//       case 'Percentage':
+//         return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />;
+//       case 'Amount':
+//         return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />;
+//       case 'Free':
+//         return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />;
+//       default:
+//         return null;
+//     }
+//   };
 
-  return (
-    <Card className="shadow-lg">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <CardTitle className="text-base sm:text-lg">{name}</CardTitle>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  {getSpecialTypeIcon()}
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{specialType === 'Free' ? 'Free Item' : specialType}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-          {isActive ? (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <BadgeCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Active</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ) : (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Upcoming</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-        </div>
-        <Badge 
-          variant="secondary"
-          className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2"
-        >
-          {type}
-        </Badge>
-      </CardHeader>
-      <CardContent>
-        <p className="font-bold text-base sm:text-lg">{discount}</p>
-        <p className="text-xs sm:text-sm text-muted-foreground">
-          Valid From: {startDate} - {endDate}
-        </p>
-        <div className="mt-2 flex items-center">
-          <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-gray-400" />
-          <span className="text-xs sm:text-sm text-gray-400">Redemptions: </span>
-          <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">{timesRedeemed}</span>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
+//   return (
+//     <Card className="shadow-lg">
+//       <CardHeader>
+//         <div className="flex justify-between items-center">
+//           <div className="flex items-center space-x-2">
+//             <CardTitle className="text-base sm:text-lg">{name}</CardTitle>
+//             <TooltipProvider>
+//               <Tooltip>
+//                 <TooltipTrigger>
+//                   {getSpecialTypeIcon()}
+//                 </TooltipTrigger>
+//                 <TooltipContent>
+//                   <p>{specialType === 'Free' ? 'Free Item' : specialType}</p>
+//                 </TooltipContent>
+//               </Tooltip>
+//             </TooltipProvider>
+//           </div>
+//           {isActive ? (
+//             <TooltipProvider>
+//               <Tooltip>
+//                 <TooltipTrigger>
+//                   <BadgeCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green" />
+//                 </TooltipTrigger>
+//                 <TooltipContent>
+//                   <p>Active</p>
+//                 </TooltipContent>
+//               </Tooltip>
+//             </TooltipProvider>
+//           ) : (
+//             <TooltipProvider>
+//               <Tooltip>
+//                 <TooltipTrigger>
+//                   <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange" />
+//                 </TooltipTrigger>
+//                 <TooltipContent>
+//                   <p>Upcoming</p>
+//                 </TooltipContent>
+//               </Tooltip>
+//             </TooltipProvider>
+//           )}
+//         </div>
+//         <Badge 
+//           variant="secondary"
+//           className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2"
+//         >
+//           {type}
+//         </Badge>
+//       </CardHeader>
+//       <CardContent>
+//         <p className="font-bold text-base sm:text-lg">{discount}</p>
+//         <p className="text-xs sm:text-sm text-muted-foreground">
+//           Valid From: {startDate} - {endDate}
+//         </p>
+//         <div className="mt-2 flex items-center">
+//           <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-gray-400" />
+//           <span className="text-xs sm:text-sm text-gray-400">Redemptions: </span>
+//           <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">{timesRedeemed}</span>
+//         </div>
+//       </CardContent>
+//     </Card>
+//   )
+// }
 
 function SurveyItem({ name, category, type, completions, location, region }: any) {
   return (
