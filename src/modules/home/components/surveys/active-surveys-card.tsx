@@ -4,102 +4,99 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { PercentDiamond, Coins, Coffee, BadgeCheck, Clock, BadgeInfo, AlertTriangle, Users } from 'lucide-react'
+import { BadgeCheck, BadgeInfo, AlertTriangle, Users, ScrollText, Store, UserRound, Popcorn } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
-import { BlueLoader } from "@/lib/blueLoader"
-import MultiColorLoader from "@/lib/loaders"
-import ThreeDotsLoader from "@/lib/three-dots-loader"
 
-interface SpecialProps {
-    special_id: number, 
-    special_name: string,
-    special: string,
-    special_type: string,
+interface SurveyProps {
+    survey_id: number,
+    survey_title: string,
+    survey_category: string,
     store_id: string,
+    region: string,
+    loyalty_tier: string,
     start_date: string,
     expiry_date: string,
-    special_value: string,
     isActive: number
 }
-type SpecialResponse = SpecialProps[]
+type SurveyResponse = SurveyProps[]
 
 // SpecialCard component to display individual special information
-export const ActiveSpecialCards = () => {
-    const [activeSpecials, setActiveSpecials] = useState<SpecialResponse>([])
+export const ActiveSurveyCards = () => {
+    const [activeSurveys, setActiveSurveys] = useState<SurveyResponse>([])
 
-    const [activeSpecialsLoading, setActiveSpecialsLoading] = useState(false);
-    const [activeSpecialsErrors, setActiveSpecialsErrors] = useState(false);
+    const [activeSurveysLoading, setActiveSurveysLoading] = useState(false);
+    const [activeSurveysErrors, setActiveSurveysErrors] = useState(false);
 
 
-    const getActiveSpecials = async () => {
-        setActiveSpecialsLoading(true);
-    
+    const getActiveSurveys = async () => {
+        setActiveSurveysLoading(true);
+        
         try {
-            const url = `products/getactivespecials`
-            const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
-            setActiveSpecials(response?.data);
-            console.log('Active Specials: ', response.data);
+            const url = `products/getactivesurveys`
+            const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
+            setActiveSurveys(response?.data);
+            console.log('Active Surveys: ', response.data);
     
         } catch (error) {
-            console.log("An error occurred when fetching the active specials");
-            setActiveSpecialsErrors(true);
+            console.log("An error occurred when fetching the Active Surveys");
+            setActiveSurveysErrors(true);
         }
     
-        setActiveSpecialsLoading(false);
+        setActiveSurveysLoading(false);
     }
 
-    const getSpecialTypeIcon = (special_value: string) => {
-        switch (special_value) {
-            case 'Percentage':
-                return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
-            case 'Amount':
-                return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
-            case 'Free':
-                return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+
+    const getSurveyCategoryIcon = (survey_category: string) => {
+        switch (survey_category) {
+            case 'Products':
+                return <Popcorn className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
+            case 'Staff':
+                return <UserRound className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
+            case 'Store':
+                return <Store className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
             default:
-                return <BadgeInfo className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <ScrollText className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
         }
     };
 
     useEffect(() => {
-        getActiveSpecials();
+        getActiveSurveys();
 
         // Set up an interval to fetch data every 5 minutes
         const interval = setInterval(() => {
-            getActiveSpecials();
+            getActiveSurveys();
         }, 300000); // 300,000 ms = 5 minutes || 60000 = 1 minute
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
     }, []);
 
-    if (activeSpecialsLoading) {
+    if (activeSurveysLoading) {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <SquareCircleLoader />
-                <p className="text-gray-600 text-sm uppercase">loading active specials...</p>
+                <p className="text-gray-600 text-sm uppercase">loading active surveys...</p>
             </div>
         )
     }
 
 
-    if (activeSpecialsErrors) {
+    if (activeSurveysErrors) {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <AlertTriangle size={38} color="red"/>
-                <p className="text-gray-600 text-sm uppercase">Oops! Unfortunately an error was encountered when fetching Active Specials, kindly refresh the page.</p>
+                <p className="text-gray-600 text-sm uppercase">Oops! Unfortunately an error was encountered when fetching Active surveys, kindly refresh the page.</p>
             </div>
         )
     }
 
 
-    if (activeSpecials.length === 0) {
+    if (activeSurveys.length === 0) {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <BadgeInfo size={38} className="text-emerald-500"/>
-                <p className="text-gray-600 text-sm uppercase">No specials are currently available. To add new specials, please navigate to the Admin page.</p>
+                <p className="text-gray-600 text-sm uppercase">No surveys are currently available. To add new surveys, please navigate to the Admin page.</p>
             </div>
         )
     }
@@ -108,19 +105,23 @@ export const ActiveSpecialCards = () => {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-        {activeSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
+        {activeSurveys?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
             <Card className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
                 <CardHeader>
-                    <div key={special_id} className="flex justify-between items-center">
+                    <div key={survey_id} className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
-                            <CardTitle className="text-base sm:text-lg">{special_name}</CardTitle>
+                            <CardTitle className="text-base sm:text-lg">{survey_title}</CardTitle>
                             <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    {getSpecialTypeIcon(special_value)} { /* render different icons based on special value */ }
+                                    {getSurveyCategoryIcon(survey_category)} { /* render different icons based on special value */ }
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>{special_value === 'Free' ? 'Free Item' : special_value}</p>
+                                <p>
+                                    {survey_category === 'Products' && "Products Survey"}
+                                    {survey_category === 'Staff' && "Staff Survey"}
+                                    {survey_category === 'Store' && "Store Survey"}
+                                </p>
                                 </TooltipContent>
                             </Tooltip>
                             </TooltipProvider>
@@ -136,15 +137,14 @@ export const ActiveSpecialCards = () => {
                             </Tooltip>
                         </TooltipProvider>
                     </div>
-                    <Badge variant="secondary" className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2">
-                        {special_type}
-                    </Badge>
+                    <div className="flex items-center text-xs sm:text-sm text-muted-foreground space-x-1">
+                        <span>{store_id || "'no-store'"} | {region || "'no-region'"} | {loyalty_tier || "'no-tier'"}</span>
+                    </div>
                 </CardHeader>
                 <CardContent>
-                    <p className="font-bold text-base sm:text-lg">{special}</p>
                     <div className="flex flex-col pt-2">
                         <p className="text-xs sm:text-sm text-muted-foreground">Valid From:</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{start_date} - {expiry_date}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground">{start_date || "'no start date'"} - {expiry_date || "'no expiry date'"}</p>
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />

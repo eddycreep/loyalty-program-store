@@ -53,13 +53,13 @@ export const UpcomingSpecialCards = () => {
     const getSpecialTypeIcon = (special_value: string) => {
         switch (special_value) {
             case 'Percentage':
-                return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
             case 'Amount':
-                return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
             case 'Free':
-                return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
             default:
-                return <BadgeInfo className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <BadgeInfo className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
         }
     };
 
@@ -128,10 +128,10 @@ export const UpcomingSpecialCards = () => {
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <BadgeCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green" />
+                                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange" />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Active</p>
+                                    <p>Upcoming</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>

@@ -39,6 +39,14 @@ const storeRegions = [
     { id: 9, region: 'Western Cape'}
 ];
 
+const ageGroup = [
+    { id: 1, age_range: '18-24', name: 'Young Adults' },
+    { id: 2, age_range: '25-34', name: 'Adults' },
+    { id: 3, age_range: '35-44', name: 'Middle-Aged Adults' },
+    { id: 4, age_range: '45-50', name: 'Older Middle-Aged Adults' },
+    { id: 5, age_range: '50+', name: 'Seniors' },
+  ];
+
 export const CreateSurveys = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [surveyName, setSurveyName] = useState<string>("");
@@ -96,7 +104,7 @@ export const CreateSurveys = () => {
                         <option value="Store">Store</option>
                     </select>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
+                <div className="w-[200px] flex flex-col pt-4">
                     <label>Store ID</label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
@@ -112,19 +120,17 @@ export const CreateSurveys = () => {
                         ))}
                     </select>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label>Regions</label>
+                <div className="w-[200px] flex flex-col pt-4">
+                    <label>Loyalty Tiers</label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
                         onChange={(e) => setSelectedRegion(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
-                            </option>
-                        ))}
+                        <option value="Gold">Gold</option>
+                        <option value="Diamond">Diamond</option>
+                        <option value="Platinum">Platinum</option>
                     </select>
                 </div>
                 <div className="flex gap-2">
