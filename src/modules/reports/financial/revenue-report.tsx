@@ -64,7 +64,7 @@ const stores = [
 
 
 export const RevenueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue from Members', 'Total Active Members', 'Revenue per Member', 'New Members', 'Churned Members', 'Revenue from New Members', 'Revenue from Returning Members', 'Top-Selling Categories', 'Average Transaction Value'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue', 'Total Active Members', 'Revenue per Member', 'New Members', 'Churned Members', 'New Members Revenue', 'Members Revenue Returning', 'Top-Selling Categories', 'Avg. Transaction Value'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
