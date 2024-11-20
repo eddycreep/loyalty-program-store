@@ -74,15 +74,26 @@ const stores = [
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
+const storeRegions = [
+    { id: 1, region: 'Eastern Cape'}, 
+    { id: 2, region: 'Free State'}, 
+    { id: 3, region: 'Gauteng'},
+    { id: 4, region: 'KwaZulu-Natal'},
+    { id: 5, region: 'Limpopo'}, 
+    { id: 6, region: 'Mpumalanga'},
+    { id: 7, region: 'Northern Cape'},
+    { id: 8, region: 'North West'},
+    { id: 9, region: 'Western Cape'}
+];
+
 export const ActiveMembersReport = () => {
-    //const headers = ['Store ID', 'Store Name', 'Date', 'Total Active Members', 'Active Members(%)', 'Loyalty Tier'];
     const header = ['Store ID', 'Store Name', 'Active Members p/Store', 'Age Group (18-24)', 'Age Group (25-34)', 'Age Group (35-44)', 'Age Group (45+)', 'Gender', 'Tiers']
 
     const [startdate, setStartDate] = useState('');
     const [enddate, setEndDate ] = useState('');
-
-    const [selectedMonth, setSelectedMonth] = useState(''); 
     const [selectedStore, setSelectedStore] = useState('');
+    const [selectedRegion, setSelectedRegion] = useState("");
+
     const [filteredData, setFilteredData] = useState(activeMembers);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -90,6 +101,14 @@ export const ActiveMembersReport = () => {
 
     // Function to handle filtering based on selected dates and store
     const handleFilter = () => {
+        //check if dates and store are null before filtering
+        if (!validateFilters()) {
+            setIsLoading(false);
+            return;
+        }
+
+
+
         setIsLoading(true);
 
         let filtered = activeMembers;
@@ -136,7 +155,52 @@ export const ActiveMembersReport = () => {
         setIsLoading(false);
     };
 
-    
+    // Function to validate filters
+    const validateFilters = () => {
+        if (!startdate && !enddate && !selectedStore) {
+        toast.error("Please select a start date, end date, and store!", {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+        return false;
+        }
+
+        if (startdate && !enddate) {
+        toast.error("End date is missing. Please select an end date!", {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+        return false;
+        }
+
+        if (!startdate && enddate) {
+        toast.error("Start date is missing. Please select a start date!", {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+        return false;
+        }
+
+        if (!selectedStore) {
+        toast.error("Please select a store!", {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+        return false;
+        }
+
+        // Validate date range
+        if (new Date(startdate) > new Date(enddate)) {
+        toast.error("Start date cannot be after the end date!", {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+        return false;
+        }
+
+        return true;
+    };
+
 
 
     if (isLoading) {
@@ -278,9 +342,24 @@ export const ActiveMembersReport = () => {
                         </SelectContent>
                     </Select>
                 </div>
+                <div className="w-[300px] flex flex-col pt-12">
+                    <label>Regions</label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {storeRegions.map((region) => (
+                            <option key={region.id} value={region.region}>
+                                {region.region}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <div className="flex justify-end w-full pt-12">
                     <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" 
-                        // onClick={handleFilter}
+                        onClick={ handleFilter }
                     >
                         <Filter />
                     </button>

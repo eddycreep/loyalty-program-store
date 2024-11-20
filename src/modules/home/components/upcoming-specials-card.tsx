@@ -107,7 +107,7 @@ export const UpcomingSpecialCards = () => {
 
 
     return (
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-2 p-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {upcomingSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
             <Card className="shadow-lg hover:shadow-xl w-[300px] sm:flex flex-col md:w-[350px] lg:w-[400px]">
                 <CardHeader>

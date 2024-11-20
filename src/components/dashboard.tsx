@@ -294,7 +294,7 @@ export default function Dashboard() {
                     <SurveysCompletedChart />
                   </div>
             </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
             <Card>
               <CardHeader>
                 <CardTitle>Active Members</CardTitle>
@@ -371,7 +371,7 @@ export default function Dashboard() {
           </div>
           </div>
         </TabsContent>
-        <TabsContent value="financial" className="space-y-4 h-screen w-full pb-64">
+        <TabsContent value="financial" className="space-y-4 h-screen w-full">
           {/* <div className="h-screen w-full"> */}
             <div className="flex justify-between gap-2 pb-2">
               <div className="w-1/3">
@@ -384,7 +384,7 @@ export default function Dashboard() {
                 <TopProductsRevenueChart />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
               <Card>
                 <CardHeader>
                   <CardTitle>Revenue per Member</CardTitle>
@@ -479,7 +479,7 @@ export default function Dashboard() {
                   <LowestRedeemedProductsChart />
                 </div>
             </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
             <Card>
               <CardHeader>
                 <CardTitle>Time to First Redemption</CardTitle>
@@ -567,7 +567,7 @@ export default function Dashboard() {
                   <TopRatedStaffChart />
                 </div>
             </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
           <Card>
             <CardHeader>
               <CardTitle>Customer Satisfaction Score (CSAT)</CardTitle>

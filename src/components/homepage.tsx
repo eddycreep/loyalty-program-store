@@ -1,3 +1,4 @@
+
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -14,6 +15,8 @@ import { apiEndPoint } from '@/utils/colors'
 import { LoyaltySummaryCards } from '@/components/loyalty-summary-cards'
 import { ActiveSpecialCards } from '@/modules/home/components/active-specials-card'
 import { UpcomingSpecialCards } from '@/modules/home/components/upcoming-specials-card'
+import { ActiveRewardsCard } from '@/modules/home/components/active-rewards-card'
+
 
 
 interface RewardProps {
@@ -96,6 +99,7 @@ export function Homepage() {
 
     setActiveSurveysLoading(false);
   }
+
 
   useEffect(() => {
     getActiveRewards();
@@ -190,30 +194,7 @@ export function Homepage() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3 sm:space-y-4">
-                    <RewardItem
-                      name="Refer a Friend"
-                      task="Refer a new customer"
-                      type="Percentage"
-                      redemptions={321}
-                      location="All Stores"
-                      region="All Regions"
-                    />
-                    <RewardItem
-                      name="Birthday Surprise"
-                      task="Shop on your birthday"
-                      type="Free"
-                      redemptions={654}
-                      location="All Stores"
-                      region="All Regions"
-                    />
-                    <RewardItem
-                      name="Loyalty Milestone Bonus"
-                      task="Reach 1000 loyalty points"
-                      type="Amount"
-                      redemptions={287}
-                      location="All Stores"
-                      region="All Regions"
-                    />
+                    <ActiveRewardsCard />
                   </ul>
                 </CardContent>
               </Card>
@@ -224,106 +205,6 @@ export function Homepage() {
     </div>
   )
 }
-
-// function SummaryCard({ title, value, icon, increase, isCurrency = false }: any) {
-//   return (
-//     <Card className="shadow-lg">
-//       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-//         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-//         <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
-//           {React.cloneElement(icon, { className: "h-5 w-5 sm:h-6 sm:w-6 text-red-500" })}
-//         </div>
-//       </CardHeader>
-//       <CardContent>
-//         <div className="text-xl sm:text-2xl font-bold">{value}</div>
-//         <div className="flex items-center mt-2 text-gray-400 text-xs sm:text-sm">
-//           <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-//           <span>
-//             {isCurrency ? '+$' : '+'}
-//             {increase.toLocaleString()} from last month
-//           </span>
-//         </div>
-//       </CardContent>
-//     </Card>
-//   )
-// }
-
-// function SpecialCard({ type, name, discount, startDate, endDate, timesRedeemed, isActive, specialType }: any) {
-//   const getSpecialTypeIcon = () => {
-//     switch (specialType) {
-//       case 'Percentage':
-//         return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />;
-//       case 'Amount':
-//         return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />;
-//       case 'Free':
-//         return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />;
-//       default:
-//         return null;
-//     }
-//   };
-
-//   return (
-//     <Card className="shadow-lg">
-//       <CardHeader>
-//         <div className="flex justify-between items-center">
-//           <div className="flex items-center space-x-2">
-//             <CardTitle className="text-base sm:text-lg">{name}</CardTitle>
-//             <TooltipProvider>
-//               <Tooltip>
-//                 <TooltipTrigger>
-//                   {getSpecialTypeIcon()}
-//                 </TooltipTrigger>
-//                 <TooltipContent>
-//                   <p>{specialType === 'Free' ? 'Free Item' : specialType}</p>
-//                 </TooltipContent>
-//               </Tooltip>
-//             </TooltipProvider>
-//           </div>
-//           {isActive ? (
-//             <TooltipProvider>
-//               <Tooltip>
-//                 <TooltipTrigger>
-//                   <BadgeCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green" />
-//                 </TooltipTrigger>
-//                 <TooltipContent>
-//                   <p>Active</p>
-//                 </TooltipContent>
-//               </Tooltip>
-//             </TooltipProvider>
-//           ) : (
-//             <TooltipProvider>
-//               <Tooltip>
-//                 <TooltipTrigger>
-//                   <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange" />
-//                 </TooltipTrigger>
-//                 <TooltipContent>
-//                   <p>Upcoming</p>
-//                 </TooltipContent>
-//               </Tooltip>
-//             </TooltipProvider>
-//           )}
-//         </div>
-//         <Badge 
-//           variant="secondary"
-//           className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2"
-//         >
-//           {type}
-//         </Badge>
-//       </CardHeader>
-//       <CardContent>
-//         <p className="font-bold text-base sm:text-lg">{discount}</p>
-//         <p className="text-xs sm:text-sm text-muted-foreground">
-//           Valid From: {startDate} - {endDate}
-//         </p>
-//         <div className="mt-2 flex items-center">
-//           <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-gray-400" />
-//           <span className="text-xs sm:text-sm text-gray-400">Redemptions: </span>
-//           <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">{timesRedeemed}</span>
-//         </div>
-//       </CardContent>
-//     </Card>
-//   )
-// }
 
 function SurveyItem({ name, category, type, completions, location, region }: any) {
   return (

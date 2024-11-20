@@ -107,9 +107,9 @@ export const ActiveSpecialCards = () => {
 
 
     return (
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-2 p-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {activeSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
-            <Card className="shadow-lg hover:shadow-xl w-[300px] sm:flex flex-col md:w-[350px] lg:w-[400px]">
+            <Card className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
                 <CardHeader>
                     <div key={special_id} className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
@@ -147,8 +147,7 @@ export const ActiveSpecialCards = () => {
                         <p className="text-xs sm:text-sm text-muted-foreground">{start_date} - {expiry_date}</p>
                     </div>
                     <div className="mt-2 flex items-center">
-                        <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-gray-400" />
-                        <span className="text-xs sm:text-sm text-gray-400">Redemptions: </span>
+                        <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
                         <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
                     </div>
                 </CardContent>
