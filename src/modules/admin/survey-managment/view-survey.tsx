@@ -64,8 +64,8 @@ export const ViewSurveys = () => {
             </div>
             <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
             {surveys?.map(({ survey_id, survey_title, survey_category, store_id, region, start_date, expiry_date, isActive }) => (
-                <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
-                    <div key={survey_id} className="flex items-center justify-between">
+                <div key={survey_id} className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
+                    <div className="flex items-center justify-between">
                         <p onClick={() => handleSurveyClick("1")}  className="text-sm flex-1 text-center cursor-pointer text-red">{survey_id}</p>
                         <p className="text-sm flex-1 text-center">{survey_title}</p>
                         <p className="text-sm flex-1 text-center">{survey_category}</p>

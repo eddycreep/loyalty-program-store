@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card"; // Adjust import path if necessary
-import { DollarSign, TrendingUp, ShoppingCart, Users } from "lucide-react";
+import { DollarSign, TrendingUp, ShoppingCart, Users, Trophy, Coins } from "lucide-react";
 
 // Dummy data for cards
 const activeMembersData = [
@@ -21,14 +21,14 @@ const revenueSpecialsData = [
 export const LoyaltySummaryCards = () => {
     return (
         // Container with flex-wrap for small/medium screens and justify-between for large screens
-        <div className="flex flex-wrap lg:flex-nowrap lg:justify-between gap-4 p-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 p-2">
             <div>
                 {activeMembersData.map((card, index) => (
                     // Adjusted card width: w-[315px] on small screens, wider on larger screens
                     <Card key={index} className="shadow-lg hover:shadow-xl w-[315px] md:w-[400px] lg:w-[390px]">
                         <CardHeader>
                             <div className="flex items-center justify-between">
-                                <p className="text-gray-500 text-sm">Active Loyalty Members</p>
+                                <p className="text-gray-500 text-sm p-2">Active Loyalty Members</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
                                     <Users size={24} />
                                 </div>
@@ -70,7 +70,7 @@ export const LoyaltySummaryCards = () => {
                             <div className="flex items-center justify-between">
                                 <p className="text-gray-500 text-sm">Rewards Redeemed</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
-                                    <TrendingUp size={24} />
+                                    <Trophy size={24} />
                                 </div>
                             </div>
                         </CardHeader>
@@ -90,7 +90,7 @@ export const LoyaltySummaryCards = () => {
                             <div className="flex items-center justify-between">
                                 <p className="text-gray-500 text-sm">Revenue from Specials</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
-                                    <DollarSign size={24} />
+                                    <Coins size={24} />
                                 </div>
                             </div>
                         </CardHeader>

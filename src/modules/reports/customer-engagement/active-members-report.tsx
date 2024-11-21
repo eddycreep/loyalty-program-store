@@ -4,7 +4,7 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import * as React from "react";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
-import { Check, X, BadgeAlert, AlertTriangle, Filter } from "lucide-react";
+import { Check, X, BadgeAlert, AlertTriangle, Filter, XOctagon, AlertOctagon, ShieldAlert } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
@@ -58,7 +58,6 @@ const activeMembers = [
 ];
 
 
-
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
@@ -73,6 +72,7 @@ const stores = [
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
+
 
 const storeRegions = [
     { id: 1, region: 'Eastern Cape'}, 
@@ -92,11 +92,12 @@ export const ActiveMembersReport = () => {
     const [startdate, setStartDate] = useState('');
     const [enddate, setEndDate ] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [selectedRegion, setSelectedRegion] = useState("");
+    const [selectedRegion, setSelectedRegion] = useState('');
 
     const [filteredData, setFilteredData] = useState(activeMembers);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [hasFiltered, setDataHasFiltered] = useState(false);
 
 
     // Function to handle filtering based on selected dates and store
@@ -106,8 +107,6 @@ export const ActiveMembersReport = () => {
             setIsLoading(false);
             return;
         }
-
-
 
         setIsLoading(true);
 
@@ -119,37 +118,38 @@ export const ActiveMembersReport = () => {
 
         // Validate dates: Ensure start date is not after end date
         if (startdate && enddate && start > end) {
-        toast.error('Start date cannot be after end date!', {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
-        setIsLoading(false);
-        return;
+            toast.error('Start date cannot be after end date!', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            setIsLoading(false);
+            return;
         }
 
         // Filter by start date and end date if both are selected
         if (startdate && enddate) {
-        filtered = filtered.filter((item) => {
-            const itemDate = new Date(item.date);
-            return itemDate >= start && itemDate <= end;
-        });
+            filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.date);
+                return itemDate >= start && itemDate <= end;
+            });
         }
 
         // Filter by store if selected
         if (selectedStore && selectedStore !== 'All') {
-        filtered = filtered.filter((item) => item.storeId === selectedStore);
+            filtered = filtered.filter((item) => item.storeId === selectedStore);
         }
 
         setFilteredData(filtered);
+        setDataHasFiltered(true);
 
         if (filtered.length === 0) {
-        setIsError(true);
-        toast.error('No data found for the selected filters!', {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
+            // setIsError(true);
+            toast.error('No data found for the selected filters!', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
         } else {
-        setIsError(false);
+            setIsError(false);
         }
 
         setIsLoading(false);
@@ -158,49 +158,48 @@ export const ActiveMembersReport = () => {
     // Function to validate filters
     const validateFilters = () => {
         if (!startdate && !enddate && !selectedStore) {
-        toast.error("Please select a start date, end date, and store!", {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
-        return false;
+            toast.error("Please select a start date, end date, and store!", {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            return false;
         }
 
         if (startdate && !enddate) {
-        toast.error("End date is missing. Please select an end date!", {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
-        return false;
+            toast.error("End date is missing. Please select an end date!", {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            return false;
         }
 
         if (!startdate && enddate) {
-        toast.error("Start date is missing. Please select a start date!", {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
-        return false;
+            toast.error("Start date is missing. Please select a start date!", {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            return false;
         }
 
         if (!selectedStore) {
-        toast.error("Please select a store!", {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
-        return false;
+            toast.error("Please select a store!", {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            return false;
         }
 
         // Validate date range
         if (new Date(startdate) > new Date(enddate)) {
-        toast.error("Start date cannot be after the end date!", {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
-        return false;
+            toast.error("Start date cannot be after the end date!", {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            return false;
         }
 
         return true;
     };
-
 
 
     if (isLoading) {
@@ -223,21 +222,39 @@ export const ActiveMembersReport = () => {
                         </div>
                     </div>
                 </div>
-                <div className="pt-12">
-                    <Select onValueChange={(value) => setSelectedStore(value)}>
-                        <SelectTrigger className="w-[200px] bg-white">
-                            <SelectValue placeholder="Select a store" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Store</SelectLabel>
-                                <SelectItem value="All">All</SelectItem>
-                                {stores.map(({ id, store_id, store }) => (
-                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
-                                ))}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Store ID:
+                    </Label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedStore}
+                        onChange={(e) => setSelectedStore(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {stores.map(({ id, store_id, store }) => (
+                            <option key={id} value={store_id}>
+                                {store_id}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Regions:
+                    </Label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {storeRegions.map((region) => (
+                            <option key={region.id} value={region.region}>
+                                {region.region}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
                     <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
@@ -275,21 +292,39 @@ export const ActiveMembersReport = () => {
                         </div>
                     </div>
                 </div>
-                <div className="pt-12">
-                    <Select onValueChange={(value) => setSelectedStore(value)}>
-                        <SelectTrigger className="w-[200px] bg-white">
-                            <SelectValue placeholder="Select a store" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Store</SelectLabel>
-                                <SelectItem value="All">All</SelectItem>
-                                {stores.map(({ id, store_id, store }) => (
-                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
-                                ))}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Store ID:
+                    </Label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedStore}
+                        onChange={(e) => setSelectedStore(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {stores.map(({ id, store_id, store }) => (
+                            <option key={id} value={store_id}>
+                                {store_id}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Regions:
+                    </Label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {storeRegions.map((region) => (
+                            <option key={region.id} value={region.region}>
+                                {region.region}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
                     <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
@@ -299,8 +334,78 @@ export const ActiveMembersReport = () => {
             </div>
 
                 <div className="flex flex-col items-center justify-center pt-20">
-                    <AlertTriangle size={44} />
-                    <p className="ml-2 uppercase pt-2 text-red">There is no data available for the selected month!</p>
+                    <XOctagon size={44} />
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data!</p>
+                </div>
+            </div>
+        );
+    }
+
+
+    if (hasFiltered && filteredData.length === 0) {
+        return (
+            <div className="h-screen overflow-y-auto pl-2 pt-4">
+                <div className='flex gap-4'>
+                <div className="pt-6">
+                    <div className="flex gap-4">
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Start Date:
+                            </Label>
+                            <input type="date" value={startdate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                        <div className="w-[270px]">
+                            <Label htmlFor="username" className="text-left pt-4">
+                                Expiry Date:
+                            </Label>
+                            <input type="date" value={enddate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                        </div>
+                    </div>
+                </div>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Store ID:
+                    </Label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedStore}
+                        onChange={(e) => setSelectedStore(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {stores.map(({ id, store_id, store }) => (
+                            <option key={id} value={store_id}>
+                                {store_id}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="w-[300px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Regions:
+                    </Label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {storeRegions.map((region) => (
+                            <option key={region.id} value={region.region}>
+                                {region.region}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="flex justify-end w-full pt-12">
+                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                        <Filter />
+                    </button>
+                </div>
+            </div>
+
+                <div className="flex flex-col items-center justify-center pt-20">
+                    <ShieldAlert size={44} />
+                    <p className="ml-2 uppercase pt-2 text-green">There is no data available for the selected dates!</p>
                 </div>
             </div>
         );
@@ -326,24 +431,27 @@ export const ActiveMembersReport = () => {
                         </div>
                     </div>
                 </div>
-                <div className="pt-12">
-                    <Select onValueChange={(value) => setSelectedStore(value)}>
-                        <SelectTrigger className="w-[200px] bg-white">
-                            <SelectValue placeholder="Select a store" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Store</SelectLabel>
-                                <SelectItem value="All">All</SelectItem>
-                                {stores.map(({ id, store_id, store }) => (
-                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
-                                ))}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                <div className="w-[350px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Store ID:
+                    </Label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedStore}
+                        onChange={(e) => setSelectedStore(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {stores.map(({ id, store_id, store }) => (
+                            <option key={id} value={store_id}>
+                                {store_id}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-                <div className="w-[300px] flex flex-col pt-12">
-                    <label>Regions</label>
+                <div className="w-[350px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Regions:
+                    </Label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -397,8 +505,6 @@ export const ActiveMembersReport = () => {
                                 <span className="text-blue">{spendingTierDemographic['Diamond']}</span>
                                 <span className="text-gray-400">{spendingTierDemographic['Platinum']}</span>
                             </div>
-                            {/* <p className="text-sm flex-1 text-center">{genderEngagementRate['Female']} {genderEngagementRate['Male']} {genderEngagementRate['PreferNotToSay']}</p>
-                            <p className='text-sm flex-1 text-center gap-2'>{spendingTierDemographic['Gold']} {spendingTierDemographic['Diamond']} {spendingTierDemographic['Platinum']}</p> */}
                         </div>
                     </div>
                 ))}

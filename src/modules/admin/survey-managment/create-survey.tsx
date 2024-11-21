@@ -1,8 +1,27 @@
 "use client"
 
+import axios from "axios";
+import toast from 'react-hot-toast';
 import { useState } from "react";
-import { X } from "lucide-react";
 import { SurveySheet } from "@/components/component/survey-sheet";
+import { apiEndPoint, colors } from "@/utils/colors";
+import { Check, X } from "lucide-react"
+
+interface SurveyProps {
+    survey_title: string,
+    survey_category: string,
+    store_id: string,
+    loyalty_tier: string,
+    start_date: string,
+    expiry_date: string,
+    isActive: number,
+}
+type SurveyResponse = SurveyProps[]
+
+interface SurveyIDProps {
+    survey_id: number,
+}
+type SurveyIDResponse = SurveyIDProps[]
 
 interface Question {
     question: string;
@@ -15,12 +34,12 @@ const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
@@ -39,12 +58,26 @@ const storeRegions = [
     { id: 9, region: 'Western Cape'}
 ];
 
+const ageGroup = [
+    { id: 1, age_range: '18-24', name: 'Young Adults' },
+    { id: 2, age_range: '25-34', name: 'Adults' },
+    { id: 3, age_range: '35-44', name: 'Middle-Aged Adults' },
+    { id: 4, age_range: '45-50', name: 'Older Middle-Aged Adults' },
+    { id: 5, age_range: '50+', name: 'Seniors' },
+];
+
 export const CreateSurveys = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [surveyName, setSurveyName] = useState<string>("");
     const [surveyCategory, setSurveyCategory] = useState<string>("");
     const [selectedStore, setSelectedStore] = useState<string>("");
-    const [selectedRegion, setSelectedRegion] = useState("");
+    const [selectedTier, setSelectedTier] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [expiryDate, setExpiryDate] = useState("");
+    const [isActive, setIsActive] = useState(false);
+
+
+    const [surveyID, setSurveyID] = useState<SurveyIDResponse>([]);
 
     const addQuestion = () => {
         const newQuestionNumber = questions.length + 1;
@@ -71,6 +104,110 @@ export const CreateSurveys = () => {
         setQuestions(updatedQuestions);
     };
 
+    const saveSurvey = async () => {
+        try {
+            const payload = {
+                survey_title: surveyName,
+                survey_category: surveyCategory,
+                store_id: selectedStore,
+                loyalty_tier: selectedTier,
+                start_date: startDate,
+                expiry_date: expiryDate,
+                isActive: isActive
+            }
+
+
+            const url = `admin/savesurvey`
+            const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
+            console.log('The Survey has been saved successfully', response)
+            toast.success('Survey Saved Successfully!', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            });
+
+            await getSurveyID(surveyName);
+        } catch (error) {
+            console.error('Error saving survey:', error)
+            toast.error('Error Saving Survey', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+        }
+    }
+
+
+    const getSurveyID = async (surveyTitle: string) => {
+        try {
+            const url = `admin/getsurveyid/:${surveyTitle}`
+            const response = await axios.post<SurveyIDResponse>(`${apiEndPoint}/${url}`)
+            setSurveyID(response?.data);
+            console.log('Retrieved Survey ID Successfully!', response)
+
+            toast.success('Retrieved Survey ID Successfully!', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            });
+
+            //await saveSurveyQuestions(response?.data.survey_id)
+        } catch (error) {
+            console.error('Error saving survey ID:', error)
+            toast.error('Error Saving Survey ID', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+        }
+    }
+
+    // const saveSurveyQuestions = async (surveyID: number) => {
+    //     try {
+    //         const payload = {
+    //             survey_id: ,
+    //             question_text: ,
+    //             question_type: ,
+    //         }
+
+
+    //         const url = `admin/savesurveyquestions/${surveyID}`
+    //         const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
+    //         console.log('The Survey has been saved successfully', response)
+    //         toast.success('Survey Saved Successfully!', {
+    //             icon: <Check color={colors.green} size={24} />,
+    //             duration: 3000,
+    //         });
+    //     } catch (error) {
+    //         console.error('Error saving survey:', error)
+    //         toast.error('Error Saving Survey', {
+    //             icon: <X color={colors.red} size={24} />,
+    //             duration: 3000,
+    //         });
+    //     }
+    // }
+
+    // const saveSurveyChoices = async (questionID: number) => {
+    //     try {
+    //         // const payload = {
+    //         //     choice_id: 
+    //         //     question_id
+    //         //     choice_text
+    //         // }
+
+
+    //         const url = `admin/savesurveychoices/${questionID}`
+    //         const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`)
+    //         console.log('The Survey has been saved successfully', response)
+    //         toast.success('Survey Saved Successfully!', {
+    //             icon: <Check color={colors.green} size={24} />,
+    //             duration: 3000,
+    //         });
+    //     } catch (error) {
+    //         console.error('Error saving survey:', error)
+    //         toast.error('Error Saving Survey', {
+    //             icon: <X color={colors.red} size={24} />,
+    //             duration: 3000,
+    //         });
+    //     }
+    // }
+
     return (
         <div className="mb-52">
             <div className="flex gap-4">
@@ -96,7 +233,7 @@ export const CreateSurveys = () => {
                         <option value="Store">Store</option>
                     </select>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
+                <div className="w-[200px] flex flex-col pt-4">
                     <label>Store ID</label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
@@ -112,25 +249,28 @@ export const CreateSurveys = () => {
                         ))}
                     </select>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label>Regions</label>
+                <div className="w-[200px] flex flex-col pt-4">
+                    <label>Loyalty Tiers</label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
+                        value={selectedTier}
+                        onChange={(e) => setSelectedTier(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
-                            </option>
-                        ))}
+                        <option value="Gold">Gold</option>
+                        <option value="Diamond">Diamond</option>
+                        <option value="Platinum">Platinum</option>
                     </select>
                 </div>
                 <div className="flex gap-2">
                     <div className="pt-10">
                         <button onClick={addQuestion} className="bg-red text-white h-10 rounded p-2">
                             Add Question
+                        </button>
+                    </div>
+                    <div className="pt-10">
+                        <button onClick={ saveSurvey } className="bg-red text-white h-10 rounded p-2">
+                            Save Survey
                         </button>
                     </div>
                     <div className="pt-10">

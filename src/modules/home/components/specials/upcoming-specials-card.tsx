@@ -26,56 +26,56 @@ interface SpecialProps {
 type SpecialResponse = SpecialProps[]
 
 // SpecialCard component to display individual special information
-export const ActiveSpecialCards = () => {
-    const [activeSpecials, setActiveSpecials] = useState<SpecialResponse>([])
+export const UpcomingSpecialCards = () => {
+    const [upcomingSpecials, setUpcomingSpecials] = useState<SpecialResponse>([])
 
-    const [activeSpecialsLoading, setActiveSpecialsLoading] = useState(false);
-    const [activeSpecialsErrors, setActiveSpecialsErrors] = useState(false);
+    const [upcomingSpecialsLoading, setUpcomingSpecialsLoading] = useState(false);
+    const [upcomingSpecialsErrors, setUpcomingSpecialsErrors] = useState(false);
 
 
-    const getActiveSpecials = async () => {
-        setActiveSpecialsLoading(true);
+    const getUpcomingSpecials = async () => {
+        setUpcomingSpecialsLoading(true);
     
         try {
-            const url = `products/getactivespecials`
+            const url = `products/getupcomingspecials`
             const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
-            setActiveSpecials(response?.data);
-            console.log('Active Specials: ', response.data);
+            setUpcomingSpecials(response?.data);
+            console.log('Upcoming Specials: ', response.data);
     
         } catch (error) {
-            console.log("An error occurred when fetching the active specials");
-            setActiveSpecialsErrors(true);
+            console.log("An error occurred when fetching the upcoming specials");
+            setUpcomingSpecialsErrors(true);
         }
     
-        setActiveSpecialsLoading(false);
+            setUpcomingSpecialsLoading(false);
     }
 
     const getSpecialTypeIcon = (special_value: string) => {
         switch (special_value) {
             case 'Percentage':
-                return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <PercentDiamond className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
             case 'Amount':
-                return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
             case 'Free':
-                return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <Coffee className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
             default:
-                return <BadgeInfo className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />;
+                return <BadgeInfo className="h-4 w-4 sm:h-5 sm:w-5 text-blue" />;
         }
     };
 
     useEffect(() => {
-        getActiveSpecials();
+        getUpcomingSpecials();
 
         // Set up an interval to fetch data every 5 minutes
         const interval = setInterval(() => {
-            getActiveSpecials();
+            getUpcomingSpecials();
         }, 300000); // 300,000 ms = 5 minutes || 60000 = 1 minute
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
     }, []);
 
-    if (activeSpecialsLoading) {
+    if (upcomingSpecialsLoading) {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <SquareCircleLoader />
@@ -85,7 +85,7 @@ export const ActiveSpecialCards = () => {
     }
 
 
-    if (activeSpecialsErrors) {
+    if (upcomingSpecialsErrors) {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <AlertTriangle size={38} color="red"/>
@@ -95,7 +95,7 @@ export const ActiveSpecialCards = () => {
     }
 
 
-    if (activeSpecials.length === 0) {
+    if (upcomingSpecials.length === 0) {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <BadgeInfo size={38} className="text-emerald-500"/>
@@ -108,10 +108,10 @@ export const ActiveSpecialCards = () => {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-        {activeSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
-            <Card className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
+        {upcomingSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
+            <Card key={special_id} className="shadow-lg hover:shadow-xl w-[300px] sm:flex flex-col md:w-[350px] lg:w-[400px]">
                 <CardHeader>
-                    <div key={special_id} className="flex justify-between items-center">
+                    <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <CardTitle className="text-base sm:text-lg">{special_name}</CardTitle>
                             <TooltipProvider>
@@ -128,10 +128,10 @@ export const ActiveSpecialCards = () => {
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <BadgeCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green" />
+                                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange" />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Active</p>
+                                    <p>Upcoming</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
@@ -148,7 +148,7 @@ export const ActiveSpecialCards = () => {
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
-                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">0</span>
                     </div>
                 </CardContent>
             </Card>

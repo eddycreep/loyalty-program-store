@@ -143,9 +143,9 @@ export function LoyaltyReviews() {
   }
 
   const renderReviewCards = (reviews: Review[]): JSX.Element => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 shadow-2xl">
       {reviews.map((review) => (
-        <Card key={review.id} className="flex flex-col">
+        <Card key={review.id} className="flex flex-col shadow-lg hover:shadow-2xl">
           <CardHeader className="flex flex-row items-center gap-4">
             <Avatar>
               <AvatarImage
