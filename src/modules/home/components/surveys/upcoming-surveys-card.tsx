@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BadgeCheck, BadgeInfo, AlertTriangle, Users, ScrollText, Store, UserRound, Popcorn } from 'lucide-react'
+import { BadgeCheck, BadgeInfo, AlertTriangle, Users, ScrollText, Store, UserRound, Popcorn, Clock } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
 
@@ -105,9 +105,9 @@ export const UpcomingSurveyCards = () => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {upcomingSurveys?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
-            <Card className="shadow-lg hover:shadow-xl w-[300px] sm:flex flex-col md:w-[350px] lg:w-[400px]">
+            <Card key={survey_id} className="shadow-lg hover:shadow-xl w-[300px] sm:flex flex-col md:w-[350px] lg:w-[400px]">
                 <CardHeader>
-                    <div key={survey_id} className="flex justify-between items-center">
+                    <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <CardTitle className="text-base sm:text-lg">{survey_title}</CardTitle>
                             <TooltipProvider>
@@ -128,10 +128,10 @@ export const UpcomingSurveyCards = () => {
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <BadgeCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green" />
+                                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange" />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Active</p>
+                                    <p>Upcoming</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
@@ -147,7 +147,7 @@ export const UpcomingSurveyCards = () => {
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
-                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">0</span>
                     </div>
                 </CardContent>
             </Card>

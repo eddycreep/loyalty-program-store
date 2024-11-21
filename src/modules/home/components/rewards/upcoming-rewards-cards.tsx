@@ -5,7 +5,7 @@ import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { PercentDiamond, Coins, Coffee, BadgeCheck, BadgeInfo, AlertTriangle, Users } from 'lucide-react'
+import { PercentDiamond, Coins, Coffee, BadgeCheck, BadgeInfo, AlertTriangle, Users, Clock } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
 
@@ -27,7 +27,7 @@ interface RewardProps {
 
 type RewardsResponse = RewardProps[]
 
-// SpecialCard component to display individual special information
+
 export const UpcomingRewardsCards = () => {
     const [upcomingRewards, setUpcomingRewards] = useState<RewardsResponse>([]);
 
@@ -37,7 +37,7 @@ export const UpcomingRewardsCards = () => {
 
     const getUpcomingRewards = async () => {
         setLoadingRewards(true);
-        //http://localhost:4200/products/get-upcoming-rewards
+
         try {
             const url = `products/get-upcoming-rewards`
             const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
@@ -111,9 +111,9 @@ export const UpcomingRewardsCards = () => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {upcomingRewards?.map(({ reward_id, reward_title, description, reward, reward_type, reward_price, store_id, region, start_date, expiry_date, loyalty_tier, age_group, isActive }) => (
-            <Card className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
+            <Card key={reward_id} className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
                 <CardHeader>
-                    <div key={reward_id} className="flex justify-between items-center">
+                    <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <CardTitle className="text-base sm:text-lg">{reward_title}</CardTitle>
                             <TooltipProvider>
@@ -130,20 +130,17 @@ export const UpcomingRewardsCards = () => {
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <BadgeCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green" />
+                                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-orange" />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Active</p>
+                                    <p>Upcoming</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
                     </div>
-                    <Badge variant="secondary" className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2">
-                        {reward_type}
-                    </Badge>
-                    {/* <div className="flex items-center text-xs sm:text-sm text-muted-foreground space-x-1">
+                    <div className="flex items-center text-xs sm:text-sm text-muted-foreground space-x-1">
                         <span>{store_id || "'no-store'"} | {region || "'no-region'"} | {loyalty_tier || "'no-tier'"}</span>
-                    </div> */}
+                    </div>
                 </CardHeader>
                 <CardContent>
                     <p className="font-bold text-base sm:text-lg">{reward}</p>
@@ -153,7 +150,7 @@ export const UpcomingRewardsCards = () => {
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
-                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">0</span>
                     </div>
                 </CardContent>
             </Card>

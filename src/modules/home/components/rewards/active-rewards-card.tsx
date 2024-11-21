@@ -111,9 +111,9 @@ export const ActiveRewardsCards = () => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {rewards?.map(({ reward_id, reward_title, description, reward, reward_type, reward_price, store_id, region, start_date, expiry_date, loyalty_tier, age_group, isActive }) => (
-            <Card className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
+            <Card key={reward_id} className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
                 <CardHeader>
-                    <div key={reward_id} className="flex justify-between items-center">
+                    <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <CardTitle className="text-base sm:text-lg">{reward_title}</CardTitle>
                             <TooltipProvider>
@@ -138,9 +138,6 @@ export const ActiveRewardsCards = () => {
                             </Tooltip>
                         </TooltipProvider>
                     </div>
-                    {/* <Badge variant="secondary" className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2">
-                        {reward_type}
-                    </Badge> */}
                     <div className="flex items-center text-xs sm:text-sm text-muted-foreground space-x-1">
                         <span>{store_id || "'no-store'"} | {region || "'no-region'"} | {loyalty_tier || "'no-tier'"}</span>
                     </div>
@@ -153,7 +150,16 @@ export const ActiveRewardsCards = () => {
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
-                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Customer Redemptions</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
                 </CardContent>
             </Card>

@@ -109,9 +109,9 @@ export const UpcomingSpecialCards = () => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {upcomingSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
-            <Card className="shadow-lg hover:shadow-xl w-[300px] sm:flex flex-col md:w-[350px] lg:w-[400px]">
+            <Card key={special_id} className="shadow-lg hover:shadow-xl w-[300px] sm:flex flex-col md:w-[350px] lg:w-[400px]">
                 <CardHeader>
-                    <div key={special_id} className="flex justify-between items-center">
+                    <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <CardTitle className="text-base sm:text-lg">{special_name}</CardTitle>
                             <TooltipProvider>
@@ -147,9 +147,8 @@ export const UpcomingSpecialCards = () => {
                         <p className="text-xs sm:text-sm text-muted-foreground">{start_date} - {expiry_date}</p>
                     </div>
                     <div className="mt-2 flex items-center">
-                        <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-gray-400" />
-                        <span className="text-xs sm:text-sm text-gray-400">Redemptions: </span>
-                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                        <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
+                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">0</span>
                     </div>
                 </CardContent>
             </Card>

@@ -109,9 +109,9 @@ export const ActiveSpecialCards = () => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {activeSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
-            <Card className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
+            <Card key={special_id} className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
                 <CardHeader>
-                    <div key={special_id} className="flex justify-between items-center">
+                    <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <CardTitle className="text-base sm:text-lg">{special_name}</CardTitle>
                             <TooltipProvider>
@@ -139,9 +139,6 @@ export const ActiveSpecialCards = () => {
                     <Badge variant="secondary" className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2">
                         {special_type}
                     </Badge>
-                    {/* <div className="flex items-center text-xs sm:text-sm text-muted-foreground space-x-1">
-                        <span>{store_id || "'no-store'"} | {special_type || "'no-special-type'"}</span>
-                    </div> */}
                 </CardHeader>
                 <CardContent>
                     <p className="font-bold text-base sm:text-lg">{special}</p>
@@ -151,7 +148,16 @@ export const ActiveSpecialCards = () => {
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
-                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Customer Redemptions</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
                 </CardContent>
             </Card>

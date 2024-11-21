@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card"; // Adjust import path if necessary
-import { DollarSign, TrendingUp, ShoppingCart, Users } from "lucide-react";
+import { DollarSign, TrendingUp, ShoppingCart, Users, Trophy, Coins } from "lucide-react";
 
 // Dummy data for cards
 const activeMembersData = [
@@ -70,7 +70,7 @@ export const LoyaltySummaryCards = () => {
                             <div className="flex items-center justify-between">
                                 <p className="text-gray-500 text-sm">Rewards Redeemed</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
-                                    <TrendingUp size={24} />
+                                    <Trophy size={24} />
                                 </div>
                             </div>
                         </CardHeader>
@@ -90,7 +90,7 @@ export const LoyaltySummaryCards = () => {
                             <div className="flex items-center justify-between">
                                 <p className="text-gray-500 text-sm">Revenue from Specials</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
-                                    <DollarSign size={24} />
+                                    <Coins size={24} />
                                 </div>
                             </div>
                         </CardHeader>

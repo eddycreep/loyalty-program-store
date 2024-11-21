@@ -168,7 +168,6 @@ export const ProductsManModule = () => {
             const url = `products/getallproductspecials`
             const response = await axios.get<ProductSpecialsResponse>(`${apiEndPoint}/${url}`)
             setAllProductSpecials(response?.data)
-            // console.log(RETRIEVED ALL PRODUCT SPECIALS:", response)
 
         } catch (error) {
             console.log("AN ERROR OCCURED WHEN FETCHING PRODUCT SPECIALS:", error)
