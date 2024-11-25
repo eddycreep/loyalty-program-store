@@ -7,29 +7,29 @@ import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 
-export const DeleteConfirmation = ({ isOpen, onClose }: any) => {
+export const DeleteSpecialConfirmation = ({ isOpen, onClose, specialID }: any) => {
   if (!isOpen) return null; // Return null if dialog is not open
 
-  const deleteSpecial = async () => {
+  const deleteSpecial = async (specialId: number) => {
     try{
-      const url = 'admin/deletespecial/special_id'
+      const url = `admin/deletespecial/${specialId}`
       const response = await axios.delete(`${apiEndPoint}/${url}`)
 
 
-      deleteSpecialItem();
+      deleteSpecialItem(specialID);
       console.log("DELETION SUCCESSFUL:", response)
     } catch (error) {
       console.error('Error deleting special:', error)
     }
   }
 
-  const deleteSpecialItem = async () => {
+  const deleteSpecialItem = async (specialId: number) => {
     try{
-      const url = 'admin/deleteproductspecial/:special_id'
+      const url = `admin/deletespecialitem/${specialId}`
       const response = await axios.delete(`${apiEndPoint}/${url}`)
       console.log("The Product linked to special has been deleted:", response)
 
-      toast.success('The special item has been deleted', {
+      toast.success('special has been deleted', {
         icon: <Check color={colors.green} size={24} />,
         duration: 3000,
       });
@@ -69,7 +69,7 @@ export const DeleteConfirmation = ({ isOpen, onClose }: any) => {
             Cancel
           </Button>
           <Button
-            onClick={ deleteSpecial }
+            onClick={() => deleteSpecial(specialID) }
             className="bg-red text-white hover:bg-red-700 h-8"
           >
             Confirm

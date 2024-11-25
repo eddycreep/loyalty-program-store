@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { CreateSurveys } from './survey-managment/create-survey';
 import { ViewSurveys } from './survey-managment/view-survey';
 import { EnhancedSurveyCreatorComponent } from '@/components/enhanced-survey-creator'
+import { EditSurvey } from './survey-managment/edit-survey';
+
 
 export const SurveyModule = () => {
     const [currentTab, setCurrentTab] = useState('products');
@@ -19,6 +21,7 @@ export const SurveyModule = () => {
                 </div>
             {currentTab === 'createSurvey' && <CreateSurveys /> }
             {currentTab === 'viewSurvey' && <ViewSurveys />}
+            {/* {currentTab === 'viewSurvey' && <EditSurvey  />} */}
         </div>
     );
 }

@@ -82,7 +82,7 @@ const stores = [
   { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-export function CombinedSpecialsComponent({ onClose }: Props) {
+export function AddCombinedSpecials({ onClose }: Props) {
   const [specials, setSpecials] = useState<CombinedSpecial[]>([])
   const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
     id: '',
@@ -414,41 +414,7 @@ export function CombinedSpecialsComponent({ onClose }: Props) {
           </CardContent>
         </Card>
 
-        {/* <Card>
-          <CardHeader>
-            <CardTitle>Existing Combined Specials</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {specials.length === 0 ? (
-              <p>No specials created yet.</p>
-            ) : (
-              <div className="space-y-4">
-                {specials.map((special) => (
-                  <Card key={special.id} className="p-4">
-                    <h3 className="font-semibold">{special.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Special {special.specialType}: {special.specialType === 'Percentage' ? `${special.specialPrice}%` : `${special.specialPrice.toFixed(2)}`}
-                    </p>
-                    <p className="text-sm text-muted-foreground">Store ID: {special.storeId}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Date: {special.startDate} to {special.endDate}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Status: {special.isActive ? 'Active' : 'Inactive'}
-                    </p>
-                    <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {special.products.map((product) => (
-                        <div key={product.id} className="text-sm">
-                          {product.name} (Group: {product.groupId})
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card> */}
+
         </div>
       </div>
   )

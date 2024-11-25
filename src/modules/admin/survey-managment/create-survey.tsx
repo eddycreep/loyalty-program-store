@@ -5,7 +5,8 @@ import toast from 'react-hot-toast';
 import { useState } from "react";
 import { SurveySheet } from "@/components/component/survey-sheet";
 import { apiEndPoint, colors } from "@/utils/colors";
-import { Check, X } from "lucide-react"
+import { Check, X } from "lucide-react";
+
 
 interface SurveyProps {
     survey_title: string,

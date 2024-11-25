@@ -4,21 +4,22 @@ import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
-import { X, Search, Check, PlusCircle } from 'lucide-react';
+import { Check, X, Search, PlusCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import { CombinedProps } from "./combined-specials"
 
 interface Props {
-  onClose: () => void;  // Corrected syntax here
+    onClose: () => void;  
+    selectedSpecial: CombinedProps | null; 
 }
 
 //specials
-interface Specials {
+export interface Specials {
     special_id: number,
     special_name: string,
     special: string,
@@ -30,19 +31,29 @@ interface Specials {
     isActive: number
 }
 
+
 //special items - individual x combined
-interface SpecialItems {
+export interface SpecialItems {
     special_id: number,
     special_group_id: string,
     product_description: string,
     special_price: string
 }
 
-//get special id
-interface SpecialIDProps {
-    special_id: number
+export interface CombinedSpecialsProps {
+    special_id: number,
+    special_name: string,
+    special: string,
+    special_type:string,
+    store_id: string,
+    start_date: string,
+    expiry_date: string,
+    special_value: string,
+    isActive: boolean,
+    special_group_id: number,
+    product_description: string,
+    special_price: number
 }
-
 
 type Product = {
     id: string
@@ -52,7 +63,7 @@ type Product = {
 }
 
 type SpecialProduct = Product & {
-    
+    groupId: string
 }
 
 type CombinedSpecial = {
@@ -69,21 +80,21 @@ type CombinedSpecial = {
 }
 
 const stores = [
-  { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
-  { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
-  { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-  { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
-  { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-  { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
-  { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-  { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-  { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
-  { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
-  { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
-  { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
+    { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
+    { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
+    { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' }, 
+    { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' }, 
+    { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' }, 
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' }, 
+    { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
+    { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
+    { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
-export function ProductsSpecialsComponent({ onClose }: Props) {
+export function EditCombinedSpecials ({ onClose }: Props) {
     const [specials, setSpecials] = useState<CombinedSpecial[]>([])
     const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
         id: '',
@@ -123,12 +134,11 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
     const displayedProducts = filteredProducts.slice(0, 3); // Modified to limit products to 3
 
     const addProductToSpecial = (product: Product) => {
-        // Allow adding only one product
-        if (currentSpecial.products.length === 0) {
-            setCurrentSpecial(prev => ({
+        if (currentSpecial.products.length < 5) {
+        setCurrentSpecial(prev => ({
             ...prev,
-            products: [{ ...product, groupId: '' }]
-            }))
+            products: [...prev.products, { ...product, groupId: '' }]
+        }))
         }
     }
 
@@ -139,9 +149,18 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
         }))
     }
 
-    const saveSpecial = async () => {
+    const updateProductGroupId = (productId: string, groupId: string) => {
+        setCurrentSpecial(prev => ({
+        ...prev,
+        products: prev.products.map(p =>
+            p.id === productId ? { ...p, groupId } : p
+        )
+        }))
+    }
+
+    const updateSpecial = async (specialId: number) => {
         try {
-            const specialType = 'Special'
+            const specialType = 'Combined Special'
             
             const payload = {
                 specialName: currentSpecial.name,
@@ -154,7 +173,7 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
                 isActive: currentSpecial.isActive,
             }
 
-            const url = `admin/savespecial`
+            const url = `admin/updatespecial/${specialId}`
             const response = await axios.post<Specials>(`${apiEndPoint}/${url}`, payload)
             console.log('The Special has been saved successfully:', response.data)
 
@@ -165,7 +184,7 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
                 })
             }
 
-            fetchSpecialID() // fetch special id
+            //updateCombinedSpecialItems() // fetch special id
         } catch (error) {
             console.error('Error saving special:', error)
             
@@ -176,46 +195,34 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
         }
     }
 
-    const fetchSpecialID = async () => {
-        try {
-            const url = `admin/getspecialid/${currentSpecial.name}`
-            const response = await axios.get<SpecialIDProps>(`${apiEndPoint}/${url}`)
-            console.log('The Special ID has been fetched successfully:', response.data)
-            setSpecialID(response?.data.special_id)
-            saveSpecialItems() //save the item
-        } catch (error) {
-            console.error('Error fetching special ID:', error)
-        }
-    }
+    // const updateCombinedSpecialItems = async (specialId: number) => {
+    //     try {
+    //         // const payload = {
+    //         //     special_group_id
+    //         //     product_description
+    //         //     special_price
+    //         // }
 
-    const saveSpecialItems = async () => {
-        try {
-            const payload = {
-                specialid: specialID,
-                productdescription: currentSpecial.products,
-                specialprice: currentSpecial.specialPrice
-            }
+    //         const url = `admin/updatecombinedspecialitems/${specialId}`
+    //         const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
+    //         console.log('The Special item has been saved with its ID:', response.data)
 
-            const url = `admin/saveproductspecial`
-            const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
-            console.log('The Special item has been saved with its ID:', response.data)
+    //         if (response.status === 200) {
+    //             toast.success('combined items updated', {
+    //                 icon: <Check color={colors.green} size={24} />,
+    //                 duration: 3000,
+    //             })
+    //         }
 
-            if (response.status === 200) {
-                toast.success('The special item has been saved successully', {
-                    icon: <Check color={colors.green} size={24} />,
-                    duration: 3000,
-                })
-            }
-
-        } catch (error) {
-            console.error('Error saving special with its product:', error)
+    //     } catch (error) {
+    //         console.error('Error saving special with its product:', error)
             
-            toast.success('There was an error when saving the special items', {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            })
-        }
-    }
+    //         toast.success('error updating combined items', {
+    //             icon: <X color={colors.red} size={24} />,
+    //             duration: 3000,
+    //         })
+    //     }
+    // }
 
     return (
         <div className="container mx-auto p-4 relative">
@@ -223,13 +230,13 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
                 <Card className="mb-6 w-[600px]">
                     <div className="flex justify-end pr-4 pt-4">
                         <button onClick={ onClose }>
-                            <X className="h-4 w-4" color="red" />
+                        <X className="h-4 w-4" color="red" />
                         </button>
                     </div>
                     <CardHeader>
-                        <CardTitle>Create Special</CardTitle>
+                        <CardTitle>Create New Combined Special</CardTitle>
                         <CardDescription>
-                            Set the special with the required fields and assign all the products linked to the special. Click Save Special once completed.
+                        Set the special with the required fields and assign all the products linked to the special. Click Save Special once completed.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -259,7 +266,7 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
                             <Label htmlFor="special-type">Special Type</Label>
                             <Select
                                 value={currentSpecial.specialValue}
-                                onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, specialValue: value as 'Percentage' | 'Amount' }))}
+                                onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, specialType: value as 'Percentage' | 'Amount' }))}
                             >
                                 <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select special type" />
@@ -358,14 +365,14 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                        {displayedProducts.map((product) => (
+                            {displayedProducts.map((product) => (
                             <Button
                                 key={product.id}
                                 variant="outline"
                                 onClick={() => addProductToSpecial(product)}
-                                disabled={currentSpecial.products.length >= 1 || currentSpecial.products.some(p => p.id === product.id)}
+                                disabled={currentSpecial.products.length >= 5 || currentSpecial.products.some(p => p.id === product.id)}
                                 className="justify-start"
-                                >
+                            >
                                 <PlusCircle className="h-4 w-4 mr-2" />
                                 {product.name}
                             </Button>
@@ -373,12 +380,18 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
                         </div>
 
                         <div className="mt-4">
-                            <Label>Product</Label>
+                            <Label>Products (Max 5)</Label>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {currentSpecial.products.map((product) => (
                                 <Card key={product.id} className="p-2 flex justify-between items-center">
                                 <span>{product.name}</span>
                                 <div className="flex items-center space-x-2">
+                                    <Input
+                                    value={product.groupId}
+                                    onChange={(e) => updateProductGroupId(product.id, e.target.value)}
+                                    placeholder="Group ID"
+                                    className="w-32"
+                                    />
                                     <Button
                                     variant="ghost"
                                     size="icon"
@@ -393,7 +406,7 @@ export function ProductsSpecialsComponent({ onClose }: Props) {
                         </div>
 
                         <Button 
-                            onClick={ saveSpecial } 
+                            // onClick={ updateSpecial } 
                             // disabled={currentSpecial.products.length === 0 || !currentSpecial.name || currentSpecial.specialPrice <= 0 || !currentSpecial.storeId || !currentSpecial.startDate || !currentSpecial.endDate}
                         >
                             Save Special

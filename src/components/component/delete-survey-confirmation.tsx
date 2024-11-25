@@ -7,29 +7,29 @@ import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 
-export const DeleteSurveyConfirmation = ({ isOpen, onClose }: any) => {
+export const DeleteSurveyConfirmation = ({ isOpen, onClose, surveyID }: any) => {
   if (!isOpen) return null;
 
-  const deleteSurvey = async () => {
+  const deleteSurvey = async (surveyid: number) => {
     try{
-      const url = 'admin/deletesurvey/:survey_id'
+      const url = `admin/deletesurvey/${surveyid}`
       const response = await axios.delete(`${apiEndPoint}/${url}`)
 
 
-      deleteSurveyQuestions();
+      await deleteSurveyQuestions(surveyID);
       console.log("Delete Survey Successful:", response)
     } catch (error) {
       console.error('Error deleting survey:', error)
     }
   }
 
-  const deleteSurveyQuestions = async () => {
+  const deleteSurveyQuestions = async (surveyid: number) => {
     try{
-      const url = 'admin/deletesurveyquestions/:survey_id'
+      const url = `admin/deletesurveyquestions/${surveyid}`
       const response = await axios.delete(`${apiEndPoint}/${url}`)
-      console.log("The Questions linked to survey have been deleted:", response)
+      console.log("the survey has been deleted successfully", response)
 
-      toast.success('The Questions linked to survey have been deleted:', {
+      toast.success('the survey has been deleted successfully', {
         icon: <Check color={colors.green} size={24} />,
         duration: 3000,
       });
@@ -37,12 +37,13 @@ export const DeleteSurveyConfirmation = ({ isOpen, onClose }: any) => {
       onClose() 
     } catch (error) {
       console.error('Error deleting survey questions', error)
-      toast.error('Error deleting survey questions', {
+      toast.error('survey deleted', {
         icon: <X color={colors.red} size={24} />,
         duration: 3000,
       });
     }
   }
+
 
   return (
     <div className="h-screen fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -69,7 +70,7 @@ export const DeleteSurveyConfirmation = ({ isOpen, onClose }: any) => {
             Cancel
           </Button>
           <Button
-            onClick={ deleteSurvey }
+            onClick={() => { deleteSurvey(surveyID)}}
             className="bg-red text-white hover:bg-red-700 h-8"
           >
             Confirm

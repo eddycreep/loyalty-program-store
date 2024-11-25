@@ -7,40 +7,40 @@ import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 
-export const CombinedDeleteConfirmation = ({ isOpen, onClose }: any) => {
+export const CombinedDeleteConfirmation = ({ isOpen, onClose, specialID }: any) => {
     if (!isOpen) return null; // Return null if dialog is not open
 
-    const deleteSpecial = async () => {
+    const deleteSpecial = async (specialId: number) => {
         try{
-        const url = 'admin/deletespecial/special_id'
+        const url = `admin/deletespecial/${specialId}`
         const response = await axios.delete(`${apiEndPoint}/${url}`)
 
 
-        deleteCombinedSpecialItems();
+        deleteCombinedSpecialItems(specialID);
         console.log("DELETION SUCCESSFUL:", response)
         } catch (error) {
         console.error('Error deleting special:', error)
         }
     }
 
-    const deleteCombinedSpecialItems = async () => {
+    const deleteCombinedSpecialItems = async (specialId: number) => {
         try{
-        const url = 'admin/deletecombinedspecial/:special_id'
-        const response = await axios.delete(`${apiEndPoint}/${url}`)
-        console.log("The Product linked to special has been deleted:", response)
+            const url = `admin/deletecombinedspecialitems/${specialId}`
+            const response = await axios.delete(`${apiEndPoint}/${url}`)
+            console.log("The Product linked to special has been deleted:", response)
 
-        toast.success('The special item has been deleted', {
-            icon: <Check color={colors.green} size={24} />,
-            duration: 3000,
-        });
+            toast.success('combined special has been deleted', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            });
 
-        onClose() 
+            onClose() 
         } catch (error) {
-        console.error('Error deleting combined special item:', error)
-        toast.error('Error deleting combined special item', {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
+            console.error('Error deleting combined special item:', error)
+            toast.error('Error deleting special items', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
         }
     }
 
@@ -69,7 +69,7 @@ export const CombinedDeleteConfirmation = ({ isOpen, onClose }: any) => {
                         Cancel
                     </Button>
                     <Button
-                        onClick={ deleteSpecial }
+                        onClick={() => deleteSpecial(specialID)}
                         className="bg-red text-white hover:bg-red-700 h-8"
                     >
                         Confirm

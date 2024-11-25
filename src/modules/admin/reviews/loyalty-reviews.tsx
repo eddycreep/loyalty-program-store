@@ -8,6 +8,17 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Star, Store, Users, ShoppingCart, Award, User, TrendingUp, TrendingDown } from 'lucide-react'
 
+import { ProductSummaryCards } from "./products/product-summary-cards"
+import { ProductReviews } from "./products/product-reviews"
+
+import { StaffSummaryCards } from "./staff/staff-summary-cards"
+import { StaffReviews } from "./staff/staff-reviews"
+
+
+import { StoreSummaryCards } from "./store/staff-summary-cards"
+import { StoreReviews } from "./store/store.reviews"
+
+
 interface ProductReview {
   id: number;
   customerName?: string;
@@ -196,38 +207,44 @@ export function LoyaltyReviews() {
           <TabsTrigger value="product" className="rounded-md py-2 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100">
             Product Reviews
           </TabsTrigger>
-          <TabsTrigger value="store" className="rounded-md py-2 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100">
-            Store Reviews
-          </TabsTrigger>
           <TabsTrigger value="staff" className="rounded-md py-2 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100">
             Staff Reviews
           </TabsTrigger>
+          <TabsTrigger value="store" className="rounded-md py-2 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100">
+            Store Reviews
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="product" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-            {renderSummaryCards('product')}
+          <div className="w-full">
+            {/* {renderSummaryCards('product')} */}
+            <ProductSummaryCards />
           </div>
           <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Product Reviews</h2>
-          <ScrollArea className="h-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-            {renderReviewCards(productReviews)}
-          </ScrollArea>
-        </TabsContent>
-        <TabsContent value="store" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-            {renderSummaryCards('store')}
-          </div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Store Reviews</h2>
-          <ScrollArea className="h-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-            {renderReviewCards(storeReviews)}
+          <ScrollArea className="h-full w-full p-2">
+            {/* {renderReviewCards(productReviews)} */}
+            <ProductReviews />
           </ScrollArea>
         </TabsContent>
         <TabsContent value="staff" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-            {renderSummaryCards('staff')}
+          <div className="w-full">
+            {/* {renderSummaryCards('staff')} */}
+            <StaffSummaryCards />
           </div>
           <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Staff Reviews</h2>
-          <ScrollArea className="h-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-            {renderReviewCards(staffReviews)}
+          <ScrollArea className="h-full w-full p-2">
+            {/* {renderReviewCards(staffReviews)} */}
+            <StaffReviews />
+          </ScrollArea>
+        </TabsContent>
+        <TabsContent value="store" className="space-y-4">
+          <div className="w-full">
+            {/* {renderSummaryCards('store')} */}
+            <StoreSummaryCards />
+          </div>
+          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Store Reviews</h2>
+          <ScrollArea className="h-full w-full p-2">
+            {/* {renderReviewCards(storeReviews)} */}
+            <StoreReviews />
           </ScrollArea>
         </TabsContent>
       </Tabs>

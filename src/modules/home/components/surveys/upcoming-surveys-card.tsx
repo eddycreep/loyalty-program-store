@@ -75,7 +75,7 @@ export const UpcomingSurveyCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <SquareCircleLoader />
-                <p className="text-gray-600 text-sm uppercase">loading active Surveys...</p>
+                <p className="text-gray-600 text-sm uppercase">loading upcoming Surveys...</p>
             </div>
         )
     }
@@ -85,7 +85,7 @@ export const UpcomingSurveyCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <AlertTriangle size={38} color="red"/>
-                <p className="text-gray-600 text-sm uppercase">Oops! Unfortunately an error was encountered when fetching Active Surveys, kindly refresh the page.</p>
+                <p className="text-gray-600 text-sm uppercase">Oops! Unfortunately an error was encountered when fetching Upcoming Surveys, kindly refresh the page.</p>
             </div>
         )
     }

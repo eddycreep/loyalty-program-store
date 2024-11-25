@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 
-export const DeleteRewardConfirmation = ({ isOpen, onClose }: any) => {
+export const DeleteRewardConfirmation = ({ isOpen, onClose, rewardID }: any) => {
   if (!isOpen) return null; // Return null if dialog is not open
 
-  const deleteReward = async () => {
+  const deleteReward = async (rewardId: number) => {
     try{
-      const url = 'deletereward/:uid'
+      const url = `admin/deletereward/${rewardId}`
       const response = await axios.delete(`${apiEndPoint}/${url}`)
-      // console.log("DELETION SUCCESSFUL:", response)
+      console.log("DELETION SUCCESSFUL:", response)
 
       toast.success('The reward item has been deleted', {
         icon: <Check color={colors.green} size={24} />,
@@ -23,7 +23,7 @@ export const DeleteRewardConfirmation = ({ isOpen, onClose }: any) => {
 
       onClose();
     } catch (error) {
-      //console.error('Error deleting special:', error)
+      console.error('Error deleting special:', error)
       toast.error('Error deleting reward', {
         icon: <X color={colors.red} size={24} />,
         duration: 3000,
@@ -56,7 +56,7 @@ export const DeleteRewardConfirmation = ({ isOpen, onClose }: any) => {
             Cancel
           </Button>
           <Button
-            onClick={ deleteReward }
+            onClick={() => deleteReward(rewardID) }
             className="bg-red text-white hover:bg-red-700 h-8"
           >
             Confirm

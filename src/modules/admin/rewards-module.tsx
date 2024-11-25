@@ -4,11 +4,12 @@ import axios from 'axios';
 import { useState, useEffect } from "react"
 import { apiEndPoint, colors } from '@/utils/colors';
 import toast from 'react-hot-toast';
-import { Expand, Shrink, Edit, X, Check, Trash2} from "lucide-react"
+import { Expand, Shrink, Edit, X, Check, Trash2, ShieldAlert, XOctagon} from "lucide-react"
 import { AddNewRewards } from "./rewards/add-new-rewards";
 import { EditRewards } from "@/components/component/edit-rewards";
 import { DeleteRewardConfirmation } from "@/components/component/delete-reward-confirmation";
-import { RewardSummaryCards } from "./rewards/reward-cards"
+import { RewardSummaryCards } from "./rewards/reward-cards";
+import SquareCircleLoader from "@/lib/square-circle-loader";
 
 export interface RewardProps {
     reward_id: number,
@@ -32,28 +33,32 @@ export const RewardsModule = () => {
     const [addRewardsPopUp, setRewardsPopUp] = useState(false);
     const [editProductsPopup, setEditProductsPopup] = useState(false);
     const [selectedReward, setSelectedReward] = useState<RewardProps | null>(null);
+    const [selectedRewardID, setSelectedRewardID] = useState(0);
 
     const headers = ['Reward ID', 'Title', 'Description', 'Reward', 'Reward Type', 'Reward Price', 'Store ID', 'Action']
 
     const [deletePopUp, setDeletePopUp] = useState(false);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
 
+    const [loadingData, setLoadingData] = useState(false);
+    const [isError, setIsError] = useState(false);
+
     const handleExpandClick = (id: number) => {
         setExpandedRow(expandedRow === id ? null : id);
     };
 
     const fetchRewards = async () => {
+        setLoadingData(true);
+
         try {
             const url = `admin/getallrewards`
             const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
             setRewards(response?.data);
+            setLoadingData(false);
+
         } catch (error) {
             console.error('Error fetching rewards:', error);
-
-            toast.error(`Error fetching rewards: ${error}`, {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
+            setIsError(true);
         }
     }
 
@@ -82,8 +87,9 @@ export const RewardsModule = () => {
         }
     }; 
 
-    const toggleDeletePage = () => {
+    const toggleDeletePage = (rewardID: number) => {
         setDeletePopUp(!deletePopUp);
+        setSelectedRewardID(rewardID)
     };
 
     const closeEditRewardsPopup = () => {
@@ -93,6 +99,126 @@ export const RewardsModule = () => {
     useEffect(() => {
         fetchRewards();
     }, []);
+
+
+    if (loadingData) {
+        return (
+            <div>
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                <div>
+                    <RewardSummaryCards />
+                </div>
+            <div>
+                <div className="flex justify-between">
+                    <div className="flex flex-col pl-2 pt-6">
+                        <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
+                        <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
+                    </div>
+                    <div className='flex gap-2 pt-8 pr-2'>
+                        <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                            Add Rewards
+                        </button>
+                    </div>
+                </div>
+                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                    {headers?.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
+                <div className="pt-20 flex flex-col items-center justify-center">
+                    <SquareCircleLoader />
+                    <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
+                </div>
+            </div>
+        </div>
+        {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+        {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
+        {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />}
+        </div>
+        )
+    }
+
+
+    if (isError) {
+        return (
+            <div>
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                <div>
+                    <RewardSummaryCards />
+                </div>
+            <div>
+                <div className="flex justify-between">
+                    <div className="flex flex-col pl-2 pt-6">
+                        <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
+                        <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
+                    </div>
+                    <div className='flex gap-2 pt-8 pr-2'>
+                        <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                            Add Rewards
+                        </button>
+                    </div>
+                </div>
+                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                    {headers?.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
+                <div className="flex flex-col items-center justify-center pt-10">
+                    <XOctagon size={44} />
+                    <p className="ml-2 uppercase pt-2 text-red">An error occoured when fetching the rewards!</p>
+                </div>
+            </div>
+        </div>
+        {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+        {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
+        {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />}
+        </div>
+        )
+    }
+
+
+    if (rewards.length === 0) {
+        return (
+            <div>
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                <div>
+                    <RewardSummaryCards />
+                </div>
+            <div>
+                <div className="flex justify-between">
+                    <div className="flex flex-col pl-2 pt-6">
+                        <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
+                        <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
+                    </div>
+                    <div className='flex gap-2 pt-8 pr-2'>
+                        <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                            Add Rewards
+                        </button>
+                    </div>
+                </div>
+                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                    {headers?.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
+                <div className="flex flex-col items-center justify-center pt-10">
+                    <ShieldAlert size={44} />
+                    <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
+                </div>
+            </div>
+        </div>
+        {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+        {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
+        {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />}
+        </div>
+        )
+    }
 
     return (
         <div>
@@ -141,7 +267,7 @@ export const RewardsModule = () => {
                                         <button className="flex items-center justify-center cursor-pointer" onClick={() => handleEditReward(reward_id)}>
                                             <Edit color="gray" /> 
                                         </button>
-                                        <button className="flex items-center justify-center cursor-pointer" onClick={ toggleDeletePage }>
+                                        <button className="flex items-center justify-center cursor-pointer" onClick={() => toggleDeletePage(reward_id)}>
                                             <Trash2 color="red" /> 
                                         </button>
                                     </div>
@@ -152,28 +278,28 @@ export const RewardsModule = () => {
                                         <div className="grid grid-cols-8 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
                                             <p className="font-medium text-gray-600"></p>
                                         <div>
-                                            <p className="font-medium text-gray-600">Region</p>
-                                            <p className="text-sm">{reward_type || '--:--'}</p>
+                                            <p className="text-md font-bold text-gray-600">Region</p>
+                                            <p className="text-sm pt-1">{region || '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-600">Loyalty Tier</p>
-                                            <p className="text-sm uppercase">{store_id || '--:--'}</p>
+                                            <p className="text-md font-bold text-gray-600">Loyalty Tier</p>
+                                            <p className="text-sm pt-1">{loyalty_tier || '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-600">Age Group</p>
-                                            <p className="text-sm uppercase">{start_date || '--:--'}</p>
+                                            <p className="text-md font-bold text-gray-600">Age Group</p>
+                                            <p className="text-sm pt-1">{age_group || '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-600">Start Date</p>
-                                            <p className="text-sm uppercase text-red">{start_date || '--:--'}</p>
+                                            <p className="text-md font-bold text-gray-600">Start Date</p>
+                                            <p className="text-sm pt-1">{start_date || '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-600">Expiry Date</p>
-                                            <p className="text-sm uppercase text-red">{expiry_date || '--:--'}</p>
+                                            <p className="text-md font-bold text-gray-600">Expiry Date</p>
+                                            <p className="text-sm pt-1 text-red">{expiry_date || '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-600">Status</p>
-                                            <p className={`text-sm ${isActive === 1 ? 'text-green' : 'text-red'}`}>
+                                            <p className="text-md font-bold text-gray-600">Status</p>
+                                            <p className={`text-sm pt-1 ${isActive === 1 ? 'text-green' : 'text-red'}`}>
                                                 {isActive === 1 ? 'Active' : 'Inactive'}
                                             </p>
                                         </div>
@@ -185,7 +311,7 @@ export const RewardsModule = () => {
                 </div>
             </div>
         </div>
-        {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+        {deletePopUp && (<DeleteRewardConfirmation rewardID={selectedRewardID} isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
         {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
         {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />}
         </div>
