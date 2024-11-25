@@ -79,7 +79,7 @@ export const UpcomingSpecialCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <SquareCircleLoader />
-                <p className="text-gray-600 text-sm uppercase">loading active specials...</p>
+                <p className="text-gray-600 text-sm uppercase">loading upcoming specials...</p>
             </div>
         )
     }
@@ -89,7 +89,7 @@ export const UpcomingSpecialCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <AlertTriangle size={38} color="red"/>
-                <p className="text-gray-600 text-sm uppercase">Oops! Unfortunately an error was encountered when fetching Active Specials, kindly refresh the page.</p>
+                <p className="text-gray-600 text-sm uppercase">Oops! Unfortunately an error was encountered when fetching Upcoming Specials, kindly refresh the page.</p>
             </div>
         )
     }
@@ -99,7 +99,7 @@ export const UpcomingSpecialCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <BadgeInfo size={38} className="text-emerald-500"/>
-                <p className="text-gray-600 text-sm uppercase">No specials are currently available. To add new specials, please navigate to the Admin page.</p>
+                <p className="text-gray-600 text-sm uppercase">No upcomiing specials are currently available. To add new specials, please navigate to the Admin page.</p>
             </div>
         )
     }

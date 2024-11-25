@@ -1,12 +1,11 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import axios from 'axios';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Gem, NotepadText } from 'lucide-react'
-import { apiEndPoint } from '@/utils/colors'
 
 import { LoyaltySummaryCards } from '@/components/loyalty-summary-cards'
 import { ActiveSpecialCards } from '@/modules/home/components/specials/active-specials-card'
@@ -56,7 +55,6 @@ export function Homepage() {
 
   return (
     <div className="h-screen bg-gray-100 overflow-y-auto pb-20">
-      {/* Main content */}
       <main className="py-4 sm:py-6 md:py-8 px-2s sm:px-6 lg:px-8">
         <div className="w-full mx-auto">
           <header className="mb-6 sm:mb-8">
@@ -70,7 +68,7 @@ export function Homepage() {
 
           {/* Specials Section */}
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4">Specials</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Specials</h2>
             <Tabs defaultValue="active" onValueChange={setActiveTab}>
               <TabsList className="mb-4">
                 <TabsTrigger value="active">Active Specials</TabsTrigger>
@@ -91,7 +89,7 @@ export function Homepage() {
 
           {/* Rewards Section */}
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4">Rewards</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Rewards</h2>
             <Tabs defaultValue="active-rewards" onValueChange={setActiveRewardsTab}>
               <TabsList className="mb-4">
                 <TabsTrigger value="active-rewards">Active Rewards</TabsTrigger>
@@ -112,7 +110,7 @@ export function Homepage() {
 
             {/* Surveys Section */}
             <section className="mb-6 sm:mb-8">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4">Surveys</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Surveys</h2>
               <Tabs defaultValue="active-surveys" onValueChange={setActiveRewardsTab}>
                 <TabsList className="mb-4">
                   <TabsTrigger value="active-surveys">Active Surveys</TabsTrigger>
@@ -133,48 +131,5 @@ export function Homepage() {
         </div>
       </main>
     </div>
-  )
-}
-
-function SurveyItem({ name, category, type, completions, location, region }: any) {
-  return (
-    <li className="flex flex-col sm:flex-row sm:items-center justify-between">
-      <div>
-        <p className="font-semibold text-sm sm:text-base">{name}</p>
-        <p className="text-xs sm:text-sm text-muted-foreground">{category} | {location} | {region}</p>
-      </div>
-      <div className="flex items-center space-x-2 mt-1 sm:mt-0">
-        <Badge 
-          variant="secondary"
-          className={`text-xs ${type === 'Free' ? 'bg-green text-white hover:bg-emerald-300 cursor-pointer' : 'bg-gray-200 text-gray-800 hover:bg-gray-300  cursor-pointer'}`}
-        >
-          {type}
-        </Badge>
-        <span className="text-xs sm:text-sm">{completions} completions</span>
-        <NotepadText className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-      </div>
-    </li>
-  )
-}
-
-function RewardItem({ name, task, type, redemptions, location, region }: any) {
-  return (
-    <li className="flex flex-col sm:flex-row sm:items-center justify-between">
-      <div>
-        <p className="font-semibold text-sm sm:text-base">{name}</p>
-        <p className="text-xs sm:text-sm text-muted-foreground">{task}</p>
-        <p className="text-xs sm:text-sm text-muted-foreground">{location} | {region}</p>
-      </div>
-      <div className="flex items-center space-x-2 mt-1 sm:mt-0">
-        <Badge 
-          variant="secondary"
-          className={`text-xs ${type === 'Free' ? 'bg-green text-white hover:bg-emerald-300 cursor-pointer' : 'bg-gray-200 text-gray-800 hover:bg-gray-300 cursor-pointer'}`}
-        >
-          {type}
-        </Badge>
-        <span className="text-xs sm:text-sm">{redemptions} redemptions</span>
-        <Gem className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-      </div>
-    </li>
   )
 }
