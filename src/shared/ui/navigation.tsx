@@ -62,7 +62,7 @@ export const Navigation = () => {
     const { role } = user
 
     return (
-      <div className="hidden lg:flex flex-col justify-between gap-1 h-[870px] w-full bg-white rounded py-4 px-2">
+      <div className="hidden lg:flex flex-col justify-between gap-1 h-full w-full bg-white rounded py-4 px-2">
         <ul className="flex flex-col gap-4 w-full">
           {
             role === 'Admin' &&
@@ -88,9 +88,11 @@ export const Navigation = () => {
             </Link>
           </li>
         </ul>
-        <button className="gap-2 flex items-center justify-center w-10/12 mx-auto rounded p-2 bg-red text-white" onClick={logout}>
-            <span className="text-white font-medium uppercase text-xs">Logout</span>
-        </button>
+        <div className="pb-8">
+          <button className="gap-2 flex items-center justify-center w-10/12 mx-auto rounded p-2 bg-red text-white" onClick={logout}>
+              <span className="text-white font-medium uppercase text-xs">Logout</span>
+          </button>
+        </div>
       </div>
     )
   }

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Angry, Annoyed, Meh, Smile, Laugh } from "lucide-react";
+import { Angry, Annoyed, Meh, Smile, Laugh, ScanEye } from "lucide-react";
 
 export function SurveySheet({
     questions,
@@ -16,7 +16,9 @@ export function SurveySheet({
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant="outline">Preview Survey</Button>
+                <Button className="bg-red text-white h-10 w-16 rounded p-2">
+                    <ScanEye />
+                </Button>
             </SheetTrigger>
             <SheetContent>
                 <SheetHeader>
