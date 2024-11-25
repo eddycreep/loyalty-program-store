@@ -5,7 +5,8 @@ import toast from 'react-hot-toast';
 import { useState } from "react";
 import { SurveySheet } from "@/components/component/survey-sheet";
 import { apiEndPoint, colors } from "@/utils/colors";
-import { Check, X } from "lucide-react";
+import { Check, HelpCircle, Save, X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 
 interface SurveyProps {
@@ -210,7 +211,10 @@ export const CreateSurveys = () => {
     // }
 
     return (
-        <div className="mb-52">
+        <div className="px-4 mb-52">
+            <div className="pt-4">
+                <h4 className="text-red font-bold">Create Surveys</h4>
+            </div>
             <div className="flex gap-4">
                 <div className="w-[300px] flex flex-col pt-4">
                     <label>Survey Title</label>
@@ -264,19 +268,46 @@ export const CreateSurveys = () => {
                     </select>
                 </div>
                 <div className="flex gap-2">
-                    <div className="pt-10">
-                        <button onClick={addQuestion} className="bg-red text-white h-10 rounded p-2">
-                            Add Question
-                        </button>
-                    </div>
-                    <div className="pt-10">
-                        <button onClick={ saveSurvey } className="bg-red text-white h-10 rounded p-2">
-                            Save Survey
-                        </button>
-                    </div>
-                    <div className="pt-10">
-                        <SurveySheet questions={questions} surveyName={surveyName} surveyCategory={surveyCategory} />
-                    </div>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <div className="pt-10">
+                                    <button onClick={addQuestion} className="bg-red text-white h-10 w-16 rounded flex items-center justify-center">
+                                        <HelpCircle />
+                                    </button>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                    <p>Add Question</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                            <div className="pt-10">
+                                <button onClick={ saveSurvey } className="bg-red text-white h-10 w-16 rounded flex items-center justify-center">
+                                    <Save />
+                                </button>
+                            </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                    <p>Save Survey</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <div className="pt-10">
+                                    <SurveySheet questions={questions} surveyName={surveyName} surveyCategory={surveyCategory} />
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                    <p>Preview</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             </div>
 
@@ -294,7 +325,9 @@ export const CreateSurveys = () => {
                             />
                         </div>
                         <div className="pt-12 pl-6 cursor-pointer" onClick={() => removeQuestion(index)}>
-                            <X color="red" />
+                            <div className="border border-red w-full">
+                                <X color="red" />
+                            </div>
                         </div>
                     </div>
 

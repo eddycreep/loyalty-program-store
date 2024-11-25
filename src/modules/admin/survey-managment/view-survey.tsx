@@ -130,7 +130,7 @@ export const ViewSurveys = () => {
         <div className="h-screen w-full">
             {surveyDeletePopUp && (<DeleteSurveyConfirmation surveyID={selectedSurveyID} isOpen={surveyDeletePopUp} onClose={toggleSurveyDeletePage}/> )}
             <div className="pl-4 pt-4">
-                <h4 className="text-red font-bold">Surveys</h4>
+                <h4 className="text-red font-bold">View Surveys</h4>
             </div>
             <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
                 {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
@@ -162,9 +162,9 @@ export const ViewSurveys = () => {
                             {isActive === 1 ? 'Active' : 'Inactive' || '--:--'}
                         </p>
                         <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                            <button className="flex items-center justify-center cursor-pointer" >
+                            {/* <button className="flex items-center justify-center cursor-pointer" >
                                 <Edit color="gray" /> 
-                            </button>
+                            </button> */}
                             <button className="flex items-center justify-center cursor-pointer" onClick={() => toggleSurveyDeletePage(survey_id)}>
                                 <Trash2 color="red" /> 
                             </button>

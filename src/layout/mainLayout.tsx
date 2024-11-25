@@ -16,12 +16,12 @@ export default function AppWrapper({ children }: Readonly<{ children: React.Reac
     }
 
     return (
-        <main className={`w-full h-screen flex flex-col overflow-hidden md:ease-in-out md:duration-500 bg-black ${!hideNavigation && 'lg:p-2'}`}>
-            {!hideNavigation && (
+        <main className={`w-full h-screen flex flex-col overflow-hidden md:ease-in-out md:duration-500 bg-black ${!hideNavigation && 'lg:p-1'}`}>
+            {/* {!hideNavigation && (
                 <div className="w-full">
                     <StoreNav />
                 </div>
-            )}
+            )} */}
             <div className="flex flex-col lg:flex-row lg:gap-2 flex-grow pt-2">
                 <nav className={`${hideNavigation ? 'hidden' : 'w-full lg:w-1/12'}`}>
                     <Navigation />

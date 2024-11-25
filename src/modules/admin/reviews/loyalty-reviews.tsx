@@ -201,7 +201,7 @@ export function LoyaltyReviews() {
 
   return (
     <div className=" p-4 dark:bg-gray-900 h-screen mb-20">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">Customer Reviews</h1>
+      {/* <h1 className="text-3xl font-bold mb-6 text-red">Customer Reviews</h1> */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-3 rounded-lg bg-gray-200 dark:bg-gray-700 p-1">
           <TabsTrigger value="product" className="rounded-md py-2 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100">
@@ -219,7 +219,7 @@ export function LoyaltyReviews() {
             {/* {renderSummaryCards('product')} */}
             <ProductSummaryCards />
           </div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Product Reviews</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-red">Product Reviews</h2>
           <ScrollArea className="h-full w-full p-2">
             {/* {renderReviewCards(productReviews)} */}
             <ProductReviews />
@@ -230,7 +230,7 @@ export function LoyaltyReviews() {
             {/* {renderSummaryCards('staff')} */}
             <StaffSummaryCards />
           </div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Staff Reviews</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-red">Staff Reviews</h2>
           <ScrollArea className="h-full w-full p-2">
             {/* {renderReviewCards(staffReviews)} */}
             <StaffReviews />
@@ -241,7 +241,7 @@ export function LoyaltyReviews() {
             {/* {renderSummaryCards('store')} */}
             <StoreSummaryCards />
           </div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Store Reviews</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-red">Store Reviews</h2>
           <ScrollArea className="h-full w-full p-2">
             {/* {renderReviewCards(storeReviews)} */}
             <StoreReviews />
