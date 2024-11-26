@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 interface RedemptionFrequency {
     store_id: string;
     store_name: string;
+    region: string;
     date: string;
     total_redemptions: number;
     total_active_members: number;
@@ -19,9 +20,9 @@ interface RedemptionFrequency {
     member_retention_rate: number;
     top_redeemed_items: string[];
     redemption_type_breakdown: {
-        points: number;
-        vouchers: number;
-        discounts: number;
+        percentage: number;
+        amount: number;
+        freeItem: number;
     };
     incentive_effectiveness: number;
 }
@@ -31,6 +32,7 @@ const redemptionFrequencyData: RedemptionFrequency[] = [
     { 
         store_id: 'SOO1', 
         store_name: 'PLUS DC Stellenbosch', 
+        region: 'Western Cape', 
         date: '2024-09-10', 
         total_redemptions: 200, 
         total_active_members: 1500, 
@@ -38,17 +40,17 @@ const redemptionFrequencyData: RedemptionFrequency[] = [
         member_retention_rate: 85,
         top_redeemed_items: ['Coffee', 'Bread', 'Milk'],
         redemption_type_breakdown: {
-            points: 45,
-            vouchers: 35,
-            discounts: 20
+            percentage: 45,
+            amount: 35,
+            freeItem: 20
         },
         incentive_effectiveness: 78
     },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-08-20', total_redemptions: 150, total_active_members: 1200, average_redemptions_per_member: 0.125, member_retention_rate: 80, top_redeemed_items: ['Bread', 'Milk'], redemption_type_breakdown: { points: 30, vouchers: 25, discounts: 15 }, incentive_effectiveness: 75 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-07-15', total_redemptions: 300, total_active_members: 1800, average_redemptions_per_member: 0.17, member_retention_rate: 82, top_redeemed_items: ['Coffee', 'Bread', 'Milk'], redemption_type_breakdown: { points: 50, vouchers: 40, discounts: 20 }, incentive_effectiveness: 79 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-25', total_redemptions: 220, total_active_members: 1600, average_redemptions_per_member: 0.137, member_retention_rate: 83, top_redeemed_items: ['Bread', 'Milk'], redemption_type_breakdown: { points: 35, vouchers: 28, discounts: 17 }, incentive_effectiveness: 77 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-07-01', total_redemptions: 190, total_active_members: 1300, average_redemptions_per_member: 0.146, member_retention_rate: 84, top_redeemed_items: ['Coffee', 'Bread'], redemption_type_breakdown: { points: 38, vouchers: 30, discounts: 12 }, incentive_effectiveness: 76 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-06-10', total_redemptions: 175, total_active_members: 1400, average_redemptions_per_member: 0.125, member_retention_rate: 81, top_redeemed_items: ['Milk'], redemption_type_breakdown: { points: 25, vouchers: 20, discounts: 10 }, incentive_effectiveness: 74 },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', region: 'Gauteng', date: '2024-08-20', total_redemptions: 150, total_active_members: 1200, average_redemptions_per_member: 0.125, member_retention_rate: 80, top_redeemed_items: ['Bread', 'Milk'], redemption_type_breakdown: { percentage: 30, amount: 25, freeItem: 15 }, incentive_effectiveness: 75 },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', region: 'Western Cape', date: '2024-07-15', total_redemptions: 300, total_active_members: 1800, average_redemptions_per_member: 0.17, member_retention_rate: 82, top_redeemed_items: ['Coffee', 'Bread', 'Milk'], redemption_type_breakdown: { percentage: 50, amount: 40, freeItem: 20 }, incentive_effectiveness: 79 },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', region: 'Mpumalanga', date: '2024-09-25', total_redemptions: 220, total_active_members: 1600, average_redemptions_per_member: 0.137, member_retention_rate: 83, top_redeemed_items: ['Bread', 'Milk'], redemption_type_breakdown: { percentage: 35, amount: 28, freeItem: 17 }, incentive_effectiveness: 77 },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', region: 'Western Cape', date: '2024-07-01', total_redemptions: 190, total_active_members: 1300, average_redemptions_per_member: 0.146, member_retention_rate: 84, top_redeemed_items: ['Coffee', 'Bread'], redemption_type_breakdown: { percentage: 38, amount: 30, freeItem: 12 }, incentive_effectiveness: 76 },
+    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', region: 'Free State', date: '2024-06-10', total_redemptions: 175, total_active_members: 1400, average_redemptions_per_member: 0.125, member_retention_rate: 81, top_redeemed_items: ['Milk'], redemption_type_breakdown: { percentage: 25, amount: 20, freeItem: 10 }, incentive_effectiveness: 74 },
 ];
 
 
@@ -56,12 +58,12 @@ const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
@@ -82,7 +84,7 @@ const storeRegions = [
 
 
 export const RedemptionFrequencyReport = () => {
-    const headers = ["Store ID", "Store Name", "Date", "Total Redemptions", "Active Members", "Avg. Redemptions", "Member Retention Rate", "Top Redeemed Items", "Redemption Type Breakdown"]
+    const headers = ["Store ID", "Store Name", "Region", "Date", "Total Redemptions", "Active Members", "Avg. Redemptions", "Member Retention Rate", "Top Redeemed Items", "Redemption Type"]
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -98,20 +100,24 @@ export const RedemptionFrequencyReport = () => {
     const handleFilter = () => {
         setIsLoading(true);
         let filtered = redemptionFrequencyData;
-        
 
+        // Filter by date range
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-
+        // Filter by selected store
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered); 
-        setDataHasFiltered(true);
+        // Filter by selected region
+        if (selectedRegion !== 'All') { // New filtering logic
+            filtered = filtered.filter(item => item.region === selectedRegion);
+        }
 
+        setFilteredData(filtered);
+        setDataHasFiltered(true);
 
         if (filtered.length === 0) {
             setIsError(true);
@@ -123,7 +129,7 @@ export const RedemptionFrequencyReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);  
+        setIsLoading(false);
     };
 
 
@@ -429,18 +435,25 @@ export const RedemptionFrequencyReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_redemptions, total_active_members, average_redemptions_per_member, member_retention_rate, top_redeemed_items, redemption_type_breakdown, incentive_effectiveness }) => (
+                {filteredData.map(({ store_id, store_name, region, date, total_redemptions, total_active_members, average_redemptions_per_member, member_retention_rate, top_redeemed_items, redemption_type_breakdown, incentive_effectiveness }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
+                            <p className="text-sm flex-1 text-center text">{region}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_redemptions}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_active_members}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{average_redemptions_per_member}%</p>
-                            <p className="text-sm flex-1 text-center uppercase">{member_retention_rate}%</p>
+                            <p className="text-sm flex-1 text-center uppercase text-red">{average_redemptions_per_member}%</p>
+                            <p className="text-sm flex-1 text-center uppercase text-green">{member_retention_rate}%</p>
                             <p className="text-sm flex-1 text-center uppercase">{top_redeemed_items.join(', ')}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{redemption_type_breakdown.points} points, {redemption_type_breakdown.vouchers} vouchers, {redemption_type_breakdown.discounts} discounts</p>
+                            <p className="text-sm flex-1 text-center uppercase">
+                                <span className="flex gap-2 justify-center">
+                                    <span className="text-blue">{redemption_type_breakdown.percentage}</span>
+                                    <span className="text-orange">{redemption_type_breakdown.amount}</span>
+                                    <span className="text-green">{redemption_type_breakdown.freeItem}</span>
+                                </span>
+                            </p>
                         </div>
                     </div>
                 ))}

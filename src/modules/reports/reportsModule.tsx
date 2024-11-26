@@ -5,7 +5,6 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // CUSTOMER ENGAGEMENT
@@ -21,7 +20,7 @@ import { ActiveMembersCard } from "@/components/component/cards/customer-engagem
 import { RevenueReport } from "./financial/revenue-report"
 import { SpecialsReport } from "./financial/specials-report"
 import { CombinedSpecialsReport } from "./financial/combined-specials-report"
-import { CostvsDiscountedRevenueReport } from "./financial/cost-vs-discounted-revenue"
+import { DiscountedRevenueReport } from "./financial/discounted-revenue"
 
 //REDEMPTIONS
 import { FirstRedemptionReport } from "./redemption/first-redemption-report"
@@ -31,7 +30,7 @@ import { UnsusedLoyaltyReport } from "./redemption/unused-specials-report"
 //SATISFACTION
 import { CustomerSatisfactionReport } from "./satisfaction/customer-satisfaction-report"
 import { AvgSpendPerTransactionReport } from "./satisfaction/avg-spend-per-transaction"
-import { CrossvsUpsellReport } from "./satisfaction/crossSell-vs-upSell-report"
+// import { CrossvsUpsellReport } from "./satisfaction/crossSell-vs-upSell-report"
 
 //EFFECTIVENESS
 import { MemberConversionReport } from "./effectiveness/member-conversion-report"
@@ -98,13 +97,13 @@ export const ReportsModule = () => {
                           <button onClick={() => setCurrentTab('revenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'revenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Revenue</button>
                           <button onClick={() => setCurrentTab('specials')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'specials'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Specials</button>
                           <button onClick={() => setCurrentTab('combined')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'combined'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Combined Specials</button>
-                          <button onClick={() => setCurrentTab('costDiscountRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'costDiscountRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cost vs Discounted Rev</button>
+                          <button onClick={() => setCurrentTab('discountRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'discountRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Discounted Revenue</button>
                       </div>
                   </div>
                   {currentTab === 'revenue' && <RevenueReport />}
                   {currentTab === 'specials' && <SpecialsReport />}
                   {currentTab === 'combined' && <CombinedSpecialsReport />}
-                  {currentTab === 'costDiscountRevenue' && <CostvsDiscountedRevenueReport />}
+                  {currentTab === 'discountRevenue' && <DiscountedRevenueReport />}
               </TabsContent>
               <TabsContent value="redemption" className="space-y-4">
                 <div className="pl-2">
@@ -123,17 +122,17 @@ export const ReportsModule = () => {
                       <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
                           <button onClick={() => setCurrentTab('satisfaction')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'satisfaction'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Customer Satisfaction</button>
                           <button onClick={() => setCurrentTab('avgTransaction')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'avgTransaction'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Avg. Spend Transaction</button>
-                          <button onClick={() => setCurrentTab('crossSell')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'crossSell'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cross-Sell/Upsell Rate</button>
+                          {/* <button onClick={() => setCurrentTab('crossSell')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'crossSell'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cross-Sell/Upsell Rate</button> */}
                       </div>
                   </div>
                   {currentTab === 'satisfaction' && <CustomerSatisfactionReport />}
                   {currentTab === 'avgTransaction' && <AvgSpendPerTransactionReport />}
-                  {currentTab === 'crossSell' && <CrossvsUpsellReport />}
+                  {/* {currentTab === 'crossSell' && <CrossvsUpsellReport />} */}
               </TabsContent>
               <TabsContent value="effectiveness" className="space-y-4">
                 <div className="pl-2">
                       <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
-                          <button onClick={() => setCurrentTab('memberConversion')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'memberConversion'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>MemberConversion Rate</button>
+                          <button onClick={() => setCurrentTab('memberConversion')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'memberConversion'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Member Conversion</button>
                           <button onClick={() => setCurrentTab('promotionalImpact')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'promotionalImpact'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Promotional Impact</button>
                       </div>
                   </div>

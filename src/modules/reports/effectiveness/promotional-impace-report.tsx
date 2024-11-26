@@ -13,8 +13,9 @@ import { Label } from "@/components/ui/label";
 interface PromotionalImpact {
     store_id: string;
     store_name: string;
+    region: string; // Added region field
     date: string;
-    special: string,
+    special: string;
     sales_during_promotion: number;
     sales_before_promotion: number;
     promotional_impact: number;
@@ -27,158 +28,105 @@ interface PromotionalImpact {
 }
 
 // Updated promotionalImpactData with random dates and more rows
-const promotionalImpactData: PromotionalImpact[] = [ 
+const promotionalImpactData: PromotionalImpact[] = [
     {
-        store_id: 'SOO1',
-        store_name: 'PLUS DC Stellenbosch',
-        date: '2024-09-15',
-        special: 'Fruits Special',
+        store_id: "SOO1",
+        store_name: "PLUS DC Stellenbosch",
+        region: "Western Cape",
+        date: "2024-09-15",
+        special: "Fruits Special",
         sales_during_promotion: 35000,
         sales_before_promotion: 30000,
         promotional_impact: 16.67,
         revenue_growth: 5000,
         units_sold: 1200,
-        most_redeemed: 'Fresh Produce',
+        most_redeemed: "Fresh Produce",
         promotion_spend: 2000,
         promotion_roi: 150,
-        avg_basket_increase: 25.5
+        avg_basket_increase: 25.5,
     },
     {
-        store_id: 'SOO2',
-        store_name: 'PLUS DC Albertin',
-        date: '2024-08-20',
-        special: 'Candy Special',
+        store_id: "SOO2",
+        store_name: "PLUS DC Albertin",
+        region: "Eastern Cape",
+        date: "2024-08-20",
+        special: "Candy Special",
         sales_during_promotion: 30000,
         sales_before_promotion: 25000,
         promotional_impact: 20,
         revenue_growth: 5000,
         units_sold: 850,
-        most_redeemed: 'Dairy Products',
+        most_redeemed: "Dairy Products",
         promotion_spend: 1800,
         promotion_roi: 177.8,
-        avg_basket_increase: 22.3
+        avg_basket_increase: 22.3,
     },
     {
-        store_id: 'SOO3',
-        store_name: 'PLUS DC Bellville',
-        date: '2024-07-10',
-        special: 'Peanut Special',
+        store_id: "SOO3",
+        store_name: "PLUS DC Bellville",
+        region: "Western Cape",
+        date: "2024-07-10",
+        special: "Peanut Special",
         sales_during_promotion: 45000,
         sales_before_promotion: 40000,
         promotional_impact: 12.5,
         revenue_growth: 5000,
         units_sold: 1000,
-        most_redeemed: 'Bakery Products',
+        most_redeemed: "Bakery Products",
         promotion_spend: 2000,
         promotion_roi: 125,
-        avg_basket_increase: 20.5
+        avg_basket_increase: 20.5,
     },
     {
-        store_id: 'SOO4',
-        store_name: 'PLUS DC Nelspruit',
-        date: '2024-06-25',
-        special: '10% Off Special',
-        sales_during_promotion: 25000,
-        sales_before_promotion: 22000,
-        promotional_impact: 13.64,
-        revenue_growth: 5000,
-        units_sold: 900,
-        most_redeemed: 'Fruit and Vegetables',
-        promotion_spend: 1800,
-        promotion_roi: 136.4,
-        avg_basket_increase: 20.5
-    },
-    {
-        store_id: 'SOO5',
-        store_name: 'PLUS DC Durbanville',
-        date: '2024-10-05',
-        special: 'Buy-One-Get-One-Free',
-        sales_during_promotion: 33000,
-        sales_before_promotion: 29000,
-        promotional_impact: 13.79,
+        store_id: "SOO11",
+        store_name: "PLUS DC Germiston",
+        region: "Gauteng",
+        date: "2024-10-22",
+        special: "Winter Warmers",
+        sales_during_promotion: 39000,
+        sales_before_promotion: 34000,
+        promotional_impact: 14.71,
         revenue_growth: 5000,
         units_sold: 1100,
-        most_redeemed: 'Meat and Poultry',
-        promotion_spend: 2000,
-        promotion_roi: 137.9,
-        avg_basket_increase: 25.5
+        most_redeemed: "Meat and Poultry",
+        promotion_spend: 2200,
+        promotion_roi: 127.3,
+        avg_basket_increase: 23.8,
     },
     {
-        store_id: 'SOO6',
-        store_name: 'PLUS DC Bloemfontein',
-        date: '2024-05-15',
-        special: 'Snack Combo',
-        sales_during_promotion: 29000,
-        sales_before_promotion: 26000,
-        promotional_impact: 11.54,
+        store_id: "SOO12",
+        store_name: "PLUS DC Polokwane",
+        region: "Limpopo",
+        date: "2024-09-10",
+        special: "Braai Essentials",
+        sales_during_promotion: 32000,
+        sales_before_promotion: 27000,
+        promotional_impact: 18.52,
         revenue_growth: 5000,
         units_sold: 950,
-        most_redeemed: 'Dairy Products',
-        promotion_spend: 1800,
-        promotion_roi: 115.4,
-        avg_basket_increase: 22.3
-    },
-    {
-        store_id: 'SOO7',
-        store_name: 'PLUS DC Cape Town',
-        date: '2024-03-28',
-        special: 'Discount Special',
-        sales_during_promotion: 41000,
-        sales_before_promotion: 36000,
-        promotional_impact: 13.89,
-        revenue_growth: 5000,
-        units_sold: 1050,
-        most_redeemed: 'Bakery Products',
+        most_redeemed: "Dairy Products",
         promotion_spend: 2000,
-        promotion_roi: 138.9,
-        avg_basket_increase: 25.5
+        promotion_roi: 140,
+        avg_basket_increase: 24.1,
     },
     {
-        store_id: 'SOO8',
-        store_name: 'PLUS DC Pietermaritzburg',
-        date: '2024-04-12',
-        special: 'Sweety Combo', 
+        store_id: "SOO13",
+        store_name: "PLUS DC Bloemfontein",
+        region: "Free State",
+        date: "2024-08-05",
+        special: "Snack Combo",
         sales_during_promotion: 37000,
-        sales_before_promotion: 33000,
-        promotional_impact: 12.12,
+        sales_before_promotion: 32000,
+        promotional_impact: 15.63,
         revenue_growth: 5000,
-        units_sold: 950,
-        most_redeemed: 'Fruit and Vegetables',
+        units_sold: 970,
+        most_redeemed: "Snacks",
         promotion_spend: 1800,
-        promotion_roi: 121.2,
-        avg_basket_increase: 20.5
-    },
-    {
-        store_id: 'SOO9',
-        store_name: 'PLUS DC East London',
-        date: '2024-09-01',
-        special: 'Summer Special',
-        sales_during_promotion: 28000,
-        sales_before_promotion: 24000,
-        promotional_impact: 16.67,
-        revenue_growth: 5000,
-        units_sold: 800,
-        most_redeemed: 'Meat and Poultry',
-        promotion_spend: 2000,
-        promotion_roi: 166.7,
-        avg_basket_increase: 25.5
-    },
-    {
-        store_id: 'SOO10',
-        store_name: 'PLUS DC Pretoria',
-        date: '2024-08-05',
-        special: 'Braai Special',
-        sales_during_promotion: 39000,
-        sales_before_promotion: 35000,
-        promotional_impact: 11.43,
-        revenue_growth: 5000,
-        units_sold: 900,
-        most_redeemed: 'Dairy Products',
-        promotion_spend: 1800,
-        promotion_roi: 114.3,
-        avg_basket_increase: 22.3
+        promotion_roi: 138.9,
+        avg_basket_increase: 21.4,
     },
 ];
+
 
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
@@ -209,7 +157,7 @@ const storeRegions = [
 
 
 export const PromotionalImpactReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Special', 'Sales During Special', 'Sales Before Special', 'Promotional Impact (%)', 'Revenue Growth During Promotion', 'Units Sold During Promotion', 'Most Redeemed Products'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Special', 'Sales During Special', 'Sales Before Special', 'Promotional Impact', 'Revenue During Promotion', 'Units Sold During Promotion', 'Top Redeemed Products'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -224,25 +172,31 @@ export const PromotionalImpactReport = () => {
     
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = promotionalImpactData;  
-        
-        
+        let filtered = promotionalImpactData;
+
+        // Filter by date range
         if (startDate && endDate) {
-            filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
+            filtered = filtered.filter(
+                (item) => item.date >= startDate && item.date <= endDate
+            );
         }
 
-        
-        if (selectedStore !== 'All') {
-            filtered = filtered.filter(item => item.store_id === selectedStore);
+        // Filter by store
+        if (selectedStore && selectedStore !== "All") {
+            filtered = filtered.filter((item) => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered);  
+        // Filter by region
+        if (selectedRegion && selectedRegion !== "All") {
+            filtered = filtered.filter((item) => item.region === selectedRegion);
+        }
+
+        setFilteredData(filtered);
         setDataHasFiltered(true);
 
-        
         if (filtered.length === 0) {
             setIsError(true);
-            toast.error('No data found for the selected filters!', {
+            toast.error("No data found for the selected filters!", {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
             });
@@ -250,7 +204,7 @@ export const PromotionalImpactReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);  
+        setIsLoading(false);
     };
 
 
@@ -555,11 +509,12 @@ export const PromotionalImpactReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, special, sales_during_promotion, sales_before_promotion, promotional_impact, revenue_growth, units_sold, most_redeemed }) => (
+                {filteredData.map(({ store_id, store_name, region, date, special, sales_during_promotion, sales_before_promotion, promotional_impact, revenue_growth, units_sold, most_redeemed }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center">{store_name}</p>
+                            {/* <p className="text-sm flex-1 text-center">{region}</p> */}
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center">{special}</p>
                             <p className="text-sm flex-1 text-center">R{sales_during_promotion.toLocaleString()}</p>

@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 interface TopPerformingProductsData {
     store_id: string;
     store_name: string;
+    region: string; // Added region field
     product_id: string;
     product_name: string;
     category: string;
@@ -29,6 +30,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO1',
         store_name: 'PLUS DC Stellenbosch',
+        region: 'Western Cape', // Added region
         product_id: 'P001',
         product_name: 'Organic Apples',
         category: 'Groceries',
@@ -44,6 +46,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO2',
         store_name: 'PLUS DC Albertin',
+        region: 'Eastern Cape', // Added region
         product_id: 'P002',
         product_name: 'Smart TV',
         category: 'Electronics',
@@ -59,6 +62,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO3',
         store_name: 'PLUS DC Bellville',
+        region: 'Western Cape', // Added region
         product_id: 'P003',
         product_name: 'Men’s Jacket',
         category: 'Fashion',
@@ -74,6 +78,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO4',
         store_name: 'PLUS DC Nelspruit',
+        region: 'Mpumalanga', // Added region
         product_id: 'P004',
         product_name: 'Bluetooth Speaker',
         category: 'Electronics',
@@ -89,6 +94,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO5',
         store_name: 'PLUS DC Durbanville',
+        region: 'Western Cape', // Added region
         product_id: 'P005',
         product_name: 'Sports Shoes',
         category: 'Fashion',
@@ -104,6 +110,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO6',
         store_name: 'PLUS DC Bloemfontein',
+        region: 'Free State', // Added region
         product_id: 'P006',
         product_name: 'Cooking Oil',
         category: 'Groceries',
@@ -119,6 +126,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO7',
         store_name: 'PLUS DC Cape Town',
+        region: 'Western Cape', // Added region
         product_id: 'P007',
         product_name: 'Laptop',
         category: 'Electronics',
@@ -134,6 +142,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO8',
         store_name: 'PLUS DC Pietermaritzburg',
+        region: 'KwaZulu-Natal', // Added region
         product_id: 'P008',
         product_name: 'Yoga Mat',
         category: 'Sports',
@@ -149,6 +158,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO9',
         store_name: 'PLUS DC East London',
+        region: 'Eastern Cape', // Added region
         product_id: 'P009',
         product_name: 'Organic Milk',
         category: 'Groceries',
@@ -164,6 +174,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO10',
         store_name: 'PLUS DC Pretoria',
+        region: 'Gauteng', // Added region
         product_id: 'P010',
         product_name: 'LED Light Bulbs',
         category: 'Electronics',
@@ -179,6 +190,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO11',
         store_name: 'PLUS DC Germiston',
+        region: 'Gauteng', // Added region
         product_id: 'P011',
         product_name: 'Designer Handbag',
         category: 'Fashion',
@@ -194,6 +206,7 @@ const topPerformingProductsReport: TopPerformingProductsData[] = [
     {
         store_id: 'SOO12',
         store_name: 'PLUS DC Polokwane',
+        region: 'Limpopo', // Added region
         product_id: 'P012',
         product_name: 'Organic Coffee Beans',
         category: 'Groceries',
@@ -254,20 +267,25 @@ export const TopPerformingProductsReport = () => {
     const handleFilter = () => {
         setIsLoading(true);
         let filtered = topPerformingProductsReport;
-
+    
         // Filter by date range
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
-
+    
         // Filter by selected store
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
-
+    
+        // Filter by selected region
+        if (selectedRegion !== 'All') { // Only filter by region if a specific region is selected
+            filtered = filtered.filter(item => item.region === selectedRegion);
+        }
+    
         setFilteredData(filtered);
         setDataHasFiltered(true);
-
+    
         if (filtered.length === 0) {
             setIsError(true);
             toast.error('No data found for the selected filters!', {
@@ -277,9 +295,10 @@ export const TopPerformingProductsReport = () => {
         } else {
             setIsError(false);
         }
-
+    
         setIsLoading(false);
     };
+    
 
 
     if (isLoading) {

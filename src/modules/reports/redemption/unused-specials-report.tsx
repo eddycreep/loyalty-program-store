@@ -4,14 +4,14 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import * as React from "react";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
-import { Check, X, BadgeAlert, AlertTriangle, Filter, ShieldAlert, XOctagon } from "lucide-react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { X, Filter, ShieldAlert, XOctagon } from "lucide-react";
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
 
 interface UnusedSpecials {
     store_id: string;
     store_name: string;
+    region: string;
     date: string;
     total_specials_issued: number;
     total_unused_specials: number;
@@ -32,6 +32,7 @@ const unusedSpecialsData: UnusedSpecials[] = [
     { 
         store_id: 'SOO1', 
         store_name: 'PLUS DC Stellenbosch', 
+        region: 'Western Cape',  
         date: '2024-10-01', 
         total_specials_issued: 15000,
         total_unused_specials: 10000, 
@@ -47,6 +48,7 @@ const unusedSpecialsData: UnusedSpecials[] = [
     { 
         store_id: 'SOO2', 
         store_name: 'PLUS DC Albertin', 
+        region: 'Gauteng',
         date: '2024-09-15', 
         total_specials_issued: 12000,
         total_unused_specials: 8000, 
@@ -61,7 +63,8 @@ const unusedSpecialsData: UnusedSpecials[] = [
     },
     { 
         store_id: 'SOO3', 
-        store_name: 'PLUS DC Bellville', 
+        store_name: 'PLUS DC Bellville',
+        region: 'Western Cape', 
         date: '2024-08-01', 
         total_specials_issued: 10000,
         total_unused_specials: 12000, 
@@ -77,6 +80,7 @@ const unusedSpecialsData: UnusedSpecials[] = [
     { 
         store_id: 'SOO4', 
         store_name: 'PLUS DC Nelspruit', 
+        region: 'Mpumalanga',
         date: '2024-07-10', 
         total_specials_issued: 8000,
         total_unused_specials: 9500, 
@@ -92,6 +96,7 @@ const unusedSpecialsData: UnusedSpecials[] = [
     { 
         store_id: 'SOO5', 
         store_name: 'PLUS DC Durbanville', 
+        region: 'Western Cape',
         date: '2024-06-25', 
         total_specials_issued: 9000,
         total_unused_specials: 11000, 
@@ -107,6 +112,7 @@ const unusedSpecialsData: UnusedSpecials[] = [
     { 
         store_id: 'SOO6', 
         store_name: 'PLUS DC Bloemfontein', 
+        region: 'Free State',
         date: '2024-05-30', 
         total_specials_issued: 11000,
         total_unused_specials: 13000, 
@@ -153,7 +159,7 @@ const storeRegions = [
 
 
 export const UnsusedLoyaltyReport = () => {
-    const headers = ["Store ID", "Store Name", "Date", "Total Specials Issued", "Unused Specials Count", "Total Redemptions", "Popular Unused Specials", "Expiry Influence"]
+    const headers = ["Store ID", "Store Name", "Region", "Date", "Total Specials Issued", "Unused Specials Count", "Total Redemptions", "Popular Unused Specials"]
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -167,21 +173,26 @@ export const UnsusedLoyaltyReport = () => {
 
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = unusedSpecialsData;  // Start with full data set
-        
+        let filtered = unusedSpecialsData; // Start with full data set
+    
         // Filter by selected date range (startDate and endDate)
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
-
+    
         // Filter by selected store if not "All"
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
-
+    
+        // **Filter by selected region if not "All"**
+        if (selectedRegion !== 'All') {
+            filtered = filtered.filter(item => item.region === selectedRegion);
+        }
+    
         setFilteredData(filtered); // Set filtered data to state
-        setDataHasFiltered(true); 
-
+        setDataHasFiltered(true);
+    
         // Handle case when no data matches the filters
         if (filtered.length === 0) {
             setIsError(true);
@@ -192,8 +203,8 @@ export const UnsusedLoyaltyReport = () => {
         } else {
             setIsError(false);
         }
-
-        setIsLoading(false);  // Disable loader after filtering
+    
+        setIsLoading(false); // Disable loader after filtering
     };
 
 
@@ -499,17 +510,18 @@ export const UnsusedLoyaltyReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_specials_issued, total_unused_specials, total_redemptions, redemption_rate, popular_unused, expiry_influence, customer_rating }) => (
+                {filteredData.map(({ store_id, store_name, region, date, total_specials_issued, total_unused_specials, total_redemptions, redemption_rate, popular_unused, expiry_influence, customer_rating }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{region}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center">{total_specials_issued}</p>
                             <p className="text-sm flex-1 text-center">{total_unused_specials}</p>
                             <p className="text-sm flex-1 text-center">{total_redemptions}</p>
                             <p className="text-sm flex-1 text-center">{popular_unused.join(', ')}</p>
-                            <p className="text-sm flex-1 text-center">{expiry_influence}%</p>
+                            {/* <p className="text-sm flex-1 text-center">{expiry_influence}%</p> */}
                         </div>
                     </div>
                 ))}
