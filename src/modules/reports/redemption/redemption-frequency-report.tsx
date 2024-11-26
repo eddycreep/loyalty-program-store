@@ -82,7 +82,7 @@ const storeRegions = [
 
 
 export const RedemptionFrequencyReport = () => {
-    const headers = ["Store ID", "Store Name", "Date", "Total Redemptions", "Total Active Members", "Average Redemptions per Member", "Member Retention Rate", "Top Redeemed Items", "Redemption Type Breakdown"]
+    const headers = ["Store ID", "Store Name", "Date", "Total Redemptions", "Active Members", "Avg. Redemptions", "Member Retention Rate", "Top Redeemed Items", "Redemption Type Breakdown"]
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -276,7 +276,7 @@ export const RedemptionFrequencyReport = () => {
 
                 <div className="flex flex-col items-center justify-center pt-20">
                     <XOctagon size={44} />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data!</p>
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
                 </div>
             </div>
         );
@@ -432,7 +432,7 @@ export const RedemptionFrequencyReport = () => {
                 {filteredData.map(({ store_id, store_name, date, total_redemptions, total_active_members, average_redemptions_per_member, member_retention_rate, top_redeemed_items, redemption_type_breakdown, incentive_effectiveness }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_redemptions}</p>

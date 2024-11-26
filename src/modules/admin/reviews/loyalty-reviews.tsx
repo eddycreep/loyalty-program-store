@@ -121,20 +121,20 @@ export function LoyaltyReviews() {
         { title: "Top Rated Products", icon: <ShoppingCart className="w-6 h-6 text-green" />, content: "1. Organic Apples\n2. Whole Grain Bread\n3. Fresh Milk" },
         { title: "Top Reviewers", icon: <User className="w-6 h-6 text-blue" />, content: "1. Alice Johnson\n2. Bob Smith\n3. Carol Davis" },
         { title: "Common Reviews", icon: <Star className="w-6 h-6 text-yellow" />, content: "1. Organic Apples\n2. Low-Fat Yogurt\n3. Whole Grain Bread" },
-        { title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Gold: 45%\nDiamond: 30%\nPlatinum: 25%" },
+        { title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Starter Savers: 45%\nSmart Shoppers: 30%\nPremier Collectors: 25%" },
         { title: "Top Redeemers", icon: <ShoppingCart className="w-6 h-6 text-red" />, content: "1. David Brown\n2. Emma Wilson\n3. Frank Miller" },
       ],
       store: [
         { title: "Top Rated Stores", icon: <Store className="w-6 h-6 text-green" />, content: "1. Downtown Market\n2. Suburb Supermarket\n3. Lakeside Grocery" },
         { title: "Common Stores", icon: <Star className="w-6 h-6 text-yellow" />, content: "1. Downtown Market\n2. Suburb Supermarket\n3. Lakeside Grocery" },
-        { title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Gold: 40%\nDiamond: 35%\nPlatinum: 25%" },
+        { title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Starter Savers: 40%\nSmart Shoppers: 35%\nPremier Collectors: 25%" },
         { title: "Top Store Reviewers", icon: <User className="w-6 h-6 text-blue" />, content: "1. David Brown\n2. Emma Wilson\n3. Frank Miller" },
         { title: "Top Redeemers", icon: <ShoppingCart className="w-6 h-6 text-red" />, content: "1. Grace Lee\n2. Henry Taylor\n3. Ivy Chen" },
       ],
       staff: [
         { title: "Top Rated Staff", icon: <Users className="w-6 h-6 text-green" />, content: "1. John Doe\n2. Jane Smith\n3. Mike Johnson" },
         { title: "Most Reviewed Staff", icon: <Star className="w-6 h-6 text-yellow" />, content: "1. John Doe\n2. Jane Smith\n3. Mike Johnson" },
-        { title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Gold: 50%\nDiamond: 30%\nPlatinum: 20%" },
+        { title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Starter Savers: 50%\nSmart Shoppers: 30%\nPremier Collectors: 20%" },
         { title: "Top Staff Reviewers", icon: <User className="w-6 h-6 text-blue" />, content: "1. Grace Lee\n2. Henry Taylor\n3. Ivy Chen" },
         { title: "Top Redeemers", icon: <ShoppingCart className="w-6 h-6 text-red" />, content: "1. Alice Johnson\n2. Bob Smith\n3. Carol Davis" },
       ],
@@ -200,7 +200,7 @@ export function LoyaltyReviews() {
   );
 
   return (
-    <div className=" p-4 dark:bg-gray-900 h-screen mb-20">
+    <div className=" p-4 dark:bg-gray-900 pb-10">
       {/* <h1 className="text-3xl font-bold mb-6 text-red">Customer Reviews</h1> */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-3 rounded-lg bg-gray-200 dark:bg-gray-700 p-1">

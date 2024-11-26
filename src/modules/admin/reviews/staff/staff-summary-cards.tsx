@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 const storeData = [
     { id: 1, title: "Top Rated Staff", icon: <Users className="w-6 h-6 text-green" />, content: "1. John Doe\n2. Jane Smith\n3. Mike Johnson" },
     { id: 2, title: "Most Reviewed Staff", icon: <Star className="w-6 h-6 text-yellow" />, content: "1. John Doe\n2. Jane Smith\n3. Mike Johnson" },
-    { id: 3, title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Gold: 50%\nDiamond: 30%\nPlatinum: 20%" },
+    { id: 3, title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Starter Savers: 50%\nSmart Shopper: 30%\nPremier Collector: 20%" },
     { id: 4, title: "Top Staff Reviewers", icon: <User className="w-6 h-6 text-blue" />, content: "1. Grace Lee\n2. Henry Taylor\n3. Ivy Chen" },
     { id: 5, title: "Top Redeemers", icon: <ShoppingCart className="w-6 h-6 text-red" />, content: "1. Alice Johnson\n2. Bob Smith\n3. Carol Davis" },
 ]

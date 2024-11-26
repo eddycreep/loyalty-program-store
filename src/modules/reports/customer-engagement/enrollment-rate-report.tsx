@@ -266,7 +266,7 @@ export const EnrollmentRateReport = () => {
 
                 <div className="flex flex-col items-center justify-center pt-20">
                     <XOctagon size={44} />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data!</p>
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
                 </div>
             </div>
         );
@@ -414,7 +414,7 @@ export const EnrollmentRateReport = () => {
                 {filteredData.map(({ store_id, store_name, customer_age_group, gender, preferred_category, enrollment_source, avg_basket_size, membership_type, customers_enrolled }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{customer_age_group}</p>
                             <p className="text-sm flex-1 text-center">{gender}</p>

@@ -214,7 +214,7 @@ export const ProductSpecials = () => {
                 ))}
             </div>
             {productSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => (
-                <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
+                <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2">
                     <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
                         <div className="flex items-center justify-between">
                             <p className="text-sm flex-1 text-center text-red">{special_id}</p>

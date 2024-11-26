@@ -55,8 +55,8 @@ const storeRegions = [
 ];
 
 export const CostvsDiscountedRevenueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Given', 'Total Revenue from Discounts', 'Net Revenue After Discounts', 'Discount Redemption Rate', 'Top Discounted Products', 'Member Segment Discount Usage', 'Profit Margin After Discounts', 'Discount ROI'];
-    //  - new headers - const headers = ['Store ID', 'Store Name', 'Date', 'Total discounts given', 'Total Revenue from discounts', 'Net Revenue After Discounts', 'Discount Redemption Rate', 'Top Discount Products',  'Loyalty Tiers Discount Usage', 'Profit After Discounts'];
+    //const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Given', 'Total Revenue from Discounts', 'Net Revenue After Discounts', 'Discount Redemption Rate', 'Top Discounted Products', 'Member Segment Discount Usage', 'Profit Margin After Discounts', 'Discount ROI'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'discounts given', 'discounts revenue', 'Revenue After Discounts', 'Discount Rate', 'Top Discount Products',  'Loyalty Tiers Discount Usage', 'Profit After Discounts'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -250,7 +250,7 @@ export const CostvsDiscountedRevenueReport = () => {
 
             <div className="flex flex-col items-center justify-center pt-20">
                 <XOctagon size={44} />
-                <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data!</p>
+                <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
             </div>
             </div>
         );
@@ -405,7 +405,7 @@ export const CostvsDiscountedRevenueReport = () => {
                 {filteredData.map(({ store_id, store_name, date, total_discounts_given, total_revenue_from_discounts, net_revenue_after_discounts }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_discounts_given}</p>

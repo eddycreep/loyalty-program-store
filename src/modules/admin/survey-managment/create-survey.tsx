@@ -82,9 +82,20 @@ export const CreateSurveys = () => {
     const [surveyID, setSurveyID] = useState<SurveyIDResponse>([]);
 
     const addQuestion = () => {
-        const newQuestionNumber = questions.length + 1;
-        setQuestions([...questions, { question: `Question ${newQuestionNumber}`, answer: "", action: "", options: [] }]);
+        // Check if the maximum limit of 5 questions has been reached
+        if (questions.length >= 5) {
+            // Display a message indicating no more questions can be added
+            toast.error('You can only add up to 5 questions.', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            return;
+        }
+        // Increment the question number and add a new question to the list
+        //const newQuestionNumber = questions.length + 1;
+        setQuestions([...questions, { question: "", answer: "", action: "", options: [] }]);
     };
+    
 
     const updateQuestionText = (index: number, text: string) => {
         const updatedQuestions = [...questions];
@@ -318,7 +329,7 @@ export const CreateSurveys = () => {
                             <label>{`Question ${index + 1}`}</label>
                             <input
                                 type="input"
-                                placeholder={`Enter Question ${index + 1}`}
+                                placeholder="Enter your question here..."
                                 className="w-full p-2 rounded-lg border border-gray-300"
                                 value={q.question}
                                 onChange={(e) => updateQuestionText(index, e.target.value)}

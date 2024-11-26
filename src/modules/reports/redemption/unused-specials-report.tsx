@@ -4,7 +4,7 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import * as React from "react";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
-import { Check, X, BadgeAlert, AlertTriangle, Filter, ShieldAlert } from "lucide-react";
+import { Check, X, BadgeAlert, AlertTriangle, Filter, ShieldAlert, XOctagon } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
@@ -345,8 +345,8 @@ export const UnsusedLoyaltyReport = () => {
             </div>
 
                 <div className="flex flex-col items-center justify-center pt-20">
-                    <AlertTriangle size={44} />
-                    <p className="ml-2 uppercase pt-2 text-red">There is no data available for the selected month!</p>
+                    <XOctagon size={44} />
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
                 </div>
             </div>
         );
@@ -502,7 +502,7 @@ export const UnsusedLoyaltyReport = () => {
                 {filteredData.map(({ store_id, store_name, date, total_specials_issued, total_unused_specials, total_redemptions, redemption_rate, popular_unused, expiry_influence, customer_rating }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center">{total_specials_issued}</p>

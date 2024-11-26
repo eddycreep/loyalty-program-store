@@ -9,7 +9,7 @@ export const SpecialsManagementModule = () => {
 
     return (
         <div className="w-full h-screen mb-4 pr-4 space-y-6">
-            <div className="pb-20">
+            <div className="pb-10">
                 <div>
                     <ProductSpecials />
                 </div>
