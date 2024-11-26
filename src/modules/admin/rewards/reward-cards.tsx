@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Award, ShoppingCart, TrendingUp, TrendingDown, Star, User, Store } from 'lucide-react'
+import { Award, ShoppingCart, TrendingUp, TrendingDown, Star, User, Store, Popcorn } from 'lucide-react'
 
 // Dummy data for rewards engagement
 const rewardsEngagementData = {
@@ -58,9 +58,9 @@ export function RewardSummaryCards() {
         content: `Gold: ${rewardsEngagementData.tierEngagement.gold}\nDiamond: ${rewardsEngagementData.tierEngagement.diamond}\nPlatinum: ${rewardsEngagementData.tierEngagement.platinum}`,
       },
       {
-        title: "Customer Tier Trends",
-        icon: <TrendingUp className="w-6 h-6 text-red" />,
-        content: "Positive engagement trends observed in Gold and Diamond tiers",
+        title: "Common Items Redeemed",
+        icon: <Popcorn className="w-6 h-6 text-red" />,
+        content: "Coke 2L\nLays\nMaynards",
       },
     ];
 

@@ -5,6 +5,7 @@ import { RewardsModule } from './rewards-module';
 import { SpecialsManagementModule } from './specials-management-module';
 import { ReviewsModule } from './reviews-module';
 import { SurveyModule } from './survey-module';
+import { Tiers } from './loyalty-tiers/tiers'
 
 
 export const AdminModule = () => {
@@ -18,11 +19,13 @@ export const AdminModule = () => {
                 <button onClick={() => setCurrentTab('rewards')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'rewards'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Customer Rewards</button>
                 <button onClick={() => setCurrentTab('reviews')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'reviews'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Customer Reviews</button>
                 <button onClick={() => setCurrentTab('surveys')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'surveys'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Survey Management</button>
+                <button onClick={() => setCurrentTab('tiers')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'tiers'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Loyalty Tiers</button>
             </div>
             {currentTab === 'products' && <SpecialsManagementModule />}
             {currentTab === 'rewards' && <RewardsModule />}
             {currentTab === 'reviews' && <ReviewsModule />}
             {currentTab === 'surveys' && <SurveyModule />}
+            {currentTab === 'tiers' && <Tiers />}
         </div>
     );
 }
