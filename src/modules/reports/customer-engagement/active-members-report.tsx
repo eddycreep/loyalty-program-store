@@ -334,7 +334,7 @@ export const ActiveMembersReport = () => {
 
                 <div className="flex flex-col items-center justify-center pt-20">
                     <XOctagon size={44} />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data!</p>
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
                 </div>
             </div>
         );
@@ -484,7 +484,7 @@ export const ActiveMembersReport = () => {
             {filteredData.map(({ storeId, storeName, activeMembers, ageGroupEngagementRate, genderEngagementRate, spendingTierDemographic }) => (
                     <div key={storeId} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{storeId}</p>
+                            <p className="text-sm flex-1 text-center text-red">{storeId}</p>
                             <p className="text-sm flex-1 text-center">{storeName}</p>
                             <p className="text-sm flex-1 text-center text-green">{activeMembers}</p>
                             <p className="text-sm flex-1 text-center">{ageGroupEngagementRate['18-24']}%</p>

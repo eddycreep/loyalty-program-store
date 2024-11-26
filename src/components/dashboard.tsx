@@ -268,7 +268,7 @@ export default function Dashboard() {
 
   return (
     <div className="w-full mb-72">
-      <h1 className="text-3xl font-bold mb-4">Loyalty Program Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-4 text-red">Loyalty Program Dashboard</h1>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
           <TabsTrigger value="customer-engagement">Customer Engagement</TabsTrigger>
@@ -294,7 +294,7 @@ export default function Dashboard() {
                     <SurveysCompletedChart />
                   </div>
             </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
             <Card>
               <CardHeader>
                 <CardTitle>Active Members</CardTitle>
@@ -384,7 +384,7 @@ export default function Dashboard() {
                 <TopProductsRevenueChart />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
               <Card>
                 <CardHeader>
                   <CardTitle>Revenue per Member</CardTitle>
@@ -467,7 +467,7 @@ export default function Dashboard() {
             </div>
           {/* </div> */}
         </TabsContent>
-        <TabsContent value="redemption" className="space-y-4">
+        <TabsContent value="redemption" className="space-y-4 h-screen w-full">
             <div className="flex justify-between gap-2">
                 <div className="">
                   <TopRedeemedProductsChart />
@@ -479,7 +479,7 @@ export default function Dashboard() {
                   <LowestRedeemedProductsChart />
                 </div>
             </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
             <Card>
               <CardHeader>
                 <CardTitle>Time to First Redemption</CardTitle>
@@ -555,7 +555,7 @@ export default function Dashboard() {
             </Card>
           </div>
         </TabsContent>
-        <TabsContent value="satisfaction" className="space-y-4">
+        <TabsContent value="satisfaction" className="space-y-4 h-screen w-full">
             <div className="flex justify-between gap-2">
                 <div className="">
                   <TopRatedProductsChart />
@@ -567,7 +567,7 @@ export default function Dashboard() {
                   <TopRatedStaffChart />
                 </div>
             </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
           <Card>
             <CardHeader>
               <CardTitle>Customer Satisfaction Score (CSAT)</CardTitle>
@@ -643,7 +643,7 @@ export default function Dashboard() {
             </Card>
           </div>
         </TabsContent>
-        <TabsContent value="effectiveness" className="space-y-4">
+        <TabsContent value="effectiveness" className="space-y-4 h-screen w-full">
             {/* <div className="flex justify-between gap-2">
                 <div className="">
                   <RedeemedTierRewards />
@@ -652,7 +652,7 @@ export default function Dashboard() {
                   <RedeemedRewardsCount />
                 </div>
             </div> */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
                 <Card>
                   <CardHeader>
                     <CardTitle>Reward Redemption by Tier</CardTitle>
@@ -779,7 +779,7 @@ export default function Dashboard() {
                   <LowPerformanceProductsChart />
                 </div>
             </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 pb-10">
               <Card className="w-[800px]">
                   <CardHeader>
                       <CardTitle>Top Performing Products</CardTitle>

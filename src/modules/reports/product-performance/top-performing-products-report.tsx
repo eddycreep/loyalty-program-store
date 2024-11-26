@@ -238,7 +238,7 @@ const storeRegions = [
 ];
 
 export const TopPerformingProductsReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Product ID', 'Product Name', 'Category', 'Date', 'Total Sales', 'Total Revenue', 'Total Discount Amount', 'Discount Usage Rate (%)', 'Avg. Discount (%)', 'Customer Count'];
+    const headers = ['Store ID', 'Store Name', 'Product ID', 'Product Name', 'Category', 'Date', 'Total Sales', 'Total Revenue', 'Total Discount', 'Usage Rate (%)', 'Avg. Discount (%)', 'Customer Count'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -415,7 +415,7 @@ export const TopPerformingProductsReport = () => {
 
                 <div className="flex flex-col items-center justify-center pt-20">
                     <XOctagon size={44} />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data</p>
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data</p>
                 </div>
             </div>
         );
@@ -563,19 +563,19 @@ export const TopPerformingProductsReport = () => {
                 {filteredData.map(({ store_id, store_name, product_id, product_name, category, total_sales, total_revenue, total_discount_amount, discount_usage_rate, avg_discount, gross_margin, customer_count, date }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
-                            <p className="text-sm flex-1 text-center">{store_name}</p>
-                            <p className="text-sm flex-1 text-center">{product_id}</p>
-                            <p className="text-sm flex-1 text-center">{product_name}</p>
-                            <p className="text-sm flex-1 text-center">{category}</p>
-                            <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center">{total_sales}</p>
-                            <p className="text-sm flex-1 text-center">R{total_revenue}</p>
-                            <p className="text-sm flex-1 text-center">{total_discount_amount}</p>
-                            <p className="text-sm flex-1 text-center">{discount_usage_rate}</p>
-                            <p className="text-sm flex-1 text-center">{avg_discount}</p>
+                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{store_name}</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{product_id}</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{product_name}</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{category}</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{date}</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{total_sales}</p>
+                            <p className="text-sm flex-1 text-center text-green">R{total_revenue}</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{total_discount_amount}</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{discount_usage_rate}%</p>
+                            <p className="text-sm flex-1 text-center text-gray-500">{avg_discount}%</p>
                             {/* <p className="text-sm flex-1 text-center">{gross_margin}</p> */}
-                            <p className="text-sm flex-1 text-center">{customer_count}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{customer_count}</p>
                         </div>
                     </div>
                 ))}

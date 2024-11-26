@@ -9,31 +9,52 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
 
+// Updated LifetimeData interface to match the new specials report structure
 interface LifetimeData {
     store_id: string;
     store_name: string;
+    region: string;
     date: string;
-    average_purchase_value: number;
-    average_purchase_frequency: number;
-    ltv_estimate: number;
-    customer_tenure: string;
-    member_demographics: string;
-    predicted_churn_rate: number;
-    lifetime_revenue: number;
-    top_products: string[];
+    product: string;
+    special: string;
+    special_type: 'Percentage' | 'Amount';
+    redemptions: number;
+    revenue: number;
+    tiers: { StarterSaver: number; SmartShopper: number; PremierCollector: number };
+    Gender: { Male: number; Female: number; Other: number };
+    AgeGroup: string; // Example: '18-24'
 }
 
+// Example data updated to match the new structure
 const lifetimeData: LifetimeData[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', average_purchase_value: 50, average_purchase_frequency: 6, ltv_estimate: 300, customer_tenure: '6 months', member_demographics: 'Male', predicted_churn_rate: 0.1, lifetime_revenue: 1800, top_products: ['Product A', 'Product B'] },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-10-01', average_purchase_value: 40, average_purchase_frequency: 5, ltv_estimate: 200, customer_tenure: '5 months', member_demographics: 'Female', predicted_churn_rate: 0.15, lifetime_revenue: 1000, top_products: ['Product C', 'Product D'] },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', average_purchase_value: 60, average_purchase_frequency: 7, ltv_estimate: 420, customer_tenure: '7 months', member_demographics: 'Male', predicted_churn_rate: 0.2, lifetime_revenue: 2520, top_products: ['Product E', 'Product F'] },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-28', average_purchase_value: 55, average_purchase_frequency: 6, ltv_estimate: 330, customer_tenure: '6 months', member_demographics: 'Female', predicted_churn_rate: 0.18, lifetime_revenue: 1980, top_products: ['Product G', 'Product H'] },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', average_purchase_value: 65, average_purchase_frequency: 7, ltv_estimate: 455, customer_tenure: '7 months', member_demographics: 'Male', predicted_churn_rate: 0.22, lifetime_revenue: 2775, top_products: ['Product I', 'Product J'] },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-09-27', average_purchase_value: 70, average_purchase_frequency: 8, ltv_estimate: 560, customer_tenure: '8 months', member_demographics: 'Female', predicted_churn_rate: 0.25, lifetime_revenue: 3920, top_products: ['Product K', 'Product L'] },
-    { store_id: 'SOO7', store_name: 'PLUS DC Cape Town', date: '2024-09-25', average_purchase_value: 62, average_purchase_frequency: 6, ltv_estimate: 372, customer_tenure: '6 months', member_demographics: 'Male', predicted_churn_rate: 0.19, lifetime_revenue: 2232, top_products: ['Product M', 'Product N'] },
-    { store_id: 'SOO8', store_name: 'PLUS DC Pietermaritzburg', date: '2024-09-29', average_purchase_value: 58, average_purchase_frequency: 5, ltv_estimate: 290, customer_tenure: '5 months', member_demographics: 'Female', predicted_churn_rate: 0.16, lifetime_revenue: 1450, top_products: ['Product O', 'Product P'] },
-    { store_id: 'SOO9', store_name: 'PLUS DC East London', date: '2024-09-26', average_purchase_value: 52, average_purchase_frequency: 6, ltv_estimate: 312, customer_tenure: '6 months', member_demographics: 'Male', predicted_churn_rate: 0.17, lifetime_revenue: 1872, top_products: ['Product Q', 'Product R'] },
-    { store_id: 'SOO10', store_name: 'PLUS DC Pretoria', date: '2024-09-23', average_purchase_value: 68, average_purchase_frequency: 7, ltv_estimate: 476, customer_tenure: '7 months', member_demographics: 'Female', predicted_churn_rate: 0.21, lifetime_revenue: 3332, top_products: ['Product S', 'Product T'] },
+    {
+        store_id: 'SOO1',
+        store_name: 'PLUS DC Stellenbosch',
+        region: 'Western Cape',
+        date: '2024-10-01',
+        product: 'Coke 2L',
+        special: '20% Off',
+        special_type: 'Percentage',
+        redemptions: 150,
+        revenue: 12000,
+        tiers: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        Gender: { Male: 80, Female: 60, Other: 10 },
+        AgeGroup: '18-24',
+    },
+    {
+        store_id: 'SOO2',
+        store_name: 'PLUS DC Albertin',
+        region: 'Eastern Cape',
+        date: '2024-10-01',
+        product: 'Lays',
+        special: 'R50 Off',
+        special_type: 'Amount',
+        redemptions: 100,
+        revenue: 8000,
+        tiers: { StarterSaver: 50, SmartShopper: 50, PremierCollector: 40 },
+        Gender: { Male: 50, Female: 45, Other: 5 },
+        AgeGroup: '25-34',
+    },
 ];
 
 
@@ -41,12 +62,12 @@ const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' }, 
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' }, 
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' }, 
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' }, 
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
@@ -66,8 +87,9 @@ const storeRegions = [
 ];
 
 
-export const LifetimeValueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Average Purchase Value', 'Average Purchase Frequency', 'LTV Estimate', 'Customer Tenure', 'Member Demographics', 'Predicted Churn Rate', 'Lifetime Revenue', 'Top Products Purchased'];
+export const CombinedSpecialsReport = () => {
+    //const headers = ['Store ID', 'Store Name', 'Date', 'Average Purchase Value', 'Average Purchase Frequency', 'LTV Estimate', 'Customer Tenure', 'Member Demographics', 'Predicted Churn Rate', 'Lifetime Revenue', 'Top Products Purchased'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Region', 'Product', 'Special', 'Special Type', 'Redemptions', 'Revenue', 'Tiers', 'Gender', 'Age Group'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -82,21 +104,24 @@ export const LifetimeValueReport = () => {
 
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = lifetimeData;  
-        
+        let filtered = lifetimeData;
 
+        // Filter by date range
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-
+        // Filter by selected store
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered); 
-        setDataHasFiltered(true);
+        // Filter by selected region
+        if (selectedRegion !== '') {
+            filtered = filtered.filter(item => item.region === selectedRegion);
+        }
 
+        setFilteredData(filtered);
 
         if (filtered.length === 0) {
             setIsError(true);
@@ -108,7 +133,7 @@ export const LifetimeValueReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);  
+        setIsLoading(false);
     };
 
 
@@ -261,7 +286,7 @@ export const LifetimeValueReport = () => {
 
             <div className="flex flex-col items-center justify-center pt-20">
                 <XOctagon size={44} />
-                <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data!</p>
+                <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
             </div>
             </div>
         );
@@ -364,24 +389,39 @@ export const LifetimeValueReport = () => {
                         </div>
                     </div>
                 </div>
-                <div className="pt-6">
-                    <Label htmlFor="username" className="text-left">
-                        Store:
+                <div className="w-[300px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Store ID:
                     </Label>
-                    <Select onValueChange={(value) => setSelectedStore(value)}>
-                        <SelectTrigger className="w-[200px] bg-white">
-                            <SelectValue placeholder="Select a store" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Store</SelectLabel>
-                                <SelectItem value="All">All</SelectItem>
-                                {stores.map(({ id, store_id, store }) => (
-                                    <SelectItem key={id} value={store_id}>{store_id}</SelectItem>
-                                ))}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedStore}
+                        onChange={(e) => setSelectedStore(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {stores.map(({ id, store_id, store }) => (
+                            <option key={id} value={store_id}>
+                                {store_id}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="w-[350px] flex flex-col pt-4">
+                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                        Regions:
+                    </Label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {storeRegions.map((region) => (
+                            <option key={region.id} value={region.region}>
+                                {region.region}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
                     <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
@@ -399,20 +439,29 @@ export const LifetimeValueReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, average_purchase_value, average_purchase_frequency, ltv_estimate, customer_tenure, member_demographics, predicted_churn_rate, lifetime_revenue, top_products }) => (
+                {filteredData.map(({ store_id, store_name, region, date, product, special, special_type, redemptions, revenue, tiers, Gender, AgeGroup }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{average_purchase_value}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{average_purchase_frequency}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{ltv_estimate}%</p>
-                            <p className="text-sm flex-1 text-center">{customer_tenure}</p>
-                            <p className="text-sm flex-1 text-center">{member_demographics}</p>
-                            <p className="text-sm flex-1 text-center">{predicted_churn_rate}%</p>
-                            <p className="text-sm flex-1 text-center">R{lifetime_revenue}</p>
-                            <p className="text-sm flex-1 text-center">{top_products.join(', ')}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{region}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{product}</p>
+                            <p className="text-sm flex-1 text-center">{special}</p>
+                            <p className="text-sm flex-1 text-center">{special_type}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{redemptions}</p>
+                            <p className="text-sm flex-1 text-center text-green">R{revenue}</p>
+                            <p className="text-sm flex-1 text-center">
+                                <span className="text-blue">{tiers.StarterSaver}</span>{' '}
+                                <span className="text-green">{tiers.SmartShopper}</span>{' '}
+                                <span className="text-purple">{tiers.PremierCollector}</span>
+                            </p>
+                            <p className="text-sm flex-1 text-center">
+                                <span className="text-blue">{Gender.Male}</span>{' '}
+                                <span className="text-pink-400">{Gender.Female}</span>{' '}
+                                <span className="text-gray-400">{Gender.Other}</span>
+                            </p>
+                            <p className="text-sm flex-1 text-center">{AgeGroup}</p>
                         </div>
                     </div>
                 ))}

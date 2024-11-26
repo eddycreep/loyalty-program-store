@@ -394,7 +394,7 @@ export const CrossvsUpsellReport = () => {
 
                 <div className="flex flex-col items-center justify-center pt-20">
                     <XOctagon size={44} />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data</p>
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data</p>
                 </div>
             </div>
         );
@@ -549,7 +549,7 @@ export const CrossvsUpsellReport = () => {
                 {filteredData.map(({ store_id, store_name, date, total_transactions_with_cross_sell, total_transactions, cross_sell_upsell_rate, top_cross_sold_items, conversion_rate_of_cross_sell_offers, customer_segment_impact, zone_engagement }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_transactions_with_cross_sell}</p>

@@ -55,7 +55,7 @@ export function RewardSummaryCards() {
       {
         title: "Engagement by Loyalty Tier",
         icon: <Award className="w-6 h-6 text-purple" />,
-        content: `Gold: ${rewardsEngagementData.tierEngagement.gold}\nDiamond: ${rewardsEngagementData.tierEngagement.diamond}\nPlatinum: ${rewardsEngagementData.tierEngagement.platinum}`,
+        content: `Start Savers: ${rewardsEngagementData.tierEngagement.gold}\nSmart Shoppers: ${rewardsEngagementData.tierEngagement.diamond}\nPremier Collectors: ${rewardsEngagementData.tierEngagement.platinum}`,
       },
       {
         title: "Common Items Redeemed",

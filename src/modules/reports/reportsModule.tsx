@@ -19,7 +19,8 @@ import { ActiveMembersCard } from "@/components/component/cards/customer-engagem
 
 // FINANCIAL
 import { RevenueReport } from "./financial/revenue-report"
-import { LifetimeValueReport } from "./financial/lifetime-value-report"
+import { SpecialsReport } from "./financial/specials-report"
+import { CombinedSpecialsReport } from "./financial/combined-specials-report"
 import { CostvsDiscountedRevenueReport } from "./financial/cost-vs-discounted-revenue"
 
 //REDEMPTIONS
@@ -95,12 +96,14 @@ export const ReportsModule = () => {
                   <div className="pl-2">
                       <div className="w-full sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center">
                           <button onClick={() => setCurrentTab('revenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'revenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Revenue</button>
-                          <button onClick={() => setCurrentTab('lifetime')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'lifetime'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Lifetime Value</button>
+                          <button onClick={() => setCurrentTab('specials')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'specials'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Specials</button>
+                          <button onClick={() => setCurrentTab('combined')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'combined'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Combined Specials</button>
                           <button onClick={() => setCurrentTab('costDiscountRevenue')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'costDiscountRevenue'? 'bg-red text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none`}>Cost vs Discounted Rev</button>
                       </div>
                   </div>
                   {currentTab === 'revenue' && <RevenueReport />}
-                  {currentTab === 'lifetime' && <LifetimeValueReport />}
+                  {currentTab === 'specials' && <SpecialsReport />}
+                  {currentTab === 'combined' && <CombinedSpecialsReport />}
                   {currentTab === 'costDiscountRevenue' && <CostvsDiscountedRevenueReport />}
               </TabsContent>
               <TabsContent value="redemption" className="space-y-4">

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
-import { Award, ShoppingCart, Tag, Calendar, MessageSquare, Users, Repeat, Trophy, Cake, PartyPopper, Clock, ChevronDown, ChevronUp, Star, Percent, Gift, Zap } from 'lucide-react'
+import { Award, ShoppingCart, Tag, Calendar, MessageSquare, Users, Repeat, Trophy, Cake, PartyPopper, Clock, ChevronDown, ChevronUp, Star, Percent, Gift, Zap, ShoppingBasket, ShoppingBag, WalletCards } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -11,8 +11,8 @@ import "../../../styles/loyalty-program-tiers.css"
 const tiers = [
   {
     name: "Starter Savers",
-    icon: Star,
-    color: "text-yellow-600",
+    icon: ShoppingBasket,
+    color: "text-orange",
     eligibility: "R50–R199/month",
     rewards: [
       "Free snack bundle on birthday",
@@ -29,7 +29,7 @@ const tiers = [
   },
   {
     name: "Smart Shoppers",
-    icon: ShoppingCart,
+    icon: ShoppingBag,
     color: "text-green-600",
     eligibility: "R200–R499/month",
     rewards: [
@@ -64,7 +64,7 @@ const tiers = [
   },
   {
     name: "Elite Enthusiasts",
-    icon: Trophy,
+    icon: WalletCards,
     color: "text-red-600",
     eligibility: "Invitation-only",
     rewards: [
@@ -203,10 +203,10 @@ function TierRow({ tier, isOpen, toggleOpen }: any) {
                   <Gift className="w-5 h-5 mr-2" />
                   Rewards
                 </h4>
-                <ul className="list-disc pl-5">
+                <ul className="list-disc pl-5 text-center">
                 {tier.rewards.map((reward: string, index: number) => (
-      <li key={index}>{reward}</li>
-    ))}
+                    <li key={index}>{reward}</li>
+                  ))}
                 </ul>
               </div>
               <div>
@@ -216,8 +216,8 @@ function TierRow({ tier, isOpen, toggleOpen }: any) {
                 </h4>
                 <ul className="list-disc pl-5">
                 {tier.discounts.map((discount: string, index: number) => (
-      <li key={index}>{discount}</li>
-    ))}
+                  <li key={index}>{discount}</li>
+                ))}
                 </ul>
               </div>
             </div>
@@ -228,8 +228,8 @@ function TierRow({ tier, isOpen, toggleOpen }: any) {
               </h4>
               <ul className="list-disc pl-5">
               {tier.combinedSpecials.map((special: string, index: number) => (
-    <li key={index}>{special}</li>
-  ))}
+                <li key={index}>{special}</li>
+              ))}
               </ul>
             </div>
           </TableCell>
@@ -293,7 +293,7 @@ export default function LoyaltyProgramTiers() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {upgradeMethods.map((method, index) => (
                 <Tooltip key={index}>
                   <TooltipTrigger>

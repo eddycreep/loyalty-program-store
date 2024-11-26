@@ -10,7 +10,7 @@ export const ReviewsModule = () => {
 
 
   return (
-    <div className="h-screen mb-20">
+    <div className="h-screen">
       <LoyaltyReviews />
     </div>
   );

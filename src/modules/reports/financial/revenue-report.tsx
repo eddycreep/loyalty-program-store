@@ -75,7 +75,8 @@ const storeRegions = [
 ];
 
 export const RevenueReport = () => {
-    const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue', 'Total Active Members', 'Revenue per Member', 'New Members', 'Churned Members', 'New Members Revenue', 'Members Revenue Returning', 'Top-Selling Categories', 'Avg. Transaction Value'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue', 'Active Members', 'Revenue per Tier', 'New Members', 'Churned Members', 'Top-Selling Categories', 'Avg. Basket Value'];
+    //const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue', 'Active Members', 'Revenue per Tier', 'New Members', 'Churned Members', 'New Members Revenue', 'Members Revenue Returning', 'Top-Selling Categories', 'Avg. Transaction Value'];
     //const hheaders = ['Store ID', 'Store Name', 'Date', 'Total Active Members', 'Tier Revenue', 'Top Selling Products', 'Average Transaction Value', 'Total Revenue Per store']; - header
 
     const [startDate, setStartDate] = useState('');
@@ -270,7 +271,7 @@ export const RevenueReport = () => {
 
                 <div className="flex flex-col items-center justify-center pt-20">
                     <XOctagon size={44} />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetch report data!</p>
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
                 </div>
             </div>
         );
@@ -425,16 +426,16 @@ export const RevenueReport = () => {
                 {filteredData.map(({ store_id, store_name, date, total_revenue, total_active_members, revenue_per_member, new_members, churned_members, revenue_new_members, revenue_returning_members, top_selling_categories,avg_transaction_value }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">R{total_revenue}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_active_members}</p>
+                            <p className="text-sm flex-1 text-center uppercase text-purple">R{total_revenue}</p>
+                            <p className="text-sm flex-1 text-center uppercase text-green">{total_active_members}</p>
                             <p className="text-sm flex-1 text-center uppercase">R{revenue_per_member}</p>
                             <p className="text-sm flex-1 text-center uppercase">{new_members}</p>
                             <p className="text-sm flex-1 text-center uppercase">{churned_members}</p>
-                            <p className="text-sm flex-1 text-center uppercase">R{revenue_new_members}</p>
-                            <p className="text-sm flex-1 text-center uppercase">R{revenue_returning_members}</p>
+                            {/* <p className="text-sm flex-1 text-center uppercase">R{revenue_new_members}</p>
+                            <p className="text-sm flex-1 text-center uppercase">R{revenue_returning_members}</p> */}
                             <p className="text-sm flex-1 text-center uppercase">{top_selling_categories.join(', ')}</p>
                             <p className="text-sm flex-1 text-center uppercase">R{avg_transaction_value}</p>
                         </div>

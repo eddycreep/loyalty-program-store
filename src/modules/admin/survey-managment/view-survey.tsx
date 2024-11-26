@@ -145,12 +145,12 @@ export const ViewSurveys = () => {
                         <p className="text-sm flex-1 text-center">{store_id || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{region || '--:--'}</p>
                         <p className={`text-sm flex-1 text-center ${
-                                loyalty_tier === 'Gold'
-                                ? 'text-amber-400'
-                                : loyalty_tier === 'Diamond'
+                                loyalty_tier === 'Starter Savers'
                                 ? 'text-blue'
-                                : loyalty_tier === 'Platinum'
-                                ? 'text-gray-500'
+                                : loyalty_tier === 'Smart Shoppers'
+                                ? 'text-green'
+                                : loyalty_tier === 'Premier Collectors'
+                                ? 'text-purple'
                                 : ''
                             }`}
                             >

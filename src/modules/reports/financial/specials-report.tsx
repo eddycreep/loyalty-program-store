@@ -4,43 +4,57 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import * as React from "react";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
-import { Check, X, BadgeAlert, AlertTriangle, Filter, XOctagon, ShieldAlert } from "lucide-react";
+import { Check, X, BadgeAlert, AlertTriangle, Filter, XOctagon } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
 
-interface FirstRedemptionData {
+// Updated LifetimeData interface to match the new specials report structure
+interface LifetimeData {
     store_id: string;
     store_name: string;
+    region: string;
     date: string;
-    average_time_to_first_redemption: number;
-    total_new_members: number;
-    count_of_first_redemptions: number;
-    enrollment_redemption_ratio: number;
-    promotional_impact: string;
-    preferred_channel: string;
-    first_redemption_value: number;
+    product: string;
+    special: string;
+    special_type: 'Percentage' | 'Amount';
+    redemptions: number;
+    revenue: number;
+    tiers: { StarterSaver: number; SmartShopper: number; PremierCollector: number };
+    Gender: { Male: number; Female: number; Other: number };
+    AgeGroup: string; // Example: '18-24'
 }
 
-
-const firstRedemptionData: FirstRedemptionData[] = [
-    { 
-        store_id: 'SOO1', 
-        store_name: 'PLUS DC Stellenbosch', 
-        date: '2024-09-01', 
-        average_time_to_first_redemption: 5, 
-        total_new_members: 100, 
-        count_of_first_redemptions: 80,
-        enrollment_redemption_ratio: 0.8,
-        promotional_impact: 'High',
-        preferred_channel: 'Mobile App',
-        first_redemption_value: 250.50
+// Example data updated to match the new structure
+const lifetimeData: LifetimeData[] = [
+    {
+        store_id: 'SOO1',
+        store_name: 'PLUS DC Stellenbosch',
+        region: 'Western Cape',
+        date: '2024-10-01',
+        product: 'Apples',
+        special: '20% Off',
+        special_type: 'Percentage',
+        redemptions: 150,
+        revenue: 12000,
+        tiers: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        Gender: { Male: 80, Female: 60, Other: 10 },
+        AgeGroup: '18-24',
     },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-09-10', average_time_to_first_redemption: 4, total_new_members: 90, count_of_first_redemptions: 70, enrollment_redemption_ratio: 0.7, promotional_impact: 'Medium', preferred_channel: 'Web', first_redemption_value: 200.00 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', average_time_to_first_redemption: 6, total_new_members: 120, count_of_first_redemptions: 100, enrollment_redemption_ratio: 0.83, promotional_impact: 'High', preferred_channel: 'Mobile App', first_redemption_value: 270.00 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-08-15', average_time_to_first_redemption: 7, total_new_members: 95, count_of_first_redemptions: 85, enrollment_redemption_ratio: 0.89, promotional_impact: 'Medium', preferred_channel: 'In-Store', first_redemption_value: 230.00 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-07-20', average_time_to_first_redemption: 3, total_new_members: 110, count_of_first_redemptions: 90, enrollment_redemption_ratio: 0.82, promotional_impact: 'High', preferred_channel: 'Mobile App', first_redemption_value: 240.00 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-06-05', average_time_to_first_redemption: 5, total_new_members: 80, count_of_first_redemptions: 60, enrollment_redemption_ratio: 0.75, promotional_impact: 'Medium', preferred_channel: 'In-Store', first_redemption_value: 180.00 },
+    {
+        store_id: 'SOO2',
+        store_name: 'PLUS DC Albertin',
+        region: 'Eastern Cape',
+        date: '2024-10-01',
+        product: 'Bananas',
+        special: 'R50 Off',
+        special_type: 'Amount',
+        redemptions: 100,
+        revenue: 8000,
+        tiers: { StarterSaver: 50, SmartShopper: 50, PremierCollector: 40 },
+        Gender: { Male: 50, Female: 45, Other: 5 },
+        AgeGroup: '25-34',
+    },
 ];
 
 
@@ -48,16 +62,17 @@ const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' }, 
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' }, 
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' }, 
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' }, 
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
+
 
 const storeRegions = [
     { id: 1, region: 'Eastern Cape'}, 
@@ -71,38 +86,43 @@ const storeRegions = [
     { id: 9, region: 'Western Cape'}
 ];
 
-export const FirstRedemptionReport = () => {
-    const headers = ["Store ID", "Store Name", "Date", "Avg. Time to First Redemption (Days)", "Total New Members", "Count of First Redemptions", "Enrollment to Redemption Ratio", "Promotional Impact", "Preferred Redemption Channel", "First Redemption Value"]
+
+export const SpecialsReport = () => {
+    //const headers = ['Store ID', 'Store Name', 'Date', 'Average Purchase Value', 'Average Purchase Frequency', 'LTV Estimate', 'Customer Tenure', 'Member Demographics', 'Predicted Churn Rate', 'Lifetime Revenue', 'Top Products Purchased'];
+    const headers = ['Store ID', 'Store Name', 'Date', 'Region', 'Product', 'Special', 'Special Type', 'Redemptions', 'Revenue', 'Tiers', 'Gender', 'Age Group'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
-    const [selectedRegion, setSelectedRegion] = useState('');
+    const [selectedRegion, setSelectedRegion] = useState("");
 
-    const [filteredData, setFilteredData] = useState<FirstRedemptionData[]>([]); // Explicitly typed state
+    const [filteredData, setFilteredData] = useState<LifetimeData[]>([]); 
     const [isLoading, setIsLoading] = useState(false); 
-    const [isError, setIsError] = useState(false);
+    const [isError, setIsError] = useState(false); 
     const [hasFiltered, setDataHasFiltered] = useState(false);
 
-    // Filter function to handle filtering by date range and store
+
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = firstRedemptionData; 
-        
-        // Filter by selected date range (startDate and endDate)
+        let filtered = lifetimeData;
+
+        // Filter by date range
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
 
-        // Filter by selected store if not "All"
+        // Filter by selected store
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
 
-        setFilteredData(filtered);  // Set filtered data to state
-        setDataHasFiltered(true);
+        // Filter by selected region
+        if (selectedRegion !== '') {
+            filtered = filtered.filter(item => item.region === selectedRegion);
+        }
 
-        // Handle case when no data matches the filters
+        setFilteredData(filtered);
+
         if (filtered.length === 0) {
             setIsError(true);
             toast.error('No data found for the selected filters!', {
@@ -113,7 +133,7 @@ export const FirstRedemptionReport = () => {
             setIsError(false);
         }
 
-        setIsLoading(false);  // Disable loader after filtering
+        setIsLoading(false);
     };
 
 
@@ -343,7 +363,7 @@ export const FirstRedemptionReport = () => {
             </div>
 
                 <div className="flex flex-col items-center justify-center pt-20">
-                    <ShieldAlert size={44} />
+                    <XOctagon size={44} />
                     <p className="ml-2 uppercase pt-2 text-green">There is no data available for the selected dates!</p>
                 </div>
             </div>
@@ -386,7 +406,7 @@ export const FirstRedemptionReport = () => {
                         ))}
                     </select>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
+                <div className="w-[350px] flex flex-col pt-4">
                     <Label htmlFor="storeid" className="text-left pt-4 pb-1">
                         Regions:
                     </Label>
@@ -419,21 +439,29 @@ export const FirstRedemptionReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, average_time_to_first_redemption, total_new_members, count_of_first_redemptions, enrollment_redemption_ratio, promotional_impact, preferred_channel, first_redemption_value }) => (
+                {filteredData.map(({ store_id, store_name, region, date, product, special, special_type, redemptions, revenue, tiers, Gender, AgeGroup }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{average_time_to_first_redemption}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_new_members}</p>
-                            <p className={`text-sm flex-1 text-center ${count_of_first_redemptions >= 50 ? 'text-green' : 'text-red'}`}>
-                                {count_of_first_redemptions}%
+                            <p className="text-sm flex-1 text-center uppercase">{region}</p>
+                            <p className="text-sm flex-1 text-center uppercase">{product}</p>
+                            <p className="text-sm flex-1 text-center">{special}</p>
+                            <p className="text-sm flex-1 text-center">{special_type}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{redemptions}</p>
+                            <p className="text-sm flex-1 text-center text-green">R{revenue}</p>
+                            <p className="text-sm flex-1 text-center">
+                                <span className="text-blue">{tiers.StarterSaver}</span>{' '}
+                                <span className="text-green">{tiers.SmartShopper}</span>{' '}
+                                <span className="text-purple">{tiers.PremierCollector}</span>
                             </p>
-                            <p className="text-sm flex-1 text-center">{(enrollment_redemption_ratio * 100).toFixed(1)}%</p>
-                            <p className="text-sm flex-1 text-center">{promotional_impact}</p>
-                            <p className="text-sm flex-1 text-center">{preferred_channel}</p>
-                            <p className="text-sm flex-1 text-center">R{first_redemption_value.toFixed(2)}</p>
+                            <p className="text-sm flex-1 text-center">
+                                <span className="text-blue">{Gender.Male}</span>{' '}
+                                <span className="text-pink-400">{Gender.Female}</span>{' '}
+                                <span className="text-gray-400">{Gender.Other}</span>
+                            </p>
+                            <p className="text-sm flex-1 text-center">{AgeGroup}</p>
                         </div>
                     </div>
                 ))}

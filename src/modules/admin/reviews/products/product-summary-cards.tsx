@@ -11,7 +11,7 @@ const productsData = [
     { id: 1, title: "Top Rated Products", icon: <ShoppingCart className="w-6 h-6 text-green" />, content: "1. Organic Apples\n2. Whole Grain Bread\n3. Fresh Milk" },
     { id: 2, title: "Top Reviewers", icon: <User className="w-6 h-6 text-blue" />, content: "1. Alice Johnson\n2. Bob Smith\n3. Carol Davis" },
     { id: 3, title: "Common Reviews", icon: <Star className="w-6 h-6 text-yellow" />, content: "1. Organic Apples\n2. Low-Fat Yogurt\n3. Whole Grain Bread" },
-    { id: 4, title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Gold: 45%\nDiamond: 30%\nPlatinum: 25%" },
+    { id: 4, title: "Loyalty Tiers", icon: <Award className="w-6 h-6 text-purple" />, content: "Starter Savers: 45%\nSmart Shoppers: 30%\nPremier Collectors: 25%" },
     { id: 5, title: "Top Redeemers", icon: <ShoppingCart className="w-6 h-6 text-red" />, content: "1. David Brown\n2. Emma Wilson\n3. Frank Miller" },
 ]
 

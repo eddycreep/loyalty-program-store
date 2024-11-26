@@ -7,6 +7,50 @@
   animation: fadeIn 0.5s ease-out;
 }
 
+@media (max-width: 640px) {
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .responsive-table tbody td {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    position: relative;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .responsive-table tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .responsive-table tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .responsive-table ul {
+    padding-left: 0;
+  }
+
+  .responsive-table ul li {
+    list-style-type: none;
+  }
+}
+
 /* Add animation for the upgrade method cards */
 .grid > * {
   animation: fadeIn 0.5s ease-out;
@@ -23,17 +67,6 @@
 .grid > *:nth-child(8) { animation-delay: 0.8s; }
 .grid > *:nth-child(9) { animation-delay: 0.9s; }
 .grid > *:nth-child(10) { animation-delay: 1s; }
-
-@media (max-width: 768px) {
-  .responsive-table td::before {
-    content: attr(data-label);
-    float: left;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-
-  .responsive-table td:last-child {
-    border-bottom: 0;
-  }
-}
+.grid > *:nth-child(11) { animation-delay: 1.1s; }
+.grid > *:nth-child(12) { animation-delay: 1.2s; }
 

@@ -222,17 +222,17 @@ export const RewardsModule = () => {
 
     return (
         <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
-                <div>
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+                <div className="pt-6">
                     <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
+                    <div className="flex flex-col pl-2 pt-24">
                         <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
                         <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
-                    <div className='flex gap-2 pt-8 pr-2'>
+                    <div className='flex gap-2 pt-28 pr-2'>
                         <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
                             Add Rewards
                         </button>
