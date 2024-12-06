@@ -13,7 +13,7 @@ const tiers = [
     name: "Starter Savers",
     icon: ShoppingBasket,
     color: "text-orange",
-    eligibility: "R50–R199/month",
+    eligibility: "R50–R199/basket",
     rewards: [
       "Free snack bundle on birthday",
       "Early access to seasonal collections"
@@ -31,7 +31,7 @@ const tiers = [
     name: "Smart Shoppers",
     icon: ShoppingBag,
     color: "text-green-600",
-    eligibility: "R200–R499/month",
+    eligibility: "R200–R499/basket",
     rewards: [
       "Free item for every R300 spent in a month",
       "Premium supply kit free with R100+ purchases in August"
@@ -48,7 +48,7 @@ const tiers = [
     name: "Premier Collectors",
     icon: Award,
     color: "text-purple-600",
-    eligibility: "R500+/month",
+    eligibility: "R500+/basket",
     rewards: [
       "Monthly product samples",
       "Free holiday bundles on R150+ purchases",
