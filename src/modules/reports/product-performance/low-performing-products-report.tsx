@@ -23,6 +23,7 @@ interface LowPerformingProductData {
     gross_margin: number;
     customer_count: number;
     date: string;
+    region: string; // Added region to the data structure
 }
 
 const lowPerformingProductsReport: LowPerformingProductData[] = [
@@ -40,6 +41,7 @@ const lowPerformingProductsReport: LowPerformingProductData[] = [
         gross_margin: 20.0,
         customer_count: 60,
         date: '2024-10-01',
+        region: 'Western Cape', // Added region value
     },
     {
         store_id: 'SOO2',
@@ -55,6 +57,7 @@ const lowPerformingProductsReport: LowPerformingProductData[] = [
         gross_margin: 25.0,
         customer_count: 40,
         date: '2024-10-02',
+        region: 'Gauteng', // Added region value
     },
     {
         store_id: 'SOO3',
@@ -70,6 +73,7 @@ const lowPerformingProductsReport: LowPerformingProductData[] = [
         gross_margin: 18.0,
         customer_count: 55,
         date: '2024-10-03',
+        region: 'Western Cape', // Added region value
     }
 ];
 
@@ -127,6 +131,11 @@ export const LowPerformingProductsReport = () => {
         // Filter by selected store
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
+        }
+
+        // Filter by selected region
+        if (selectedRegion !== 'All') {
+            filtered = filtered.filter(item => item.region === selectedRegion);
         }
 
         setFilteredData(filtered);

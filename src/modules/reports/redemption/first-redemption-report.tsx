@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 interface FirstRedemptionData {
     store_id: string;
     store_name: string;
+    region: string;
     date: string;
     average_time_to_first_redemption: number;
     total_new_members: number;
@@ -27,6 +28,7 @@ const firstRedemptionData: FirstRedemptionData[] = [
     { 
         store_id: 'SOO1', 
         store_name: 'PLUS DC Stellenbosch', 
+        region: 'Western Cape.', 
         date: '2024-09-01', 
         average_time_to_first_redemption: 5, 
         total_new_members: 100, 
@@ -36,11 +38,11 @@ const firstRedemptionData: FirstRedemptionData[] = [
         preferred_channel: 'Mobile App',
         first_redemption_value: 250.50
     },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-09-10', average_time_to_first_redemption: 4, total_new_members: 90, count_of_first_redemptions: 70, enrollment_redemption_ratio: 0.7, promotional_impact: 'Medium', preferred_channel: 'Web', first_redemption_value: 200.00 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', average_time_to_first_redemption: 6, total_new_members: 120, count_of_first_redemptions: 100, enrollment_redemption_ratio: 0.83, promotional_impact: 'High', preferred_channel: 'Mobile App', first_redemption_value: 270.00 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-08-15', average_time_to_first_redemption: 7, total_new_members: 95, count_of_first_redemptions: 85, enrollment_redemption_ratio: 0.89, promotional_impact: 'Medium', preferred_channel: 'In-Store', first_redemption_value: 230.00 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-07-20', average_time_to_first_redemption: 3, total_new_members: 110, count_of_first_redemptions: 90, enrollment_redemption_ratio: 0.82, promotional_impact: 'High', preferred_channel: 'Mobile App', first_redemption_value: 240.00 },
-    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', date: '2024-06-05', average_time_to_first_redemption: 5, total_new_members: 80, count_of_first_redemptions: 60, enrollment_redemption_ratio: 0.75, promotional_impact: 'Medium', preferred_channel: 'In-Store', first_redemption_value: 180.00 },
+    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', region: 'Gauteng', date: '2024-09-10', average_time_to_first_redemption: 4, total_new_members: 90, count_of_first_redemptions: 70, enrollment_redemption_ratio: 0.7, promotional_impact: 'Medium', preferred_channel: 'Web', first_redemption_value: 200.00 },
+    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', region: 'Western Cape', date: '2024-10-01', average_time_to_first_redemption: 6, total_new_members: 120, count_of_first_redemptions: 100, enrollment_redemption_ratio: 0.83, promotional_impact: 'High', preferred_channel: 'Mobile App', first_redemption_value: 270.00 },
+    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', region: 'Mpumalanga', date: '2024-08-15', average_time_to_first_redemption: 7, total_new_members: 95, count_of_first_redemptions: 85, enrollment_redemption_ratio: 0.89, promotional_impact: 'Medium', preferred_channel: 'In-Store', first_redemption_value: 230.00 },
+    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', region: 'Western Cape', date: '2024-07-20', average_time_to_first_redemption: 3, total_new_members: 110, count_of_first_redemptions: 90, enrollment_redemption_ratio: 0.82, promotional_impact: 'High', preferred_channel: 'Mobile App', first_redemption_value: 240.00 },
+    { store_id: 'SOO6', store_name: 'PLUS DC Bloemfontein', region: 'Free State', date: '2024-06-05', average_time_to_first_redemption: 5, total_new_members: 80, count_of_first_redemptions: 60, enrollment_redemption_ratio: 0.75, promotional_impact: 'Medium', preferred_channel: 'In-Store', first_redemption_value: 180.00 },
 ];
 
 
@@ -48,12 +50,12 @@ const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' }, 
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' }, 
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' }, 
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' }, 
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
@@ -72,7 +74,7 @@ const storeRegions = [
 ];
 
 export const FirstRedemptionReport = () => {
-    const headers = ["Store ID", "Store Name", "Date", "Avg. Time to First Redemption (Days)", "Total New Members", "Count of First Redemptions", "Enrollment to Redemption Ratio", "Promotional Impact", "Preferred Redemption Channel", "First Redemption Value"]
+    const headers = ["Store ID", "Store Name", "Region", "Date", "Avg. Redemption (Days)", "Total New Members", "Count of First Redemptions",  "Promotional Impact", "Redemption Channel", "1st Redemption Value"]
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -87,21 +89,26 @@ export const FirstRedemptionReport = () => {
     // Filter function to handle filtering by date range and store
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = firstRedemptionData; 
-        
+        let filtered = firstRedemptionData;
+    
         // Filter by selected date range (startDate and endDate)
         if (startDate && endDate) {
             filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
         }
-
+    
         // Filter by selected store if not "All"
         if (selectedStore !== 'All') {
             filtered = filtered.filter(item => item.store_id === selectedStore);
         }
-
+    
+        // Filter by selected region if not "All"
+        if (selectedRegion !== 'All') {
+            filtered = filtered.filter(item => item.region === selectedRegion);
+        }
+    
         setFilteredData(filtered);  // Set filtered data to state
         setDataHasFiltered(true);
-
+    
         // Handle case when no data matches the filters
         if (filtered.length === 0) {
             setIsError(true);
@@ -112,9 +119,10 @@ export const FirstRedemptionReport = () => {
         } else {
             setIsError(false);
         }
-
+    
         setIsLoading(false);  // Disable loader after filtering
     };
+    
 
 
     if (isLoading) {
@@ -419,18 +427,19 @@ export const FirstRedemptionReport = () => {
             </div>
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, average_time_to_first_redemption, total_new_members, count_of_first_redemptions, enrollment_redemption_ratio, promotional_impact, preferred_channel, first_redemption_value }) => (
+                {filteredData.map(({ store_id, store_name, region, date, average_time_to_first_redemption, total_new_members, count_of_first_redemptions, enrollment_redemption_ratio, promotional_impact, preferred_channel, first_redemption_value }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-red">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
+                            <p className="text-sm flex-1 text-center text">{region}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{average_time_to_first_redemption}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_new_members}</p>
                             <p className={`text-sm flex-1 text-center ${count_of_first_redemptions >= 50 ? 'text-green' : 'text-red'}`}>
-                                {count_of_first_redemptions}%
+                                {count_of_first_redemptions}
                             </p>
-                            <p className="text-sm flex-1 text-center">{(enrollment_redemption_ratio * 100).toFixed(1)}%</p>
+                            {/* <p className="text-sm flex-1 text-center">{(enrollment_redemption_ratio * 100).toFixed(1)}%</p> */}
                             <p className="text-sm flex-1 text-center">{promotional_impact}</p>
                             <p className="text-sm flex-1 text-center">{preferred_channel}</p>
                             <p className="text-sm flex-1 text-center">R{first_redemption_value.toFixed(2)}</p>

@@ -9,33 +9,154 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
 
-interface DiscountCostnRevenueData {
+// Define the updated data interface
+interface DiscountRevenueData {
     store_id: string;
     store_name: string;
+    region: string;
     date: string;
     total_discounts_given: number;
     total_revenue_from_discounts: number;
+    discount_rate: string;
+    top_discount_products: string;
+    tiers_usage_rate: { StarterSaver: number; SmartShopper: number; PremierCollector: number };
     net_revenue_after_discounts: number;
 }
 
-const discountCostnRevenueData: DiscountCostnRevenueData[] = [
-    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', date: '2024-10-01', total_discounts_given: 5000, total_revenue_from_discounts: 30000, net_revenue_after_discounts: 25000 },
-    { store_id: 'SOO2', store_name: 'PLUS DC Albertin', date: '2024-10-01', total_discounts_given: 4000, total_revenue_from_discounts: 25000, net_revenue_after_discounts: 21000 },
-    { store_id: 'SOO3', store_name: 'PLUS DC Bellville', date: '2024-10-01', total_discounts_given: 6000, total_revenue_from_discounts: 40000, net_revenue_after_discounts: 34000 },
-    { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', date: '2024-09-28', total_discounts_given: 5500, total_revenue_from_discounts: 35000, net_revenue_after_discounts: 29500 },
-    { store_id: 'SOO5', store_name: 'PLUS DC Durbanville', date: '2024-09-30', total_discounts_given: 7000, total_revenue_from_discounts: 45000, net_revenue_after_discounts: 38000 },
+const discountRevenueData: DiscountRevenueData[] = [
+    {
+        store_id: "SOO1",
+        store_name: "PLUS DC Stellenbosch",
+        region: "Western Cape",
+        date: "2024-10-01",
+        total_discounts_given: 5000,
+        total_revenue_from_discounts: 30000,
+        discount_rate: "15%",
+        top_discount_products: "Apples",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 25000,
+    },
+    {
+        store_id: "SOO2",
+        store_name: "PLUS DC Alberton",
+        region: "Gauteng",
+        date: "2024-10-01",
+        total_discounts_given: 4000,
+        total_revenue_from_discounts: 25000,
+        discount_rate: "12%",
+        top_discount_products: "Bananas",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 21000,
+    },
+    {
+        store_id: "SOO3",
+        store_name: "PLUS DC Bellville",
+        region: "Western Cape",
+        date: "2024-10-01",
+        total_discounts_given: 6000,
+        total_revenue_from_discounts: 40000,
+        discount_rate: "18%",
+        top_discount_products: "Oranges",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 34000,
+    },
+    {
+        store_id: "SOO4",
+        store_name: "PLUS DC Nelspruit",
+        region: "Mpumalanga",
+        date: "2024-09-28",
+        total_discounts_given: 5500,
+        total_revenue_from_discounts: 35000,
+        discount_rate: "16%",
+        top_discount_products: "Maynards",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 29500,
+    },
+    {
+        store_id: "SOO5",
+        store_name: "PLUS DC Durbanville",
+        region: "Western Cape",
+        date: "2024-09-30",
+        total_discounts_given: 7000,
+        total_revenue_from_discounts: 45000,
+        discount_rate: "20%",
+        top_discount_products: "Lays",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 38000,
+    },
+    {
+        store_id: "SOO6",
+        store_name: "PLUS DC Bloemfontein",
+        region: "Free State",
+        date: "2024-10-03",
+        total_discounts_given: 3000,
+        total_revenue_from_discounts: 18000,
+        discount_rate: "10%",
+        top_discount_products: "Coke",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 16000,
+    },
+    {
+        store_id: "SOO7",
+        store_name: "PLUS DC Cape Town",
+        region: "Western Cape",
+        date: "2024-10-02",
+        total_discounts_given: 8000,
+        total_revenue_from_discounts: 50000,
+        discount_rate: "14%",
+        top_discount_products: "Applie Pie",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 43000,
+    },
+    {
+        store_id: "SOO8",
+        store_name: "PLUS DC Pietermaritzburg",
+        region: "KwaZulu-Natal",
+        date: "2024-10-05",
+        total_discounts_given: 4500,
+        total_revenue_from_discounts: 30000,
+        discount_rate: "15%",
+        top_discount_products: "Doritos",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 25500,
+    },
+    {
+        store_id: "SOO9",
+        store_name: "PLUS DC East London",
+        region: "Eastern Cape",
+        date: "2024-09-29",
+        total_discounts_given: 3500,
+        total_revenue_from_discounts: 20000,
+        discount_rate: "12%",
+        top_discount_products: "School Books",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 17500,
+    },
+    {
+        store_id: "SOO10",
+        store_name: "PLUS DC Pretoria",
+        region: "Gauteng",
+        date: "2024-10-04",
+        total_discounts_given: 9000,
+        total_revenue_from_discounts: 60000,
+        discount_rate: "15%",
+        top_discount_products: "Watermelon",
+        tiers_usage_rate: { StarterSaver: 40, SmartShopper: 60, PremierCollector: 80 },
+        net_revenue_after_discounts: 51000,
+    },
 ];
+
 
 const stores = [
     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },
     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },
     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },
+    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },
     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
@@ -54,16 +175,15 @@ const storeRegions = [
     { id: 9, region: 'Western Cape'}
 ];
 
-export const CostvsDiscountedRevenueReport = () => {
-    //const headers = ['Store ID', 'Store Name', 'Date', 'Total Discounts Given', 'Total Revenue from Discounts', 'Net Revenue After Discounts', 'Discount Redemption Rate', 'Top Discounted Products', 'Member Segment Discount Usage', 'Profit Margin After Discounts', 'Discount ROI'];
-    const headers = ['Store ID', 'Store Name', 'Date', 'discounts given', 'discounts revenue', 'Revenue After Discounts', 'Discount Rate', 'Top Discount Products',  'Loyalty Tiers Discount Usage', 'Profit After Discounts'];
+export const DiscountedRevenueReport = () => {
+    const headers = ['Store ID', 'Store Name', 'Region', 'Date', 'discounts given', 'discounts revenue', 'Discount Rate', 'Top Discount Products',  'Tiers Usage Rate', 'Profit After Discounts'];
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [selectedStore, setSelectedStore] = useState('');
     const [selectedRegion, setSelectedRegion] = useState("");
 
-    const [filteredData, setFilteredData] = useState<DiscountCostnRevenueData[]>([]); 
+    const [filteredData, setFilteredData] = useState<DiscountRevenueData[]>([]); 
     const [isLoading, setIsLoading] = useState(false); 
     const [isError, setIsError] = useState(false);
     const [hasFiltered, setDataHasFiltered] = useState(false);
@@ -71,34 +191,31 @@ export const CostvsDiscountedRevenueReport = () => {
     
     const handleFilter = () => {
         setIsLoading(true);
-        let filtered = discountCostnRevenueData;  // Start with full data set
-        
-        // Filter by selected date range (startDate and endDate)
+        let filtered = discountRevenueData;
+    
+        // Filter by date range
         if (startDate && endDate) {
-            filtered = filtered.filter(item => item.date >= startDate && item.date <= endDate);
+          filtered = filtered.filter(
+            (item) => item.date >= startDate && item.date <= endDate
+          );
         }
-
-        // Filter by selected store if not "All"
-        if (selectedStore !== 'All') {
-            filtered = filtered.filter(item => item.store_id === selectedStore);
+    
+        // Filter by region
+        if (selectedRegion && selectedRegion !== "All") {
+          filtered = filtered.filter((item) => item.region === selectedRegion);
         }
-
+    
         setFilteredData(filtered);
-        setDataHasFiltered(true);
-
-        // Handle case when no data matches the filters
+    
         if (filtered.length === 0) {
-            setIsError(true);
-            toast.error('No data found for the selected filters!', {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
-        } else {
-            setIsError(false);
+          toast.error("No data found for the selected filters!", {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+          });
         }
-
-        setIsLoading(false);  // Disable loader after filtering
-    };
+    
+        setIsLoading(false);
+      };
 
 
     if (isLoading) {
@@ -402,15 +519,23 @@ export const CostvsDiscountedRevenueReport = () => {
                 ))}
             </div>
             <div className="pt-2 max-h-screen pb-2 space-y-2">
-                {filteredData.map(({ store_id, store_name, date, total_discounts_given, total_revenue_from_discounts, net_revenue_after_discounts }) => (
+                {filteredData.map(({ store_id, store_name, region, date, total_discounts_given, total_revenue_from_discounts, discount_rate, top_discount_products, tiers_usage_rate, net_revenue_after_discounts }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-red">{store_id}</p>
-                            <p className="text-sm flex-1 text-center text">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{store_name}</p>
+                            <p className="text-sm flex-1 text-center">{region}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_discounts_given}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{total_revenue_from_discounts}</p>
-                            <p className="text-sm flex-1 text-center uppercase">{net_revenue_after_discounts}%</p>
+                            <p className="text-sm flex-1 text-center">{total_discounts_given}</p>
+                            <p className="text-sm flex-1 text-center">{total_revenue_from_discounts}</p>
+                            <p className="text-sm flex-1 text-center">{discount_rate}</p>
+                            <p className="text-sm flex-1 text-center">{top_discount_products}</p>
+                            <p className="text-sm flex-1 text-center">
+                                <span className="text-blue">{tiers_usage_rate.StarterSaver}</span>{' '}
+                                <span className="text-green">{tiers_usage_rate.SmartShopper}</span>{' '}
+                                <span className="text-purple">{tiers_usage_rate.PremierCollector}</span>
+                            </p>
+                            <p className="text-sm flex-1 text-center">{net_revenue_after_discounts}</p>
                         </div>
                     </div>
                 ))}
