@@ -5,12 +5,9 @@ import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { PercentDiamond, Coins, Coffee, BadgeCheck, Clock, BadgeInfo, AlertTriangle, Users } from 'lucide-react'
+import { PercentDiamond, Coins, Coffee, BadgeCheck, BadgeInfo, AlertTriangle, Users } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
-import { BlueLoader } from "@/lib/blueLoader"
-import MultiColorLoader from "@/lib/loaders"
-import ThreeDotsLoader from "@/lib/three-dots-loader"
 
 interface SpecialProps {
     special_id: number, 
@@ -25,7 +22,7 @@ interface SpecialProps {
 }
 type SpecialResponse = SpecialProps[]
 
-// SpecialCard component to display individual special information
+
 export const ActiveSpecialCards = () => {
     const [activeSpecials, setActiveSpecials] = useState<SpecialResponse>([])
 
@@ -35,9 +32,10 @@ export const ActiveSpecialCards = () => {
 
     const getActiveSpecials = async () => {
         setActiveSpecialsLoading(true);
+        //http://localhost:4000/products/getallactivespecials
     
         try {
-            const url = `products/getactivespecials`
+            const url = `products/getallactivespecials`
             const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
             setActiveSpecials(response?.data);
             console.log('Active Specials: ', response.data);

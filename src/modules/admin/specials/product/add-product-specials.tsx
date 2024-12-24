@@ -196,7 +196,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                 specialprice: currentSpecial.specialPrice
             }
 
-            const url = `admin/saveproductspecial`
+            const url = `admin/savespecialitems`
             const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
             console.log('The Special item has been saved with its ID:', response.data)
 

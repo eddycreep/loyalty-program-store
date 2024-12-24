@@ -1,11 +1,7 @@
-
 'use client'
 
 import { useState } from 'react'
-import axios from 'axios';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Gem, NotepadText } from 'lucide-react'
 
 import { LoyaltySummaryCards } from '@/components/loyalty-summary-cards'
 import { ActiveSpecialCards } from '@/modules/home/components/specials/active-specials-card'
@@ -66,7 +62,7 @@ export function Homepage() {
             <LoyaltySummaryCards />
           </div>
 
-          {/* Specials Section */}
+          {/* Specials Card */}
           <section className="mb-6 sm:mb-8">
             <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Specials</h2>
             <Tabs defaultValue="active" onValueChange={setActiveTab}>
@@ -87,7 +83,7 @@ export function Homepage() {
             </Tabs>
           </section>
 
-          {/* Rewards Section */}
+          {/* Rewards Card */}
           <section className="mb-6 sm:mb-8">
             <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Rewards</h2>
             <Tabs defaultValue="active-rewards" onValueChange={setActiveRewardsTab}>
@@ -108,7 +104,7 @@ export function Homepage() {
             </Tabs>
           </section>
 
-            {/* Surveys Section */}
+            {/* Surveys Card */}
             <section className="mb-6 sm:mb-8">
               <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Surveys</h2>
               <Tabs defaultValue="active-surveys" onValueChange={setActiveRewardsTab}>
