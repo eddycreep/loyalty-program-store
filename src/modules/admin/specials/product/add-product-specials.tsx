@@ -136,7 +136,6 @@ export function AddProductsSpecials({ onClose }: Props) {
 
     const displayedProducts = searchProducts.slice(0, 3); // Modified to limit products to 3
 
-    //getallproducts
     const fetchProducts = async () => {
         try {
             const url = `products/getproducts`;
@@ -264,6 +263,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                 productdescription: productName,
                 specialprice: specialPrice
             }
+            //http://localhost:4000/admin/save-special-items
 
             const url = `admin/save-special-items`
             const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
@@ -461,20 +461,20 @@ export function AddProductsSpecials({ onClose }: Props) {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                        {displayedProducts.map((product) => (
-                            <Button
-                                key={product.id}
-                                variant="outline"
-                                onClick={() => addProductToSpecial(product)}
-                                disabled={currentSpecial.products.length >= 1 || currentSpecial.products.some(p => p.id === product.id)}
-                                className="justify-start"
-                                >
-                                <PlusCircle className="h-4 w-4 mr-2" />
-                                {product.name}
-                            </Button>
+                        {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {displayedProducts.map((product) => (
+                                <Button
+                                    key={product.id}
+                                    variant="outline"
+                                    onClick={() => addProductToSpecial(product)}
+                                    disabled={currentSpecial.products.length >= 1 || currentSpecial.products.some(p => p.id === product.id)}
+                                    className="justify-start"
+                                    >
+                                    <PlusCircle className="h-4 w-4 mr-2" />
+                                    {product.name}
+                                </Button>
                             ))}
-                        </div>
+                        </div> */}
 
                         <div className="mt-4">
                             <Label>Product</Label>
