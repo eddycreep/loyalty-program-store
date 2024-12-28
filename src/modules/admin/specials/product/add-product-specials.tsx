@@ -1,5 +1,6 @@
 'use client'
 
+import { format } from "date-fns";
 import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -11,14 +12,15 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useSession } from '@/context';
 
 
 interface Props {
   onClose: () => void;  // Corrected syntax here
 }
 
-//specials
-interface Specials {
+//new special data
+interface Special {
     special_id: number,
     special_name: string,
     special: string,
@@ -30,20 +32,22 @@ interface Specials {
     isActive: number
 }
 
-//special items - individual x combined
+//special items
 interface SpecialItems {
     special_id: number,
-    special_group_id: string,
     product_description: string,
     special_price: string
 }
 
-//get special id
-interface SpecialIDProps {
-    special_id: number
+interface SpecialInfo {
+    special_id: number,
+    special_name: string,
+    special: string,
+    special_type: string
 }
+type SpecialInfoRes = SpecialInfo[]
 
-
+//old product data
 type Product = {
     id: string
     name: string
@@ -51,10 +55,21 @@ type Product = {
     item_code: string
 }
 
+//new product data
+interface ProductsData {
+    id: number,
+    item_code: string
+    selling_incl_1: number,
+    special_price_incl: number,
+    description_1: string
+}
+type ProductsDataRes = ProductsData[]
+
 type SpecialProduct = Product & {
     
 }
 
+//old special data
 type CombinedSpecial = {
     id: string
     name: string
@@ -83,7 +98,20 @@ const stores = [
   { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
 ];
 
+// user activity
+interface UserActivity {
+    emp_id: number,
+    emp_name: string,
+    activity_id: number,
+    activity: string,
+    activity_type: string,
+    time_logged: string,
+    log_message: string,
+}
+
+
 export function AddProductsSpecials({ onClose }: Props) {
+    const { user } = useSession();
     const [specials, setSpecials] = useState<CombinedSpecial[]>([])
     const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
         id: '',
@@ -98,30 +126,45 @@ export function AddProductsSpecials({ onClose }: Props) {
         isActive: true
     })
     const [searchTerm, setSearchTerm] = useState('')
-    const [specialID, setSpecialID] = useState(0)
+    const [specialID, setSpecialID] = useState<SpecialInfoRes>([])
 
-    // Mock product data (replace with actual API call in production)
-    const allProducts: Product[] = [
-        { id: '1', name: 'Apple', price: 0.5, item_code: 'P001' },
-        { id: '2', name: 'Banana', price: 0.3, item_code: 'P002' },
-        { id: '3', name: 'Orange', price: 0.6, item_code: 'P003' },
-        { id: '4', name: 'Milk', price: 2.5, item_code: 'P004' },
-        { id: '5', name: 'Bread', price: 1.5, item_code: 'P005' },
-        { id: '6', name: 'Eggs', price: 3.0, item_code: 'P006' },
-        { id: '7', name: 'Cheese', price: 4.5, item_code: 'P007' },
-        { id: '8', name: 'Yogurt', price: 1.2, item_code: 'P008' },
-        { id: '9', name: 'Tomato', price: 0.8, item_code: 'P009' },
-        { id: '10', name: 'Potato', price: 0.4, item_code: 'P010' },
-        { id: '11', name: 'Onion', price: 0.3, item_code: 'P011' },
-        { id: '12', name: 'Carrot', price: 0.4, item_code: 'P012' },
-    ]
+    const [allProducts, setAllProducts] = useState<ProductsDataRes>([])
 
-    const filteredProducts = allProducts.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const searchProducts = allProducts.filter(product =>
+        product.description_1.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    const displayedProducts = filteredProducts.slice(0, 3); // Modified to limit products to 3
+    const displayedProducts = searchProducts.slice(0, 3); // Modified to limit products to 3
 
+    //getallproducts
+    const fetchProducts = async () => {
+        try {
+            const url = `products/getproducts`;
+            const response = await axios.get<ProductsDataRes>(`${apiEndPoint}/${url}`);
+            console.log('products data:', response.data);
+    
+            setAllProducts(response?.data);
+    
+            if (response.status === 200) {
+                toast.success('Products Fetched', {
+                    icon: <Check color={colors.blue} size={24} />,
+                    duration: 3000,
+                });
+
+            } else {
+                toast.error('Products Failed', {
+                    icon: <Check color={colors.blue} size={24} />,
+                    duration: 3000,
+                });
+    
+                console.error('Products Failed: ', response.data);
+            }
+
+        } catch (error) {
+            console.error('error fetching products: ', error);
+        }
+    };
+    
     const addProductToSpecial = (product: Product) => {
         // Allow adding only one product
         if (currentSpecial.products.length === 0) {
@@ -155,7 +198,7 @@ export function AddProductsSpecials({ onClose }: Props) {
             }
 
             const url = `admin/savespecial`
-            const response = await axios.post<Specials>(`${apiEndPoint}/${url}`, payload)
+            const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
             console.log('The Special has been saved successfully:', response.data)
 
             if (response.status === 200) {
@@ -178,25 +221,51 @@ export function AddProductsSpecials({ onClose }: Props) {
 
     const fetchSpecialID = async () => {
         try {
-            const url = `admin/getspecialid/${currentSpecial.name}`
-            const response = await axios.get<SpecialIDProps>(`${apiEndPoint}/${url}`)
-            console.log('The Special ID has been fetched successfully:', response.data)
-            setSpecialID(response?.data.special_id)
-            saveSpecialItems() //save the item
+            const url = `admin/getspecialid/${currentSpecial.name}`;
+            const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
+            console.log('The Special ID has been fetched successfully:', response.data);
+    
+            setSpecialID(response?.data);
+    
+            if (response.data.length > 0) {
+                saveSpecialItems(); // save the items
+                
+                logUserActivity(response.data[0]); // Pass the fetched data directly to logUserActivity
+    
+                toast.success('Executing user logging', {
+                    icon: <Check color={colors.blue} size={24} />,
+                    duration: 3000,
+                });
+    
+                console.error('Special data returned: ', response.data);
+            } else if (response.data.length == 0) {
+                toast.success('No special data, returning', {
+                    icon: <Check color={colors.blue} size={24} />,
+                    duration: 3000,
+                });
+    
+                console.error('No special data returned: ', response.data);
+            }
         } catch (error) {
-            console.error('Error fetching special ID:', error)
+            console.error('Error fetching special ID:', error);
         }
-    }
-
+    };
+    
     const saveSpecialItems = async () => {
+        console.log('executing saving items: ', currentSpecial);
+
+        // Destructure the 'name' property from the first item in the 'products' array
+        const { id, products, specialPrice } = currentSpecial;
+        const productName = products.length > 0 ? products[0].name : null;
+
         try {
             const payload = {
-                specialid: specialID,
-                productdescription: currentSpecial.products,
-                specialprice: currentSpecial.specialPrice
+                specialid: id,
+                productdescription: productName,
+                specialprice: specialPrice
             }
 
-            const url = `admin/savespecialitems`
+            const url = `admin/save-special-items`
             const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
             console.log('The Special item has been saved with its ID:', response.data)
 
@@ -216,6 +285,41 @@ export function AddProductsSpecials({ onClose }: Props) {
             })
         }
     }
+    
+    const logUserActivity = async (special: SpecialInfo) => {
+        const timeLogged = format(new Date(), "EEE MMM dd yyyy HH:mm:ss 'GMT'XXX");
+        const message = "User created a new normal special";
+    
+        try {
+            const payload = {
+                emp_id: user.emp_id,
+                emp_name: user.emp_id,
+                activity_id: special.special_id,
+                activity: special.special_name,
+                activity_type: special.special_type,
+                time_logged: timeLogged,
+                log_message: message,
+            };
+    
+            const url = `users/log-user-activity`;
+            const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+            console.log('The User\'s activity has been logged!', response.data);
+    
+            if (response.status === 200) {
+                toast.success('Activity logged!', {
+                    icon: <Check color={colors.orange} size={24} />,
+                    duration: 3000,
+                });
+            }
+        } catch (error) {
+            console.error('Error logging activity:', error);
+    
+            toast.error('Error logging activity!', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+        }
+    };
 
     return (
         <div className="container mx-auto p-4 relative">

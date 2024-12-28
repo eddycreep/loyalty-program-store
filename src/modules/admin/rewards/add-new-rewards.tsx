@@ -11,6 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useSession } from '@/context';
+import { format } from "date-fns";
 
 interface Rewards {
   reward_title: string,
@@ -22,18 +24,38 @@ interface Rewards {
   region: string,
   start_date: string,
   expiry_date: string,
-  isActive: boolean; // Changed from number to boolean
+  isActive: boolean; 
   loyaltyTier: string,
   ageGroup: string,
 }
-// type RewardsResponse = Rewards[]
 
 
-type Product = {
-    id: string
-    name: string
-    price: number
+interface RewardInfo {
+    reward_id: number,
+    reward_title: string,
+    reward_type: string,
+}
+
+//new product data
+interface ProductsData {
+    id: number,
     item_code: string
+    selling_incl_1: number,
+    special_price_incl: number,
+    description_1: string
+}
+type ProductsDataRes = ProductsData[]
+
+
+// user activity
+interface UserActivity {
+    emp_id: number,
+    emp_name: string,
+    activity_id: number,
+    activity: string,
+    activity_type: string,
+    time_logged: string,
+    log_message: string,
 }
 
 
@@ -41,12 +63,12 @@ const stores = [
   { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
   { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
   { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-  { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+  { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },
   { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-  { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+  { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },
   { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-  { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-  { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+  { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },
+  { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },
   { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
   { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
   { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
@@ -82,6 +104,12 @@ const ageGroup = [
 ];
 
 export function AddNewRewards({ onClose }: any) {
+  const { user } = useSession();
+
+  const [products, setProducts] = useState<ProductsDataRes>([])
+  const [loyaltyAgeGroups, setLoyaltyAgeGroups] = useState<AgeGroupsRes>([])
+  const [stores, setStores] = useState<StoresRes>([])
+
   const [currentReward, setCurrentReward] = useState<Rewards>({
     reward_title: '',
     description: '',
@@ -97,21 +125,78 @@ export function AddNewRewards({ onClose }: any) {
     ageGroup: '',
   })
 
-  // Mock product data (replace with actual API call in production)
-  const allProducts: Product[] = [
-    { id: '1', name: 'Apple', price: 0.5, item_code: 'P001' },
-    { id: '2', name: 'Banana', price: 0.3, item_code: 'P002' },
-    { id: '3', name: 'Orange', price: 0.6, item_code: 'P003' },
-    { id: '4', name: 'Milk', price: 2.5, item_code: 'P004' },
-    { id: '5', name: 'Bread', price: 1.5, item_code: 'P005' },
-    { id: '6', name: 'Eggs', price: 3.0, item_code: 'P006' },
-    { id: '7', name: 'Cheese', price: 4.5, item_code: 'P007' },
-    { id: '8', name: 'Yogurt', price: 1.2, item_code: 'P008' },
-    { id: '9', name: 'Tomato', price: 0.8, item_code: 'P009' },
-    { id: '10', name: 'Potato', price: 0.4, item_code: 'P010' },
-    { id: '11', name: 'Onion', price: 0.3, item_code: 'P011' },
-    { id: '12', name: 'Carrot', price: 0.4, item_code: 'P012' },
-  ]
+
+  const getStores = async () => {
+    try {
+
+        const url = `admin/savereward`
+        const response = await axios.post<Rewards>(`${apiEndPoint}/${url}`, payload)
+        console.log('The Special has been saved successfully:', response.data)
+
+        if (response.status === 200) {
+            toast.success('The Reward has been saved successfully', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            })
+        }
+    } catch (error) {
+        console.error('Error saving Reward:', error)
+        
+        toast.success('There was an error when saving the Reward', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        })
+    }
+  }
+
+
+  // const getLoyaltyTiers = async () => {
+  //   try {
+
+  //       const url = `admin/savereward`
+  //       const response = await axios.post<Rewards>(`${apiEndPoint}/${url}`, payload)
+  //       console.log('The Special has been saved successfully:', response.data)
+
+  //       if (response.status === 200) {
+  //           toast.success('The Reward has been saved successfully', {
+  //               icon: <Check color={colors.green} size={24} />,
+  //               duration: 3000,
+  //           })
+  //       }
+  //   } catch (error) {
+  //       console.error('Error saving Reward:', error)
+        
+  //       toast.success('There was an error when saving the Reward', {
+  //           icon: <X color={colors.red} size={24} />,
+  //           duration: 3000,
+  //       })
+  //   }
+  // }
+
+
+  // const getAgeGroups = async () => {
+  //   try {
+
+  //       const url = `admin/savereward`
+  //       const response = await axios.post<Rewards>(`${apiEndPoint}/${url}`, payload)
+  //       console.log('The Special has been saved successfully:', response.data)
+
+  //       if (response.status === 200) {
+  //           toast.success('The Reward has been saved successfully', {
+  //               icon: <Check color={colors.green} size={24} />,
+  //               duration: 3000,
+  //           })
+  //       }
+  //   } catch (error) {
+  //       console.error('Error saving Reward:', error)
+        
+  //       toast.success('There was an error when saving the Reward', {
+  //           icon: <X color={colors.red} size={24} />,
+  //           duration: 3000,
+  //       })
+  //   }
+  // }
+
 
   const saveReward = async () => {
     try {
@@ -149,6 +234,42 @@ export function AddNewRewards({ onClose }: any) {
         })
     }
   }
+
+
+  const logUserActivity = async (bonus: RewardInfo) => {
+    const timeLogged = format(new Date(), "EEE MMM dd yyyy HH:mm:ss 'GMT'XXX");
+    const message = "User created a new reward";
+
+    try {
+        const payload = {
+            emp_id: user.emp_id,
+            emp_name: user.emp_id,
+            activity_id: bonus.reward_id,
+            activity: bonus.reward_title,
+            activity_type: bonus.reward_type,
+            time_logged: timeLogged,
+            log_message: message,
+        };
+
+        const url = `users/log-user-activity`;
+        const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+        console.log('The Users activity has been logged!', response.data);
+
+        if (response.status === 200) {
+            toast.success('Activity logged!', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            });
+        }
+    } catch (error) {
+        console.error('Error logging reward activity:', error);
+
+        toast.error('Error logging reward activity!', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+    }
+  };
 
   return (
     <div className="container mx-auto p-4 relative">
