@@ -10,6 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import SquareCircleLoader from "@/lib/square-circle-loader"
 
 interface SpecialProps {
+    uid: number,
     special_id: number, 
     special_name: string,
     special: string,
@@ -19,6 +20,8 @@ interface SpecialProps {
     expiry_date: string,
     special_value: string,
     isActive: number
+    insertedAt: string,
+    updatedAt: string
 }
 type SpecialResponse = SpecialProps[]
 
@@ -32,10 +35,11 @@ export const ActiveSpecialCards = () => {
 
     const getActiveSpecials = async () => {
         setActiveSpecialsLoading(true);
-        //http://localhost:4000/products/getallactivespecials
+        //http://localhost:4400/specials/get-all-active-specials
     
         try {
-            const url = `products/getallactivespecials`
+            //const url = `products/getallactivespecials`
+            const url = `specials/get-all-active-specials`
             const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
             setActiveSpecials(response?.data);
             console.log('Active Specials: ', response.data);
