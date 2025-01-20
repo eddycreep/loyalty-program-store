@@ -1,7 +1,7 @@
 'use client'
 
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { X, Search, Check, PlusCircle } from 'lucide-react';
@@ -11,77 +11,21 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useSession } from '@/context';
+import { format } from "date-fns";
+import { AgeGroupsResponse, LoyaltyTiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/shared/types/data-types'
+import { Rewards, RewardInfo, RewardInfoResponse } from '@/shared/types/rewards/rewards-data'
 
-interface Rewards {
-  reward_title: string,
-  description: string,
-  reward: string,
-  reward_type: string,
-  reward_price: number,
-  store_id: string,
-  region: string,
-  start_date: string,
-  expiry_date: string,
-  isActive: boolean; // Changed from number to boolean
-  loyaltyTier: string,
-  ageGroup: string,
-}
-// type RewardsResponse = Rewards[]
-
-
-type Product = {
-    id: string
-    name: string
-    price: number
-    item_code: string
-}
-
-
-const stores = [
-  { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
-  { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
-  { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-  { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
-  { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-  { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
-  { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-  { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-  { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
-  { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
-  { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
-  { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
-];
-
-const regions = [
-    { id: 1, region_id: 'ROO1', region: 'Western Cape' },
-    { id: 2, region_id: 'ROO2', region: 'Gauteng' },
-    { id: 3, region_id: 'ROO3', region: 'KwaZulu-Natal' },
-    { id: 4, region_id: 'ROO4', region: 'Eastern Cape' },
-    { id: 5, region_id: 'ROO5', region: 'Limpopo' },
-    { id: 6, region_id: 'ROO6', region: 'Free State' },
-    { id: 7, region_id: 'ROO7', region: 'Mpumalanga' },
-    { id: 8, region_id: 'ROO8', region: 'Northern Cape' },
-    { id: 9, region_id: 'ROO9', region: 'North West' },
-    { id: 10, region_id: 'ROO10', region: 'Western Cape Coastal' }, // Additional examples for variety
-    { id: 11, region_id: 'ROO11', region: 'Cape Flats' },
-    { id: 12, region_id: 'ROO12', region: 'Garden Route' },
-];
-
-const loyaltyTiers = [
-  { id: 1, tier: 'Gold' },
-  { id: 2, tier: 'Diamond' },
-  { id: 3, tier: 'Platinum' },
-];
-
-const ageGroup = [
-  { id: 1, age_range: '18-24', name: 'Young Adults' },
-  { id: 2, age_range: '25-34', name: 'Adults' },
-  { id: 3, age_range: '35-44', name: 'Middle-Aged Adults' },
-  { id: 4, age_range: '45-50', name: 'Older Middle-Aged Adults' },
-  { id: 5, age_range: '50+', name: 'Seniors' },
-];
 
 export function AddNewRewards({ onClose }: any) {
+  const { user } = useSession();
+
+  const [products, setProducts] = useState<ProductsResponse>([])
+  const [allStores, setAllStores] = useState<StoresResponse>([])
+  const [loyaltyTiers, setLoyaltyTiers] = useState<LoyaltyTiersResponse>([])
+  const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
+  const [rewardInfo, setRewardInfo] = useState<RewardInfoResponse>([])
+
   const [currentReward, setCurrentReward] = useState<Rewards>({
     reward_title: '',
     description: '',
@@ -97,21 +41,53 @@ export function AddNewRewards({ onClose }: any) {
     ageGroup: '',
   })
 
-  // Mock product data (replace with actual API call in production)
-  const allProducts: Product[] = [
-    { id: '1', name: 'Apple', price: 0.5, item_code: 'P001' },
-    { id: '2', name: 'Banana', price: 0.3, item_code: 'P002' },
-    { id: '3', name: 'Orange', price: 0.6, item_code: 'P003' },
-    { id: '4', name: 'Milk', price: 2.5, item_code: 'P004' },
-    { id: '5', name: 'Bread', price: 1.5, item_code: 'P005' },
-    { id: '6', name: 'Eggs', price: 3.0, item_code: 'P006' },
-    { id: '7', name: 'Cheese', price: 4.5, item_code: 'P007' },
-    { id: '8', name: 'Yogurt', price: 1.2, item_code: 'P008' },
-    { id: '9', name: 'Tomato', price: 0.8, item_code: 'P009' },
-    { id: '10', name: 'Potato', price: 0.4, item_code: 'P010' },
-    { id: '11', name: 'Onion', price: 0.3, item_code: 'P011' },
-    { id: '12', name: 'Carrot', price: 0.4, item_code: 'P012' },
-  ]
+  const getProducts = async () => {
+    try {
+        const url = `products/get-products`
+        const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`)
+        console.log('PRODUCTS RETURNED !!', response.data)
+        setProducts(response.data)
+    } catch (error) {
+        console.error('Error RETURNING PRODUCTS:', error)
+    }
+  }
+
+
+  const getStores = async () => {
+    try {
+        const url = `products/get-stores`
+        const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+        console.log('STORE RETURNED !!', response.data)
+        setAllStores(response.data)
+    } catch (error) {
+        console.error('Error RETURNING STORES:', error)
+    }
+  }
+
+
+  const getLoyaltyTiers = async () => {
+    try {
+        const url = `products/get-loyalty-tiers`
+        const response = await axios.get<LoyaltyTiersResponse>(`${apiEndPoint}/${url}`)
+        console.log('TIERS RETURNED !!', response.data)
+        setLoyaltyTiers(response.data)
+    } catch (error) {
+        console.error('Error RETURNING TIERS:', error)
+    }
+  }
+
+
+  const getAgeGroups = async () => {
+    try {
+        const url = `products/get-age-groups`
+        const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
+        console.log('AGE_GROUPS RETURNED !!', response.data)
+        setAgeGroups(response.data)
+    } catch (error) {
+        console.error('Error RETURNING AGE_GROUPS:', error)
+    }
+  }
+
 
   const saveReward = async () => {
     try {
@@ -125,21 +101,16 @@ export function AddNewRewards({ onClose }: any) {
           region: currentReward.region,
           start_date: currentReward.start_date,
           expiry_date: currentReward.expiry_date,
+          loyalty_tier: currentReward.loyaltyTier,
+          age_group: currentReward.ageGroup,
           isActive: currentReward.isActive,
-          loyaltyTier: currentReward.loyaltyTier,
-          ageGroup: currentReward.ageGroup,
         }
 
-        const url = `admin/savereward`
+        const url = `admin/save-reward`
         const response = await axios.post<Rewards>(`${apiEndPoint}/${url}`, payload)
-        console.log('The Special has been saved successfully:', response.data)
+        console.log('The Reward has been saved:', response.data)
 
-        if (response.status === 200) {
-            toast.success('The Reward has been saved successfully', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            })
-        }
+        await getRewardInfo(); 
     } catch (error) {
         console.error('Error saving Reward:', error)
         
@@ -149,6 +120,68 @@ export function AddNewRewards({ onClose }: any) {
         })
     }
   }
+
+
+  const getRewardInfo = async () => {
+    try {
+        const url = `admin/get-reward-info/${currentReward.reward_title}`
+        const response = await axios.get<RewardInfoResponse>(`${apiEndPoint}/${url}`)
+        console.log('REWARD INFO RETURNED!!', response.data)
+        setRewardInfo(response.data)
+
+
+        await logUserActivity(response.data[0]); 
+    } catch (error) {
+        console.error('Error RETURNING REWARD INFO:', error)
+    }
+  }
+
+
+  const logUserActivity = async (bonus: RewardInfo) => {
+    const timeLogged = format(new Date(), "EEE MMM dd yyyy HH:mm:ss 'GMT'XXX");
+    const message = "User created a new reward";
+
+    try {
+        const payload = {
+            emp_id: user.emp_id,
+            emp_name: user.emp_name,
+            activity_id: bonus.reward_id,
+            activity: bonus.reward_title,
+            activity_type: bonus.reward_type,
+            time_logged: timeLogged,
+            log_message: message,
+        };
+
+        console.log('PAYLOAD INFO - PAYLOAD INFO: ', bonus)
+
+        const url = `users/log-user-activity`;
+        const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+        console.log('The Users activity has been logged!', response.data);
+
+        if (response.status === 200) {
+            toast.success('Activity logged!', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            });
+        }
+    } catch (error) {
+        console.error('Error logging reward activity:', error);
+
+        toast.error('Error logging reward activity!', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+    }
+  };
+
+
+  useEffect(() => {
+    getProducts();
+    getStores();
+    getLoyaltyTiers();
+    getAgeGroups();
+  }, []);
+
 
   return (
     <div className="container mx-auto p-4 relative">
@@ -234,7 +267,6 @@ export function AddNewRewards({ onClose }: any) {
               <div className="flex gap-4">
                   <div className="w-full">
                     <Label htmlFor="store-id">Store ID</Label>
-                    {/* Changed the input field to a select dropdown to display store IDs */}
                       <Select
                         value={currentReward.store_id}
                         onValueChange={(value) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
@@ -243,11 +275,10 @@ export function AddNewRewards({ onClose }: any) {
                           <SelectValue placeholder="Select store ID" />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* Mapping through the stores array to create options for the dropdown */}
-                          <SelectItem value="All">All</SelectItem> {/* Added "All" option */}
-                          {stores.map((store) => (
-                            <SelectItem key={store.id} value={store.store_id}>
-                              {store.store_id}
+                          <SelectItem value="All">All</SelectItem>
+                          {allStores.map((branch) => (
+                            <SelectItem key={branch.id} value={branch.code}>
+                              {branch.code}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -264,11 +295,10 @@ export function AddNewRewards({ onClose }: any) {
                           <SelectValue placeholder="Select region" />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* Mapping through the stores array to create options for the dropdown */}
-                          <SelectItem value="All">All</SelectItem> {/* Added "All" option */}
-                          {regions.map((location) => (
-                            <SelectItem key={location.id} value={location.region}>
-                              {location.region}
+                          <SelectItem value="All">All</SelectItem>
+                          {allStores.map((branch) => (
+                            <SelectItem key={branch.id} value={branch.address_4}>
+                              {branch.address_4}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -287,9 +317,9 @@ export function AddNewRewards({ onClose }: any) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="All">All</SelectItem>
-                        {ageGroup.map((store) => (
-                          <SelectItem key={store.id} value={store.name}>
-                            {store.name}
+                        {ageGroups.map((age) => (
+                          <SelectItem key={age.age_group_id} value={age.age_range}>
+                            {age.group_name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -297,7 +327,6 @@ export function AddNewRewards({ onClose }: any) {
                   </div>
                   <div className="w-full">
                     <Label htmlFor="store-id">Loyalty Tier</Label>
-                    {/* Changed the input field to a select dropdown to display store IDs */}
                       <Select
                         value={currentReward.loyaltyTier}
                         onValueChange={(value) => setCurrentReward(prev => ({ ...prev, loyaltyTier: value }))}
@@ -306,11 +335,10 @@ export function AddNewRewards({ onClose }: any) {
                           <SelectValue placeholder="Select tier" />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* Mapping through the stores array to create options for the dropdown */}
-                          <SelectItem value="All">All</SelectItem> {/* Added "All" option */}
-                          {loyaltyTiers.map((loyalty) => (
-                            <SelectItem key={loyalty.id} value={loyalty.tier}>
-                              {loyalty.tier}
+                          <SelectItem value="All">All</SelectItem>
+                          {loyaltyTiers.map((tier) => (
+                            <SelectItem key={tier.loyalty_id} value={tier.loyalty_tier}>
+                              {tier.loyalty_tier}
                             </SelectItem>
                           ))}
                         </SelectContent>
