@@ -23,13 +23,18 @@ interface RewardProps {
     loyalty_tier: string,
     age_group: string,
     isActive: number
+    insertedAt: string,
+    updatedAt: string
 }
 
-type RewardsResponse = RewardProps[]
+// Define the structure of the API response
+interface RewardsResponse {
+    message: string;
+    results: RewardProps[];
+}
 
-// SpecialCard component to display individual special information
 export const ActiveRewardsCards = () => {
-    const [rewards, setRewards] = useState<RewardsResponse>([]);
+    const [rewards, setRewards] = useState<RewardProps[]>([]);
 
     const [loadingRewards, setLoadingRewards] = useState(false);
     const [rewardError, setRewardError] = useState(false);
@@ -39,9 +44,9 @@ export const ActiveRewardsCards = () => {
         setLoadingRewards(true);
     
         try {
-            const url = `products/getactiverewards`
+            const url = `rewards/get-active-rewards`
             const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
-            setRewards(response?.data);
+            setRewards(response.data.results);
             console.log('Active Rewards: ', response.data);
     
         } catch (error) {

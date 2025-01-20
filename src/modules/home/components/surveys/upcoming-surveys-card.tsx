@@ -18,12 +18,18 @@ interface SurveyProps {
     start_date: string,
     expiry_date: string,
     isActive: number
+    insertedAt: string,
+    updatedAt: string
 }
-type SurveyResponse = SurveyProps[]
+
+interface SurveyResponse {
+    message: string;
+    results: SurveyProps[];
+}
 
 
 export const UpcomingSurveyCards = () => {
-    const [upcomingSurveys, setUpcomingSurveys] = useState<SurveyResponse>([]);
+    const [upcomingSurveys, setUpcomingSurveys] = useState<SurveyProps[]>([]);
 
     const [upcomingSurveysLoading, setUpcomingSurveysLoading] = useState(false);
     const [upcomingSurveysErrors, setUpcomingSurveysErrors] = useState(false);
@@ -31,11 +37,11 @@ export const UpcomingSurveyCards = () => {
 
     const getUpcomingSurveys = async () => {
         setUpcomingSurveysLoading(true);
-    
+
         try {
-            const url = `products/get-upcoming-surveys`
+            const url = `survey/get-upcoming-surveys`
             const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
-            setUpcomingSurveys(response?.data);
+            setUpcomingSurveys(response.data.results);
             console.log('Upcoming Surveys: ', response.data);
     
         } catch (error) {

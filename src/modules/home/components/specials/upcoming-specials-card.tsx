@@ -13,6 +13,7 @@ import MultiColorLoader from "@/lib/loaders"
 import ThreeDotsLoader from "@/lib/three-dots-loader"
 
 interface SpecialProps {
+    uid: number,
     special_id: number, 
     special_name: string,
     special: string,
@@ -21,13 +22,19 @@ interface SpecialProps {
     start_date: string,
     expiry_date: string,
     special_value: string,
-    isActive: number
+    isActive: number,
+    insertedAt: string,
+    updatedAt: string
 }
-type SpecialResponse = SpecialProps[]
+
+type SpecialResponse = {
+    message: string;
+    results: SpecialProps[];
+};
 
 // SpecialCard component to display individual special information
 export const UpcomingSpecialCards = () => {
-    const [upcomingSpecials, setUpcomingSpecials] = useState<SpecialResponse>([])
+    const [upcomingSpecials, setUpcomingSpecials] = useState<SpecialProps[]>([])
 
     const [upcomingSpecialsLoading, setUpcomingSpecialsLoading] = useState(false);
     const [upcomingSpecialsErrors, setUpcomingSpecialsErrors] = useState(false);
@@ -35,11 +42,12 @@ export const UpcomingSpecialCards = () => {
 
     const getUpcomingSpecials = async () => {
         setUpcomingSpecialsLoading(true);
+        //http://localhost:4400/specials/get-all-upcoming-specials
     
         try {
-            const url = `products/getupcomingspecials`
+            const url = `specials/get-all-upcoming-specials`
             const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
-            setUpcomingSpecials(response?.data);
+            setUpcomingSpecials(response?.data.results || []);
             console.log('Upcoming Specials: ', response.data);
     
         } catch (error) {

@@ -23,11 +23,15 @@ interface SpecialProps {
     insertedAt: string,
     updatedAt: string
 }
-type SpecialResponse = SpecialProps[]
+
+type SpecialResponse = {
+    message: string;
+    results: SpecialProps[];
+};
 
 
 export const ActiveSpecialCards = () => {
-    const [activeSpecials, setActiveSpecials] = useState<SpecialResponse>([])
+    const [activeSpecials, setActiveSpecials] = useState<SpecialProps[]>([]);
 
     const [activeSpecialsLoading, setActiveSpecialsLoading] = useState(false);
     const [activeSpecialsErrors, setActiveSpecialsErrors] = useState(false);
@@ -38,10 +42,9 @@ export const ActiveSpecialCards = () => {
         //http://localhost:4400/specials/get-all-active-specials
     
         try {
-            //const url = `products/getallactivespecials`
             const url = `specials/get-all-active-specials`
             const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
-            setActiveSpecials(response?.data);
+            setActiveSpecials(response?.data.results || []);
             console.log('Active Specials: ', response.data);
     
         } catch (error) {

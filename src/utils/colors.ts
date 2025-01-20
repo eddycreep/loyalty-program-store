@@ -24,6 +24,7 @@ export const colors = {
     }
 
 
-export const apiEndPoint = process.env.REST_ENDPOINT || `http://localhost:4000` 
+export const apiEndPoint = process.env.REST_ENDPOINT || `http://localhost:4400`
 
-//export const apiEndPoint = process.env.REST_ENDPOINT || `http://localhost:4000/products/getallactivespecials`
+//export const apiEndPoint = process.env.REST_ENDPOINT || `http://localhost:4400`
+//export const apiEndPoint = process.env.REST_ENDPOINT || `https://loyalty-program-server.onrender.com`

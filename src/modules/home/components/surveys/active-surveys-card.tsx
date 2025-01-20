@@ -18,12 +18,17 @@ interface SurveyProps {
     start_date: string,
     expiry_date: string,
     isActive: number
+    insertedAt: string,
+    updatedAt: string
 }
-type SurveyResponse = SurveyProps[]
 
-// SpecialCard component to display individual special information
+interface SurveyResponse {
+    message: string;
+    results: SurveyProps[];
+}
+
 export const ActiveSurveyCards = () => {
-    const [activeSurveys, setActiveSurveys] = useState<SurveyResponse>([])
+    const [activeSurveys, setActiveSurveys] = useState<SurveyProps[]>([])
 
     const [activeSurveysLoading, setActiveSurveysLoading] = useState(false);
     const [activeSurveysErrors, setActiveSurveysErrors] = useState(false);
@@ -31,11 +36,11 @@ export const ActiveSurveyCards = () => {
 
     const getActiveSurveys = async () => {
         setActiveSurveysLoading(true);
-        
+
         try {
-            const url = `products/getactivesurveys`
+            const url = `survey/get-active-surveys`
             const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
-            setActiveSurveys(response?.data);
+            setActiveSurveys(response.data.results);
             console.log('Active Surveys: ', response.data);
     
         } catch (error) {
