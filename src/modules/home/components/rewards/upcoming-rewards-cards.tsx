@@ -23,13 +23,17 @@ interface RewardProps {
     loyalty_tier: string,
     age_group: string,
     isActive: number
+    insertedAt: string,
+    updatedAt: string
 }
 
-type RewardsResponse = RewardProps[]
-
+interface RewardsResponse {
+    message: string;
+    results: RewardProps[];
+}
 
 export const UpcomingRewardsCards = () => {
-    const [upcomingRewards, setUpcomingRewards] = useState<RewardsResponse>([]);
+    const [upcomingRewards, setUpcomingRewards] = useState<RewardProps[]>([]);
 
     const [loadingRewards, setLoadingRewards] = useState(false);
     const [rewardError, setRewardError] = useState(false);
@@ -39,9 +43,9 @@ export const UpcomingRewardsCards = () => {
         setLoadingRewards(true);
 
         try {
-            const url = `products/get-upcoming-rewards`
+            const url = `rewards/get-upcoming-rewards`
             const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
-            setUpcomingRewards(response?.data);
+            setUpcomingRewards(response.data.results);
             console.log('Upcoming Rewards: ', response.data);
     
         } catch (error) {
@@ -68,14 +72,13 @@ export const UpcomingRewardsCards = () => {
     useEffect(() => {
         getUpcomingRewards();
 
-        // Set up an interval to fetch data every 5 minutes
         const interval = setInterval(() => {
             getUpcomingRewards();
-        }, 300000); // 300,000 ms = 5 minutes || 60000 = 1 minute
+        }, 300000); 
 
-        // Clear interval on component unmount
         return () => clearInterval(interval);
     }, []);
+
 
     if (loadingRewards) {
         return (
@@ -105,7 +108,6 @@ export const UpcomingRewardsCards = () => {
             </div>
         )
     }
-
 
 
     return (
