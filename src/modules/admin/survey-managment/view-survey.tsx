@@ -37,7 +37,7 @@ export const ViewSurveys = () => {
     const router = useRouter();
 
     const handleSurveyClick = (surveyId: string) => {
-        router.push(`/admin/survey-management/${surveyId}`);
+        router.push(`/surveys/edit-survey`);
     };
 
     const toggleSurveyDeletePage = (surveyID: number) => {
@@ -76,7 +76,7 @@ export const ViewSurveys = () => {
         return (
             <div className="h-screen w-full">
                 <div className="pl-4 pt-4">
-                    <h4 className="text-red font-bold">Surveys</h4>
+                    <h4 className="text-purple font-bold">Surveys</h4>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
@@ -94,7 +94,7 @@ export const ViewSurveys = () => {
         return (
             <div className="h-screen w-full">
                 <div className="pl-4 pt-4">
-                    <h4 className="text-red font-bold">Surveys</h4>
+                    <h4 className="text-purple font-bold">Surveys</h4>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
@@ -112,7 +112,7 @@ export const ViewSurveys = () => {
         return (
             <div className="h-screen w-full">
                 <div className="pl-4 pt-4">
-                    <h4 className="text-red font-bold">Surveys</h4>
+                    <h4 className="text-purple font-bold">Surveys</h4>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
@@ -130,7 +130,7 @@ export const ViewSurveys = () => {
         <div className="h-screen w-full">
             {surveyDeletePopUp && (<DeleteSurveyConfirmation surveyID={selectedSurveyID} isOpen={surveyDeletePopUp} onClose={toggleSurveyDeletePage}/> )}
             <div className="pl-4 pt-4">
-                <h4 className="text-red font-bold">View Surveys</h4>
+                <h4 className="text-purple font-bold">View Surveys</h4>
             </div>
             <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
                 {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
@@ -139,7 +139,7 @@ export const ViewSurveys = () => {
             {surveys?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
                 <div key={survey_id} className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
                     <div className="flex items-center justify-between">
-                        <p onClick={() => handleSurveyClick("1")}  className="text-sm flex-1 text-center cursor-pointer text-red">{survey_id}</p>
+                        <p onClick={() => handleSurveyClick("1")}  className="text-sm flex-1 text-center cursor-pointer text-gray-400">{survey_id}</p>
                         <p className="text-sm flex-1 text-center">{survey_title || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{survey_category || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{store_id || '--:--'}</p>

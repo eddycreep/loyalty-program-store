@@ -6,8 +6,8 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
-import { UserActivity } from '@/shared/types/data-types'
-import { RewardInfo, RewardInfoResponse } from '@/shared/types/rewards/rewards-data';
+import { UserActivity } from '@/modules/types/data-types'
+import { RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data';
 
 export const DeleteRewardConfirmation = ({ isOpen, onClose, rewardID, rewardTitle }: any) => {
   const [rewardInfo, setRewardInfo] = useState<RewardInfoResponse>([])

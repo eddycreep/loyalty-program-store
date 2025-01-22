@@ -64,7 +64,7 @@ export function Homepage() {
 
           {/* Specials Card */}
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Specials</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-purple">Specials</h2>
             <Tabs defaultValue="active" onValueChange={setActiveTab}>
               <TabsList className="mb-4">
                 <TabsTrigger value="active">Active Specials</TabsTrigger>
@@ -85,7 +85,7 @@ export function Homepage() {
 
           {/* Rewards Card */}
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Rewards</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-purple">Rewards</h2>
             <Tabs defaultValue="active-rewards" onValueChange={setActiveRewardsTab}>
               <TabsList className="mb-4">
                 <TabsTrigger value="active-rewards">Active Rewards</TabsTrigger>
@@ -106,7 +106,7 @@ export function Homepage() {
 
             {/* Surveys Card */}
             <section className="mb-6 sm:mb-8">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4 text-red">Surveys</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4 text-purple">Surveys</h2>
               <Tabs defaultValue="active-surveys" onValueChange={setActiveRewardsTab}>
                 <TabsList className="mb-4">
                   <TabsTrigger value="active-surveys">Active Surveys</TabsTrigger>
