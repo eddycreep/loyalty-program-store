@@ -22,11 +22,16 @@ interface ProductSpecialsProps {
     start_date: string,
     expiry_date: string,
     special_value: string,
-    isActive: number,
-    product_description: string,
-    special_price: number,
+    isActive: boolean,
+    specialItem: SpecialItem
 }
 type ProductSpecialsResponse = ProductSpecialsProps[]
+
+interface SpecialItem {
+    special_id: number,
+    product_description: string,
+    special_price: number
+}
 
 export const ProductSpecials = () => {
     const [productSpecials, setProductSpecials] = useState<ProductSpecialsResponse>([]);
@@ -49,9 +54,9 @@ export const ProductSpecials = () => {
         setLoadingData(true);
 
         try{
-            const url = `products/getallproductspecials`
+            const url = `specials/get-all-product-specials`
             const response = await axios.get<ProductSpecialsResponse>(`${apiEndPoint}/${url}`)
-            console.log("ALL PRODUCT SPECIALS: " + response)
+            console.log("ALL PRODUCT SPECIALS: ", response.data)
             setProductSpecials(response?.data)
             setLoadingData(false);
 
@@ -109,11 +114,11 @@ export const ProductSpecials = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Product Specials</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
                         <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Special
                         </button>
                     </div>
@@ -139,11 +144,11 @@ export const ProductSpecials = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Product Specials</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
                         <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Special
                         </button>
                     </div>
@@ -169,11 +174,11 @@ export const ProductSpecials = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Product Specials</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
                         <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Special
                         </button>
                     </div>
@@ -198,11 +203,11 @@ export const ProductSpecials = () => {
         <div>
             <div className="flex justify-between">
                 <div className="flex flex-col pl-2 pt-6">
-                    <h4 className="text-2xl font-semibold text-red">Product Specials</h4>
+                    <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
                     <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                 </div>
                 <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                    <button onClick={ toggleProductSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                    <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                         Add Special
                     </button>
                 </div>
@@ -214,15 +219,15 @@ export const ProductSpecials = () => {
                     </p>
                 ))}
             </div>
-            {productSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, product_description, special_price }) => (
+            {productSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, specialItem }) => (
                 <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2">
                     <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
                         <div className="flex items-center justify-between">
-                            <p className="text-sm flex-1 text-center text-red">{special_id}</p>
+                            <p className="text-sm flex-1 text-center text-gray-400">{special_id}</p>
                             <p className="text-sm flex-1 text-center">{special_name || '--:--'}</p>
                             <p className="text-sm flex-1 text-center">{special || '--:--'}</p>
-                            <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{product_description || '--:--'}</p>
-                            <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{special_price || '--:--'}</p>
+                            <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{specialItem.product_description}</p>
+                            <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{specialItem.special_price}</p>
                             <p className="text-sm flex-1 text-center">{special_value || '--:--'}</p>
                             <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                 <button className="flex items-center justify-center cursor-pointer" onClick={() => handleExpandClick(special_id)}>
@@ -263,8 +268,8 @@ export const ProductSpecials = () => {
                                 </div>
                                 <div>
                                     <p className="font-medium text-gray-600">Status</p>
-                                    <p className={`text-sm ${isActive === 1 ? 'text-green' : 'text-red'}`}>
-                                        {isActive === 1 ? 'Active' : 'Inactive'}
+                                    <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>
+                                        {isActive === true ? 'Active' : 'Inactive'}
                                     </p>
                                 </div>
                             </div>

@@ -10,7 +10,6 @@ export const ProductsModule = () => {
     return (
         <div className='w-full h-screen flex flex-col rounded-'>
             <Homepage />
-            {/* <Page /> */}
         </div>
     );
 }

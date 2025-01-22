@@ -19,7 +19,7 @@ interface SurveyProps {
     loyalty_tier: string,
     start_date: string,
     expiry_date: string,
-    isActive: number
+    isActive: boolean
 }
 type SurveyResponse = SurveyProps[]
 
@@ -49,7 +49,7 @@ export const ViewSurveys = () => {
         setLoadingData(true);
 
         try {
-            const url = `admin/getallsurveys`
+            const url = `survey/get-all-surveys`
             const response = await axios.get(`${apiEndPoint}/${url}`);
             setSurveys(response?.data)
             setLoadingData(false);
@@ -66,9 +66,9 @@ export const ViewSurveys = () => {
     
         const loggedTicketsInterval = setInterval(() => {
             fetchAllSurveys();
-        }, 60000); // 1 minutes
+        }, 60000);
     
-        return () => clearInterval(loggedTicketsInterval); // Clean up interval on unmount
+        return () => clearInterval(loggedTicketsInterval);
     },[]);
 
 
@@ -158,8 +158,8 @@ export const ViewSurveys = () => {
                         </p>
                         <p className="text-sm flex-1 text-center">{start_date || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{expiry_date || '--:--'}</p>
-                        <p className={`text-sm flex-1 text-center flex items-center justify-center space-x-2 ${isActive === 1 ? 'text-green' : 'text-red'}`}>
-                            {isActive === 1 ? 'Active' : 'Inactive' || '--:--'}
+                        <p className={`text-sm flex-1 text-center flex items-center justify-center space-x-2 ${isActive === true ? 'text-green' : 'text-red'}`}>
+                            {isActive === true ? 'Active' : 'Inactive' || '--:--'}
                         </p>
                         <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                             {/* <button className="flex items-center justify-center cursor-pointer" >

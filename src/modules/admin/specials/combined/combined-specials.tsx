@@ -23,12 +23,18 @@ export interface CombinedProps {
     start_date: string,
     expiry_date: string,
     special_value: string,
-    isActive: number,
+    isActive: boolean,
+    combinedSpecialItem: CombinedSpecialItem
+}
+type CombinedSpecialsResponse = CombinedProps[]
+
+
+interface CombinedSpecialItem {
+    special_id: number,
     special_group_id: number,
     product_description: string,
     special_price: number
 }
-type CombinedSpecialsResponse = CombinedProps[]
 
 export const CombinedSpecials = () => {
     const [combinedSpecials, setCombinedSpecials] = useState<CombinedSpecialsResponse>([]);
@@ -51,7 +57,7 @@ export const CombinedSpecials = () => {
         setLoadingData(true);
 
         try{
-            const url = `products/getallcombinedspecials`
+            const url = `specials/get-all-combined-specials`
             const response = await axios.get<CombinedSpecialsResponse>(`${apiEndPoint}/${url}`)
             setCombinedSpecials(response?.data)
             console.log("RETRIEVED ALL ACTIVE GROUP SPECIALS:", response)
@@ -101,17 +107,6 @@ export const CombinedSpecials = () => {
         setCombinedSpecialsComponent(!combinedSpecialsComponent);
     }
 
-    // Group specials by 'special_id' to only show the first row initially, with an expandable section for additional items
-    const groupedCombinedSpecials = Object.values(
-        combinedSpecials.reduce((acc, item) => {
-        if (!acc[item.special_id]) {
-            acc[item.special_id] = { ...item, items: [] }; // Initialize group with first item
-        }
-        acc[item.special_id].items.push(item); // Add item to its group
-        return acc;
-        }, {} as { [key: number]: CombinedProps & { items: CombinedProps[] } })
-    );
-
     useEffect(() => {
         getCombinedSpecials();
     
@@ -128,11 +123,11 @@ export const CombinedSpecials = () => {
             <div className="pb-16 pt-20">
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Combined Specials</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Combined Specials</h4>
                         <p className="text-gray-500">Assign exclusive combined specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleCombinedSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleCombinedSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Special
                         </button>
                     </div>
@@ -158,11 +153,11 @@ export const CombinedSpecials = () => {
             <div className="pb-16 pt-20">
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Combined Specials</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Combined Specials</h4>
                         <p className="text-gray-500">Assign exclusive combined specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleCombinedSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleCombinedSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Special
                         </button>
                     </div>
@@ -188,11 +183,11 @@ export const CombinedSpecials = () => {
             <div className="pb-16 pt-20">
             <div className="flex justify-between">
                 <div className="flex flex-col pl-2 pt-6">
-                    <h4 className="text-2xl font-semibold text-red">Combined Specials</h4>
+                    <h4 className="text-2xl font-semibold text-purple">Combined Specials</h4>
                     <p className="text-gray-500">Assign exclusive combined specials that customers can purchase</p>
                 </div>
                 <div className='flex gap-2 pt-8 pr-2'>
-                    <button onClick={ toggleCombinedSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                    <button onClick={ toggleCombinedSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                         Add Special
                     </button>
                 </div>
@@ -217,11 +212,11 @@ export const CombinedSpecials = () => {
         <div className="pb-14 pt-20">
             <div className="flex justify-between">
                 <div className="flex flex-col pl-2 pt-6">
-                    <h4 className="text-2xl font-semibold text-red">Combined Specials</h4>
+                    <h4 className="text-2xl font-semibold text-purple">Combined Specials</h4>
                     <p className="text-gray-500">Assign exclusive combined specials that customers can purchase</p>
                 </div>
                 <div className='flex gap-2 pt-8 pr-2'>
-                    <button onClick={ toggleCombinedSpecials } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                    <button onClick={ toggleCombinedSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                         Add Special
                     </button>
                 </div>
@@ -234,16 +229,16 @@ export const CombinedSpecials = () => {
                 ))}
             </div>
             {/* Render each grouped special as a row */}
-            {groupedCombinedSpecials.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, items }) => (
+            {combinedSpecials.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, combinedSpecialItem }) => (
                 <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
                     <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
                         <div className="grid grid-cols-8 gap-2 items-center">
-                            <p className="text-sm text-center text-red">{special_id || '--:--'}</p>
-                            <p className="text-sm text-center">{items[0].special_group_id || '--:--'}</p>
-                            <p className="text-sm text-center">{items[0].product_description || '--:--'}</p>
+                            <p className="text-sm text-center text-gray-400">{special_id || '--:--'}</p>
+                            <p className="text-sm text-center">{combinedSpecialItem.special_group_id || '--:--'}</p>
+                            <p className="text-sm text-center">{combinedSpecialItem.product_description || '--:--'}</p>
                             <p className="text-sm text-center">{special_name || '--:--'}</p>
                             <p className="text-sm text-center">{special || '--:--'}</p>
-                            <p className="text-sm text-center">{items[0].special_price || '--:--'}</p>
+                            <p className="text-sm text-center">{combinedSpecialItem.special_price || '--:--'}</p>
                             <p className="text-sm text-center">{special_value || '--:--'}</p>
                             <div className="flex items-center justify-center gap-4">
                             <button className="flex items-center cursor-pointer" onClick={() => handleExpandCombinedClick(special_id)}>
@@ -273,18 +268,16 @@ export const CombinedSpecials = () => {
                                     <p className="font-semibold text-gray-600">Status</p>
                                     <p></p>
                                     {/* Data row displaying each item in the expanded view */}
-                                    {items.slice(1).map((item) => (
-                                    <React.Fragment key={item.special_group_id}>
+                                    <React.Fragment key={combinedSpecialItem.special_group_id}>
                                         <p></p>
-                                        <p className="text-sm">{item.special_group_id || '--:--'}</p>
-                                        <p className="text-sm">{item.product_description || '--:--'}</p>
-                                        <p className="text-sm">{item.store_id || '--:--'}</p>
-                                        <p className="text-sm">{item.start_date || '--:--'}</p>
-                                        <p className="text-sm">{item.expiry_date || '--:--'}</p>
-                                        <p className={`text-sm ${item.isActive === 1 ? 'text-green' : 'text-red'}`}>{item.isActive === 1 ? 'Active' : 'Inactive'  || '--:--'}</p>
+                                        <p className="text-sm pr-4">{combinedSpecialItem.special_group_id || '--:--'}</p>
+                                        <p className="text-sm">{combinedSpecialItem.product_description || '--:--'}</p>
+                                        <p className="text-sm">{store_id || '--:--'}</p>
+                                        <p className="text-sm">{start_date || '--:--'}</p>
+                                        <p className="text-sm text-red">{expiry_date || '--:--'}</p>
+                                        <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>{isActive === true ? 'Active' : 'Inactive'  || '--:--'}</p>
                                         <p></p>
                                     </React.Fragment>
-                                    ))}
                                 </div>
                             </div>
                         )}

@@ -24,7 +24,8 @@ export interface RewardProps {
     expiry_date: string,
     loyalty_tier: string,
     age_group: string,
-    isActive: number
+    isActive: boolean
+    
 }
 type RewardsResponse = RewardProps[]
 
@@ -34,6 +35,7 @@ export const RewardsModule = () => {
     const [editProductsPopup, setEditProductsPopup] = useState(false);
     const [selectedReward, setSelectedReward] = useState<RewardProps | null>(null);
     const [selectedRewardID, setSelectedRewardID] = useState(0);
+    const [selectedRewardTitle, setSelectedRewardTitle] = useState('');
 
     const headers = ['Reward ID', 'Title', 'Description', 'Reward', 'Reward Type', 'Reward Price', 'Store ID', 'Action']
 
@@ -51,7 +53,7 @@ export const RewardsModule = () => {
         setLoadingData(true);
 
         try {
-            const url = `admin/getallrewards`
+            const url = `rewards/get-all-rewards`
             const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
             setRewards(response?.data);
             setLoadingData(false);
@@ -59,6 +61,33 @@ export const RewardsModule = () => {
         } catch (error) {
             console.error('Error fetching rewards:', error);
             setIsError(true);
+        }
+    }
+
+    const deleteReward = async () => {
+        try {
+            const url = `rewards/delete-reward/21`
+            const response = await axios.delete(`${apiEndPoint}/${url}`);
+            console.log('reward deleted successfully: ', response)
+
+            toast.success('Reward Deleted', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+                style: {
+                    backgroundColor: 'black',
+                    color: 'white',
+                },
+            });
+        } catch (error) {
+            console.error('Error deleting reward:', error);
+            toast.error('Error Deleting Reward!', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+                style: {
+                    backgroundColor: 'black',
+                    color: 'white',
+                },
+            });
         }
     }
 
@@ -72,8 +101,7 @@ export const RewardsModule = () => {
         if (selected) {
             setSelectedReward(selected);
             setEditProductsPopup(true);
-
-            console.log("No selected Reward, sumn wrong with the code my nigga:" + selected);
+            
             toast.success('Passsing the Reward Details was successful', {
                 icon: <Check color={colors.green} size={24} />,
                 duration: 3000,
@@ -87,9 +115,10 @@ export const RewardsModule = () => {
         }
     }; 
 
-    const toggleDeletePage = (rewardID: number) => {
+    const toggleDeletePage = (rewardID: number, rewardTitle: string) => {
         setDeletePopUp(!deletePopUp);
         setSelectedRewardID(rewardID)
+        setSelectedRewardTitle(rewardTitle)
     };
 
     const closeEditRewardsPopup = () => {
@@ -111,11 +140,11 @@ export const RewardsModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
                         <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleAddRewards } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Rewards
                         </button>
                     </div>
@@ -151,11 +180,11 @@ export const RewardsModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
                         <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleAddRewards } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Rewards
                         </button>
                     </div>
@@ -191,11 +220,11 @@ export const RewardsModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
                         <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleAddRewards } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Rewards
                         </button>
                     </div>
@@ -221,7 +250,7 @@ export const RewardsModule = () => {
     }
 
     return (
-        <div>
+        <div className="pb-52">
             <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
                 <div className="pt-6">
                     <RewardSummaryCards />
@@ -229,11 +258,11 @@ export const RewardsModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-24">
-                        <h4 className="text-2xl font-semibold text-red">Customer Rewards</h4>
+                        <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
                         <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddRewards } className="bg-black text-white p-2 w-40 h-10 rounded-lg hover:bg-red">
+                        <button onClick={ toggleAddRewards } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
                             Add Rewards
                         </button>
                     </div>
@@ -249,7 +278,7 @@ export const RewardsModule = () => {
                 {rewards?.map(({ reward_id, reward_title, description, reward, reward_type, reward_price, store_id, region, start_date, expiry_date, loyalty_tier, age_group, isActive }) => (
                             <div key={reward_id} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-red">{reward_id}</p>
+                                    <p className="text-sm flex-1 text-center text-gray-400">{reward_id}</p>
                                     <p className="text-sm flex-1 text-center">{reward_title || '--:--'}</p>
                                     <p className="text-sm flex-1 text-center">{description || '--:--'}</p>
                                     <p className="text-sm flex-1 text-center">{reward || '--:--'}</p>
@@ -267,7 +296,7 @@ export const RewardsModule = () => {
                                         <button className="flex items-center justify-center cursor-pointer" onClick={() => handleEditReward(reward_id)}>
                                             <Edit color="gray" /> 
                                         </button>
-                                        <button className="flex items-center justify-center cursor-pointer" onClick={() => toggleDeletePage(reward_id)}>
+                                        <button className="flex items-center justify-center cursor-pointer" onClick={() => toggleDeletePage(reward_id, reward_title)}>
                                             <Trash2 color="red" /> 
                                         </button>
                                     </div>
@@ -299,8 +328,8 @@ export const RewardsModule = () => {
                                         </div>
                                         <div>
                                             <p className="text-md font-bold text-gray-600">Status</p>
-                                            <p className={`text-sm pt-1 ${isActive === 1 ? 'text-green' : 'text-red'}`}>
-                                                {isActive === 1 ? 'Active' : 'Inactive'}
+                                            <p className={`text-sm pt-1 ${isActive === true ? 'text-green' : 'text-red'}`}>
+                                                {isActive === true ? 'Active' : 'Inactive'}
                                             </p>
                                         </div>
                                     </div>
@@ -311,7 +340,7 @@ export const RewardsModule = () => {
                 </div>
             </div>
         </div>
-        {deletePopUp && (<DeleteRewardConfirmation rewardID={selectedRewardID} isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+        {deletePopUp && (<DeleteRewardConfirmation rewardID={selectedRewardID} rewardTitle={selectedRewardTitle} isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
         {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
         {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />}
         </div>

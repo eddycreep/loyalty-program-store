@@ -17,21 +17,23 @@ export interface Stores {
     address_3: string,
     address_4: string,
     address_5: string,
-    address_6: string
+    address_6: string,
+    address_7: string,
+    address_8: string,
 }
 export type StoresResponse = Stores[]
 
 
-export interface LoyaltyTiers {
-    loyalty_id: number,
-    loyalty_tier: string,
+export interface Tiers {
+    tier_id: number,
+    tier: string,
     eligibility: string,
     rewards: string,
     discounts: string,
     min_spending_amount: number,
     max_spending_amount: number,
 }
-export type LoyaltyTiersResponse = LoyaltyTiers[]
+export type TiersResponse = Tiers[]
 
 
 export interface AgeGroups {

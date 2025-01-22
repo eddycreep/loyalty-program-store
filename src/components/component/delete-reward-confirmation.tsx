@@ -2,29 +2,75 @@
 
 import toast from 'react-hot-toast';
 import axios from 'axios'
-import React from 'react'
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
+import { UserActivity } from '@/shared/types/data-types'
+import { RewardInfo, RewardInfoResponse } from '@/shared/types/rewards/rewards-data';
 
-export const DeleteRewardConfirmation = ({ isOpen, onClose, rewardID }: any) => {
-  if (!isOpen) return null; // Return null if dialog is not open
+export const DeleteRewardConfirmation = ({ isOpen, onClose, rewardID, rewardTitle }: any) => {
+  const [rewardInfo, setRewardInfo] = useState<RewardInfoResponse>([])
 
-  const deleteReward = async (rewardId: number) => {
+  if (!isOpen) return null;
+
+  
+  const getRewardInfo = async () => {
+    try {
+        const url = `rewards/get-reward-info/${rewardTitle}`
+        const response = await axios.get<RewardInfoResponse>(`${apiEndPoint}/${url}`)
+        setRewardInfo(response.data)
+
+        await logUserActivity(response.data[0]); 
+    } catch (error) {
+        console.error('Error RETURNING REWARD INFO:', error)
+    }
+  }
+
+
+  const logUserActivity = async (bonus: RewardInfo) => {
+    const message = "User deleted a reward";
+
+    try {
+        const payload = {
+          // emp_id: user.id,
+          // emp_name: user.emp_name,
+          emp_id: 102,
+          emp_name: "Eddy", 
+          activity_id: bonus.reward_id,
+          activity: bonus.reward_title,
+          activity_type: bonus.reward_type,
+          log_message: message
+        };
+
+        const url = `logs/log-user-activity`;
+        const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+
+        await deleteReward()
+    } catch (error) {
+        console.error('Error logging reward activity:', error);
+    }
+  };
+
+
+  const deleteReward = async () => {
     try{
-      const url = `admin/deletereward/${rewardId}`
+      const url = `rewards/delete-reward/${rewardID}`
       const response = await axios.delete(`${apiEndPoint}/${url}`)
-      console.log("DELETION SUCCESSFUL:", response)
 
-      toast.success('The reward item has been deleted', {
-        icon: <Check color={colors.green} size={24} />,
-        duration: 3000,
+      toast.success('Reward Deleted', {
+          icon: <Check color={colors.green} size={24} />,
+          duration: 3000,
+          style: {
+            backgroundColor: 'black', 
+            color: 'white',
+          },
       });
 
       onClose();
     } catch (error) {
       console.error('Error deleting special:', error)
-      toast.error('Error deleting reward', {
+      toast.error('Reward Not Deleted', {
         icon: <X color={colors.red} size={24} />,
         duration: 3000,
       });
@@ -56,7 +102,7 @@ export const DeleteRewardConfirmation = ({ isOpen, onClose, rewardID }: any) => 
             Cancel
           </Button>
           <Button
-            onClick={() => deleteReward(rewardID) }
+            onClick={() => getRewardInfo() }
             className="bg-red text-white hover:bg-red-700 h-8"
           >
             Confirm
