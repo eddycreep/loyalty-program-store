@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
-import { X, Search, Check, PlusCircle } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from '@/context';
 import { format } from "date-fns";
-import { AgeGroupsResponse, LoyaltyTiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/shared/types/data-types'
+import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/shared/types/data-types'
 import { Rewards, RewardInfo, RewardInfoResponse } from '@/shared/types/rewards/rewards-data'
 
 
@@ -22,7 +22,7 @@ export function AddNewRewards({ onClose }: any) {
 
   const [products, setProducts] = useState<ProductsResponse>([])
   const [allStores, setAllStores] = useState<StoresResponse>([])
-  const [loyaltyTiers, setLoyaltyTiers] = useState<LoyaltyTiersResponse>([])
+  const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
   const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
   const [rewardInfo, setRewardInfo] = useState<RewardInfoResponse>([])
 
@@ -45,7 +45,6 @@ export function AddNewRewards({ onClose }: any) {
     try {
         const url = `products/get-products`
         const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`)
-        console.log('PRODUCTS RETURNED !!', response.data)
         setProducts(response.data)
     } catch (error) {
         console.error('Error RETURNING PRODUCTS:', error)
@@ -55,9 +54,8 @@ export function AddNewRewards({ onClose }: any) {
 
   const getStores = async () => {
     try {
-        const url = `products/get-stores`
+        const url = `inventory/get-stores`
         const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
-        console.log('STORE RETURNED !!', response.data)
         setAllStores(response.data)
     } catch (error) {
         console.error('Error RETURNING STORES:', error)
@@ -67,8 +65,8 @@ export function AddNewRewards({ onClose }: any) {
 
   const getLoyaltyTiers = async () => {
     try {
-        const url = `products/get-loyalty-tiers`
-        const response = await axios.get<LoyaltyTiersResponse>(`${apiEndPoint}/${url}`)
+        const url = `tiers/get-loyalty-tiers`
+        const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
         console.log('TIERS RETURNED !!', response.data)
         setLoyaltyTiers(response.data)
     } catch (error) {
@@ -79,7 +77,7 @@ export function AddNewRewards({ onClose }: any) {
 
   const getAgeGroups = async () => {
     try {
-        const url = `products/get-age-groups`
+        const url = `age-group/get-age-groups`
         const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
         console.log('AGE_GROUPS RETURNED !!', response.data)
         setAgeGroups(response.data)
@@ -91,30 +89,53 @@ export function AddNewRewards({ onClose }: any) {
 
   const saveReward = async () => {
     try {
+        const selectedStore = allStores.find(store => store.code === currentReward.store_id);
+        const region = selectedStore ? selectedStore.address_4 : ''; 
+
+        // Function to format date-time value to 'YYYY-MM-DD HH:mm:ss'
+        const formatDateTime = (value: string): string => {
+          const [date, time] = value.split('T'); // Split date and time from 'YYYY-MM-DDTHH:mm'
+          return `${date} ${time}:00`; // Append ':00' to match 'HH:mm:ss'
+        };
+
+        const formattedStartDate = formatDateTime(currentReward.start_date);
+        const formattedExpiryDate = formatDateTime(currentReward.expiry_date);
+
         const payload = {
-          reward_title: currentReward.reward_title,
-          description: currentReward.description,
-          reward: currentReward.reward,
-          reward_type: currentReward.reward_type,
-          reward_price: currentReward.reward_price,
-          store_id: currentReward.store_id,
-          region: currentReward.region,
-          start_date: currentReward.start_date,
-          expiry_date: currentReward.expiry_date,
-          loyalty_tier: currentReward.loyaltyTier,
-          age_group: currentReward.ageGroup,
-          isActive: currentReward.isActive,
+            reward_title: currentReward.reward_title,
+            description: currentReward.description,
+            reward: currentReward.reward,
+            reward_type: currentReward.reward_type,
+            reward_price: currentReward.reward_price,
+            store_id: currentReward.store_id,
+            region: region,
+            start_date: formattedStartDate,
+            expiry_date: formattedExpiryDate,
+            loyalty_tier: currentReward.loyaltyTier,
+            age_group: currentReward.ageGroup,
+            isActive: currentReward.isActive,
         }
 
-        const url = `admin/save-reward`
+        const url = `rewards/save-reward`
         const response = await axios.post<Rewards>(`${apiEndPoint}/${url}`, payload)
-        console.log('The Reward has been saved:', response.data)
+        console.log('The Reward has been saved:', response)
+
+        if (response.status === 201) {
+          toast.success('Reward Saved!', {
+              icon: <Check color={colors.green} size={24} />,
+              duration: 3000,
+              style: {
+                backgroundColor: 'black',
+                color: 'white', 
+              },
+          });
+        }
 
         await getRewardInfo(); 
     } catch (error) {
         console.error('Error saving Reward:', error)
         
-        toast.success('There was an error when saving the Reward', {
+        toast.error('Reward not saved', {
             icon: <X color={colors.red} size={24} />,
             duration: 3000,
         })
@@ -124,11 +145,10 @@ export function AddNewRewards({ onClose }: any) {
 
   const getRewardInfo = async () => {
     try {
-        const url = `admin/get-reward-info/${currentReward.reward_title}`
+        const url = `rewards/get-reward-info/${currentReward.reward_title}`
         const response = await axios.get<RewardInfoResponse>(`${apiEndPoint}/${url}`)
         console.log('REWARD INFO RETURNED!!', response.data)
         setRewardInfo(response.data)
-
 
         await logUserActivity(response.data[0]); 
     } catch (error) {
@@ -138,39 +158,27 @@ export function AddNewRewards({ onClose }: any) {
 
 
   const logUserActivity = async (bonus: RewardInfo) => {
-    const timeLogged = format(new Date(), "EEE MMM dd yyyy HH:mm:ss 'GMT'XXX");
     const message = "User created a new reward";
 
     try {
         const payload = {
-            emp_id: user.emp_id,
-            emp_name: user.emp_name,
-            activity_id: bonus.reward_id,
-            activity: bonus.reward_title,
-            activity_type: bonus.reward_type,
-            time_logged: timeLogged,
-            log_message: message,
+          // emp_id: user.id,
+          // emp_name: user.emp_name,
+          emp_id: 102,
+          emp_name: "Eddy", 
+          activity_id: bonus.reward_id,
+          activity: bonus.reward_title,
+          activity_type: bonus.reward_type,
+          log_message: message
         };
 
-        console.log('PAYLOAD INFO - PAYLOAD INFO: ', bonus)
-
-        const url = `users/log-user-activity`;
+        const url = `logs/log-user-activity`;
         const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
         console.log('The Users activity has been logged!', response.data);
 
-        if (response.status === 200) {
-            toast.success('Activity logged!', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            });
-        }
+        onClose();
     } catch (error) {
         console.error('Error logging reward activity:', error);
-
-        toast.error('Error logging reward activity!', {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
     }
   };
 
@@ -200,11 +208,11 @@ export function AddNewRewards({ onClose }: any) {
             <div className="space-y-4">
               <div className="flex gap-4">
                 <div className="w-full">
-                    <Label htmlFor="special-name">Reward Title</Label>
+                    <Label htmlFor="special-name">Title</Label>
                     <Input
                       id="reward-title"
-                      value={currentReward.reward_title} // Changed `currentSpecial.name` to `currentReward.reward_title`
-                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_title: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `name` to `reward_title`
+                      value={currentReward.reward_title} 
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_title: e.target.value }))} 
                       placeholder="Enter reward title"
                     />
                 </div>
@@ -212,18 +220,27 @@ export function AddNewRewards({ onClose }: any) {
                     <Label htmlFor="special-name">Description</Label>
                     <Input
                       id="special-name"
-                      value={currentReward.reward} // Changed `currentSpecial.special` to `currentReward.description`
-                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `special` to `description`
+                      value={currentReward.description} 
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))}
                       placeholder="Enter reward"
                     />
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                  <Label htmlFor="special-type">Reward Type</Label>
+                    <Label htmlFor="special-name">Reward</Label>
+                    <Input
+                      id="special-name"
+                      value={currentReward.reward} 
+                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward: e.target.value }))}
+                      placeholder="Enter reward"
+                    />
+                </div>
+                <div className="w-full">
+                  <Label htmlFor="special-type">Type</Label>
                   <Select
-                    value={currentReward.reward_type} // Changed `currentSpecial.specialValue` to `currentReward.reward_type`
-                    onValueChange={(value) => setCurrentReward(prev => ({ ...prev, reward_type: value as 'Percentage' | 'Amount' }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `specialValue` to `reward_type`
+                    value={currentReward.reward_type}
+                    onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, reward_type: value as 'Percentage' | 'Amount' }))} 
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select reward type" />
@@ -234,34 +251,59 @@ export function AddNewRewards({ onClose }: any) {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="w-full">
-                    <Label htmlFor="special-price">Reward Price</Label>
-                    <Input
-                        id="special-price"
-                        value={currentReward.reward_price || ''} // Changed `currentSpecial.specialPrice` to `currentReward.reward_price`
-                        onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_price: parseFloat(e.target.value) }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `specialPrice` to `reward_price`
-                        placeholder="Enter reward price"
-                      />
-                </div>
+              </div>
+              <div className="flex gap-4">
+                  <div className="w-full">
+                    <Label htmlFor="store-id">Tier</Label>
+                      <Select
+                        value={currentReward.loyaltyTier}
+                        onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, loyaltyTier: value }))}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select tier" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="All">All</SelectItem>
+                          {loyaltyTiers.map((loyalty) => (
+                            <SelectItem key={loyalty.tier_id} value={loyalty.tier}>
+                              {loyalty.tier}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                  </div>
+                  <div className="w-full">
+                      <Label htmlFor="special-price">Price</Label>
+                      <Input
+                          id="special-price"
+                          type="number" // Changed from 'text' or other types to 'number' to allow numeric input
+                          // step="0.01" // Added 'step' attribute to allow decimal numbers
+                          value={currentReward.reward_price || ''}
+                          onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_price: parseFloat(e.target.value) }))}
+                          placeholder="Enter reward price"
+                        />
+                  </div>
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
                   <Label htmlFor="start-date">Start Date</Label>
-                  <Input
-                    id="start-date"
-                    type="date"
-                    value={currentReward.start_date} // Changed `currentSpecial.startDate` to `currentReward.start_date`
-                    onChange={(e) => setCurrentReward(prev => ({ ...prev, start_date: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `startDate` to `start_date`
-                  />
+                  <input 
+                    type="datetime-local" 
+                    name="start-date"
+                    value={currentReward.start_date} 
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, start_date: e.target.value }))} 
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
+                  </input>
                 </div>
                 <div className="w-full">
                   <Label htmlFor="end-date">End Date</Label>
-                  <Input
-                    id="end-date"
-                    type="date"
-                    value={currentReward.expiry_date} // Changed `currentSpecial.endDate` to `currentReward.expiry_date`
-                    onChange={(e) => setCurrentReward(prev => ({ ...prev, expiry_date: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `endDate` to `expiry_date`
-                  />
+                  <input 
+                    type="datetime-local" 
+                    name="end-date"
+                    value={currentReward.expiry_date} 
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, expiry_date: e.target.value }))} 
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
+                  </input>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -269,7 +311,7 @@ export function AddNewRewards({ onClose }: any) {
                     <Label htmlFor="store-id">Store ID</Label>
                       <Select
                         value={currentReward.store_id}
-                        onValueChange={(value) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
+                        onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select store ID" />
@@ -285,32 +327,10 @@ export function AddNewRewards({ onClose }: any) {
                       </Select>
                   </div>
                   <div className="w-full">
-                    <Label htmlFor="store-id">Region</Label>
-                    {/* Changed the input field to a select dropdown to display store IDs */}
-                      <Select
-                        value={currentReward.region}
-                        onValueChange={(value) => setCurrentReward(prev => ({ ...prev, region: value }))}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select region" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="All">All</SelectItem>
-                          {allStores.map((branch) => (
-                            <SelectItem key={branch.id} value={branch.address_4}>
-                              {branch.address_4}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                  </div>
-              </div>
-              <div className="flex gap-4">
-                  <div className="w-full">
                     <Label htmlFor="store-id">Age Group</Label>
                     <Select
-                      value={currentReward.ageGroup} // Changed `currentSpecial.storeId` to `currentReward.store_id`
-                      onValueChange={(value) => setCurrentReward(prev => ({ ...prev, ageGroup: value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `storeId` to `store_id`
+                      value={currentReward.ageGroup}
+                      onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, ageGroup: value }))}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select Age Group" />
@@ -325,37 +345,9 @@ export function AddNewRewards({ onClose }: any) {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="w-full">
-                    <Label htmlFor="store-id">Loyalty Tier</Label>
-                      <Select
-                        value={currentReward.loyaltyTier}
-                        onValueChange={(value) => setCurrentReward(prev => ({ ...prev, loyaltyTier: value }))}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select tier" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="All">All</SelectItem>
-                          {loyaltyTiers.map((tier) => (
-                            <SelectItem key={tier.loyalty_id} value={tier.loyalty_tier}>
-                              {tier.loyalty_tier}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                  </div>
               </div>
               <div className="flex gap-4">
-                <div className="w-full">
-                    <Label htmlFor="reward">Reward Description</Label>
-                    <Input
-                      id="reward"
-                      value={currentReward.description} 
-                      onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))} // Updated `setCurrentSpecial` to `setCurrentReward` and `name` to `reward_title`
-                      placeholder="Enter description for reward"
-                    />
-                </div>
-                <div className="flex flex-col space-x-2 pt-2">
+                  <div className="flex flex-col space-x-2 pt-2">
                       <Label htmlFor="active-toggle">
                         Active
                       </Label>
@@ -371,8 +363,7 @@ export function AddNewRewards({ onClose }: any) {
                   </div>
               </div>
 
-              <Button 
-                onClick={ saveReward }>
+              <Button className="bg-green hover:bg-emerald-300" onClick={ saveReward }>
                   Save Reward
               </Button>
             </div>

@@ -8,9 +8,7 @@ import { EditSurvey } from './survey-managment/edit-survey';
 
 
 export const SurveyModule = () => {
-    const [currentTab, setCurrentTab] = useState('products');
-    {/* <CreateSurveys /> */}
-    {/* {currentTab === 'createSurvey' && <EnhancedSurveyCreatorComponent /> } */}
+    const [currentTab, setCurrentTab] = useState('');
 
 
     return (
@@ -21,7 +19,6 @@ export const SurveyModule = () => {
                 </div>
             {currentTab === 'createSurvey' && <CreateSurveys /> }
             {currentTab === 'viewSurvey' && <ViewSurveys />}
-            {/* {currentTab === 'viewSurvey' && <EditSurvey  />} */}
         </div>
     );
 }
