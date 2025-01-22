@@ -219,7 +219,7 @@ export function LoyaltyReviews() {
             {/* {renderSummaryCards('product')} */}
             <ProductSummaryCards />
           </div>
-          <h2 className="text-2xl font-semibold mb-4 text-red">Product Reviews</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-purple">Product Reviews</h2>
           <ScrollArea className="h-full w-full p-2">
             {/* {renderReviewCards(productReviews)} */}
             <ProductReviews />
@@ -230,7 +230,7 @@ export function LoyaltyReviews() {
             {/* {renderSummaryCards('staff')} */}
             <StaffSummaryCards />
           </div>
-          <h2 className="text-2xl font-semibold mb-4 text-red">Staff Reviews</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-purple">Staff Reviews</h2>
           <ScrollArea className="h-full w-full p-2">
             {/* {renderReviewCards(staffReviews)} */}
             <StaffReviews />
@@ -241,7 +241,7 @@ export function LoyaltyReviews() {
             {/* {renderSummaryCards('store')} */}
             <StoreSummaryCards />
           </div>
-          <h2 className="text-2xl font-semibold mb-4 text-red">Store Reviews</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-purple">Store Reviews</h2>
           <ScrollArea className="h-full w-full p-2">
             {/* {renderReviewCards(storeReviews)} */}
             <StoreReviews />

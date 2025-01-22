@@ -13,8 +13,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from '@/context';
 import { format } from "date-fns";
-import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/shared/types/data-types'
-import { Rewards, RewardInfo, RewardInfoResponse } from '@/shared/types/rewards/rewards-data'
+import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
+import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data'
 
 
 export function AddNewRewards({ onClose }: any) {

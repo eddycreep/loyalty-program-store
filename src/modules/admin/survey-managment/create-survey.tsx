@@ -2,71 +2,15 @@
 
 import axios from "axios";
 import toast from 'react-hot-toast';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SurveySheet } from "@/components/component/survey-sheet";
 import { apiEndPoint, colors } from "@/utils/colors";
 import { Check, HelpCircle, Save, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { SurveyProps, SurveyResponse, SurveyInfo, SurveyInfoResponse, Question } from "@/modules/types/survey/data-types";
+import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
+import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data'
 
-
-interface SurveyProps {
-    survey_title: string,
-    survey_category: string,
-    store_id: string,
-    loyalty_tier: string,
-    start_date: string,
-    expiry_date: string,
-    isActive: number,
-}
-type SurveyResponse = SurveyProps[]
-
-interface SurveyIDProps {
-    survey_id: number,
-}
-type SurveyIDResponse = SurveyIDProps[]
-
-interface Question {
-    question: string;
-    answer: string;
-    action: string;
-    options?: string[];
-}
-
-const stores = [
-    { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
-    { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
-    { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },
-    { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },
-    { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },
-    { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
-    { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
-    { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
-];
-
-//const regions = ['Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo', 'Mpumalanga', 'Northern Cape', 'North West', 'Western Cape'];
-const storeRegions = [
-    { id: 1, region: 'Eastern Cape'}, 
-    { id: 2, region: 'Free State'}, 
-    { id: 3, region: 'Gauteng'},
-    { id: 4, region: 'KwaZulu-Natal'},
-    { id: 5, region: 'Limpopo'}, 
-    { id: 6, region: 'Mpumalanga'},
-    { id: 7, region: 'Northern Cape'},
-    { id: 8, region: 'North West'},
-    { id: 9, region: 'Western Cape'}
-];
-
-const ageGroup = [
-    { id: 1, age_range: '18-24', name: 'Young Adults' },
-    { id: 2, age_range: '25-34', name: 'Adults' },
-    { id: 3, age_range: '35-44', name: 'Middle-Aged Adults' },
-    { id: 4, age_range: '45-50', name: 'Older Middle-Aged Adults' },
-    { id: 5, age_range: '50+', name: 'Seniors' },
-];
 
 export const CreateSurveys = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -78,8 +22,44 @@ export const CreateSurveys = () => {
     const [expiryDate, setExpiryDate] = useState("");
     const [isActive, setIsActive] = useState(false);
 
+    const [allStores, setAllStores] = useState<StoresResponse>([])
+    const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
+    const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
+    const [surveyInfo, setSurveyInfo] = useState<SurveyInfoResponse>([]);
 
-    const [surveyID, setSurveyID] = useState<SurveyIDResponse>([]);
+    const getStores = async () => {
+        try {
+            const url = `inventory/get-stores`
+            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            setAllStores(response.data)
+        } catch (error) {
+            console.error('Error RETURNING STORES:', error)
+        }
+    }
+    
+    
+    const getLoyaltyTiers = async () => {
+        try {
+            const url = `tiers/get-loyalty-tiers`
+            const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+            console.log('TIERS RETURNED !!', response.data)
+            setLoyaltyTiers(response.data)
+        } catch (error) {
+            console.error('Error RETURNING TIERS:', error)
+        }
+    }
+    
+    
+    const getAgeGroups = async () => {
+        try {
+            const url = `age-group/get-age-groups`
+            const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
+            console.log('AGE_GROUPS RETURNED !!', response.data)
+            setAgeGroups(response.data)
+        } catch (error) {
+            console.error('Error RETURNING AGE_GROUPS:', error)
+        }
+    }
 
     const addQuestion = () => {
         // Check if the maximum limit of 5 questions has been reached
@@ -119,41 +99,64 @@ export const CreateSurveys = () => {
 
     const saveSurvey = async () => {
         try {
+            const selectedstore = allStores.find(store => store.code === selectedStore);
+            const region = selectedstore ? selectedstore.address_4 : ''; 
+
+            console.log('selected store: ', selectedstore);
+            console.log('region: ', region);
+    
+            const formatDateTime = (value: string): string => {
+                const [date, time] = value.split('T'); // Split date and time from 'YYYY-MM-DDTHH:mm'
+                return `${date} ${time}:00`; // Append ':00' to match 'HH:mm:ss'
+            };
+    
+            const formattedStartDate = formatDateTime(startDate);
+            const formattedExpiryDate = formatDateTime(expiryDate);
+
+
+            console.log('startdate: ', formattedStartDate);
+            console.log('enddate: ', formattedExpiryDate);
+
+
             const payload = {
                 survey_title: surveyName,
                 survey_category: surveyCategory,
                 store_id: selectedStore,
+                region: region,
                 loyalty_tier: selectedTier,
-                start_date: startDate,
-                expiry_date: expiryDate,
-                isActive: isActive
+                start_date: formattedStartDate,
+                expiry_date: formattedExpiryDate,
+                isActive: true
+                // isActive: isActive
             }
 
 
-            const url = `admin/savesurvey`
+            const url = `survey/save-survey`
             const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
             console.log('The Survey has been saved successfully', response)
-            toast.success('Survey Saved Successfully!', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            });
 
-            await getSurveyID(surveyName);
+            if (response.status === 201) {
+                toast.success('Survey Saved Successfully!', {
+                    icon: <Check color={colors.green} size={24} />,
+                    duration: 3000,
+                });
+            }
+
+            await getSurveyInfo();
         } catch (error) {
             console.error('Error saving survey:', error)
-            toast.error('Error Saving Survey', {
+            toast.error('Survey Not Saved', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
             });
         }
     }
 
-
-    const getSurveyID = async (surveyTitle: string) => {
+    const getSurveyInfo = async () => {
         try {
-            const url = `admin/getsurveyid/:${surveyTitle}`
-            const response = await axios.post<SurveyIDResponse>(`${apiEndPoint}/${url}`)
-            setSurveyID(response?.data);
+            const url = `survey/get-survey-id/${surveyName}`
+            const response = await axios.get<SurveyInfoResponse>(`${apiEndPoint}/${url}`)
+            setSurveyInfo(response?.data);
             console.log('Retrieved Survey ID Successfully!', response)
 
             toast.success('Retrieved Survey ID Successfully!', {
@@ -161,7 +164,7 @@ export const CreateSurveys = () => {
                 duration: 3000,
             });
 
-            //await saveSurveyQuestions(response?.data.survey_id)
+            await saveSurveyQuestions(response.data[0]);
         } catch (error) {
             console.error('Error saving survey ID:', error)
             toast.error('Error Saving Survey ID', {
@@ -171,24 +174,82 @@ export const CreateSurveys = () => {
         }
     }
 
-    // const saveSurveyQuestions = async (surveyID: number) => {
+    const saveSurveyQuestions = async (surveyData: SurveyInfo) => {
+        try {
+            // Map through questions and prepare the payload for each question
+            const questionPayloads = questions.map((q) => ({
+                survey_id: surveyData.survey_id, // Use the survey ID from the retrieved survey data
+                question_text: q.question, // The text of the question
+                question_type: q.action, // The type of the question (e.g., Text, Rating, Multiple Choice)
+            }));
+
+            console.log('question payload: ', questionPayloads);
+
+            // Loop through the payloads and save each question
+            for (const payload of questionPayloads) {
+                const url = `survey/save-survey-questions`;
+                const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload);
+                console.log(`Question Saved Successfully: ${payload.question_text}`, response);
+            }
+
+            // const url = `survey/save-survey-questions`
+            // const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
+            // console.log('The Survey Questions have been saved successfully', response)
+
+            toast.success('Survey Questions Saved Successfully!', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            });
+        } catch (error) {
+            console.error('Error Saving Survey Questions:', error)
+            toast.error('Error Saving Survey Questions', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+        }
+    }
+
+    // const logUserActivity = async (bonus: SurveyInfo) => {
+    //     const message = "User created a new survey";
+    
     //     try {
     //         const payload = {
-    //             survey_id: ,
-    //             question_text: ,
-    //             question_type: ,
+    //           // emp_id: user.id,
+    //           // emp_name: user.emp_name,
+    //             emp_id: 102,
+    //             emp_name: "Eddy", 
+    //             activity_id: bonus.survey_id,
+    //             activity: bonus.survey_title,
+    //             activity_type: bonus.survey_category,
+    //             log_message: message
+    //         };
+    
+    //         const url = `logs/log-user-activity`;
+    //         const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+    //         console.log('The Users activity has been logged!', response.data);
+    //     } catch (error) {
+    //         console.error('Error logging surevy activity:', error);
+    //     }
+    // };
+
+    // const saveSurveyQuestions = async () => {
+    //     try {
+    //         const payload = {
+    //             // survey_id,
+    //             // question_text,
+    //             // question_type
     //         }
 
-
-    //         const url = `admin/savesurveyquestions/${surveyID}`
+    //         const url = `survey/save-survey-questions`
     //         const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
-    //         console.log('The Survey has been saved successfully', response)
-    //         toast.success('Survey Saved Successfully!', {
+    //         console.log('The Survey Questions have been saved successfully', response)
+
+    //         toast.success('Survey Questions Saved Successfully!', {
     //             icon: <Check color={colors.green} size={24} />,
     //             duration: 3000,
     //         });
     //     } catch (error) {
-    //         console.error('Error saving survey:', error)
+    //         console.error('Error Saving Survey Questions:', error)
     //         toast.error('Error Saving Survey', {
     //             icon: <X color={colors.red} size={24} />,
     //             duration: 3000,
@@ -221,26 +282,78 @@ export const CreateSurveys = () => {
     //     }
     // }
 
+    useEffect(() => {
+        getStores();
+        getLoyaltyTiers();
+        getAgeGroups();
+    }, []);
+
     return (
         <div className="px-4 mb-52">
-            <div className="pt-4">
-                <h4 className="text-red font-bold">Create Surveys</h4>
+            <div className="flex justify-between px-2 pt-4">
+                <div>
+                    <h4 className="text-purple font-bold">Create Surveys</h4>
+                </div>
+                <div>
+                    <div className="flex gap-2">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <div className="">
+                                        <button onClick={addQuestion} className="bg-gray-400 hover:bg-gray-300 text-white h-9 w-16 rounded flex items-center justify-center">
+                                            <HelpCircle />
+                                        </button>
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                        <p>Add Question</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                <div className="">
+                                    <button onClick={ saveSurvey } className="bg-green hover:bg-emerald-300 text-white h-10 w-16 rounded flex items-center justify-center">
+                                        <Save />
+                                    </button>
+                                </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                        <p>Save Survey</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <div className="">
+                                        <SurveySheet questions={questions} surveyName={surveyName} surveyCategory={surveyCategory} />
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                        <p>Preview</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                </div>
             </div>
             <div className="flex gap-4">
-                <div className="w-[300px] flex flex-col pt-4">
+                <div className="w-[350px] flex flex-col pt-3">
                     <label>Survey Title</label>
                     <input
                         type="input"
                         placeholder="enter survey title"
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
                         value={surveyName}
                         onChange={(e) => setSurveyName(e.target.value)}
                     />
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
+                <div className="w-[350px] flex flex-col pt-4">
                     <label>Survey Category</label>
                     <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
                         onChange={(e) => setSurveyCategory(e.target.value)}
                     >
                         <option value="All">All</option>
@@ -249,76 +362,57 @@ export const CreateSurveys = () => {
                         <option value="Store">Store</option>
                     </select>
                 </div>
-                <div className="w-[200px] flex flex-col pt-4">
+                <div className="w-[350px] flex flex-col pt-4">
                     <label>Store ID</label>
                     <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map((store) => (
-                            <option key={store.id} value={store.store_id}>
-                                {/* {store.store}  */}
-                                {store.store_id}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
                 </div>
-                <div className="w-[200px] flex flex-col pt-4">
+                <div className="w-[350px] flex flex-col pt-4">
                     <label>Loyalty Tiers</label>
                     <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
                         value={selectedTier}
                         onChange={(e) => setSelectedTier(e.target.value)}
                     >
                         <option value="All">All</option>
-                        <option value="Gold">Gold</option>
-                        <option value="Diamond">Diamond</option>
-                        <option value="Platinum">Platinum</option>
+                        {loyaltyTiers.map((loyalty) => (
+                            <option key={loyalty.tier_id} value={loyalty.tier}>
+                                {loyalty.tier}
+                            </option>
+                        ))}
                     </select>
                 </div>
-                <div className="flex gap-2">
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <div className="pt-10">
-                                    <button onClick={addQuestion} className="bg-red text-white h-10 w-16 rounded flex items-center justify-center">
-                                        <HelpCircle />
-                                    </button>
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                    <p>Add Question</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                            <div className="pt-10">
-                                <button onClick={ saveSurvey } className="bg-red text-white h-10 w-16 rounded flex items-center justify-center">
-                                    <Save />
-                                </button>
-                            </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                    <p>Save Survey</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <div className="pt-10">
-                                    <SurveySheet questions={questions} surveyName={surveyName} surveyCategory={surveyCategory} />
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                    <p>Preview</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+            </div>
+            <div className="flex gap-4 pt-10">
+                <div className="w-[350px] flex flex-col pt-4">
+                    <label>Start Date:</label>
+                    <input 
+                        type="datetime-local" 
+                        name="start-date"
+                        value={startDate} 
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="w-full h-12 p-2 rounded-lg border border-gray-300">
+                    </input>
+                </div>
+                <div className="w-[350px] flex flex-col pt-4">
+                    <label>Expiry Date:</label>
+                    <input 
+                        type="datetime-local" 
+                        name="expiry-date"
+                        value={expiryDate} 
+                        onChange={(e) => setExpiryDate(e.target.value)}
+                        className="w-full h-12 p-2 rounded-lg border border-gray-300">
+                    </input>
                 </div>
             </div>
 

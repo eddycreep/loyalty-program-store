@@ -16,7 +16,7 @@ const data = [
     { name: 'Question 5', No: 19, Yes: 48, Maybe: 26},
 ];
 
-export const SurveyChart = () => {
+export default function SurveyChart() {
     const  [loadingData, setLoadingData] = useState(false);
     const  [isError, setIsError] = useState(false);
 
@@ -80,9 +80,9 @@ export const SurveyChart = () => {
 
 
     return (
-        <div className="p-4 pb-24">
+        <div className="h-screen p-4 overflow-y-auto">
             <div className="flex flex-col pl-2 pt-6">
-                <h4 className="text-2xl font-semibold text-red">Detailed Surveys</h4>
+                <h4 className="text-2xl font-semibold text-purple">Detailed Surveys</h4>
                 <p className="text-gray-500">View detailed results of the survey, including comprehensive insights and responses from participants.</p>
             </div>
             <div className="pt-8 p-2">
@@ -100,7 +100,7 @@ export const SurveyChart = () => {
                         <input type="date" value={enddate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                     </div>
                     <div className="flex justify-end w-full pt-6">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
                         <Filter />
                     </button>
                 </div>
@@ -139,31 +139,31 @@ export const SurveyChart = () => {
             <div className="flex gap-4 pt-16 p-2">
                 <div className="w-96">
                     <div className="bg-white rounded p-4">
-                        <h5 className="text-lg font-semibold text-red">Survey Name</h5>
+                        <h5 className="text-lg font-semibold text-purple">Survey Name</h5>
                         <p className="text-gray-500">Products Survey</p>
                     </div>
                 </div>
                 <div className="w-96">
                     <div className="bg-white rounded p-4">
-                        <h5 className="text-lg font-semibold text-red">Store ID</h5>
+                        <h5 className="text-lg font-semibold text-purple">Store ID</h5>
                         <p className="text-gray-500">SOO1</p>
                     </div>
                 </div>
                 <div className="w-96">
                     <div className="bg-white rounded p-4">
-                        <h5 className="text-lg font-semibold text-red">Region</h5>
+                        <h5 className="text-lg font-semibold text-purple">Region</h5>
                         <p className="text-gray-500">Gauteng</p>
                     </div>
                 </div>
                 <div className="w-96">
                     <div className="bg-white rounded p-4">
-                        <h5 className="text-lg font-semibold text-red">Loyalty Tier</h5>
+                        <h5 className="text-lg font-semibold text-purple">Loyalty Tier</h5>
                         <p className="text-gray-500">Gold</p>
                     </div>
                 </div>
                 <div className="w-96">
                     <div className="bg-white rounded p-4">
-                        <h5 className="text-lg font-semibold text-red">Status</h5>
+                        <h5 className="text-lg font-semibold text-purple">Status</h5>
                         <p className="text-green">Active</p>
                     </div>
                 </div>

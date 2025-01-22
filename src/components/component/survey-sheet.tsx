@@ -16,7 +16,7 @@ export function SurveySheet({
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button className="bg-red text-white h-10 w-16 rounded p-2">
+                <Button className="bg-purple hover:bg-indigo-400 text-white h-10 w-16 rounded p-2">
                     <ScanEye />
                 </Button>
             </SheetTrigger>

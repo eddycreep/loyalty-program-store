@@ -64,33 +64,6 @@ export const RewardsModule = () => {
         }
     }
 
-    const deleteReward = async () => {
-        try {
-            const url = `rewards/delete-reward/21`
-            const response = await axios.delete(`${apiEndPoint}/${url}`);
-            console.log('reward deleted successfully: ', response)
-
-            toast.success('Reward Deleted', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-                style: {
-                    backgroundColor: 'black',
-                    color: 'white',
-                },
-            });
-        } catch (error) {
-            console.error('Error deleting reward:', error);
-            toast.error('Error Deleting Reward!', {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-                style: {
-                    backgroundColor: 'black',
-                    color: 'white',
-                },
-            });
-        }
-    }
-
     const toggleAddRewards = () => {
         setRewardsPopUp(!addRewardsPopUp);
     }
@@ -102,16 +75,8 @@ export const RewardsModule = () => {
             setSelectedReward(selected);
             setEditProductsPopup(true);
             
-            toast.success('Passsing the Reward Details was successful', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            });
         } else {
             console.log("No selected Reward, sumn wrong with the code my nigga:" + selected);
-            toast.error('Error passing the product Rewards!', {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
         }
     }; 
 

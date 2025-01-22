@@ -144,9 +144,12 @@ export const UpcomingSpecialCards = () => {
                             </Tooltip>
                         </TooltipProvider>
                     </div>
-                    <Badge variant="secondary" className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2">
+                    {/* <Badge variant="secondary" className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2">
                         {special_type}
-                    </Badge>
+                    </Badge> */}
+                    <div className="flex items-center text-xs sm:text-sm text-muted-foreground space-x-1">
+                        <span>{special_type}</span>
+                    </div>
                 </CardHeader>
                 <CardContent>
                     <p className="font-bold text-base sm:text-lg">{special}</p>
