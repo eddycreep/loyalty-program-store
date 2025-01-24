@@ -88,7 +88,6 @@ const storeRegions = [
 
 
 export const CombinedSpecialsReport = () => {
-    //const headers = ['Store ID', 'Store Name', 'Date', 'Average Purchase Value', 'Average Purchase Frequency', 'LTV Estimate', 'Customer Tenure', 'Member Demographics', 'Predicted Churn Rate', 'Lifetime Revenue', 'Top Products Purchased'];
     const headers = ['Store ID', 'Store Name', 'Date', 'Region', 'Product', 'Special', 'Special Type', 'Redemptions', 'Revenue', 'Tiers', 'Gender', 'Age Group'];
 
     const [startDate, setStartDate] = useState('');
@@ -192,7 +191,7 @@ export const CombinedSpecialsReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -270,7 +269,7 @@ export const CombinedSpecialsReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -348,7 +347,7 @@ export const CombinedSpecialsReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -424,7 +423,7 @@ export const CombinedSpecialsReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -442,7 +441,7 @@ export const CombinedSpecialsReport = () => {
                 {filteredData.map(({ store_id, store_name, region, date, product, special, special_type, redemptions, revenue, tiers, Gender, AgeGroup }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{region}</p>

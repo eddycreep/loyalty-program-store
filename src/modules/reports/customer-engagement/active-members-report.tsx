@@ -5,8 +5,10 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
 import { X,  Filter, XOctagon, ShieldAlert } from "lucide-react";
-import SquareCircleLoader from "@/lib/square-circle-loader"
+import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Label } from "@/components/ui/label";
+import axios from "axios";
+import { StoresResponse } from '@/modules/types/data-types';
 
 const activeMembers = [
     {
@@ -98,6 +100,17 @@ export const ActiveMembersReport = () => {
     const [isError, setIsError] = useState(false);
     const [hasFiltered, setDataHasFiltered] = useState(false);
 
+    const [allStores, setAllStores] = useState<StoresResponse>([]);
+
+    const getStores = async () => {
+        try {
+            const url = `inventory/get-stores`
+            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            setAllStores(response.data)
+        } catch (error) {
+            console.error('Error RETURNING STORES:', error)
+        }
+    }
 
     // Function to handle filtering based on selected dates and store
     const handleFilter = () => {
@@ -256,7 +269,7 @@ export const ActiveMembersReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
                         <Filter />
                     </button>
                 </div>
@@ -326,7 +339,7 @@ export const ActiveMembersReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
                         <Filter />
                     </button>
                 </div>
@@ -396,7 +409,7 @@ export const ActiveMembersReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
                         <Filter />
                     </button>
                 </div>
@@ -410,6 +423,9 @@ export const ActiveMembersReport = () => {
         );
     }
 
+    useEffect(() => {
+        getStores();
+    }, []);
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
@@ -430,7 +446,7 @@ export const ActiveMembersReport = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-[350px] flex flex-col pt-4">
+                <div className="w-[570px] flex flex-col pt-4">
                     <Label htmlFor="storeid" className="text-left pt-4 pb-1">
                         Store ID:
                     </Label>
@@ -440,32 +456,15 @@ export const ActiveMembersReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
-                        Regions:
-                    </Label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" 
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" 
                         onClick={ handleFilter }
                     >
                         <Filter />
@@ -484,7 +483,7 @@ export const ActiveMembersReport = () => {
             {filteredData.map(({ storeId, storeName, activeMembers, ageGroupEngagementRate, genderEngagementRate, spendingTierDemographic }) => (
                     <div key={storeId} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{storeId}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{storeId}</p>
                             <p className="text-sm flex-1 text-center">{storeName}</p>
                             <p className="text-sm flex-1 text-center text-green">{activeMembers}</p>
                             <p className="text-sm flex-1 text-center">{ageGroupEngagementRate['18-24']}%</p>

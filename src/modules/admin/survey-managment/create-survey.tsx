@@ -10,6 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { SurveyProps, SurveyResponse, SurveyInfo, SurveyInfoResponse, Question } from "@/modules/types/survey/data-types";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data'
+import EditSurvey from "./edit-survey";
 
 
 export const CreateSurveys = () => {
@@ -22,9 +23,9 @@ export const CreateSurveys = () => {
     const [expiryDate, setExpiryDate] = useState("");
     const [isActive, setIsActive] = useState(false);
 
-    const [allStores, setAllStores] = useState<StoresResponse>([])
-    const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
-    const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
+    const [allStores, setAllStores] = useState<StoresResponse>([]);
+    const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
+    const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
     const [surveyInfo, setSurveyInfo] = useState<SurveyInfoResponse>([]);
 
     const getStores = async () => {
@@ -37,7 +38,6 @@ export const CreateSurveys = () => {
         }
     }
     
-    
     const getLoyaltyTiers = async () => {
         try {
             const url = `tiers/get-loyalty-tiers`
@@ -48,7 +48,6 @@ export const CreateSurveys = () => {
             console.error('Error RETURNING TIERS:', error)
         }
     }
-    
     
     const getAgeGroups = async () => {
         try {
@@ -75,7 +74,6 @@ export const CreateSurveys = () => {
         //const newQuestionNumber = questions.length + 1;
         setQuestions([...questions, { question: "", answer: "", action: "", options: [] }]);
     };
-    
 
     const updateQuestionText = (index: number, text: string) => {
         const updatedQuestions = [...questions];
@@ -133,14 +131,6 @@ export const CreateSurveys = () => {
 
             const url = `survey/save-survey`
             const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
-            console.log('The Survey has been saved successfully', response)
-
-            if (response.status === 201) {
-                toast.success('Survey Saved Successfully!', {
-                    icon: <Check color={colors.green} size={24} />,
-                    duration: 3000,
-                });
-            }
 
             await getSurveyInfo();
         } catch (error) {
@@ -157,105 +147,92 @@ export const CreateSurveys = () => {
             const url = `survey/get-survey-id/${surveyName}`
             const response = await axios.get<SurveyInfoResponse>(`${apiEndPoint}/${url}`)
             setSurveyInfo(response?.data);
-            console.log('Retrieved Survey ID Successfully!', response)
-
-            toast.success('Retrieved Survey ID Successfully!', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            });
 
             await saveSurveyQuestions(response.data[0]);
         } catch (error) {
-            console.error('Error saving survey ID:', error)
-            toast.error('Error Saving Survey ID', {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
+            console.log('Error getting survey info: ', error);
         }
     }
 
     const saveSurveyQuestions = async (surveyData: SurveyInfo) => {
         try {
-            // Map through questions and prepare the payload for each question
-            const questionPayloads = questions.map((q) => ({
-                survey_id: surveyData.survey_id, // Use the survey ID from the retrieved survey data
-                question_text: q.question, // The text of the question
-                question_type: q.action, // The type of the question (e.g., Text, Rating, Multiple Choice)
-            }));
-
-            console.log('question payload: ', questionPayloads);
-
-            // Loop through the payloads and save each question
-            for (const payload of questionPayloads) {
-                const url = `survey/save-survey-questions`;
-                const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload);
-                console.log(`Question Saved Successfully: ${payload.question_text}`, response);
+            // Filter out incomplete or invalid questions
+            const validQuestions = questions.filter((q) => q.question && q.action);
+            if (!validQuestions.length) {
+                toast.error('No valid questions to save.');
+                return;
             }
 
-            // const url = `survey/save-survey-questions`
-            // const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
-            // console.log('The Survey Questions have been saved successfully', response)
+            // Prepare payloads
+            const questionPayloads = validQuestions.map((q) => ({
+                survey_id: surveyData.survey_id,
+                question_text: q.question.trim(),
+                question_type: q.action.trim(),
+            }));
 
-            toast.success('Survey Questions Saved Successfully!', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            });
+            // Use a bulk API call instead of looping (if supported by the backend)
+            const url = `survey/save-survey-questions`;
+            const response = await axios.post(`${apiEndPoint}/${url}`, questionPayloads);
+
+            if (response.status === 201 || response.status === 200) {
+                console.log('Questions saved successfully:', response.data);
+                toast.success('Survey Saved Successfully!');
+                logUserActivity(surveyData);
+            } else {
+                throw new Error('Failed to save questions');
+            }
         } catch (error) {
-            console.error('Error Saving Survey Questions:', error)
-            toast.error('Error Saving Survey Questions', {
+            console.error('Error Saving Survey:', error)
+            toast.error('Survey Not Saved', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
+                style: {
+                    backgroundColor: 'black',
+                    color: 'white', 
+                },
             });
         }
     }
 
-    // const logUserActivity = async (bonus: SurveyInfo) => {
-    //     const message = "User created a new survey";
+    const logUserActivity = async (surveyData: SurveyInfo) => {
+        const message = "User created a new survey";
     
-    //     try {
-    //         const payload = {
-    //           // emp_id: user.id,
-    //           // emp_name: user.emp_name,
-    //             emp_id: 102,
-    //             emp_name: "Eddy", 
-    //             activity_id: bonus.survey_id,
-    //             activity: bonus.survey_title,
-    //             activity_type: bonus.survey_category,
-    //             log_message: message
-    //         };
+        try {
+            const payload = {
+              // emp_id: user.id,
+              // emp_name: user.emp_name,
+                emp_id: 102,
+                emp_name: "Eddy", 
+                activity_id: surveyData.survey_id,
+                activity: surveyData.survey_title,
+                activity_type: surveyData.survey_category,
+                log_message: message
+            };
     
-    //         const url = `logs/log-user-activity`;
-    //         const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
-    //         console.log('The Users activity has been logged!', response.data);
-    //     } catch (error) {
-    //         console.error('Error logging surevy activity:', error);
-    //     }
-    // };
+            const url = `logs/log-user-activity`;
+            const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+            console.log('The Users activity has been logged!', response.data);
 
-    // const saveSurveyQuestions = async () => {
-    //     try {
-    //         const payload = {
-    //             // survey_id,
-    //             // question_text,
-    //             // question_type
-    //         }
-
-    //         const url = `survey/save-survey-questions`
-    //         const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
-    //         console.log('The Survey Questions have been saved successfully', response)
-
-    //         toast.success('Survey Questions Saved Successfully!', {
-    //             icon: <Check color={colors.green} size={24} />,
-    //             duration: 3000,
-    //         });
-    //     } catch (error) {
-    //         console.error('Error Saving Survey Questions:', error)
-    //         toast.error('Error Saving Survey', {
-    //             icon: <X color={colors.red} size={24} />,
-    //             duration: 3000,
-    //         });
-    //     }
-    // }
+            toast.success('Activity Logged Successufully', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+                style: {
+                    backgroundColor: 'black',
+                    color: 'white', 
+                },
+            });
+        } catch (error) {
+            console.error('Error logging surevy activity:', error);
+            toast.error('Activity Not Logged', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+                style: {
+                    backgroundColor: 'black',
+                    color: 'white', 
+                },
+            });
+        }
+    };
 
     // const saveSurveyChoices = async (questionID: number) => {
     //     try {
@@ -289,10 +266,10 @@ export const CreateSurveys = () => {
     }, []);
 
     return (
-        <div className="px-4 mb-52">
-            <div className="flex justify-between px-2 pt-4">
+        <div className="pb-20">
+            <div className="flex justify-between pt-4">
                 <div>
-                    <h4 className="text-purple font-bold">Create Surveys</h4>
+                    <h4 className="text-purple font-bold">Create Survey</h4>
                 </div>
                 <div>
                     <div className="flex gap-2">

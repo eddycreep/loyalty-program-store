@@ -202,7 +202,7 @@ export function AddNewRewards({ onClose }: any) {
               </div>
             <div className="pl-6 pb-4">
                 <p className="text-xl font-bold">Add Reward</p>
-                <p className="text-gray-600">Add alternative ways customers can redeem rewards</p>
+                <p className="text-gray-600">Add a new customer reward</p>
             </div>
           <CardContent>
             <div className="space-y-4">

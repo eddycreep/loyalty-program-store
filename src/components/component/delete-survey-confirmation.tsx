@@ -12,24 +12,11 @@ export const DeleteSurveyConfirmation = ({ isOpen, onClose, surveyID }: any) => 
 
   const deleteSurvey = async (surveyid: number) => {
     try{
-      const url = `admin/deletesurvey/${surveyid}`
-      const response = await axios.delete(`${apiEndPoint}/${url}`)
+      const url = `survey/delete-survey/${surveyid}`
+      const response = await axios.delete(`${apiEndPoint}/${url}`);
+      console.log("Deleted Survey Successfully", response)
 
-
-      await deleteSurveyQuestions(surveyID);
-      console.log("Delete Survey Successful:", response)
-    } catch (error) {
-      console.error('Error deleting survey:', error)
-    }
-  }
-
-  const deleteSurveyQuestions = async (surveyid: number) => {
-    try{
-      const url = `admin/deletesurveyquestions/${surveyid}`
-      const response = await axios.delete(`${apiEndPoint}/${url}`)
-      console.log("the survey has been deleted successfully", response)
-
-      toast.success('the survey has been deleted successfully', {
+      toast.success('Survey Deleted', {
         icon: <Check color={colors.green} size={24} />,
         duration: 3000,
       });
@@ -37,7 +24,7 @@ export const DeleteSurveyConfirmation = ({ isOpen, onClose, surveyID }: any) => 
       onClose() 
     } catch (error) {
       console.error('Error deleting survey questions', error)
-      toast.error('survey deleted', {
+      toast.error('Survey Not Deleted', {
         icon: <X color={colors.red} size={24} />,
         duration: 3000,
       });
