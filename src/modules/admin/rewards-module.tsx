@@ -251,24 +251,19 @@ export const RewardsModule = () => {
                                     <p className="text-sm flex-1 text-center">{reward_price || '--:--'}</p>
                                     <p className="text-sm flex-1 text-center">{store_id || '--:--'}</p>
                                     <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                        <button className="flex items-center justify-center cursor-pointer" onClick={() => handleExpandClick(reward_id)}>
-                                        {expandedRow === reward_id ? (
-                                            <Shrink color="gray" />
-                                        ) : (
-                                            <Expand color="gray" />
-                                        )}
+                                        <button onClick={() => handleExpandClick(reward_id)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
+                                            {expandedRow === reward_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
                                         </button>
-                                        <button className="flex items-center justify-center cursor-pointer" onClick={() => handleEditReward(reward_id)}>
-                                            <Edit color="gray" /> 
+                                        <button onClick={() => handleEditReward(reward_id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
+                                            <Edit size={21} /> 
                                         </button>
-                                        <button className="flex items-center justify-center cursor-pointer" onClick={() => toggleDeletePage(reward_id, reward_title)}>
-                                            <Trash2 color="red" /> 
+                                        <button onClick={() => toggleDeletePage(reward_id, reward_title)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                            <Trash2 size={21} /> 
                                         </button>
                                     </div>
                                 </div>
                                 {expandedRow === reward_id && (
                                     <div className="pt-4">
-                                        {/* Displaying labels and values in a grid */}
                                         <div className="grid grid-cols-8 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
                                             <p className="font-medium text-gray-600"></p>
                                         <div>

@@ -1,73 +1,18 @@
-import { Award, Star, Zap, Crown, Gift, ShoppingCart, Tag, Calendar, MessageSquare, Users, Repeat, Trophy, Cake, PartyPopper, Rocket, Clock, WalletCards, ShoppingBag, ShoppingBasket } from 'lucide-react'
+"use client"
+
+import React from "react";
+import axios from "axios"
+import { useState, useEffect } from "react"
+import { Crown, ShoppingCart, Tag, Calendar, MessageSquare, Users, Repeat, Trophy, Cake, PartyPopper, Rocket, Clock, WalletCards, ShoppingBag, ShoppingBasket, ChefHat, Coins, Star  } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import "../styles/loyalty-program-tiers.css"
 import { apiEndPoint, colors } from '@/utils/colors'
-
-const tiers = [
-  {
-    name: "Starter Savers",
-    icon: ShoppingBasket,
-    eligibility: "R50–R199/month",
-    discounts: [
-      "5% off on snacks/beverages",
-      "10% off holiday-themed bundles",
-      "Snack Pack Special: Buy a sandwich and get 50% off a drink"
-    ],
-    rewards: [
-      '"Buy 2 get 1 free" on select school supplies',
-      "Birthday perk: Free snack bundle (choose from 3)",
-      "Seasonal perk: Special themed stationery set"
-    ]
-  },
-  {
-    name: "Smart Shoppers",
-    icon: ShoppingBag,
-    eligibility: "R200–R499/month",
-    discounts: [
-      "10% off snacks/school supplies",
-      "15% cart discount during seasonal events",
-      "Lunch Combo: 20% off when buying a meal deal with a fruit snack"
-    ],
-    rewards: [
-      "Early-bird promotions access",
-      "Free item for every R300 spent in a month",
-      "Back-to-School special: Premium supply kit free with R100+ purchases in January"
-    ]
-  },
-  {
-    name: "Premier Collectors",
-    icon: Crown,
-    eligibility: "R500+/month",
-    discounts: [
-      "15% off across all categories",
-      "20% off orders over R100",
-      "Study Boost: 25% off when buying any textbook with a pack of highlighters"
-    ],
-    rewards: [
-      "Monthly product samples (new snacks/limited-edition supplies)",
-      "Free holiday bundles on R150+ purchases",
-      "Free delivery on all orders",
-      "Special occasion gift: Premium items"
-    ]
-  },
-  {
-    name: "Elite Enthusiasts",
-    icon: WalletCards,
-    eligibility: "Invitation-only",
-    discounts: [
-      "25% off exclusive items",
-      "30% off during VIP shopping events",
-      "Luxury Learning: 40% off when purchasing a premium backpack with any electronic device"
-    ],
-    rewards: [
-      "VIP event invitations",
-      "Monthly exclusive item gifts",
-      "Priority access to limited/sold-out products",
-      "Thank-you bonus: R25 gift card every 6 months of continuous engagement"
-    ]
-  }
-]
+import { AddNewTiers } from "@/modules/admin/loyalty-tiers/add-new-tiers"
+import { Edit, Expand, Trash2, Shrink, X, Check, XOctagon, ShieldAlert } from "lucide-react";
+import { DeleteTierConfirmation } from "./component/delete-tier-confirmation";
+import { TierInfo, TierInfoResponse, LoyaltyTiersProps, LoyaltyTiersResponse } from '@/modules/types/tiers/data-types';
+import { EditTiers } from "@/modules/admin/loyalty-tiers/edit-tiers"
 
 const upgradeMethods = [
   {
@@ -144,6 +89,27 @@ const upgradeMethods = [
   }
 ]
 
+const icons = [
+  { id: 1, icon: ShoppingBasket, color: "text-blue" },
+  { id: 2, icon: ShoppingBag, color: "text-green" },
+  { id: 3, icon: Crown, color: "text-purple" },
+  { id: 4, icon: WalletCards, color: "text-pink-500" },
+  { id: 5, icon: ChefHat, color: "text-orange" },
+  { id: 6, icon: Coins, color: "text-cyan-400" },
+  { id: 7, icon: Star, color: "text-teal-400" }
+]
+
+interface TiersProps {
+    tier_id: number;
+    tier: string;
+    eligibility: string;
+    rewards: string;
+    discounts: string;
+    min_spending_amount: number;
+    max_spending_amount: number;
+}
+type TiersResponse = TiersProps[];
+
 function UpgradeMethodCard({ icon: Icon, color, title, description }: any) {
   return (
     <Card className="transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
@@ -157,57 +123,231 @@ function UpgradeMethodCard({ icon: Icon, color, title, description }: any) {
 }
 
 export default function LoyaltyProgramTiers() {
+  const [addTiersPopUp, setTiersPopUp] = useState(false);
+  const [editTiersPopup, setEditTiersPopup] = useState(false);
+  const [deletePopUp, setDeletePopUp] = useState(false);
+
+  const [tierID, setSelectedTierID] = useState(0);
+  const [tierTitle, setSelectedTierTitle] = useState('');
+
+  const [tiersData, setTiersData] = useState<TiersResponse>([]);
+  const [selectedTier, setSelectedTier] = useState<LoyaltyTiersProps | null>(null);
+
+  const [loading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const getTiers = async () => {
+    setLoading(true);
+
+    try {
+      const url = `tiers/get-loyalty-tiers`
+      const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+      setTiersData(response.data);
+      setLoading(false);
+
+    } catch (error) {
+      console.log('error: ', error);
+      setIsError(true);
+    }
+  }
+
+  const toggleAddTiers = () => {
+    setTiersPopUp(!addTiersPopUp);
+  }
+
+  const handleEditTier = (tierId: any) => {
+    const selected = tiersData.find((item) => item.tier_id === tierId) || null;
+    
+    if (selected) {
+        setSelectedTier(selected);
+        setEditTiersPopup(true);
+        
+    } else {
+        console.log("No selected Tier, sumn wrong with the code my nigga:" + selected);
+    }
+  }; 
+
+  const closeEditTiersPopup = () => {
+      setEditTiersPopup(false);
+  }
+
+  const toggleDeletePage = (tierId: number, tierTitle: string) => {
+    setDeletePopUp(!deletePopUp);
+    setSelectedTierID(tierId)
+    setSelectedTierTitle(tierTitle)
+  };
+
+  useEffect(() => {
+    getTiers();
+  }, [])
+
+  
+  if (loading) {
+    return (
+        <div className=" py-8">
+          <Card className="bg-white shadow-lg mb-8">
+            <CardHeader className="text-center">
+              <CardTitle className="text-3xl font-bold text-purple mb-2">Loyalty Tiers</CardTitle>
+              <CardDescription className="text-lg text-gray-600 mb-4">
+                  Unlock exclusive rewards and benefits as you climb our loyalty tiers. The more you engage, the more you earn!
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className='pb-2'>
+                  <button onClick={ toggleAddTiers } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
+                      Add Tier
+                  </button>
+              </div>
+              <div className="overflow-x-auto">
+                <Table className="w-full border">
+                  <TableHeader>
+                    <TableRow className="bg-gray-100">
+                      <TableHead className="w-[170px] py-4 text-center text-gray-600">Tier</TableHead>
+                      <TableHead className="w-[200px] py-4 text-center text-gray-600">Eligibility</TableHead>
+                      <TableHead className="w-[600px] py-4 text-center text-gray-600">Discounts</TableHead>
+                      <TableHead className="w-[600px] py-4 text-center text-gray-600">Rewards</TableHead>
+                      <TableHead className="w-[110px] py-4 text-center text-gray-600">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {tiersData.map((tier, index) => (
+                      <TableRow key={tier.tier} className="bg-white text-black">
+                        <TableCell className="font-medium py-4 text-center">
+                          <div className="flex items-center justify-center space-x-2">
+                              {icons[index]?.icon &&
+                                  React.createElement(icons[index].icon, {
+                                    className: `w-6 h-6 ${icons[index].color}`,
+                                  })}
+                            <span className="text-base">{tier.tier}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="py-4 text-center">{tier.eligibility}</TableCell>
+                        <TableCell className="py-4 text-left">
+                          {/* <ul className="list-disc list-inside text-left">
+                            {tier.discounts.map((discount, i) => (
+                              <li key={i} className="text-sm mb-1">{tier.discounts}</li>
+                            ))}
+                          </ul> */}
+                          <span className="text-base">{tier.discounts}</span>
+                        </TableCell>
+                        <TableCell className="py-4 text-left">
+                          {/* <ul className="list-disc list-inside text-left">
+                            {tier.rewards.map((reward, i) => (
+                              <li key={i} className="text-sm mb-1">{reward}</li>
+                            ))}
+                          </ul> */}
+                          <span className="text-base">{tier.rewards}</span>
+                        </TableCell>
+                        <TableCell className="py-4 text-left">
+                          <div>
+                            <div className="flex gap-2">
+                              <button onClick={() => handleEditTier(tier.tier_id)} className="flex items-center justify-center bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 w-10 h-10 rounded-lg">
+                                <Edit />
+                              </button>
+                              <button onClick={() => toggleDeletePage(tier.tier_id, tier.tier)} className="flex items-center justify-center bg-white text-red border border-red hover:bg-rose-100 p-1 w-10 h-10 rounded-lg">
+                                <Trash2 />
+                              </button>
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white shadow-lg">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl font-bold text-purple mb-2">Boost Your Tier Status</CardTitle>
+              <CardDescription className="text-lg text-gray-600">
+                Discover exciting ways to climb the loyalty ladder and unlock premium rewards!
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {upgradeMethods.map((method, index) => (
+                  <UpgradeMethodCard key={index} {...method} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          {addTiersPopUp && <AddNewTiers onClose={ toggleAddTiers } />}
+          {editTiersPopup && <EditTiers onClose={ closeEditTiersPopup } selectedTier={ selectedTier } />}
+          {deletePopUp && (<DeleteTierConfirmation tierID={ tierID } tierTitle={ tierTitle } isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+      </div>
+    )
+  }
+
+
+
   return (
     <div className=" py-8">
-      {/* <Award className="w-16 h-16 mx-auto text-primary" /> */}
       <Card className="bg-white shadow-lg mb-8">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-red mb-2">Loyalty Tiers</CardTitle>
+          <CardTitle className="text-3xl font-bold text-purple mb-2">Loyalty Tiers</CardTitle>
           <CardDescription className="text-lg text-gray-600 mb-4">
-            Unlock exclusive rewards and benefits as you climb our loyalty tiers. The more you engage, the more you earn!
+              Unlock exclusive rewards and benefits as you climb our loyalty tiers. The more you engage, the more you earn!
           </CardDescription>
-          {/* <Award className="w-16 h-16 mx-auto text-primary" /> */}
         </CardHeader>
         <CardContent>
+          <div className='pb-2'>
+              <button onClick={ toggleAddTiers } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
+                  Add Tier
+              </button>
+          </div>
           <div className="overflow-x-auto">
             <Table className="w-full border">
               <TableHeader>
                 <TableRow className="bg-gray-100">
-                  <TableHead className="w-[150px] py-4 text-center text-gray-600">Tier</TableHead>
-                  <TableHead className="w-[150px] py-4 text-center text-gray-600">Eligibility</TableHead>
-                  <TableHead className="py-4 text-center text-gray-600">Discounts</TableHead>
-                  <TableHead className="py-4 text-center text-gray-600">Rewards</TableHead>
+                  <TableHead className="w-[170px] py-4 text-center text-gray-600">Tier</TableHead>
+                  <TableHead className="w-[200px] py-4 text-center text-gray-600">Eligibility</TableHead>
+                  <TableHead className="w-[600px] py-4 text-center text-gray-600">Discounts</TableHead>
+                  <TableHead className="w-[600px] py-4 text-center text-gray-600">Rewards</TableHead>
+                  <TableHead className="w-[110px] py-4 text-center text-gray-600">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tiers.map((tier, index) => (
-                  <TableRow key={tier.name} className="bg-white text-black">
+                {tiersData.map((tier, index) => (
+                  <TableRow key={tier.tier} className="bg-white text-black">
                     <TableCell className="font-medium py-4 text-center">
                       <div className="flex items-center justify-center space-x-2">
-                        <tier.icon className={`w-6 h-6 ${
-                          tier.name === "Starter Savers" ? "text-blue" :
-                            tier.name === "Smart Shoppers" ? "text-green" :
-                              tier.name === "Premier Collectors" ? "text-purple" :
-                                tier.name === "Elite Enthusiasts" ? "text-pink-500" :
-                                  "text-gray-500"
-                        }`} />
-                        <span className="text-base">{tier.name}</span>
+                          {icons[index]?.icon &&
+                              React.createElement(icons[index].icon, {
+                                className: `w-6 h-6 ${icons[index].color}`,
+                              })}
+                        <span className="text-base">{tier.tier}</span>
                       </div>
                     </TableCell>
                     <TableCell className="py-4 text-center">{tier.eligibility}</TableCell>
                     <TableCell className="py-4 text-left">
-                      <ul className="list-disc list-inside text-left">
+                      {/* <ul className="list-disc list-inside text-left">
                         {tier.discounts.map((discount, i) => (
-                          <li key={i} className="text-sm mb-1">{discount}</li>
+                          <li key={i} className="text-sm mb-1">{tier.discounts}</li>
                         ))}
-                      </ul>
+                      </ul> */}
+                      <span className="text-base">{tier.discounts}</span>
                     </TableCell>
                     <TableCell className="py-4 text-left">
-                      <ul className="list-disc list-inside text-left">
+                      {/* <ul className="list-disc list-inside text-left">
                         {tier.rewards.map((reward, i) => (
                           <li key={i} className="text-sm mb-1">{reward}</li>
                         ))}
-                      </ul>
+                      </ul> */}
+                      <span className="text-base">{tier.rewards}</span>
+                    </TableCell>
+                    <TableCell className="py-4 text-left">
+                      <div>
+                        <div className="flex gap-2">
+                          <button onClick={() => handleEditTier(tier.tier_id)} className="flex items-center justify-center bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 w-10 h-10 rounded-lg">
+                            <Edit />
+                          </button>
+                          <button onClick={() => toggleDeletePage(tier.tier_id, tier.tier)} className="flex items-center justify-center bg-white text-red border border-red hover:bg-rose-100 p-1 w-10 h-10 rounded-lg">
+                            <Trash2 />
+                          </button>
+                        </div>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -219,7 +359,7 @@ export default function LoyaltyProgramTiers() {
 
       <Card className="bg-white shadow-lg">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-red mb-2">Boost Your Tier Status</CardTitle>
+          <CardTitle className="text-2xl font-bold text-purple mb-2">Boost Your Tier Status</CardTitle>
           <CardDescription className="text-lg text-gray-600">
             Discover exciting ways to climb the loyalty ladder and unlock premium rewards!
           </CardDescription>
@@ -232,6 +372,9 @@ export default function LoyaltyProgramTiers() {
           </div>
         </CardContent>
       </Card>
+      {addTiersPopUp && <AddNewTiers onClose={ toggleAddTiers } />}
+      {editTiersPopup && <EditTiers onClose={ closeEditTiersPopup } selectedTier={ selectedTier } />}
+      {deletePopUp && (<DeleteTierConfirmation tierID={ tierID } tierTitle={ tierTitle } isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
     </div>
   )
 }

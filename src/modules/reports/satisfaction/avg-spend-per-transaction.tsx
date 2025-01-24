@@ -317,7 +317,7 @@ export const AvgSpendPerTransactionReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -395,7 +395,7 @@ export const AvgSpendPerTransactionReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -473,7 +473,7 @@ export const AvgSpendPerTransactionReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -549,7 +549,7 @@ export const AvgSpendPerTransactionReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -566,7 +566,7 @@ export const AvgSpendPerTransactionReport = () => {
                 {filteredData.map(({ store_id, store_name, region, date, total_revenue, total_transactions, average_spend_per_transaction, basket_size, spend_per_customer_segment, dwell_time, promotion_impact }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center text">{region}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>

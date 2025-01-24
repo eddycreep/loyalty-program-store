@@ -56,7 +56,6 @@ export const ProductSpecials = () => {
         try{
             const url = `specials/get-all-product-specials`
             const response = await axios.get<ProductSpecialsResponse>(`${apiEndPoint}/${url}`)
-            console.log("ALL PRODUCT SPECIALS: ", response.data)
             setProductSpecials(response?.data)
             setLoadingData(false);
 
@@ -230,24 +229,19 @@ export const ProductSpecials = () => {
                             <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{specialItem.special_price}</p>
                             <p className="text-sm flex-1 text-center">{special_value || '--:--'}</p>
                             <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                <button className="flex items-center justify-center cursor-pointer" onClick={() => handleExpandClick(special_id)}>
-                                {expandedRow === special_id ? (
-                                    <Shrink color="gray" />
-                                ) : (
-                                    <Expand color="gray" />
-                                )}
+                                <button className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg" onClick={() => handleExpandClick(special_id)}>
+                                    {expandedRow === special_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
                                 </button>
-                                <button className="flex items-center justify-center cursor-pointer" onClick={() => handleEditProductSpecial(special_id)}>
-                                    <Edit color="gray" />
+                                <button className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" onClick={() => handleEditProductSpecial(special_id)}>
+                                    <Edit size={21} />
                                 </button>
-                                <button className="flex items-center justify-center cursor-pointer" onClick={() => toggleDeletePage(special_id) }>
-                                    <Trash2 color="red" />
+                                <button className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleDeletePage(special_id) }>
+                                    <Trash2 size={21} />
                                 </button>
                             </div>
                         </div>
                         {expandedRow === special_id && (
                             <div className="pt-4">
-                                {/* Displaying labels and values in a grid */}
                                 <div className="grid grid-cols-7 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
                                     <p className="font-medium text-gray-600"></p>
                                 <div>

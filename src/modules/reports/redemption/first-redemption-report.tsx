@@ -25,19 +25,7 @@ interface FirstRedemptionData {
 
 
 const firstRedemptionData: FirstRedemptionData[] = [
-    { 
-        store_id: 'SOO1', 
-        store_name: 'PLUS DC Stellenbosch', 
-        region: 'Western Cape.', 
-        date: '2024-09-01', 
-        average_time_to_first_redemption: 5, 
-        total_new_members: 100, 
-        count_of_first_redemptions: 80,
-        enrollment_redemption_ratio: 0.8,
-        promotional_impact: 'High',
-        preferred_channel: 'Mobile App',
-        first_redemption_value: 250.50
-    },
+    { store_id: 'SOO1', store_name: 'PLUS DC Stellenbosch', region: 'Western Cape.', date: '2024-09-01', average_time_to_first_redemption: 5, total_new_members: 100, count_of_first_redemptions: 80,enrollment_redemption_ratio: 0.8, promotional_impact: 'High', preferred_channel: 'Mobile App', first_redemption_value: 250.50 },
     { store_id: 'SOO2', store_name: 'PLUS DC Albertin', region: 'Gauteng', date: '2024-09-10', average_time_to_first_redemption: 4, total_new_members: 90, count_of_first_redemptions: 70, enrollment_redemption_ratio: 0.7, promotional_impact: 'Medium', preferred_channel: 'Web', first_redemption_value: 200.00 },
     { store_id: 'SOO3', store_name: 'PLUS DC Bellville', region: 'Western Cape', date: '2024-10-01', average_time_to_first_redemption: 6, total_new_members: 120, count_of_first_redemptions: 100, enrollment_redemption_ratio: 0.83, promotional_impact: 'High', preferred_channel: 'Mobile App', first_redemption_value: 270.00 },
     { store_id: 'SOO4', store_name: 'PLUS DC Nelspruit', region: 'Mpumalanga', date: '2024-08-15', average_time_to_first_redemption: 7, total_new_members: 95, count_of_first_redemptions: 85, enrollment_redemption_ratio: 0.89, promotional_impact: 'Medium', preferred_channel: 'In-Store', first_redemption_value: 230.00 },
@@ -180,7 +168,7 @@ export const FirstRedemptionReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -258,7 +246,7 @@ export const FirstRedemptionReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -336,7 +324,7 @@ export const FirstRedemptionReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -412,7 +400,7 @@ export const FirstRedemptionReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -430,7 +418,7 @@ export const FirstRedemptionReport = () => {
                 {filteredData.map(({ store_id, store_name, region, date, average_time_to_first_redemption, total_new_members, count_of_first_redemptions, enrollment_redemption_ratio, promotional_impact, preferred_channel, first_redemption_value }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center text">{region}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>

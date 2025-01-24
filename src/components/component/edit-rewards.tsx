@@ -182,8 +182,8 @@ export function EditRewards({ onClose, selectedReward }: any) {
                 </button>
               </div>
             <div className="pl-6 pb-4">
-                <p className="text-xl font-bold">Add Reward</p>
-                <p className="text-gray-600">Add alternative ways customers can redeem rewards</p>
+                <p className="text-xl font-bold">Edit Reward</p>
+                <p className="text-gray-600">Edit existing customer rewards</p>
             </div>
           <CardContent>
             <div className="space-y-4">

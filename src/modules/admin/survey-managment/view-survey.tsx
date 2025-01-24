@@ -4,7 +4,7 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { useState, useEffect, createContext } from 'react';
 import { toast } from "react-hot-toast";
-import { Edit, ShieldAlert, Trash2, XOctagon, XOctagonIcon } from "lucide-react";
+import { Check, Edit, ShieldAlert, Trash2, XOctagon, XOctagonIcon } from "lucide-react";
 import { ViewDetailedSurvey } from "./view-detailed-survey";
 import { useRouter } from 'next/navigation';
 import { DeleteSurveyConfirmation  } from '@/components/component/delete-survey-confirmation';
@@ -37,7 +37,7 @@ export const ViewSurveys = () => {
     const router = useRouter();
 
     const handleSurveyClick = (surveyId: string) => {
-        router.push(`/surveys/edit-survey`);
+        router.push(`/surveys/view-detailed-survey`);
     };
 
     const toggleSurveyDeletePage = (surveyID: number) => {
@@ -59,7 +59,6 @@ export const ViewSurveys = () => {
             setIsError(true);
         }
     }
-
 
     useEffect(() => {
         fetchAllSurveys();
@@ -127,7 +126,7 @@ export const ViewSurveys = () => {
 
 
     return (
-        <div className="h-screen w-full">
+        <div className="h-screen w-full pb-2">
             {surveyDeletePopUp && (<DeleteSurveyConfirmation surveyID={selectedSurveyID} isOpen={surveyDeletePopUp} onClose={toggleSurveyDeletePage}/> )}
             <div className="pl-4 pt-4">
                 <h4 className="text-purple font-bold">View Surveys</h4>
@@ -135,9 +134,9 @@ export const ViewSurveys = () => {
             <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
                 {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
             </div>
-            <div className="pt-2 max-h-[350px] pb-2 space-y-2 overflow-y-auto">
+            <div className="pt-2 max-h-screen pb-2 space-y-2 overflow-y-auto">
             {surveys?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
-                <div key={survey_id} className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
+                <div key={survey_id} className="bg-white flex flex-col p-2 mx-2 rounded shadow-md cursor-pointer">
                     <div className="flex items-center justify-between">
                         <p onClick={() => handleSurveyClick("1")}  className="text-sm flex-1 text-center cursor-pointer text-gray-400">{survey_id}</p>
                         <p className="text-sm flex-1 text-center">{survey_title || '--:--'}</p>
@@ -162,11 +161,11 @@ export const ViewSurveys = () => {
                             {isActive === true ? 'Active' : 'Inactive' || '--:--'}
                         </p>
                         <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                            {/* <button className="flex items-center justify-center cursor-pointer" >
-                                <Edit color="gray" /> 
-                            </button> */}
-                            <button className="flex items-center justify-center cursor-pointer" onClick={() => toggleSurveyDeletePage(survey_id)}>
-                                <Trash2 color="red" /> 
+                            <button className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" >
+                                <Edit size={21} /> 
+                            </button>
+                            <button className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleSurveyDeletePage(survey_id)}>
+                                <Trash2 size={21} /> 
                             </button>
                         </div>
                     </div>

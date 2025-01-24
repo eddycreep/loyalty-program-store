@@ -8,6 +8,8 @@ import { Check, X, BadgeAlert, AlertTriangle, Filter, ShieldAlert, XOctagon } fr
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { Label } from "@/components/ui/label";
+import axios from "axios";
+import { StoresResponse } from '@/modules/types/data-types';
 
 // Define the interface for RedemptionRate data
 interface RedemptionRate {
@@ -158,6 +160,17 @@ export const RedemptionRateReport = () => {
     const [isError, setIsError] = useState(false); 
     const [hasFiltered, setDataHasFiltered] = useState(false);
 
+    const [allStores, setAllStores] = useState<StoresResponse>([]);
+
+    const getStores = async () => {
+        try {
+            const url = `inventory/get-stores`
+            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            setAllStores(response.data)
+        } catch (error) {
+            console.error('Error RETURNING STORES:', error)
+        }
+    }
 
     const handleFilter = () => {
         setIsLoading(true);
@@ -246,7 +259,7 @@ export const RedemptionRateReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -324,7 +337,7 @@ export const RedemptionRateReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -402,7 +415,7 @@ export const RedemptionRateReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -424,6 +437,10 @@ export const RedemptionRateReport = () => {
         );
     }
 
+    useEffect(() => {
+        getStores();
+    }, []);
+
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
             <div className='flex gap-4'>
@@ -443,7 +460,7 @@ export const RedemptionRateReport = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-[350px] flex flex-col pt-4">
+                <div className="w-[570px] flex flex-col pt-4">
                     <Label htmlFor="storeid" className="text-left pt-4 pb-1">
                         Store ID:
                     </Label>
@@ -453,32 +470,15 @@ export const RedemptionRateReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
-                        Regions:
-                    </Label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.id}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -496,7 +496,7 @@ export const RedemptionRateReport = () => {
                 {filteredData.map(({ store_id, store_name, date, total_discounts_redeemed, specials_redeemed, redemption_rate }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase">{total_discounts_redeemed}</p>

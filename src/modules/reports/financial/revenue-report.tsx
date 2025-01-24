@@ -76,8 +76,6 @@ const storeRegions = [
 
 export const RevenueReport = () => {
     const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue', 'Active Members', 'Revenue per Tier', 'New Members', 'Churned Members', 'Top-Selling Categories', 'Avg. Basket Value'];
-    //const headers = ['Store ID', 'Store Name', 'Date', 'Total Revenue', 'Active Members', 'Revenue per Tier', 'New Members', 'Churned Members', 'New Members Revenue', 'Members Revenue Returning', 'Top-Selling Categories', 'Avg. Transaction Value'];
-    //const hheaders = ['Store ID', 'Store Name', 'Date', 'Total Active Members', 'Tier Revenue', 'Top Selling Products', 'Average Transaction Value', 'Total Revenue Per store']; - header
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -177,7 +175,7 @@ export const RevenueReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -255,7 +253,7 @@ export const RevenueReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -333,7 +331,7 @@ export const RevenueReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -409,7 +407,7 @@ export const RevenueReport = () => {
                     </select>
                 </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -426,7 +424,7 @@ export const RevenueReport = () => {
                 {filteredData.map(({ store_id, store_name, date, total_revenue, total_active_members, revenue_per_member, new_members, churned_members, revenue_new_members, revenue_returning_members, top_selling_categories,avg_transaction_value }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>
                             <p className="text-sm flex-1 text-center">{date}</p>
                             <p className="text-sm flex-1 text-center uppercase text-purple">R{total_revenue}</p>

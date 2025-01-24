@@ -356,7 +356,7 @@ export const TopPerformingProductsReport = () => {
                         </select>
                     </div>
                     <div className="flex justify-end w-full pt-12">
-                        <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                        <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                             <Filter />
                         </button>
                     </div>
@@ -426,7 +426,7 @@ export const TopPerformingProductsReport = () => {
                         </select>
                     </div>
                     <div className="flex justify-end w-full pt-12">
-                        <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                        <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                             <Filter />
                         </button>
                     </div>
@@ -496,7 +496,7 @@ export const TopPerformingProductsReport = () => {
                         </select>
                     </div>
                     <div className="flex justify-end w-full pt-12">
-                        <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                        <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                             <Filter />
                         </button>
                     </div>
@@ -564,7 +564,7 @@ export const TopPerformingProductsReport = () => {
                         </select>
                     </div>
                 <div className="flex justify-end w-full pt-12">
-                    <button className="bg-red hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
                     </button>
                 </div>
@@ -582,7 +582,7 @@ export const TopPerformingProductsReport = () => {
                 {filteredData.map(({ store_id, store_name, product_id, product_name, category, total_sales, total_revenue, total_discount_amount, discount_usage_rate, avg_discount, gross_margin, customer_count, date }) => (
                     <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
-                            <p className="text-sm flex-1 text-center text-red">{store_id}</p>
+                            <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text-gray-500">{store_name}</p>
                             <p className="text-sm flex-1 text-center text-gray-500">{product_id}</p>
                             <p className="text-sm flex-1 text-center text-gray-500">{product_name}</p>

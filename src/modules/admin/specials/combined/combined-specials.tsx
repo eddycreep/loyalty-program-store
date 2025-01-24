@@ -241,18 +241,14 @@ export const CombinedSpecials = () => {
                             <p className="text-sm text-center">{combinedSpecialItem.special_price || '--:--'}</p>
                             <p className="text-sm text-center">{special_value || '--:--'}</p>
                             <div className="flex items-center justify-center gap-4">
-                            <button className="flex items-center cursor-pointer" onClick={() => handleExpandCombinedClick(special_id)}>
-                                {expandedCombinedRow === special_id ? (
-                                <Shrink color="gray" />
-                                ) : (
-                                <Expand color="gray" />
-                                )}
+                            <button className="flex items-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg" onClick={() => handleExpandCombinedClick(special_id)}>
+                                {expandedCombinedRow === special_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
                             </button>
-                            <button className="flex items-center cursor-pointer" onClick={() => handleEditCombinedSpecial(special_id)}>
-                                <Edit color="gray" /> 
+                            <button className="flex items-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" onClick={() => handleEditCombinedSpecial(special_id)}>
+                                <Edit size={21} /> 
                             </button>
-                            <button className="flex items-center cursor-pointer" onClick={() => toggleCombinedDeletePage(special_id)}>
-                                <Trash2 color="red" /> 
+                            <button className="flex items-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleCombinedDeletePage(special_id)}>
+                                <Trash2 size={21} /> 
                             </button>
                             </div>
                         </div>
