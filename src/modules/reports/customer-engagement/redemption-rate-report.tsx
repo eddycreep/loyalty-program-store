@@ -203,6 +203,10 @@ export const RedemptionRateReport = () => {
         setIsLoading(false);  
     };
 
+    useEffect(() => {
+        getStores();
+    }, []);
+
     
     if (isLoading) {
         return (
@@ -436,10 +440,6 @@ export const RedemptionRateReport = () => {
             </div>
         );
     }
-
-    useEffect(() => {
-        getStores();
-    }, []);
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">

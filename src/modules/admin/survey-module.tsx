@@ -1,15 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { CreateSurveys } from './survey-managment/create-survey';
 import { ViewSurveys } from './survey-managment/view-survey';
-import { EnhancedSurveyCreatorComponent } from '@/components/enhanced-survey-creator'
-import { EditSurvey } from './survey-managment/edit-survey';
-
 
 export const SurveyModule = () => {
     const [currentTab, setCurrentTab] = useState('');
-
 
     return (
         <div className='w-full h-full flex flex-col py-4 gap-4 rounded-lg overflow-y-auto mb-4'>

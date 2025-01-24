@@ -56,25 +56,6 @@ export function EditRewards({ onClose, selectedReward }: any) {
       isActive: false
   })
 
-      // Synchronize `selectedReward` data with `currentReward` and populate age group
-      useEffect(() => {
-        if (selectedReward && ageGroups.length > 0) {
-            const matchedAgeGroup = ageGroups.find(ag => ag.age_range === selectedReward.age_group);
-            console.log('Matched Age Group:', matchedAgeGroup);
-            setCurrentReward(prev => ({
-                ...prev,
-                ...selectedReward,
-                age_group: matchedAgeGroup ? matchedAgeGroup.group_name : '',
-            }));
-            console.log('Updated Current Reward:', {
-                ...selectedReward,
-                age_group: matchedAgeGroup ? matchedAgeGroup.group_name : '',
-            });
-        }
-        console.log('Current Reward Age Group:', currentReward.age_group);
-    }, [selectedReward, ageGroups]);
-    
-
   const getStores = async () => {
     try {
         const url = `inventory/get-stores`
@@ -171,6 +152,20 @@ export function EditRewards({ onClose, selectedReward }: any) {
     getLoyaltyTiers();
     getAgeGroups();
   }, [])
+
+  // Synchronize `selectedReward` data with `currentReward` and populate age group
+  useEffect(() => {
+    if (selectedReward && ageGroups.length > 0) {
+        const matchedAgeGroup = ageGroups.find(ag => ag.age_range === selectedReward.age_group);
+        
+        setCurrentReward(prev => ({
+            ...prev,
+            ...selectedReward,
+            age_group: matchedAgeGroup ? matchedAgeGroup.group_name : '',
+        }));
+    }
+
+  }, [selectedReward, ageGroups]);
 
   return (
     <div className="container mx-auto p-4 relative">
