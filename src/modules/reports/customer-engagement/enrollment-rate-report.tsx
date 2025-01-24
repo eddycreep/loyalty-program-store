@@ -145,6 +145,10 @@ export const EnrollmentRateReport = () => {
         setIsLoading(false);
     };
 
+    useEffect(() => {
+        getStores();
+    }, []);
+
 
     if (isLoading) {
         return (
@@ -354,10 +358,6 @@ export const EnrollmentRateReport = () => {
             </div>
         );
     }
-
-    useEffect(() => {
-        getStores();
-    }, []);
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">

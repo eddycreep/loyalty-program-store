@@ -213,6 +213,9 @@ export const ActiveMembersReport = () => {
         return true;
     };
 
+    useEffect(() => {
+        getStores();
+    }, []);
 
     if (isLoading) {
         return (
@@ -422,10 +425,6 @@ export const ActiveMembersReport = () => {
             </div>
         );
     }
-
-    useEffect(() => {
-        getStores();
-    }, []);
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
