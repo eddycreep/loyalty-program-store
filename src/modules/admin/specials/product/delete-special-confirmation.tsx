@@ -70,7 +70,7 @@ export const DeleteSpecialConfirmation = ({ isOpen, onClose, specialID }: any) =
           </Button>
           <Button
             onClick={() => deleteSpecial(specialID) }
-            className="bg-red text-white hover:bg-red-700 h-8"
+            className="bg-red text-white hover:bg-rose-300 h-8"
           >
             Confirm
           </Button>

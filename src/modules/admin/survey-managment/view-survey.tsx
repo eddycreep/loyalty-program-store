@@ -25,8 +25,15 @@ type SurveyResponse = SurveyProps[]
 
 export const SurveyContext = createContext<SurveyProps | null>(null);
 
+type Params = {
+    params: {
+        survey_id: string
+    }
+}
+
 export const ViewSurveys = () => {
-    const headers = ['Survey ID', 'Survey Name', 'Category', 'Store', 'Region', 'Loyalty Tier', 'Start Date', 'Expiry Date', 'Status', 'Action']
+    const router = useRouter();
+
     const [surveyDeletePopUp, setSurveyDeletePopUp] = useState(false);
     const [surveys, setSurveys] = useState<SurveyResponse>([]);
 
@@ -34,10 +41,11 @@ export const ViewSurveys = () => {
     const [loadingData, setLoadingData] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const router = useRouter();
+    const headers = ['Survey ID', 'Survey Name', 'Category', 'Store', 'Region', 'Loyalty Tier', 'Start Date', 'Expiry Date', 'Status', 'Action']
 
-    const handleSurveyClick = (surveyId: string) => {
-        router.push(`/surveys/view-detailed-survey`);
+
+    const handleSurveyClick = (survey_id: number) => {
+        router.push(`/surveys/view-detailed-survey/${survey_id}`);
     };
 
     const toggleSurveyDeletePage = (surveyID: number) => {
@@ -138,7 +146,7 @@ export const ViewSurveys = () => {
             {surveys?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
                 <div key={survey_id} className="bg-white flex flex-col p-2 mx-2 rounded shadow-md cursor-pointer">
                     <div className="flex items-center justify-between">
-                        <p onClick={() => handleSurveyClick("1")}  className="text-sm flex-1 text-center cursor-pointer text-gray-400">{survey_id}</p>
+                        <p onClick={() => handleSurveyClick(survey_id)}  className="text-sm flex-1 text-center cursor-pointer text-gray-400">{survey_id}</p>
                         <p className="text-sm flex-1 text-center">{survey_title || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{survey_category || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{store_id || '--:--'}</p>

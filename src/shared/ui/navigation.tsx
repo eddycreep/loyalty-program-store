@@ -68,23 +68,23 @@ export const Navigation = () => {
             role === 'Admin' &&
             <li className="flex justify-center">
               <Link href='/' className="p-2 rounded-full hover:bg-gray-100">
-                <Home size={30} strokeWidth={1.5} color={pathname === '/' ? colors?.red : colors?.black} />
+                <Home size={30} strokeWidth={1.5} color={pathname === '/' ? colors?.purple : colors?.black} />
               </Link>
             </li>
           }
           <li className="flex justify-center">
             <Link href='/dashboard' className="p-2 rounded-full hover:bg-gray-100">
-              <LayoutDashboardIcon size={30} strokeWidth={1.5} color={pathname === '/dashboard' ? colors?.red : colors?.black} />
+              <LayoutDashboardIcon size={30} strokeWidth={1.5} color={pathname === '/dashboard' ? colors?.purple : colors?.black} />
             </Link>
           </li>
           <li className="flex justify-center">
             <Link href='/reports' className="p-2 rounded-full hover:bg-gray-100">
-              <ListTodo size={30} strokeWidth={1.5} color={pathname === '/reports' ? colors?.red : colors?.black} />
+              <ListTodo size={30} strokeWidth={1.5} color={pathname === '/reports' ? colors?.purple : colors?.black} />
             </Link>
           </li>
           <li className="flex justify-center">
             <Link href='/admin' className="p-2 rounded-full hover:bg-gray-100">
-              <Blocks size={30} strokeWidth={1.5} color={pathname === '/admin' ? colors?.red : colors?.black} />
+              <Blocks size={30} strokeWidth={1.5} color={pathname === '/admin' ? colors?.purple : colors?.black} />
             </Link>
           </li>
         </ul>

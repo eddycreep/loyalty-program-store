@@ -124,6 +124,7 @@ function UpgradeMethodCard({ icon: Icon, color, title, description }: any) {
 
 export default function LoyaltyProgramTiers() {
   const [addTiersPopUp, setTiersPopUp] = useState(false);
+  const [ARPopUp, setARPopUp] = useState(false);
   const [editTiersPopup, setEditTiersPopup] = useState(false);
   const [deletePopUp, setDeletePopUp] = useState(false);
 
@@ -153,6 +154,11 @@ export default function LoyaltyProgramTiers() {
 
   const toggleAddTiers = () => {
     setTiersPopUp(!addTiersPopUp);
+  }
+
+
+  const toggleAddAR = () => {
+    setARPopUp(!ARPopUp);
   }
 
   const handleEditTier = (tierId: any) => {
@@ -365,6 +371,11 @@ export default function LoyaltyProgramTiers() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+            <div className='pb-2'>
+                <button onClick={ toggleAddAR } className="bg-green text-white p-2 w-52 h-10 rounded-lg hover:bg-emerald-300">
+                    Add Alternative Reward
+                </button>
+            </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {upgradeMethods.map((method, index) => (
               <UpgradeMethodCard key={index} {...method} />

@@ -52,13 +52,13 @@ export const DeleteSurveyConfirmation = ({ isOpen, onClose, surveyID }: any) => 
           <Button
             variant="outline"
             onClick={onClose}
-            className="bg-black text-white hover:bg-gray-600 hover:text-white h-8"
+            className="bg-purple text-white hover:bg-indigo-300 hover:text-white h-8"
           >
             Cancel
           </Button>
           <Button
             onClick={() => { deleteSurvey(surveyID)}}
-            className="bg-red text-white hover:bg-red-700 h-8"
+            className="bg-red text-white hover:bg-rose-300 h-8"
           >
             Confirm
           </Button>

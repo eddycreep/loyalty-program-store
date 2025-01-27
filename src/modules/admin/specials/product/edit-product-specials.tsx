@@ -393,6 +393,7 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
 
               <Button 
                 onClick={ saveSpecial } 
+                className="bg-green hover:bg-emerald-300"
                 // disabled={currentSpecial.products.length === 0 || !currentSpecial.name || currentSpecial.specialPrice <= 0 || !currentSpecial.storeId || !currentSpecial.startDate || !currentSpecial.endDate}
               >
                   Save Special
