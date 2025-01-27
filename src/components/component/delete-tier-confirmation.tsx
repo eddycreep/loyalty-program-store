@@ -92,19 +92,19 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
             </Button>
             <div>
             <div className="text-lg font-semibold mb-2">Confirm Deletion</div>
-            <p className="text-gray-600 mb-4">Are you sure you want to delete this special? This action cannot be undone.</p>
+            <p className="text-gray-600 mb-4">Are you sure you want to delete this tier? This action cannot be undone.</p>
             </div>
             <div className="flex justify-end space-x-2">
             <Button
                 variant="outline"
                 onClick={onClose}
-                className="bg-black text-white hover:bg-gray-600 hover:text-white h-8"
+                className="bg-purple text-white hover:bg-indio-300 hover:text-white h-8"
             >
                 Cancel
             </Button>
             <Button
                 onClick={() => getRewardInfo() }
-                className="bg-red text-white hover:bg-red-700 h-8"
+                className="bg-red text-white hover:bg-rose-300 h-8"
             >
                 Confirm
             </Button>

@@ -268,7 +268,7 @@ export default function Dashboard() {
 
   return (
     <div className="w-full mb-72">
-      <h1 className="text-3xl font-bold mb-4 text-red">Loyalty Program Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-4 text-purple">Loyalty Program Dashboard</h1>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
           <TabsTrigger value="customer-engagement">Customer Engagement</TabsTrigger>

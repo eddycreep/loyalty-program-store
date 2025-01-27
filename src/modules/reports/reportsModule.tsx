@@ -67,7 +67,7 @@ export const ReportsModule = () => {
 
     return (
         <div className='w-full h-screen flex flex-col px-4 py-4 gap-4 rounded-lg overflow-y-auto m2b-4'>
-            <h1 className="text-3xl font-bold mb-4">Reports</h1>
+            <h1 className="text-3xl font-bold mb-4 text-purple">Reports</h1>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
               <TabsList>
                 <TabsTrigger value="customer-engagement">Customer Engagement</TabsTrigger>
