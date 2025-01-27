@@ -13,6 +13,8 @@ import { Edit, Expand, Trash2, Shrink, X, Check, XOctagon, ShieldAlert } from "l
 import { DeleteTierConfirmation } from "./component/delete-tier-confirmation";
 import { TierInfo, TierInfoResponse, LoyaltyTiersProps, LoyaltyTiersResponse } from '@/modules/types/tiers/data-types';
 import { EditTiers } from "@/modules/admin/loyalty-tiers/edit-tiers"
+import { DeleteAlternativeRewardConfirmation } from "./component/delete-alternative-reward-confirmation";
+import { AddNewAlternativeReward } from "@/modules/admin/rewards/add-alternative-reward";
 
 const upgradeMethods = [
   {
@@ -124,12 +126,15 @@ function UpgradeMethodCard({ icon: Icon, color, title, description }: any) {
 
 export default function LoyaltyProgramTiers() {
   const [addTiersPopUp, setTiersPopUp] = useState(false);
-  const [ARPopUp, setARPopUp] = useState(false);
+  const [addARPopUp, setARPopUp] = useState(false);
+  const [deleteARPopUp, setDeleteARPopUp] = useState(false);
   const [editTiersPopup, setEditTiersPopup] = useState(false);
   const [deletePopUp, setDeletePopUp] = useState(false);
 
   const [tierID, setSelectedTierID] = useState(0);
   const [tierTitle, setSelectedTierTitle] = useState('');
+  const [ARID, setSelectedARID] = useState(0);
+  const [ARTitle, setSelectedARTitle] = useState('');
 
   const [tiersData, setTiersData] = useState<TiersResponse>([]);
   const [selectedTier, setSelectedTier] = useState<LoyaltyTiersProps | null>(null);
@@ -158,7 +163,7 @@ export default function LoyaltyProgramTiers() {
 
 
   const toggleAddAR = () => {
-    setARPopUp(!ARPopUp);
+    setARPopUp(!addARPopUp);
   }
 
   const handleEditTier = (tierId: any) => {
@@ -177,10 +182,17 @@ export default function LoyaltyProgramTiers() {
       setEditTiersPopup(false);
   }
 
-  const toggleDeletePage = (tierId: number, tierTitle: string) => {
+  const toggleTierDeletePage = (tierId: number, tierTitle: string) => {
     setDeletePopUp(!deletePopUp);
     setSelectedTierID(tierId)
     setSelectedTierTitle(tierTitle)
+  };
+
+
+  const toggleAlternativeRewardDeletePage = (alternativeRewardId: number, alternativeRewardTitle: string) => {
+    setDeleteARPopUp(!deleteARPopUp);
+    setSelectedARID(alternativeRewardId)
+    setSelectedARTitle(alternativeRewardTitle)
   };
 
   useEffect(() => {
@@ -250,7 +262,7 @@ export default function LoyaltyProgramTiers() {
                               <button onClick={() => handleEditTier(tier.tier_id)} className="flex items-center justify-center bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 w-10 h-10 rounded-lg">
                                 <Edit />
                               </button>
-                              <button onClick={() => toggleDeletePage(tier.tier_id, tier.tier)} className="flex items-center justify-center bg-white text-red border border-red hover:bg-rose-100 p-1 w-10 h-10 rounded-lg">
+                              <button onClick={() => toggleTierDeletePage(tier.tier_id, tier.tier)} className="flex items-center justify-center bg-white text-red border border-red hover:bg-rose-100 p-1 w-10 h-10 rounded-lg">
                                 <Trash2 />
                               </button>
                             </div>
@@ -281,7 +293,7 @@ export default function LoyaltyProgramTiers() {
           </Card>
           {addTiersPopUp && <AddNewTiers onClose={ toggleAddTiers } />}
           {editTiersPopup && <EditTiers onClose={ closeEditTiersPopup } selectedTier={ selectedTier } />}
-          {deletePopUp && (<DeleteTierConfirmation tierID={ tierID } tierTitle={ tierTitle } isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+          {deletePopUp && (<DeleteTierConfirmation tierID={ tierID } tierTitle={ tierTitle } isOpen={ deletePopUp } onClose={ toggleTierDeletePage } /> )}
       </div>
     )
   }
@@ -349,7 +361,7 @@ export default function LoyaltyProgramTiers() {
                           <button onClick={() => handleEditTier(tier.tier_id)} className="flex items-center justify-center bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 w-10 h-10 rounded-lg">
                             <Edit />
                           </button>
-                          <button onClick={() => toggleDeletePage(tier.tier_id, tier.tier)} className="flex items-center justify-center bg-white text-red border border-red hover:bg-rose-100 p-1 w-10 h-10 rounded-lg">
+                          <button onClick={() => toggleTierDeletePage(tier.tier_id, tier.tier)} className="flex items-center justify-center bg-white text-red border border-red hover:bg-rose-100 p-1 w-10 h-10 rounded-lg">
                             <Trash2 />
                           </button>
                         </div>
@@ -385,7 +397,9 @@ export default function LoyaltyProgramTiers() {
       </Card>
       {addTiersPopUp && <AddNewTiers onClose={ toggleAddTiers } />}
       {editTiersPopup && <EditTiers onClose={ closeEditTiersPopup } selectedTier={ selectedTier } />}
-      {deletePopUp && (<DeleteTierConfirmation tierID={ tierID } tierTitle={ tierTitle } isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+      {deletePopUp && (<DeleteTierConfirmation tierID={ tierID } tierTitle={ tierTitle } isOpen={ deletePopUp } onClose={ toggleTierDeletePage } /> )}
+      {addARPopUp && <AddNewAlternativeReward onClose={ toggleAddAR } />}
+      {deleteARPopUp && (<DeleteAlternativeRewardConfirmation arID={ ARID } arTitle={ ARTitle } isOpen={ deletePopUp } onClose={ toggleAlternativeRewardDeletePage } /> )}
     </div>
   )
 }

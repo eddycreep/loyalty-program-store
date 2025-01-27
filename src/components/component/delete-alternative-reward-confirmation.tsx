@@ -7,19 +7,20 @@ import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 import { UserActivity } from '@/modules/types/data-types'
-import { TierInfo, TierInfoResponse, LoyaltyTiersProps, LoyaltyTiersResponse } from '@/modules/types/tiers/data-types';
+import {  AlternativeRewardProps, AlternativeRewardResponse, AlternativeRewardInfo, AlternativeRewardInfoResponse } from '@/modules/types/alternative-reward/alternative-reward.data-types';
 
-export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: any) => {
-    const [tierInfo, setTierInfo] = useState<TierInfoResponse>([])
+export const DeleteAlternativeRewardConfirmation = ({ isOpen, onClose, alternativeRewardID, alternativeRewardTitle }: any) => {
+    const [alternativeRewardInfo, setAlternativeRewardInfo] = useState<AlternativeRewardInfoResponse>([])
 
     if (!isOpen) return null;
 
+    //rewards/get-alternative-reward-info/Survey Participation
     
-    const getTierInfo = async () => {
+    const getAlternativeRewardInfo = async () => {
         try {
-            const url = `tiers/get-tier-info/${tierTitle}`
-            const response = await axios.get<TierInfoResponse>(`${apiEndPoint}/${url}`)
-            setTierInfo(response.data)
+            const url = `rewards/get-alternative-reward-info/${alternativeRewardTitle}`
+            const response = await axios.get<AlternativeRewardInfoResponse>(`${apiEndPoint}/${url}`)
+            setAlternativeRewardInfo(response.data)
 
             await logUserActivity(response.data[0]); 
         } catch (error) {
@@ -28,9 +29,9 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
     }
 
 
-    const logUserActivity = async (tierInfo: TierInfo) => {
-        const message = "User deleted a tier";
-        const type = "Tier"
+    const logUserActivity = async (alternativeRewardInfo: AlternativeRewardInfo) => {
+        const message = "User deleted a an alternative reward";
+        const type = "Alternative Reward"
 
         try {
             const payload = {
@@ -38,8 +39,8 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
                 // emp_name: user.emp_name,
                 emp_id: 102,
                 emp_name: "Eddy", 
-                activity_id: tierInfo.tier_id,
-                activity: tierInfo.tier,
+                activity_id: alternativeRewardInfo.reward_id,
+                activity: alternativeRewardInfo.reward_title,
                 activity_type: type,
                 log_message: message
             };
@@ -47,34 +48,34 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
             const url = `logs/log-user-activity`;
             const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
 
-            await deleteTier()
+            await deleteAlternativeReward()
         } catch (error) {
             console.error('Error logging reward activity:', error);
         }
     };
 
 
-    const deleteTier = async () => {
+    const deleteAlternativeReward = async () => {
         try{
-        const url = `tiers/delete-tier/${tierID}`
-        const response = await axios.delete(`${apiEndPoint}/${url}`)
+            const url = `rewards/delete-alternative-reward/${alternativeRewardID}`
+            const response = await axios.delete(`${apiEndPoint}/${url}`)
 
-        toast.success('Tier Deleted', {
-            icon: <Check color={colors.green} size={24} />,
-            duration: 3000,
-            style: {
-                backgroundColor: 'black', 
-                color: 'white',
-            },
-        });
+            toast.success('Tier Deleted', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+                style: {
+                    backgroundColor: 'black', 
+                    color: 'white',
+                },
+            });
 
-        onClose();
+            onClose();
         } catch (error) {
-        console.error('Error deleting special:', error)
-        toast.error('Reward Not Deleted', {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
+            console.error('Error deleting special:', error)
+            toast.error('Reward Not Deleted', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
         }
     }
 
@@ -103,7 +104,7 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
                 Cancel
             </Button>
             <Button
-                onClick={() => getTierInfo() }
+                onClick={() => getAlternativeRewardInfo() }
                 className="bg-red text-white hover:bg-rose-300 h-8"
             >
                 Confirm
