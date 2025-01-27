@@ -165,7 +165,7 @@ export default function SurveyChart() {
                 </div>
                 </div>
                 {surveyData?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
-                <div className="bg-white p-2 h-[500px] w-full rounded-lg shadow border-2 flex items-center justify-center text-sm text-gray-500 font-medium relative">
+                <div key={survey_id} className="bg-white p-2 h-[500px] w-full rounded-lg shadow border-2 flex items-center justify-center text-sm text-gray-500 font-medium relative">
                     <div className='w-full h-[80%] flex flex-col justify-center items-center gap-2'>
                         <h2 className='text-center text-base md:text-lg text-purple'>{survey_title}</h2>
                         <h2 className='text-center text-base md:text-lg'>Survey Results</h2>
@@ -173,7 +173,8 @@ export default function SurveyChart() {
                             <BarChart
                                 width={500}
                                 height={300}
-                                data={data}
+                                // data={data}
+                                data={surveyResponse}
                                 margin={{
                                     top: 5,
                                     right: 30,
@@ -199,7 +200,7 @@ export default function SurveyChart() {
                 ))}
             </div>
             {surveyData?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
-                <div className="flex gap-4 pt-16 p-2">
+                <div key={survey_id} className="flex gap-4 pt-16 p-2">
                     <div className="w-96">
                         <div className="bg-white rounded p-4">
                             <h5 className="text-lg font-semibold text-purple">Survey Name</h5>
