@@ -21,7 +21,7 @@ export const colors = {
         darkblue: '#0038FF',
         indigo: '#a5b4fc',
         darkIndigo: '#4f46e5'
-    }
+}
 
 
 export const apiEndPoint = process.env.REST_ENDPOINT || `http://localhost:4400`
