@@ -32,7 +32,7 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
 
     useEffect(() => {
         if (user?.id === null || user?.emp_id === null) {
-            router.push('/')
+            router.push('/login')
         }
     }, [user, router]);
 

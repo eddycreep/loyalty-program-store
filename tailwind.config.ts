@@ -82,7 +82,8 @@ const config: Config = {
   			}
   		},
   		backgroundImage: {
-			login: "url('/covers/cover.webp')",
+			// login: "url('/covers/cover.webp')",
+			login: "url('/covers/program.jpg')",
 		},		  
   		borderRadius: {
   			lg: 'var(--radius)',
