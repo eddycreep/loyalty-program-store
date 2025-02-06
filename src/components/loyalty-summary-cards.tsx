@@ -20,12 +20,10 @@ const revenueSpecialsData = [
 
 export const LoyaltySummaryCards = () => {
     return (
-        // Container with flex-wrap for small/medium screens and justify-between for large screens
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 p-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div>
                 {activeMembersData.map((card, index) => (
-                    // Adjusted card width: w-[315px] on small screens, wider on larger screens
-                    <Card key={index} className="shadow-lg hover:shadow-xl w-[315px] md:w-[400px] lg:w-[390px]">
+                    <Card key={index} className="shadow-lg hover:shadow-xl w-full">
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <p className="text-gray-500 text-sm p-2">Active Loyalty Members</p>
@@ -45,7 +43,7 @@ export const LoyaltySummaryCards = () => {
             </div>
             <div>
                 {redeemedSpecialsData.map((card, index) => (
-                    <Card key={index} className="shadow-lg hover:shadow-xl w-[315px] md:w-[400px] lg:w-[390px]">
+                    <Card key={index} className="shadow-lg hover:shadow-xl w-full">
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <p className="text-gray-500 text-sm">Total Specials Redeemed</p>
@@ -65,7 +63,7 @@ export const LoyaltySummaryCards = () => {
             </div>
             <div>
                 {redeemedRewardsData.map((card, index) => (
-                    <Card key={index} className="shadow-lg hover:shadow-xl w-[315px] md:w-[400px] lg:w-[390px]">
+                    <Card key={index} className="shadow-lg hover:shadow-xl w-full">
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <p className="text-gray-500 text-sm">Rewards Redeemed</p>
@@ -85,7 +83,7 @@ export const LoyaltySummaryCards = () => {
             </div>
             <div>
                 {revenueSpecialsData.map((card, index) => (
-                    <Card key={index} className="shadow-lg hover:shadow-xl w-[315px] md:w-[400px] lg:w-[390px]">
+                    <Card key={index} className="shadow-lg hover:shadow-xl w-full">
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <p className="text-gray-500 text-sm">Revenue from Specials</p>

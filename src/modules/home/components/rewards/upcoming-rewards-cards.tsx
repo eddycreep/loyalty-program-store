@@ -94,7 +94,7 @@ export const UpcomingRewardsCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <AlertTriangle size={38} color="red"/>
-                <p className="text-gray-600 text-sm uppercase">Oops! Unfortunately an error was encountered when fetching Upcoming Rewards, kindly refresh the page.</p>
+                <p className="text-gray-600 text-sm uppercase">Oops! an error was thrown when fetching upcoming rewards, kindly refresh the page.</p>
             </div>
         )
     }
@@ -104,16 +104,16 @@ export const UpcomingRewardsCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <BadgeInfo size={38} className="text-emerald-500"/>
-                <p className="text-gray-600 text-sm uppercase">No rewards are currently available. To add new rewards, please navigate to the Admin page.</p>
+                <p className="text-gray-600 text-sm uppercase">No rewards available. please navigate to the Admin page to add new rewards.</p>
             </div>
         )
     }
 
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {upcomingRewards?.map(({ reward_id, reward_title, description, reward, reward_type, reward_price, store_id, region, start_date, expiry_date, loyalty_tier, age_group, isActive }) => (
-            <Card key={reward_id} className="shadow-lg hover:shadow-xl w-[400px] sm:flex flex-col md:w-[400px] lg:w-[400px]">
+            <Card key={reward_id} className="shadow-lg hover:shadow-xl w-full">
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">

@@ -1,8 +1,6 @@
 'use client'
 
 import { Homepage } from '../../components/homepage'
-import Page from './page'
-
 
 export const ProductsModule = () => {
 

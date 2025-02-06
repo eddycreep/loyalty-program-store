@@ -8,14 +8,16 @@ import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 import { UserActivity } from '@/modules/types/data-types'
 import { TierInfo, TierInfoResponse, LoyaltyTiersProps, LoyaltyTiersResponse } from '@/modules/types/tiers/data-types';
+import { useSession } from '@/context';
 
 export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: any) => {
+    const { user } = useSession();
     const [tierInfo, setTierInfo] = useState<TierInfoResponse>([])
 
     if (!isOpen) return null;
 
     
-    const getRewardInfo = async () => {
+    const getTierInfo = async () => {
         try {
             const url = `tiers/get-tier-info/${tierTitle}`
             const response = await axios.get<TierInfoResponse>(`${apiEndPoint}/${url}`)
@@ -34,10 +36,8 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
 
         try {
             const payload = {
-                // emp_id: user.id,
-                // emp_name: user.emp_name,
-                emp_id: 102,
-                emp_name: "Eddy", 
+                emp_id: user.id,
+                emp_name: user.emp_name,
                 activity_id: tierInfo.tier_id,
                 activity: tierInfo.tier,
                 activity_type: type,
@@ -103,7 +103,7 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
                 Cancel
             </Button>
             <Button
-                onClick={() => getRewardInfo() }
+                onClick={() => getTierInfo() }
                 className="bg-red text-white hover:bg-rose-300 h-8"
             >
                 Confirm

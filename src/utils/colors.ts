@@ -21,10 +21,10 @@ export const colors = {
         darkblue: '#0038FF',
         indigo: '#a5b4fc',
         darkIndigo: '#4f46e5'
-    }
+}
 
 
-export const apiEndPoint = process.env.REST_ENDPOINT || `https://loyalty-program-server.onrender.com`
+export const apiEndPoint = process.env.REST_ENDPOINT || `http://localhost:4400`
 
 //export const apiEndPoint = process.env.REST_ENDPOINT || `http://localhost:4400`
 //export const apiEndPoint = process.env.REST_ENDPOINT || `https://loyalty-program-server.onrender.com`

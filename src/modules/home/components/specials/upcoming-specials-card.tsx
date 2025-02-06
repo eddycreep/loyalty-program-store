@@ -97,7 +97,7 @@ export const UpcomingSpecialCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <AlertTriangle size={38} color="red"/>
-                <p className="text-gray-600 text-sm uppercase">Oops! Unfortunately an error was encountered when fetching Upcoming Specials, kindly refresh the page.</p>
+                <p className="text-gray-600 text-sm uppercase">Oops! error when fetching Upcoming Specials, kindly refresh the page.</p>
             </div>
         )
     }
@@ -107,7 +107,7 @@ export const UpcomingSpecialCards = () => {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
                 <BadgeInfo size={38} className="text-emerald-500"/>
-                <p className="text-gray-600 text-sm uppercase">No upcomiing specials are currently available. To add new specials, please navigate to the Admin page.</p>
+                <p className="text-gray-600 text-sm uppercase">No specials available. please navigate to the Admin page to add new specials.</p>
             </div>
         )
     }
@@ -115,9 +115,9 @@ export const UpcomingSpecialCards = () => {
 
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {upcomingSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
-            <Card key={special_id} className="shadow-lg hover:shadow-xl w-[300px] sm:flex flex-col md:w-[350px] lg:w-[400px]">
+            <Card key={special_id} className="shadow-lg hover:shadow-xl w-full">
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">

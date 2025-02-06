@@ -69,7 +69,6 @@ export default function SurveyChart() {
 
     // Convert surveyId from params to a number
     const surveyID = Number(params?.survey_id); // Conversion to number
-    console.log("Survey ID:", surveyID);
 
     useEffect(() => {
         const getSurveyData = async () => {
@@ -190,9 +189,9 @@ export default function SurveyChart() {
                                     <Tooltip />
                                     <Legend />
                                 <CartesianGrid strokeDasharray="3 3" stroke="#9f9f9f" vertical={false} />
-                                <Bar dataKey="Yes" fill="#ff2257" background={{ fill: 'transparent' }} />
-                                <Bar dataKey="No" fill="#00d384" background={{ fill: 'transparent' }} />
-                                <Bar dataKey="Maybe" fill="#FFC400" background={{ fill: 'transparent' }} />
+                                <Bar dataKey="rating_response" fill="#ff2257" background={{ fill: 'transparent' }} />
+                                <Bar dataKey="multiple_choice_response" fill="#00d384" background={{ fill: 'transparent' }} />
+                                <Bar dataKey="text_response" fill="#FFC400" background={{ fill: 'transparent' }} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
