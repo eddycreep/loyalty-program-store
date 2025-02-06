@@ -12,7 +12,6 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from '@/context';
-import { format } from "date-fns";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data'
 
@@ -162,10 +161,8 @@ export function AddNewAlternativeReward({ onClose }: any) {
 
     try {
         const payload = {
-          // emp_id: user.id,
-          // emp_name: user.emp_name,
-          emp_id: 102,
-          emp_name: "Eddy", 
+          emp_id: user.id,
+          emp_name: user.emp_name,
           activity_id: bonus.reward_id,
           activity: bonus.reward_title,
           activity_type: bonus.reward_type,

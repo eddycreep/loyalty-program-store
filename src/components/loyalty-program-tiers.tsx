@@ -174,11 +174,9 @@ function UpgradeMethodCard({ icon: Icon, color, title, description }: any) {
       {deletePopUp && (<DeleteAlternativeRewardConfirmation arID={ rewardID } arTitle={ rewardTitle } isOpen={ deletePopUp } onClose={ toggleRewardDeletePage } /> )}
       <div className="gap-y-2">
         {ARData?.map(({ reward_id, reward_title, description, reward, reward_type, reward_price, start_date, expiry_date, loyalty_tier, age_group, isActive }) => (
-          <Card className="transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg relative">
-            {/* Added "relative" to the Card component to ensure that child elements with "absolute" positioning are positioned relative to this component.*/}
+          <Card key={reward_id} className="transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg relative">
             <CardContent className="flex flex-col items-center p-6 text-center">
               <div className="absolute top-4 right-4 flex gap-2">
-                {/* Changed the div containing the buttons to have "absolute" positioning with "top-4 right-4" to move it to the top-right corner of the card. */}
                 <button onClick={() => handleEditReward(reward_id)} className="flex items-center justify-center bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 w-7 h-7 rounded-lg">
                   <Edit />
                 </button>
@@ -458,9 +456,7 @@ export default function LoyaltyProgramTiers() {
                     Add Alternative Reward
                 </button>
             </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               <AlternativeRewardCard />
-          </div>
         </CardContent>
       </Card>
       {addTiersPopUp && <AddNewTiers onClose={ toggleAddTiers } />}

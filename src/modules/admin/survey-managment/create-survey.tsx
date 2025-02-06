@@ -11,9 +11,11 @@ import { SurveyProps, SurveyResponse, SurveyInfo, SurveyInfoResponse, Question }
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data'
 import EditSurvey from "./edit-survey";
+import { useSession } from '@/context';
 
 
 export const CreateSurveys = () => {
+    const { user } = useSession();
     const [questions, setQuestions] = useState<Question[]>([]);
     const [surveyName, setSurveyName] = useState<string>("");
     const [surveyCategory, setSurveyCategory] = useState<string>("");
@@ -199,10 +201,8 @@ export const CreateSurveys = () => {
     
         try {
             const payload = {
-              // emp_id: user.id,
-              // emp_name: user.emp_name,
-                emp_id: 102,
-                emp_name: "Eddy", 
+                emp_id: user.id,
+                emp_name: user.emp_name,
                 activity_id: surveyData.survey_id,
                 activity: surveyData.survey_title,
                 activity_type: surveyData.survey_category,

@@ -168,7 +168,7 @@ export function EditAlternativeRewards({ onClose, selectedReward }: any) {
   }, [selectedReward, ageGroups]);
 
   return (
-    <div className="container mx-auto p-4 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <Card className="mb-6 w-[600px]">
               <div className="flex justify-end pr-4 pt-4">

@@ -8,8 +8,10 @@ import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 import { UserActivity } from '@/modules/types/data-types'
 import { RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data';
+import { useSession } from '@/context';
 
 export const DeleteRewardConfirmation = ({ isOpen, onClose, rewardID, rewardTitle }: any) => {
+  const { user } = useSession();
   const [rewardInfo, setRewardInfo] = useState<RewardInfoResponse>([])
 
   if (!isOpen) return null;
@@ -33,10 +35,8 @@ export const DeleteRewardConfirmation = ({ isOpen, onClose, rewardID, rewardTitl
 
     try {
         const payload = {
-          // emp_id: user.id,
-          // emp_name: user.emp_name,
-          emp_id: 102,
-          emp_name: "Eddy", 
+          emp_id: user.id,
+          emp_name: user.emp_name,
           activity_id: bonus.reward_id,
           activity: bonus.reward_title,
           activity_type: bonus.reward_type,
