@@ -29,25 +29,13 @@ type Product = {
     item_code: string
 }
 
-//new product data
-// interface ProductsData {
-//     id: number,
-//     item_code: string
-//     selling_incl_1: number,
-//     special_price_incl: number,
-//     description_1: string
-// }
-// type ProductsDataRes = ProductsData[]
-
-
-
 type SpecialProduct = Product & {
     
 }
 
 //old special data
 type CombinedSpecial = {
-    id?: string  // Made optional since it's not set in initial state
+    id?: string 
     special_name: string
     special: string
     description: string
@@ -101,24 +89,7 @@ export function AddProductsSpecials({ onClose }: Props) {
         try {
             const url = `inventory/get-products`;
             const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`);
-            console.log('products data:', response?.data.results);
-    
             setAllProducts(response?.data.results || []);
-    
-            if (response.status === 200) {
-                toast.success('Products Fetched', {
-                    icon: <Check color={colors.blue} size={24} />,
-                    duration: 3000,
-                });
-
-            } else {
-                toast.error('Products Failed', {
-                    icon: <Check color={colors.red} size={24} />,
-                    duration: 3000,
-                });
-    
-                console.error('Products Failed: ', response?.data.results);
-            }
 
         } catch (error) {
             console.error('error fetching products: ', error);
@@ -139,7 +110,6 @@ export function AddProductsSpecials({ onClose }: Props) {
         try {
             const url = `tiers/get-loyalty-tiers`
             const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
-            console.log('TIERS RETURNED !!', response.data)
             setLoyaltyTiers(response.data)
         } catch (error) {
             console.error('Error RETURNING TIERS:', error)
@@ -150,7 +120,6 @@ export function AddProductsSpecials({ onClose }: Props) {
         try {
             const url = `age-group/get-age-groups`
             const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
-            console.log('AGE_GROUPS RETURNED !!', response.data)
             setAgeGroups(response.data)
         } catch (error) {
             console.error('Error RETURNING AGE_GROUPS:', error)
