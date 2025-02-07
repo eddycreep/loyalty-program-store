@@ -1,11 +1,19 @@
 export interface Products {
     id: number,
-    item_code: string
+    item_code: string,
     selling_incl_1: number,
     special_price_incl: number,
+    inventory: ProductDescription
+}
+
+export interface ProductDescription {
     description_1: string
 }
-export type ProductsResponse = Products[]
+
+export type ProductsResponse = {
+    message: string;
+    results: Products[];
+};
 
 
 export interface Stores {

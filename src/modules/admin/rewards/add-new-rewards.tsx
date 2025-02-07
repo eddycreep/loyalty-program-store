@@ -20,7 +20,7 @@ import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards
 export function AddNewRewards({ onClose }: any) {
   const { user } = useSession();
 
-  const [products, setProducts] = useState<ProductsResponse>([])
+  const [products, setProducts] = useState<ProductsResponse[]>([])
   const [allStores, setAllStores] = useState<StoresResponse>([])
   const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
   const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
@@ -41,15 +41,15 @@ export function AddNewRewards({ onClose }: any) {
     ageGroup: '',
   })
 
-  const getProducts = async () => {
-    try {
-        const url = `products/get-products`
-        const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`)
-        setProducts(response.data)
-    } catch (error) {
-        console.error('Error RETURNING PRODUCTS:', error)
-    }
-  }
+  // const getProducts = async () => {
+  //   try {
+  //       const url = `products/get-products`
+  //       const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`)
+  //       setProducts(response?.data.results || [])
+  //   } catch (error) {
+  //       console.error('Error RETURNING PRODUCTS:', error)
+  //   }
+  // }
 
 
   const getStores = async () => {
@@ -184,7 +184,7 @@ export function AddNewRewards({ onClose }: any) {
 
 
   useEffect(() => {
-    getProducts();
+    // getProducts();
     getStores();
     getLoyaltyTiers();
     getAgeGroups();
