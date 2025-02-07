@@ -17,13 +17,17 @@ import SquareCircleLoader from "@/lib/square-circle-loader";
 export interface CombinedProps {
     special_id: number,
     special_name: string,
+    description: string,
     special: string,
-    special_type:string,
+    special_price: number,
+    special_type: string,
     store_id: string,
     start_date: string,
     expiry_date: string,
     special_value: string,
     isActive: boolean,
+    loyalty_tier: string,
+    age_group: string,
     combinedSpecialItem: CombinedSpecialItem
 }
 type CombinedSpecialsResponse = CombinedProps[]
@@ -33,7 +37,6 @@ interface CombinedSpecialItem {
     special_id: number,
     special_group_id: number,
     product_description: string,
-    special_price: number
 }
 
 export const CombinedSpecials = () => {
@@ -229,7 +232,7 @@ export const CombinedSpecials = () => {
                 ))}
             </div>
             {/* Render each grouped special as a row */}
-            {combinedSpecials.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, combinedSpecialItem }) => (
+            {combinedSpecials.map(({ special_id, special_name, special, special_type, special_price, store_id, start_date, expiry_date, special_value, isActive, combinedSpecialItem }) => (
                 <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
                     <div className="bg-white flex flex-col p-3 mx-2 rounded shadow-md">
                         <div className="grid grid-cols-8 gap-2 items-center">
@@ -238,7 +241,7 @@ export const CombinedSpecials = () => {
                             <p className="text-sm text-center">{combinedSpecialItem.product_description || '--:--'}</p>
                             <p className="text-sm text-center">{special_name || '--:--'}</p>
                             <p className="text-sm text-center">{special || '--:--'}</p>
-                            <p className="text-sm text-center">{combinedSpecialItem.special_price || '--:--'}</p>
+                            <p className="text-sm text-center">{special_price || '--:--'}</p>
                             <p className="text-sm text-center">{special_value || '--:--'}</p>
                             <div className="flex items-center justify-center gap-4">
                             <button className="flex items-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg" onClick={() => handleExpandCombinedClick(special_id)}>
@@ -271,7 +274,9 @@ export const CombinedSpecials = () => {
                                         <p className="text-sm">{store_id || '--:--'}</p>
                                         <p className="text-sm">{start_date || '--:--'}</p>
                                         <p className="text-sm text-red">{expiry_date || '--:--'}</p>
-                                        <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>{isActive === true ? 'Active' : 'Inactive'  || '--:--'}</p>
+                                        <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>
+                                            {isActive ? 'Active' : 'Inactive'}
+                                        </p>
                                         <p></p>
                                     </React.Fragment>
                                 </div>

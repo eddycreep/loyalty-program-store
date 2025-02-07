@@ -16,13 +16,17 @@ import SquareCircleLoader from "@/lib/square-circle-loader";
 interface ProductSpecialsProps {
     special_id: number,
     special_name: string,
+    description: string,  
     special: string,
+    special_price: string,
     special_type: string,
-    store_id: string,
+    store_id: string, 
     start_date: string,
     expiry_date: string,
     special_value: string,
-    isActive: boolean,
+    isActive: boolean, 
+    loyalty_tier: string,
+    age_group: string,
     specialItem: SpecialItem
 }
 type ProductSpecialsResponse = ProductSpecialsProps[]
@@ -30,7 +34,6 @@ type ProductSpecialsResponse = ProductSpecialsProps[]
 interface SpecialItem {
     special_id: number,
     product_description: string,
-    special_price: number
 }
 
 export const ProductSpecials = () => {
@@ -199,82 +202,84 @@ export const ProductSpecials = () => {
 
 
     return (
-        <div>
-            <div className="flex justify-between">
-                <div className="flex flex-col pl-2 pt-6">
-                    <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
-                    <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
-                </div>
-                <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                    <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                        Add Special
-                    </button>
-                </div>
-            </div>
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                {headers?.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
-                        {header}
-                    </p>
-                ))}
-            </div>
-            {productSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive, specialItem }) => (
-                <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2">
-                    <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
-                        <div className="flex items-center justify-between">
-                            <p className="text-sm flex-1 text-center text-gray-400">{special_id}</p>
-                            <p className="text-sm flex-1 text-center">{special_name || '--:--'}</p>
-                            <p className="text-sm flex-1 text-center">{special || '--:--'}</p>
-                            <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{specialItem.product_description}</p>
-                            <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{specialItem.special_price}</p>
-                            <p className="text-sm flex-1 text-center">{special_value || '--:--'}</p>
-                            <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                <button className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg" onClick={() => handleExpandClick(special_id)}>
-                                    {expandedRow === special_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
-                                </button>
-                                <button className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" onClick={() => handleEditProductSpecial(special_id)}>
-                                    <Edit size={21} />
-                                </button>
-                                <button className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleDeletePage(special_id) }>
-                                    <Trash2 size={21} />
-                                </button>
-                            </div>
-                        </div>
-                        {expandedRow === special_id && (
-                            <div className="pt-4">
-                                <div className="grid grid-cols-7 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
-                                    <p className="font-medium text-gray-600"></p>
-                                <div>
-                                    <p className="font-medium text-gray-600">Special Type</p>
-                                    <p className="text-sm">{special_type || '--:--'}</p>
-                                </div>
-                                <div>
-                                    <p className="font-medium text-gray-600">Store ID</p>
-                                    <p className="text-sm uppercase">{store_id || '--:--'}</p>
-                                </div>
-                                <div>
-                                    <p className="font-medium text-gray-600">Start Date</p>
-                                    <p className="text-sm uppercase">{start_date || '--:--'}</p>
-                                </div>
-                                <div>
-                                    <p className="font-medium text-gray-600">Expiry Date</p>
-                                    <p className="text-sm uppercase text-red">{expiry_date || '--:--'}</p>
-                                </div>
-                                <div>
-                                    <p className="font-medium text-gray-600">Status</p>
-                                    <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>
-                                        {isActive === true ? 'Active' : 'Inactive'}
-                                    </p>
-                                </div>
-                            </div>
-                            </div>
-                        )}
+        <>
+            <div>
+                {productSpecialsComponent && (<AddProductsSpecials onClose={ toggleProductSpecials } />)}
+                {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial as unknown as Special} />}
+                {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
+                <div className="flex justify-between">
+                    <div className="flex flex-col pl-2 pt-6">
+                        <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
+                        <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
+                    </div>
+                    <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
+                        <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
+                            Add Special
+                        </button>
                     </div>
                 </div>
-            ))}
-            {productSpecialsComponent && (<AddProductsSpecials onClose={ toggleProductSpecials } />)}
-            {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial as unknown as Special} />}
-            {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
-    </div>
+                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                    {headers?.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
+                {productSpecials?.map(({ special_id, special_name, special, special_price, special_type, store_id, start_date, expiry_date, special_value, isActive, specialItem }) => (
+                    <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2">
+                        <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm flex-1 text-center text-gray-400">{special_id}</p>
+                                <p className="text-sm flex-1 text-center">{special_name || '--:--'}</p>
+                                <p className="text-sm flex-1 text-center">{special || '--:--'}</p>
+                                <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{specialItem?.product_description || '--:--'}</p>
+                                <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{special_price || '--:--'}</p>
+                                <p className="text-sm flex-1 text-center">{special_value || '--:--'}</p>
+                                <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                    <button className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg" onClick={() => handleExpandClick(special_id)}>
+                                        {expandedRow === special_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
+                                    </button>
+                                    <button className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" onClick={() => handleEditProductSpecial(special_id)}>
+                                        <Edit size={21} />
+                                    </button>
+                                    <button className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleDeletePage(special_id) }>
+                                        <Trash2 size={21} />
+                                    </button>
+                                </div>
+                            </div>
+                            {expandedRow === special_id && (
+                                <div className="pt-4">
+                                    <div className="grid grid-cols-7 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
+                                        <p className="font-medium text-gray-600"></p>
+                                    <div>
+                                        <p className="font-medium text-gray-600">Special Type</p>
+                                        <p className="text-sm">{special_type || '--:--'}</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-gray-600">Store ID</p>
+                                        <p className="text-sm uppercase">{store_id || '--:--'}</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-gray-600">Start Date</p>
+                                        <p className="text-sm uppercase">{start_date || '--:--'}</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-gray-600">Expiry Date</p>
+                                        <p className="text-sm uppercase text-red">{expiry_date || '--:--'}</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-gray-600">Status</p>
+                                        <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>
+                                            {isActive === true ? 'Active' : 'Inactive'}
+                                        </p>
+                                    </div>
+                                </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </>
     )
 }
