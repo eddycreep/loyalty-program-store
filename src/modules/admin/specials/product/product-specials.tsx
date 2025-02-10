@@ -7,9 +7,9 @@ import toast from 'react-hot-toast';
 import { Edit, Expand, Trash2, Shrink, X, Check, XOctagon, ShieldAlert } from "lucide-react";
 
 import { AddProductsSpecials } from "@/modules/admin/specials/product/add-product-specials";
-import { EditProductSpecials } from "@/modules/admin/specials/product/edit-product-specials";
+//import { EditProductSpecials } from "@/modules/admin/specials/product/edit-product-specials";
 import { DeleteSpecialConfirmation } from "@/modules/admin/specials/product/delete-special-confirmation";
-import { Special } from "@/modules/admin/specials/product/edit-product-specials";
+//import { Special } from "@/modules/admin/specials/product/edit-product-specials";
 import SquareCircleLoader from "@/lib/square-circle-loader";
 
 //get-all-active-product-specials
@@ -205,7 +205,7 @@ export const ProductSpecials = () => {
         <>
             <div>
                 {productSpecialsComponent && (<AddProductsSpecials onClose={ toggleProductSpecials } />)}
-                {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial as unknown as Special} />}
+                {/* {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial as unknown as Special} />} */}
                 {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">

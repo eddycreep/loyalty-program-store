@@ -4,6 +4,7 @@ export interface Special {
     special: string,
     description: string,
     special_type: string,
+    special_price: number,
     store_id: string,
     start_date: string,
     expiry_date: string,
