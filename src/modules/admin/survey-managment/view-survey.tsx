@@ -48,6 +48,12 @@ export const ViewSurveys = () => {
         router.push(`/surveys/view-detailed-survey/${survey_id}`);
     };
 
+
+    const handleEditSurvey = (survey_id: number) => {
+        //C:\Users\chris\OneDrive\Documents\Work\Projects\Loyalty Program\loyalty-store\src\app\surveys\edit-survey\[survey_id]\page.tsx
+        router.push(`/surveys/edit-survey/${survey_id}`);
+    };
+
     const toggleSurveyDeletePage = (surveyID: number) => {
         setSurveyDeletePopUp(!surveyDeletePopUp);
         setSelectedSurveyID(surveyID)
@@ -166,10 +172,10 @@ export const ViewSurveys = () => {
                         <p className="text-sm flex-1 text-center">{start_date || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{expiry_date || '--:--'}</p>
                         <p className={`text-sm flex-1 text-center flex items-center justify-center space-x-2 ${isActive === true ? 'text-green' : 'text-red'}`}>
-                            {isActive === true ? 'Active' : 'Inactive' || '--:--'}
+                            {isActive ? 'Active' : 'Inactive'}
                         </p>
                         <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                            <button className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" >
+                            <button onClick={() => handleEditSurvey(survey_id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" >
                                 <Edit size={21} /> 
                             </button>
                             <button className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleSurveyDeletePage(survey_id)}>
