@@ -178,7 +178,7 @@ export const ViewSurveys = () => {
                             <button onClick={() => handleEditSurvey(survey_id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" >
                                 <Edit size={21} /> 
                             </button>
-                            <button className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleSurveyDeletePage(survey_id)}>
+                            <button onClick={() => toggleSurveyDeletePage(survey_id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
                                 <Trash2 size={21} /> 
                             </button>
                         </div>

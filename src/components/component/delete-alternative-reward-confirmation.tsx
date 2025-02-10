@@ -10,73 +10,76 @@ import { UserActivity } from '@/modules/types/data-types'
 import {  AlternativeRewardProps, AlternativeRewardResponse, AlternativeRewardInfo, AlternativeRewardInfoResponse } from '@/modules/types/alternative-reward/alternative-reward.data-types';
 import { useSession } from '@/context';
 
-export const DeleteAlternativeRewardConfirmation = ({ isOpen, onClose, alternativeRewardID, alternativeRewardTitle }: any) => {
+export const DeleteAlternativeRewardConfirmation = ({ isOpen, onClose, ARID, ARTitle, ARType }: any) => {
     const { user } = useSession();
     const [alternativeRewardInfo, setAlternativeRewardInfo] = useState<AlternativeRewardInfoResponse>([])
 
     if (!isOpen) return null;
-    
-    const getAlternativeRewardInfo = async () => {
-        try {
-            const url = `rewards/get-alternative-reward-info/${alternativeRewardTitle}`
-            const response = await axios.get<AlternativeRewardInfoResponse>(`${apiEndPoint}/${url}`)
-            console.error('Alternative Reward Info: ', response)
-            setAlternativeRewardInfo(response.data)
 
-            await logUserActivity(response.data[0]); 
-        } catch (error) {
-            console.error('Error RETURNING REWARD INFO:', error)
-        }
-    }
-
-
-    const logUserActivity = async (alternativeRewardInfo: AlternativeRewardInfo) => {
-        const message = "User deleted a an alternative reward";
-        const type = "Alternative Reward"
-
-        try {
-            const payload = {
-                emp_id: user.id,
-                emp_name: user.emp_name,
-                activity_id: alternativeRewardInfo.reward_id,
-                activity: alternativeRewardInfo.reward_title,
-                activity_type: type,
-                log_message: message
-            };
-
-            const url = `logs/log-user-activity`;
-            const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
-
-            await deleteAlternativeReward()
-        } catch (error) {
-            console.error('Error logging reward activity:', error);
-        }
-    };
-
+    console.log('AR ID: ', ARID)
+    console.log('AR TITLE: ', ARTitle)
+    console.log('AR TYPE: ', ARType)
 
     const deleteAlternativeReward = async () => {
         try{
-            const url = `rewards/delete-alternative-reward/${alternativeRewardID}`
+            const url = `rewards/delete-alternative-reward/${ARID}`
             const response = await axios.delete(`${apiEndPoint}/${url}`)
+            console.log('AR Deleted:', response)
 
-            toast.success('Tier Deleted', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-                style: {
-                    backgroundColor: 'black', 
-                    color: 'white',
-                },
-            });
+            if (response.status === 200) {
+                toast.success('Reward Deleted', {
+                    icon: <Check color={colors.green} size={24} />,
+                    duration: 3000,
+                    style: {
+                        backgroundColor: 'black', 
+                        color: 'white',
+                    },
+                });
 
-            onClose();
+                logUserActivity();
+                onClose();
+            } else {
+                toast.error('Reward Not Deleted', {
+
+                    icon: <X color={colors.red} size={24} />,
+                    duration: 3000,
+                    style: {
+                        backgroundColor: 'black', 
+                        color: 'white',
+                    },
+                });
+            }
         } catch (error) {
-            console.error('Error deleting special:', error)
-            toast.error('Reward Not Deleted', {
+            console.error('ERROR:', error)
+            toast.error('ERROR', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
             });
         }
     }
+
+    const logUserActivity = async () => {
+        const message = "User deleted an alternative reward";
+
+        try {
+            const payload = {
+                emp_id: user.emp_id,
+                emp_name: user.emp_name,
+                activity_id: ARID,
+                activity: ARTitle,
+                activity_type: ARType,
+                log_message: message
+            };
+
+
+            console.log('PAYLOAD: ', payload)
+
+            const url = `logs/log-user-activity`;
+            const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+        } catch (error) {
+            console.error('Error logging reward activity:', error);
+        }
+    };
 
     return (
         <div className="h-screen fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -103,7 +106,7 @@ export const DeleteAlternativeRewardConfirmation = ({ isOpen, onClose, alternati
                         Cancel
                     </Button>
                     <Button
-                        onClick={() => getAlternativeRewardInfo() }
+                        onClick={() => deleteAlternativeReward() }
                         className="bg-red text-white hover:bg-rose-300 h-8"
                     >
                         Confirm
