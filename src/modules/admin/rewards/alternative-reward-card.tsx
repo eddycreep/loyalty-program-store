@@ -45,6 +45,7 @@ export const AlternativeRewardCard = () => {
 
     const [rewardID, setSelectedRewardID] = useState(0);
     const [rewardTitle, setSelectedRewardTitle] = useState('');
+    const [rewardType, setSelectedRewardType] = useState('');
 
     const [ARData, setARData] = useState<AlternativeRewardResponse>([]);
     const [selectedReward, setSelectedReward] = useState<AlternativeRewardProps | null>(null);
@@ -82,11 +83,13 @@ export const AlternativeRewardCard = () => {
       setEditRewardPopup(false);
     }
 
-    const toggleRewardDeletePage = (rewardId: number, rewardTitle: string) => {
+    const toggleRewardDeletePage = (rewardId: number, rewardTitle: string, rewardType: string) => {
         setDeletePopUp(!deletePopUp);
         setSelectedRewardID(rewardId)
         setSelectedRewardTitle(rewardTitle)
+        setSelectedRewardType(rewardType)
     };
+
 
     useEffect(()=> {
         getAlternativeRewards();
@@ -94,10 +97,10 @@ export const AlternativeRewardCard = () => {
 
     return (
         <>
-        {deletePopUp && (<DeleteAlternativeRewardConfirmation arID={rewardID} arTitle={rewardTitle} isOpen={deletePopUp} onClose={toggleRewardDeletePage}/>)}
+        {deletePopUp && (<DeleteAlternativeRewardConfirmation ARID={rewardID} ARTitle={rewardTitle} ARType={rewardType} isOpen={deletePopUp} onClose={toggleRewardDeletePage}/>)}
         {editRewardPopup && <EditAlternativeRewards onClose={closeEditRewardPopup} selectedReward={selectedReward} />}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {ARData?.map(({ reward_id, reward_title, description }) => {
+            {ARData?.map(({ reward_id, reward_title, description, reward_type }) => {
                 const selectedIcon = icons.find((icon) => icon.id === reward_id) || icons[0];
                 const { icon: SelectedIcon, color } = selectedIcon;
     
@@ -110,7 +113,7 @@ export const AlternativeRewardCard = () => {
                                 <button onClick={() => handleEditReward(reward_id)} className="flex items-center justify-center bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 w-7 h-7 rounded-lg">
                                     <Edit />
                                 </button>
-                                <button onClick={() => toggleRewardDeletePage(reward_id, reward_title)} className="flex items-center justify-center bg-white text-red border border-red hover:bg-rose-100 p-1 w-7 h-7 rounded-lg">
+                                <button onClick={() => toggleRewardDeletePage(reward_id, reward_title, reward_type)} className="flex items-center justify-center bg-white text-red border border-red hover:bg-rose-100 p-1 w-7 h-7 rounded-lg">
                                     <Trash2 />
                                 </button>
                             </div>

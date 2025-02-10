@@ -10,6 +10,7 @@ import { apiEndPoint, colors } from '@/utils/colors';
 export const DeleteSurveyConfirmation = ({ isOpen, onClose, surveyID }: any) => {
   if (!isOpen) return null;
 
+  
   const deleteSurvey = async (surveyid: number) => {
     try{
       const url = `survey/delete-survey/${surveyid}`
