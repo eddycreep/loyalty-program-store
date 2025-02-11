@@ -1,12 +1,12 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Star, Store, Users, ShoppingCart, Award, User, TrendingUp, TrendingDown } from 'lucide-react'
+import { Star, Store, Users, ShoppingCart, Award, User } from 'lucide-react'
 
 import { ProductSummaryCards } from "./products/product-summary-cards"
 import { ProductReviews } from "./products/product-reviews"

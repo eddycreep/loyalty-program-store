@@ -19,7 +19,6 @@ import { TierInfo, TierInfoResponse, LoyaltyTiersProps, LoyaltyTiersResponse } f
 export function AddNewTiers({ onClose }: any) {
     const { user } = useSession();
 
-    const [products, setProducts] = useState<ProductsResponse>([])
     const [allStores, setAllStores] = useState<StoresResponse>([])
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
@@ -33,16 +32,6 @@ export function AddNewTiers({ onClose }: any) {
         min_spending_amount: 0,
         max_spending_amount: 0,
     })
-
-    const getProducts = async () => {
-        try {
-            const url = `products/get-products`
-            const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`)
-            setProducts(response.data)
-        } catch (error) {
-            console.error('Error RETURNING PRODUCTS:', error)
-        }
-    }
 
     const getStores = async () => {
         try {
@@ -132,14 +121,12 @@ export function AddNewTiers({ onClose }: any) {
 
         try {
             const payload = {
-            // emp_id: user.id,
-            // emp_name: user.emp_name,
-            emp_id: 102,
-            emp_name: "Eddy", 
-            activity_id: tierInfo.tier_id,
-            activity: tierInfo.tier,
-            activity_type: type,
-            log_message: message
+                emp_id: user.emp_id,
+                emp_name: user.emp_name,
+                activity_id: tierInfo.tier_id,
+                activity: tierInfo.tier,
+                activity_type: type,
+                log_message: message
             };
 
             const url = `logs/log-user-activity`;
@@ -154,7 +141,6 @@ export function AddNewTiers({ onClose }: any) {
 
 
     useEffect(() => {
-        getProducts();
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
