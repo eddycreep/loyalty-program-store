@@ -50,7 +50,6 @@ export const ViewSurveys = () => {
 
 
     const handleEditSurvey = (survey_id: number) => {
-        //C:\Users\chris\OneDrive\Documents\Work\Projects\Loyalty Program\loyalty-store\src\app\surveys\edit-survey\[survey_id]\page.tsx
         router.push(`/surveys/edit-survey/${survey_id}`);
     };
 

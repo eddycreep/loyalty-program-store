@@ -348,9 +348,9 @@ export function AddNewRewards({ onClose }: any) {
                         <SelectContent>
                           {/* Mapping through the stores array to create options for the dropdown */}
                           <SelectItem value="All">All</SelectItem> {/* Added "All" option */}
-                          {regions.map((location) => (
-                            <SelectItem key={location.id} value={location.region}>
-                              {location.region}
+                          {regions.map((reg) => (
+                            <SelectItem key={reg.id} value={reg.region}>
+                              {reg.region}
                             </SelectItem>
                           ))}
                         </SelectContent>
