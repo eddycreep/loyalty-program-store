@@ -10,7 +10,7 @@ import { Edit, Expand, Trash2, Shrink, X, Check, XOctagon, ShieldAlert } from "l
 import { AddCombinedSpecials } from "@/modules/admin/specials/combined/add-combined-specials";
 import { EditCombinedSpecials } from "@/modules/admin/specials/combined/edit-combined-specials";
 import { CombinedDeleteConfirmation } from "@/modules/admin/specials/combined/delete-combined-confirmation";
-import { Specials, SpecialItems, CombinedSpecialsProps } from "@/modules/admin/specials/combined/edit-combined-specials";
+import { SpecialItems } from "@/modules/types/special/product/data-types";
 import SquareCircleLoader from "@/lib/square-circle-loader";
 
 //get-active-group-specials
@@ -286,7 +286,7 @@ export const CombinedSpecials = () => {
                 </div>
             ))}
             {combinedSpecialsComponent && (<AddCombinedSpecials onClose={ toggleCombinedSpecials } />)}
-            {/* {editCombinedSpecialsPopup && <EditCombinedSpecials onClose={ closeEditSpecialsPopup } selectedCombinedSpecial={selectedCombinedSpecial} />} */}
+            {editCombinedSpecialsPopup && <EditCombinedSpecials onClose={ closeEditSpecialsPopup } selectedCombinedSpecial={selectedCombinedSpecial} />}
             {combinedDeletePopUp && (<CombinedDeleteConfirmation specialID={selectedCombinedSpecialID} isOpen={combinedDeletePopUp} onClose={toggleCombinedDeletePage}/> )}
     </div>
     )

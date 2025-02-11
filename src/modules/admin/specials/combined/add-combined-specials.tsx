@@ -104,12 +104,11 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
 
 
-    // Mock product data (replace with actual API call in production)
 
         // First filter products based on search term
-        const searchProducts = allProducts.filter(product =>
+    const searchProducts = allProducts.filter(product =>
         product.inventory.description_1.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+    )
 
     // Then limit to first 3 matches
     const displayedProducts = searchProducts.slice(0, 3);
@@ -164,11 +163,11 @@ export function AddCombinedSpecials({ onClose }: Props) {
 
         // Convert the inventory product to the SpecialProduct format
         const specialProduct: SpecialProduct = {
-        id: product.id.toString(), // Convert to string since SpecialProduct.id is string
-        name: product.inventory.description_1,
-        price: product.selling_incl_1, // Access from product directly, not from inventory
-        item_code: product.item_code, // Access from product directly, not from inventory
-        groupId: ''
+            id: product.id.toString(), // Convert to string since SpecialProduct.id is string
+            name: product.inventory.description_1,
+            price: product.selling_incl_1, // Access from product directly, not from inventory
+            item_code: product.item_code, // Access from product directly, not from inventory
+            groupId: ''
         };
 
         setCurrentSpecial(prev => ({
@@ -603,6 +602,6 @@ export function AddCombinedSpecials({ onClose }: Props) {
                 </CardContent>
             </Card>
         </div>
-    </div>
+        </div>
     )
 }
