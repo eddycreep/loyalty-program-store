@@ -49,6 +49,11 @@ export interface CombinedSpecialItems {
     product_description: string,
 }
 
+export interface UpdateCombinedSpecialItems {
+    special_group_id: number,
+    product_description: string,
+}
+
 type Product = {
   id: string
   name: string
@@ -192,7 +197,7 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
         }))
     }
 
-    const saveSpecial = async () => {
+    const updateSpecial = async () => {
         try {
             const specialType = 'Combined Special'
 
@@ -220,18 +225,19 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
                 isActive: currentSpecial.isActive,
             }
 
-            const url = `specials/save-special`
-            const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
+            const url = `specials/update-special/${selectedCombinedSpecial?.special_id}`
+            const response = await axios.patch<Special>(`${apiEndPoint}/${url}`, payload)
             console.log('The Special has been saved successfully:', response.data)
 
-            // if (response.status === 200) {
-            //     toast.success('The special has been saved successfully', {
-            //         icon: <Check color={colors.green} size={24} />,
-            //         duration: 3000,
-            //     })
-            // }
+            if (response.status === 200) {
+                updateSpecialItems();
+            } else {
+                toast.error('Special Not Updated', {
+                    icon: <X color={colors.red} size={24} />,
+                    duration: 3000,
+                })
+            }
 
-            fetchSpecialInfo()
         } catch (error) {
             console.error('Error saving special:', error)
             
@@ -242,73 +248,32 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
         }
     }
 
-    const fetchSpecialInfo = async () => {
+    const updateSpecialItems = async () => {
         try {
-            const url = `specials/get-special-info/${currentSpecial.special_name}`;
-            const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
-            console.log('The Special ID has been fetched successfully:', response.data);
-
-            setSpecialID(response?.data);
-
-            if (response.data.length > 0) {
-                saveSpecialItems(response.data[0].special_id); // save the items
-                
-                //logUserActivity(response.data[0]); // Pass the fetched data directly to logUserActivity
-
-                toast.success('Special Info Fetched, now saving items', {
-                    icon: <Check color={colors.blue} size={24} />,
-                    duration: 3000,
-                });
-
-                console.error('Special info returned: ', response.data);
-            } else if (response.data.length == 0) {
-                toast.success('No special data, returning', {
-                    icon: <Check color={colors.blue} size={24} />,
-                    duration: 3000,
-                });
-
-                console.error('No special data returned: ', response.data);
-            }
-        } catch (error) {
-            console.error('Error fetching special ID:', error);
-        }
-    };
-
-    const saveSpecialItems = async (specialId: number) => {
-        console.log('passed special id from info function: ', specialId);
-
-        try {
-            // Loop through each product in currentSpecial.products
-            for (let i = 0; i < currentSpecial.products.length; i++) {
-                const product = currentSpecial.products[i];
-                
-                const payload: CombinedSpecialItems = {
-                    special_id: specialId,
-                    special_group_id: i + 1, // Assign sequential group IDs (1, 2, 3)
-                    product_description: product.name // Use the product name from the SpecialProduct
+            // Create an array of all update promises to handle them concurrently
+            const updatePromises = currentSpecial.products.map(async (product, index) => {
+                const payload: UpdateCombinedSpecialItems = {
+                    special_group_id: index + 1, // Keep sequential group IDs (1, 2, 3)
+                    product_description: product.name
                 };
 
-                console.log('saving special item payload:', payload);
+                const url = `specials/update-combined-special-items/${selectedCombinedSpecial?.special_id}`;
+                return axios.patch<UpdateCombinedSpecialItems>(`${apiEndPoint}/${url}`, payload);
+            });
 
-                const url = `specials/save-combined-special-items`;
-                const response = await axios.post<CombinedSpecialItems>(
-                    `${apiEndPoint}/${url}`, 
-                    payload
-                );
+            // Wait for all updates to complete
+            await Promise.all(updatePromises);
 
-                console.log('Special item saved successfully:', response.data);
-            }
-
-            // Show success toast after all items are saved
-            toast.success('Special Saved', {
+            // Show success toast after all items are updated
+            toast.success('Special Items Updated Successfully', {
                 icon: <Check color={colors.green} size={24} />,
                 duration: 3000,
             });
 
         } catch (error) {
-            console.error('Special Items Not Saved:', error);
+            console.error('Error updating special items:', error);
             
-            toast.error('Error saving special items', {
+            toast.error('Error updating special items', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
             });
@@ -614,7 +579,7 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
                             <Button onClick={ onClose } className="bg-red hover:bg-rose-300 w-full">
                                 Cancel
                             </Button>
-                            <Button onClick={ saveSpecial } className="bg-green hover:bg-emerald-300 w-full">
+                            <Button onClick={ updateSpecial } className="bg-green hover:bg-emerald-300 w-full">
                                 Save Special
                             </Button>
                         </div>

@@ -33,8 +33,8 @@ type SpecialProduct = Product & {
     
 }
 
-//old special data
-type CombinedSpecial = {
+
+export type CombinedSpecial = {
     id?: string 
     special_name: string
     special: string

@@ -7,13 +7,12 @@ import toast from 'react-hot-toast';
 import { Edit, Expand, Trash2, Shrink, X, Check, XOctagon, ShieldAlert } from "lucide-react";
 
 import { AddProductsSpecials } from "@/modules/admin/specials/product/add-product-specials";
-//import { EditProductSpecials } from "@/modules/admin/specials/product/edit-product-specials";
+import { EditProductSpecials } from "@/modules/admin/specials/product/edit-product-specials";
 import { DeleteSpecialConfirmation } from "@/modules/admin/specials/product/delete-special-confirmation";
-//import { Special } from "@/modules/admin/specials/product/edit-product-specials";
 import SquareCircleLoader from "@/lib/square-circle-loader";
 
 //get-all-active-product-specials
-interface ProductSpecialsProps {
+export interface ProductSpecialsProps {
     special_id: number,
     special_name: string,
     description: string,  
@@ -72,6 +71,7 @@ export const ProductSpecials = () => {
         const selected = productSpecials.find((item) => item.special_id === special_id) || null;
         
         if (selected) {
+            // Keep the original ProductSpecialsProps object
             setSelectedProductSpecial(selected);
             setEditProductsPopup(true);
         } else {
@@ -205,7 +205,7 @@ export const ProductSpecials = () => {
         <>
             <div>
                 {productSpecialsComponent && (<AddProductsSpecials onClose={ toggleProductSpecials } />)}
-                {/* {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial as unknown as Special} />} */}
+                {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial} />}
                 {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">

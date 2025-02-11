@@ -35,6 +35,10 @@ export interface SpecialItems {
     product_description: string,
 }
 
+export interface UpdateSpecialItems {
+    product_description: string,
+}
+
 export interface SpecialInfo {
     special_id: number,
     special_name: string,
