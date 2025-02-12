@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "STORE-LOYALTY",
-  description: "Setup discounts, rewards and more for your customers",
+  description: "Setup specials, discounts, rewards and more for your customers",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

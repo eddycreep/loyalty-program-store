@@ -1,15 +1,10 @@
 'use client'
 
-import { Star, User } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Star } from "lucide-react";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from 'react-hot-toast';
-import { useQuery } from "@/hooks/useQuery";
 import * as React from "react";
-import {useState, useEffect } from 'react';
-import axios from 'axios';
-import { ReviewCards } from '@/components/component/review-cards';
 import { SuccessCard } from "@/components/component/cards/success-card"
 
 interface ReviewProps {

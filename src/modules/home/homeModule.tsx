@@ -2,54 +2,21 @@
 
 import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
 import { LoyaltySummaryCards } from '@/components/loyalty-summary-cards'
 import { ActiveSpecialCards } from '@/modules/home/components/specials/active-specials-card'
 import { UpcomingSpecialCards } from '@/modules/home/components/specials/upcoming-specials-card'
-
 import { ActiveRewardsCards } from '@/modules/home/components/rewards/active-rewards-card'
 import { UpcomingRewardsCards } from '@/modules/home/components/rewards/upcoming-rewards-cards'
-
 import { ActiveSurveyCards } from '@/modules/home/components/surveys/active-surveys-card'
 import { UpcomingSurveyCards } from '@/modules/home/components/surveys/upcoming-surveys-card'
 
-
-interface RewardProps {
-  reward_id: number,
-  reward_title: string,
-  description: string,
-  reward: string,
-  reward_type: string,
-  reward_price: number,
-  store_id: string,
-  region: string,
-  start_date: string,
-  expiry_date: string,
-  loyalty_tier: string,
-  age_group: string,
-  isActive: number
-}
-type RewardResponse = RewardProps[]
-
-interface SurveyProps {
-  survey_id: number,
-  survey_title: string,
-  survey_category: string,
-  store_id: string,
-  region: string,
-  start_date: string,
-  expiry_date: string,
-  isActive: number,
-}
-type SurveyResponse = SurveyProps[]
-
-
-export function Homepage() {
+export const HomeModule = () => {
   const [activeTab, setActiveTab] = useState("active")
   const [activeRewardsTab, setActiveRewardsTab] = useState("active-rewards")
 
 
   return (
+    <div className="w-full h-screen flex flex-col rounded">
     <div className="h-screen bg-gray-100 overflow-y-auto pb-20">
       <main className="py-4 sm:py-6 md:py-8 px-2s sm:px-6 lg:px-8">
         <div className="w-full mx-auto">
@@ -126,6 +93,7 @@ export function Homepage() {
           </section>
         </div>
       </main>
+    </div>
     </div>
   )
 }

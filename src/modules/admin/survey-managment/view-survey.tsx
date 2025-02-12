@@ -168,8 +168,8 @@ export const ViewSurveys = () => {
                             >
                             {loyalty_tier || '--:--'}
                         </p>
-                        <p className="text-sm flex-1 text-center">{start_date || '--:--'}</p>
-                        <p className="text-sm flex-1 text-center">{expiry_date || '--:--'}</p>
+                        <p className="text-sm flex-1 text-center">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
+                        <p className="text-sm flex-1 text-center">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                         <p className={`text-sm flex-1 text-center flex items-center justify-center space-x-2 ${isActive === true ? 'text-green' : 'text-red'}`}>
                             {isActive ? 'Active' : 'Inactive'}
                         </p>

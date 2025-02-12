@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { RewardsModule } from './rewards-module';
-import { SpecialsManagementModule } from './specials-management-module';
+import { SpecialsModule } from './specials-module';
 import { ReviewsModule } from './reviews-module';
 import { SurveyModule } from './survey-module';
 import { Tiers } from './loyalty-tiers/tiers'
@@ -19,7 +19,7 @@ export const AdminModule = () => {
                 <button onClick={() => setCurrentTab('surveys')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'surveys'? 'bg-purple text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Survey Management</button>
                 <button onClick={() => setCurrentTab('tiers')} className={`bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'tiers'? 'bg-purple text-white' : 'bg-black text-white'} text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Loyalty Tiers</button>
             </div>
-            {currentTab === 'specials' && <SpecialsManagementModule />}
+            {currentTab === 'specials' && <SpecialsModule />}
             {currentTab === 'rewards' && <RewardsModule />}
             {currentTab === 'reviews' && <ReviewsModule />}
             {currentTab === 'surveys' && <SurveyModule />}

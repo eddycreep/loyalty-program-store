@@ -2,18 +2,13 @@
 
 import axios from "axios";
 import toast from 'react-hot-toast';
-import { useState, useEffect } from "react";
-import { SurveySheet } from "@/components/component/survey-sheet";
+import { useState, useEffect, useCallback } from "react";
 import { apiEndPoint, colors } from "@/utils/colors";
-import { Check, HelpCircle, Save, X } from "lucide-react";
+import { Save, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { SurveyProps, SurveyInfo, SurveyInfoResponse, Question } from "@/modules/types/survey/data-types";
-import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
-import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data';
-import { SwitchExtended } from "@/components/ui/switch-extended";
-import { useParams } from "next/navigation"; // For Next.js 13
-
-
+import { SurveyInfo, SurveyInfoResponse, Question } from "@/modules/types/survey/data-types";
+import { AgeGroupsResponse, TiersResponse, StoresResponse } from '@/modules/types/data-types'
+import { useParams } from "next/navigation";
 
 interface Survey {
     survey_id: number,
@@ -105,7 +100,8 @@ export default function EditSurvey() {
     }
 
 
-    const getSurveyData = async () => {
+    // Wrap getSurveyData in useCallback
+    const getSurveyData = useCallback(async () => {
         try {
             const url = `survey/get-survey-questions-with-choices/${surveyID}`
             const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`)
@@ -133,8 +129,7 @@ export default function EditSurvey() {
         } catch (error) {
             console.error('Survey Data: ', error)
         }
-
-    }
+    }, [surveyID]); // Add surveyID as dependency
 
 
     const updateSurvey = async () => {
@@ -224,11 +219,14 @@ export default function EditSurvey() {
 
 
     useEffect(() => {
-        getSurveyData();
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
     }, []);
+
+    useEffect(() => {
+        getSurveyData();
+    }, [getSurveyData]); // Update dependency array to include getSurveyData
 
     return (
         <div className="h-screen flex flex-col overflow-hidden">
@@ -352,9 +350,9 @@ export default function EditSurvey() {
                             <h5 className="text-purple font-bold">Questions</h5>
                         </div>
                         <div className="grid grid-cols-4 gap-4">
-                            {surveyQuestionsData?.map(({ question_id, question_text, question_type }) => (
+                            {surveyQuestionsData?.map(({ question_id, question_text, question_type }, index) => (
                                 <div key={question_id} className="flex flex-col pt-3">
-                                    <label>Question {question_id}:</label>
+                                    <label>Question {index + 1}:</label>
                                     <input
                                         type="input"
                                         placeholder="Enter question"
@@ -375,7 +373,7 @@ export default function EditSurvey() {
                         <div className="grid grid-cols-4 gap-4">
                             {surveyQuestionsChoicesData?.map(({ option_id, question_id, option_text, option_order }) => (
                                 <div key={option_id} className="flex flex-col pt-3">
-                                    <label>Options for Question `{question_id}`:</label>
+                                    <label>Options for Question:</label>
                                     <input
                                         type="input"
                                         placeholder="Enter option"

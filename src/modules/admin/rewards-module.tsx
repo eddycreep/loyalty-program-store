@@ -3,7 +3,6 @@
 import axios from 'axios';
 import { useState, useEffect } from "react"
 import { apiEndPoint, colors } from '@/utils/colors';
-import toast from 'react-hot-toast';
 import { Expand, Shrink, Edit, X, Check, Trash2, ShieldAlert, XOctagon} from "lucide-react"
 import { AddNewRewards } from "./rewards/add-new-rewards";
 import { EditRewards } from "@/components/component/edit-rewards";
@@ -280,11 +279,11 @@ export const RewardsModule = () => {
                                         </div>
                                         <div>
                                             <p className="text-md font-bold text-gray-600">Start Date</p>
-                                            <p className="text-sm pt-1">{start_date || '--:--'}</p>
+                                            <p className="text-sm pt-1">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
                                         </div>
                                         <div>
                                             <p className="text-md font-bold text-gray-600">Expiry Date</p>
-                                            <p className="text-sm pt-1 text-red">{expiry_date || '--:--'}</p>
+                                            <p className="text-sm pt-1 text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                                         </div>
                                         <div>
                                             <p className="text-md font-bold text-gray-600">Status</p>
