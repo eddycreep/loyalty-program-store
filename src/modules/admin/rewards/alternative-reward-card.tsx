@@ -3,16 +3,15 @@
 import React from "react";
 import axios from "axios"
 import { useState, useEffect } from "react"
-import { ShoppingBasket, ShoppingBag, Crown, WalletCards, ChefHat, Coins, Star, Globe, Heart, Bell, Sun, Moon, Cloud, Umbrella, Snowflake, Flame, Anchor, Camera, Music } from "lucide-react";
-
+import { ShoppingBasket, ShoppingBag, Crown, WalletCards, ChefHat, Coins, Star, Globe, Heart, Bell, Sun, Moon, Cloud, Umbrella, Snowflake, Flame, Anchor, Camera, Music, XOctagon, ShieldAlert } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card"
 import "../../../styles/loyalty-program-tiers.css";
 import { apiEndPoint, colors } from '@/utils/colors'
 import { Edit, Trash2 } from "lucide-react";
 import { DeleteAlternativeRewardConfirmation } from "@/components/component/delete-alternative-reward-confirmation";
-import { AddNewAlternativeReward } from "@/modules/admin/rewards/add-alternative-reward";
 import { AlternativeRewardProps, AlternativeRewardResponse } from "@/modules/types/alternative-reward/alternative-reward.data-types";
 import { EditAlternativeRewards } from "./edit-alternative-rewards";
+import SquareCircleLoader from "@/lib/square-circle-loader";
 
 const icons = [
     { id: 1, icon: ShoppingBasket, color: colors.blue },
@@ -59,13 +58,12 @@ export const AlternativeRewardCard = () => {
         console.log('alternative: ', response)
         setARData(response.data);
         setLoading(false);
-  
+
       } catch (error) {
         console.log('error: ', error);
         setIsError(true);
       }
     }
-
 
     const handleEditReward = (rewardId: any) => {
       const selected = ARData.find((item) => item.reward_id === rewardId) || null;
@@ -95,14 +93,40 @@ export const AlternativeRewardCard = () => {
         getAlternativeRewards();
     }, [])
 
+
+    if (loading) {
+      return (
+            <div className="min-h-[200px] w-full flex flex-col items-center justify-center">
+                <SquareCircleLoader />
+                <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
+            </div>
+      )
+    }
+  
+    if (isError) {
+      return (
+            <div className="min-h-[200px] w-full flex flex-col items-center justify-center">
+                <XOctagon size={34} />
+                <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching tiers</p>
+            </div>
+      )
+    }
+  
+    if (ARData.length === 0) {
+      return (
+            <div className="flex flex-col items-center justify-center py-10 w-full">
+                <ShieldAlert size={34} />
+                <p className="ml-2 uppercase pt-2 text-green">No alternative rewards have been set. Add new rewards to enhance their experience!</p>
+            </div>
+      )
+    }
+
     return (
         <>
         {deletePopUp && (<DeleteAlternativeRewardConfirmation ARID={rewardID} ARTitle={rewardTitle} ARType={rewardType} isOpen={deletePopUp} onClose={toggleRewardDeletePage}/>)}
         {editRewardPopup && <EditAlternativeRewards onClose={closeEditRewardPopup} selectedReward={selectedReward} />}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {ARData?.map(({ reward_id, reward_title, description, reward_type }) => {
-                const selectedIcon = icons.find((icon) => icon.id === reward_id) || icons[0];
-                const { icon: SelectedIcon, color } = selectedIcon;
+            {ARData?.map(({ reward_id, reward_title, description, reward_type }) => {const selectedIcon = icons.find((icon) => icon.id === reward_id) || icons[0]; const { icon: SelectedIcon, color } = selectedIcon;
     
               return (
                   <div key={reward_id}>

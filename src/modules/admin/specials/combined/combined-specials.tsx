@@ -260,7 +260,7 @@ export const CombinedSpecials = () => {
                                 <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-center text-sm">
                                     <p></p>
                                     <p className="font-semibold text-gray-600">Special Group ID</p>
-                                    <p className="font-semibold text-gray-600">Product Description</p>
+                                    <p className="font-semibold text-gray-600">Product</p>
                                     <p className="font-semibold text-gray-600">Store ID</p>
                                     <p className="font-semibold text-gray-600">Start Date</p>
                                     <p className="font-semibold text-gray-600">Expiry Date</p>
@@ -272,8 +272,8 @@ export const CombinedSpecials = () => {
                                         <p className="text-sm pr-4">{combinedSpecialItem.special_group_id || '--:--'}</p>
                                         <p className="text-sm">{combinedSpecialItem.product_description || '--:--'}</p>
                                         <p className="text-sm">{store_id || '--:--'}</p>
-                                        <p className="text-sm">{start_date || '--:--'}</p>
-                                        <p className="text-sm text-red">{expiry_date || '--:--'}</p>
+                                        <p className="text-sm">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
+                                        <p className="text-sm text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                                         <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>
                                             {isActive ? 'Active' : 'Inactive'}
                                         </p>

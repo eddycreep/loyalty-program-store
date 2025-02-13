@@ -261,11 +261,11 @@ export const ProductSpecials = () => {
                                     </div>
                                     <div>
                                         <p className="font-medium text-gray-600">Start Date</p>
-                                        <p className="text-sm uppercase">{start_date || '--:--'}</p>
+                                        <p className="text-sm uppercase">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
                                     </div>
                                     <div>
                                         <p className="font-medium text-gray-600">Expiry Date</p>
-                                        <p className="text-sm uppercase text-red">{expiry_date || '--:--'}</p>
+                                        <p className="text-sm uppercase text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                                     </div>
                                     <div>
                                         <p className="font-medium text-gray-600">Status</p>
