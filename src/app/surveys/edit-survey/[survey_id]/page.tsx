@@ -4,11 +4,12 @@ import axios from "axios";
 import toast from 'react-hot-toast';
 import { useState, useEffect, useCallback } from "react";
 import { apiEndPoint, colors } from "@/utils/colors";
-import { Save, X } from "lucide-react";
+import { Save, ShieldAlert, X, XOctagon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { SurveyInfo, SurveyInfoResponse, Question } from "@/modules/types/survey/data-types";
 import { AgeGroupsResponse, TiersResponse, StoresResponse } from '@/modules/types/data-types'
 import { useParams } from "next/navigation";
+import SquareCircleLoader from "@/lib/square-circle-loader";
 
 interface Survey {
     survey_id: number,
@@ -56,6 +57,9 @@ export default function EditSurvey() {
     const [expiryDate, setExpiryDate] = useState("");
     const [isActive, setIsActive] = useState(false);
 
+    const  [loading, setLoading] = useState(false);
+    const  [isError, setIsError] = useState(false);
+
     const [allStores, setAllStores] = useState<StoresResponse>([])
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
@@ -98,7 +102,6 @@ export default function EditSurvey() {
             console.error('Error RETURNING AGE_GROUPS:', error)
         }
     }
-
 
     // Wrap getSurveyData in useCallback
     const getSurveyData = useCallback(async () => {
@@ -188,8 +191,8 @@ export default function EditSurvey() {
 
             // Prepare payloads
             const questionPayloads = validQuestions.map((q) => ({
-                survey_id: surveyData.survey_id,
-                question_text: q.question.trim(),
+                // survey_id: surveyData.survey_id,
+                // question_text: q.question.trim(),
                 question_type: q.action.trim(),
             }));
 
@@ -227,6 +230,114 @@ export default function EditSurvey() {
     useEffect(() => {
         getSurveyData();
     }, [getSurveyData]); // Update dependency array to include getSurveyData
+
+    if (loading) {
+        return (
+            <div className="h-screen flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto px-4">
+                <div className="flex justify-between pt-4">
+                    <div>
+                        <h4 className="text-purple font-bold">Edit Survey</h4>
+                    </div>
+                    <div>
+                        <div className="flex gap-2">
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                    <div className="">
+                                        <button onClick={() => updateSurvey()}className="bg-green hover:bg-emerald-300 text-white h-10 w-16 rounded flex items-center justify-center">
+                                            <Save />
+                                        </button>
+                                    </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                            <p>Update Survey</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                    </div>
+                </div>
+                <div className="min-h-[200px] w-full flex flex-col items-center py-20 justify-center">
+                    <SquareCircleLoader />
+                    <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
+                </div>
+            </div>
+        </div>
+        )
+    }
+    
+    if (isError) {
+        return (
+            <div className="h-screen flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto px-4">
+                <div className="flex justify-between pt-4">
+                    <div>
+                        <h4 className="text-purple font-bold">Edit Survey</h4>
+                    </div>
+                    <div>
+                        <div className="flex gap-2">
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                    <div className="">
+                                        <button onClick={() => updateSurvey()}className="bg-green hover:bg-emerald-300 text-white h-10 w-16 rounded flex items-center justify-center">
+                                            <Save />
+                                        </button>
+                                    </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                            <p>Update Survey</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                    </div>
+                </div>
+                <div className="min-h-[200px] w-full flex flex-col items-center py-20 justify-center">
+                    <XOctagon size={34} />
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching survey data</p>
+                </div>
+            </div>
+        </div>
+        )
+    }
+    
+    if (surveyQuestionsData?.length === 0) {
+        return (
+            <div className="h-screen flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto px-4">
+                <div className="flex justify-between pt-4">
+                    <div>
+                        <h4 className="text-purple font-bold">Edit Survey</h4>
+                    </div>
+                    <div>
+                        <div className="flex gap-2">
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                    <div className="">
+                                        <button onClick={() => updateSurvey()}className="bg-green hover:bg-emerald-300 text-white h-10 w-16 rounded flex items-center justify-center">
+                                            <Save />
+                                        </button>
+                                    </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                            <p>Update Survey</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-col items-center justify-center py-20 w-full">
+                    <ShieldAlert size={34} />
+                    <p className="ml-2 uppercase pt-2 text-green">The survey has no responses yet or is inactive</p>
+                </div>
+            </div>
+        </div>
+        )
+    }
 
     return (
         <div className="h-screen flex flex-col overflow-hidden">
@@ -373,7 +484,7 @@ export default function EditSurvey() {
                         <div className="grid grid-cols-4 gap-4">
                             {surveyQuestionsChoicesData?.map(({ option_id, question_id, option_text, option_order }) => (
                                 <div key={option_id} className="flex flex-col pt-3">
-                                    <label>Options for Question:</label>
+                                    <label>Options for {question_id}:</label>
                                     <input
                                         type="input"
                                         placeholder="Enter option"

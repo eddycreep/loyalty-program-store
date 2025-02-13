@@ -3,19 +3,12 @@
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { apiEndPoint, colors } from '@/utils/colors';
-import { Filter } from 'lucide-react';
+import { Filter, ShieldAlert, XOctagon } from 'lucide-react';
 import { useState, useEffect } from 'react'
 import { Label, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import { X, Check } from 'lucide-react'
 import { useParams } from "next/navigation"; // For Next.js 13+
-
-const data = [
-    { name: 'Question 1', No: 40, Yes: 24, Maybe: 24 },
-    { name: 'Question 2', No: 30, Yes: 18, Maybe: 3 },
-    { name: 'Question 3', No: 20, Yes: 8, Maybe: 9 },
-    { name: 'Question 4', No: 27, Yes: 8, Maybe: 2 },
-    { name: 'Question 5', No: 19, Yes: 48, Maybe: 26},
-];
+import SquareCircleLoader from '@/lib/square-circle-loader';
 
 interface Survey {
     survey_id: number,
@@ -59,7 +52,7 @@ type SurveyCustomerResponse = SurveyCustomerResponseProps[]
 export default function SurveyChart() {
     const params = useParams();
 
-    const  [loadingData, setLoadingData] = useState(false);
+    const  [loading, setLoading] = useState(false);
     const  [isError, setIsError] = useState(false);
     const  [startdate, setStartDate] = useState('');
     const  [enddate, setEndDate] = useState('');
@@ -69,14 +62,18 @@ export default function SurveyChart() {
 
     // Convert surveyId from params to a number
     const surveyID = Number(params?.survey_id); // Conversion to number
+    console.log("surveyID: ", surveyID)
 
     useEffect(() => {
         const getSurveyData = async () => {
+            setLoading(true);
+
             try {
                 const url = `survey/get-active-survey-with-questions/${surveyID}`
                 const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
                 console.log("Retrieved Survey Data:", response.data)
                 setSurveyData(response?.data.results);
+                setLoading(false);
             } catch (error) {
                 console.error("An error occurred when fetching survey data:", error)
                 setIsError(true);
@@ -100,42 +97,258 @@ export default function SurveyChart() {
     }, [surveyID])
     
 
-    const validateFilters = () => {
-        if (!startdate && !enddate) {
-            toast.error("Please select a start date, end date!", {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
-            return false;
-        }
+    // const validateFilters = () => {
+    //     if (!startdate && !enddate) {
+    //         toast.error("Please select a start date, end date!", {
+    //             icon: <X color={colors.red} size={24} />,
+    //             duration: 3000,
+    //         });
+    //         return false;
+    //     }
 
-        if (startdate && !enddate) {
-            toast.error("End date is missing. Please select an end date!", {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
-            return false;
-        }
+    //     if (startdate && !enddate) {
+    //         toast.error("End date is missing. Please select an end date!", {
+    //             icon: <X color={colors.red} size={24} />,
+    //             duration: 3000,
+    //         });
+    //         return false;
+    //     }
 
-        if (!startdate && enddate) {
-            toast.error("Start date is missing. Please select a start date!", {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
-            return false;
-        }
+    //     if (!startdate && enddate) {
+    //         toast.error("Start date is missing. Please select a start date!", {
+    //             icon: <X color={colors.red} size={24} />,
+    //             duration: 3000,
+    //         });
+    //         return false;
+    //     }
 
-        // Validate date range
-        if (new Date(startdate) > new Date(enddate)) {
-            toast.error("Start date cannot be after the end date!", {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-            });
-            return false;
-        }
+    //     // Validate date range
+    //     if (new Date(startdate) > new Date(enddate)) {
+    //         toast.error("Start date cannot be after the end date!", {
+    //             icon: <X color={colors.red} size={24} />,
+    //             duration: 3000,
+    //         });
+    //         return false;
+    //     }
 
-        return true;
-    };
+    //     return true;
+    // };
+
+    if (loading) {
+        return (
+            <div className="p-4 pb-24">
+            <div className="flex flex-col pl-2 pt-6">
+                <h4 className="text-2xl font-semibold text-purple">Detailed Surveys</h4>
+                <p className="text-gray-500">View detailed results of the survey, including comprehensive insights and responses from participants.</p>
+            </div>
+            <div className="pt-8 p-2">
+                <div className="flex gap-4 py-2">
+                    <div className="w-[350px]">
+                        <label htmlFor="username" className="text-left pt-4">
+                            Start Date:
+                        </label>
+                        <input type="date" value={startdate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                    </div>
+                    <div className="w-[350px]">
+                        <label htmlFor="username" className="text-left pt-4">
+                            Expiry Date:
+                        </label>
+                        <input type="date" value={enddate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                    </div>
+                    <div className="flex justify-end w-full pt-6">
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                        <Filter />
+                    </button>
+                </div>
+                </div>
+                <div className="min-h-[200px] w-full flex flex-col items-center py-20 justify-center">
+                    <SquareCircleLoader />
+                    <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
+                </div>
+            </div>
+            {surveyData?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
+                <div key={survey_id} className="flex gap-4 pt-16 p-2">
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Survey Name</h5>
+                            <p className="text-gray-500">{survey_title}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Store ID</h5>
+                            <p className="text-gray-500">{store_id}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Region</h5>
+                            <p className="text-gray-500">{region}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Loyalty Tier</h5>
+                            <p className="text-gray-500">{loyalty_tier}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Status</h5>
+                            <p className={isActive ? "text-green" : "text-red"}>
+                                {isActive ? 'Active' : 'Inactive'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+        )
+    }
+    
+    if (isError) {
+        return (
+            <div className="p-4 pb-24">
+            <div className="flex flex-col pl-2 pt-6">
+                <h4 className="text-2xl font-semibold text-purple">Detailed Surveys</h4>
+                <p className="text-gray-500">View detailed results of the survey, including comprehensive insights and responses from participants.</p>
+            </div>
+            <div className="pt-8 p-2">
+                <div className="flex gap-4 py-2">
+                    <div className="w-[350px]">
+                        <label htmlFor="username" className="text-left pt-4">
+                            Start Date:
+                        </label>
+                        <input type="date" value={startdate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                    </div>
+                    <div className="w-[350px]">
+                        <label htmlFor="username" className="text-left pt-4">
+                            Expiry Date:
+                        </label>
+                        <input type="date" value={enddate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                    </div>
+                    <div className="flex justify-end w-full pt-6">
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                        <Filter />
+                    </button>
+                </div>
+                </div>
+                <div className="min-h-[200px] w-full flex flex-col items-center py-20 justify-center">
+                    <XOctagon size={34} />
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching survey data</p>
+                </div>
+            </div>
+            {surveyData?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
+                <div key={survey_id} className="flex gap-4 pt-16 p-2">
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Survey Name</h5>
+                            <p className="text-gray-500">{survey_title}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Store ID</h5>
+                            <p className="text-gray-500">{store_id}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Region</h5>
+                            <p className="text-gray-500">{region}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Loyalty Tier</h5>
+                            <p className="text-gray-500">{loyalty_tier}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Status</h5>
+                            <p className={isActive ? "text-green" : "text-red"}>
+                                {isActive ? 'Active' : 'Inactive'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+        )
+    }
+    
+    if (surveyData?.length === 0) {
+        return (
+            <div className="p-4 pb-24">
+            <div className="flex flex-col pl-2 pt-6">
+                <h4 className="text-2xl font-semibold text-purple">Detailed Surveys</h4>
+                <p className="text-gray-500">View detailed results of the survey, including comprehensive insights and responses from participants.</p>
+            </div>
+            <div className="pt-8 p-2">
+                <div className="flex gap-4 py-2">
+                    <div className="w-[350px]">
+                        <label htmlFor="username" className="text-left pt-4">
+                            Start Date:
+                        </label>
+                        <input type="date" value={startdate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                    </div>
+                    <div className="w-[350px]">
+                        <label htmlFor="username" className="text-left pt-4">
+                            Expiry Date:
+                        </label>
+                        <input type="date" value={enddate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                    </div>
+                    <div className="flex justify-end w-full pt-6">
+                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center">
+                        <Filter />
+                    </button>
+                </div>
+                </div>
+                <div className="flex flex-col items-center justify-center py-20 w-full">
+                    <ShieldAlert size={34} />
+                    <p className="ml-2 uppercase pt-2 text-green">The survey has no responses yet or is inactive</p>
+                </div>
+            </div>
+            {surveyData?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
+                <div key={survey_id} className="flex gap-4 pt-16 p-2">
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Survey Name</h5>
+                            <p className="text-gray-500">{survey_title}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Store ID</h5>
+                            <p className="text-gray-500">{store_id}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Region</h5>
+                            <p className="text-gray-500">{region}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Loyalty Tier</h5>
+                            <p className="text-gray-500">{loyalty_tier}</p>
+                        </div>
+                    </div>
+                    <div className="w-96">
+                        <div className="bg-white rounded p-4">
+                            <h5 className="text-lg font-semibold text-purple">Status</h5>
+                            <p className={isActive ? "text-green" : "text-red"}>
+                                {isActive ? 'Active' : 'Inactive'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+        )
+    }
 
     return (
         <div className="p-4 pb-24">

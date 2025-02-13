@@ -966,7 +966,8 @@ li {
 
 .squareloader .circle {
     /* --color: #333; */
-    --color: #ff2257;
+    /* --color: #ff2257; */
+    --color: #a17efa;
     --dim: 1.2rem;
     width: var(--dim);
     height: var(--dim);
