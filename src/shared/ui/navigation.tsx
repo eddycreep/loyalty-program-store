@@ -58,7 +58,9 @@ export const Navigation = () => {
   }
 
   const DesktopNavigation = () => {
-    if (!user) return null;
+    if (!user) {
+      return;
+    }
     const { role } = user
 
     return (
