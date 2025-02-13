@@ -3,19 +3,21 @@
 import { useSession } from '@/context';
 import { usePathname,  useRouter } from 'next/navigation';
 import { Navigation } from '@/shared/ui/navigation';
-import { StoreNav } from '@/shared/ui/store-nav';
 
 export default function AppWrapper({ children }: Readonly<{ children: React.ReactNode }>) {
     const pathname = usePathname();
-    const router = useRouter();
+    // const router = useRouter();
     const { user } = useSession();
 
     const hideNavigation = pathname?.toLocaleLowerCase()?.includes('/login')
 
     // Redirect to login if user is not authenticated
+    // if (!user) {
+    //     router.push('/login');
+    //     return null;
+    // }
     if (!user) {
-        router.push('/login');
-        return null;
+        return;
     }
 
     return (
