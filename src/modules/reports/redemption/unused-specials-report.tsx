@@ -215,13 +215,13 @@ export const UnsusedLoyaltyReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <Label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
                             </Label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <Label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
                             </Label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
@@ -229,7 +229,7 @@ export const UnsusedLoyaltyReport = () => {
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <Label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
                     </Label>
                     <select
@@ -246,7 +246,7 @@ export const UnsusedLoyaltyReport = () => {
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <Label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
                     </Label>
                     <select
@@ -269,9 +269,9 @@ export const UnsusedLoyaltyReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}
@@ -293,13 +293,13 @@ export const UnsusedLoyaltyReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <Label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
                             </Label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <Label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
                             </Label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
@@ -307,7 +307,7 @@ export const UnsusedLoyaltyReport = () => {
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <Label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
                     </Label>
                     <select
@@ -324,7 +324,7 @@ export const UnsusedLoyaltyReport = () => {
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <Label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
                     </Label>
                     <select
@@ -347,9 +347,9 @@ export const UnsusedLoyaltyReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}
@@ -371,13 +371,13 @@ export const UnsusedLoyaltyReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <Label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
                             </Label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <Label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
                             </Label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
@@ -385,7 +385,7 @@ export const UnsusedLoyaltyReport = () => {
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <Label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
                     </Label>
                     <select
@@ -402,7 +402,7 @@ export const UnsusedLoyaltyReport = () => {
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <Label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
                     </Label>
                     <select
@@ -425,9 +425,9 @@ export const UnsusedLoyaltyReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}
@@ -447,13 +447,13 @@ export const UnsusedLoyaltyReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <Label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
                             </Label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <Label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
                             </Label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
@@ -461,7 +461,7 @@ export const UnsusedLoyaltyReport = () => {
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <Label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
                     </Label>
                     <select
@@ -478,7 +478,7 @@ export const UnsusedLoyaltyReport = () => {
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <Label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
                     </Label>
                     <select
@@ -501,9 +501,9 @@ export const UnsusedLoyaltyReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}
@@ -511,7 +511,7 @@ export const UnsusedLoyaltyReport = () => {
 
             <div className="pt-2 max-h-screen pb-2 space-y-2">
                 {filteredData.map(({ store_id, store_name, region, date, total_specials_issued, total_unused_specials, total_redemptions, redemption_rate, popular_unused, expiry_influence, customer_rating }) => (
-                    <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
+                    <div key={store_id} className="bg-white text-gray-500 flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center">{store_name}</p>

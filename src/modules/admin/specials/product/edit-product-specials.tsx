@@ -339,7 +339,7 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                 <div className="space-y-4">
                 <div className="flex gap-4">
                     <div className="w-full">
-                        <Label htmlFor="special-name">Special Name</Label>
+                        <label htmlFor="special-name" className="text-black text-sm">Special Name</label>
                         <Input
                             id="special-name"
                             value={currentSpecial.special_name}

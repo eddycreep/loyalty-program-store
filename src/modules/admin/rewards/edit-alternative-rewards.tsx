@@ -204,7 +204,7 @@ export function EditAlternativeRewards({ onClose, selectedReward }: any) {
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                    <Label htmlFor="special-name">Reward</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Reward</label>
                     <Input
                       id="special-name"
                       value={currentReward.reward} 

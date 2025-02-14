@@ -236,23 +236,23 @@ export const RetentionRateReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                Expiry Date:
-                            </Label>
+                            <label htmlFor="username" className="text-left pt-4 text-black">
+                                End Date:
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-4 pb-1 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -267,9 +267,9 @@ export const RetentionRateReport = () => {
                     </select>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-4 pb-1 text-black">
                         Regions:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -290,6 +290,14 @@ export const RetentionRateReport = () => {
                 </div>
             </div>
 
+                <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+                    {headers.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
+
                 <div className="pt-20 flex flex-col items-center justify-center">
                     <SquareCircleLoader />
                     <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
@@ -306,23 +314,23 @@ export const RetentionRateReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                Expiry Date:
-                            </Label>
+                            <label htmlFor="username" className="text-left pt-4 text-black">
+                                End Date:
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-4 pb-1 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -337,9 +345,9 @@ export const RetentionRateReport = () => {
                     </select>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-4 pb-1 text-black">
                         Regions:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -376,23 +384,23 @@ export const RetentionRateReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                Expiry Date:
-                            </Label>
+                            <label htmlFor="username" className="text-left pt-4 text-black">
+                                End Date:
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-4 pb-1 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -407,9 +415,9 @@ export const RetentionRateReport = () => {
                     </select>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-4 pb-1 text-black">
                         Regions:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -444,23 +452,23 @@ export const RetentionRateReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                Expiry Date:
-                            </Label>
+                            <label htmlFor="username" className="text-left pt-4 text-black">
+                                End Date:
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[570px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-4 pb-1 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -481,9 +489,9 @@ export const RetentionRateReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}

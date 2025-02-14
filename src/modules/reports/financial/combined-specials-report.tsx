@@ -139,71 +139,71 @@ export const CombinedSpecialsReport = () => {
     if (isLoading) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            <div className='flex gap-4'>
-                <div className="pt-6">
-                    <div className="flex gap-4">
-                        <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                Start Date:
-                            </Label>
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                        </div>
-                        <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                End Date:
-                            </Label>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                <div className='flex gap-4'>
+                    <div className="pt-6">
+                        <div className="flex gap-4">
+                            <div className="w-[270px]">
+                                <label htmlFor="username" className="text-left pt-4 text-black">
+                                    Start Date:
+                                </label>
+                                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
+                            <div className="w-[270px]">
+                                <label htmlFor="username" className="text-left pt-4 text-black">
+                                    End Date:
+                                </label>
+                                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
                         </div>
                     </div>
+                    <div className="w-[300px] flex flex-col pt-4">
+                        <label htmlFor="storeid" className="text-left pt-2 text-black">
+                            Store ID:
+                        </label>
+                        <select
+                            className="w-full p-2 rounded-lg border border-gray-300"
+                            value={selectedStore}
+                            onChange={(e) => setSelectedStore(e.target.value)}
+                        >
+                            <option value="All">All</option>
+                            {stores.map(({ id, store_id, store }) => (
+                                <option key={id} value={store_id}>
+                                    {store_id}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="w-[300px] flex flex-col pt-4">
+                        <label htmlFor="storeid" className="text-left pt-2 text-black">
+                            Regions:
+                        </label>
+                        <select
+                            className="w-full p-2 rounded-lg border border-gray-300"
+                            value={selectedRegion}
+                            onChange={(e) => setSelectedRegion(e.target.value)}
+                        >
+                            <option value="All">All</option>
+                            {storeRegions.map((region) => (
+                                <option key={region.id} value={region.region}>
+                                    {region.region}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex justify-end w-full pt-12">
+                        <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                            <Filter />
+                        </button>
+                    </div>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
-                        Store ID:
-                    </Label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedStore}
-                        onChange={(e) => setSelectedStore(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
-                        Regions:
-                    </Label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="flex justify-end w-full pt-12">
-                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
-                        <Filter />
-                    </button>
-                </div>
-            </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
-                {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
-                        {header}
-                    </p>
-                ))}
-            </div>
+                <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+                    {headers.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
 
                 <div className="pt-20 flex flex-col items-center justify-center">
                     <SquareCircleLoader />
@@ -217,76 +217,76 @@ export const CombinedSpecialsReport = () => {
     if (isError) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            <div className='flex gap-4'>
-                <div className="pt-6">
-                    <div className="flex gap-4">
-                        <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                Start Date:
-                            </Label>
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                        </div>
-                        <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                End Date:
-                            </Label>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                <div className='flex gap-4'>
+                    <div className="pt-6">
+                        <div className="flex gap-4">
+                            <div className="w-[270px]">
+                                <label htmlFor="username" className="text-left pt-4 text-black">
+                                    Start Date:
+                                </label>
+                                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
+                            <div className="w-[270px]">
+                                <label htmlFor="username" className="text-left pt-4 text-black">
+                                    End Date:
+                                </label>
+                                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
                         </div>
                     </div>
+                    <div className="w-[300px] flex flex-col pt-4">
+                        <label htmlFor="storeid" className="text-left pt-2 text-black">
+                            Store ID:
+                        </label>
+                        <select
+                            className="w-full p-2 rounded-lg border border-gray-300"
+                            value={selectedStore}
+                            onChange={(e) => setSelectedStore(e.target.value)}
+                        >
+                            <option value="All">All</option>
+                            {stores.map(({ id, store_id, store }) => (
+                                <option key={id} value={store_id}>
+                                    {store_id}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="w-[300px] flex flex-col pt-4">
+                        <label htmlFor="storeid" className="text-left pt-2 text-black">
+                            Regions:
+                        </label>
+                        <select
+                            className="w-full p-2 rounded-lg border border-gray-300"
+                            value={selectedRegion}
+                            onChange={(e) => setSelectedRegion(e.target.value)}
+                        >
+                            <option value="All">All</option>
+                            {storeRegions.map((region) => (
+                                <option key={region.id} value={region.region}>
+                                    {region.region}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex justify-end w-full pt-12">
+                        <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                            <Filter />
+                        </button>
+                    </div>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
-                        Store ID:
-                    </Label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedStore}
-                        onChange={(e) => setSelectedStore(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
-                        Regions:
-                    </Label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="flex justify-end w-full pt-12">
-                    <button className="bg-purple hover:bg-indigo-300 text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
-                        <Filter />
-                    </button>
-                </div>
-            </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
-                {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
-                        {header}
-                    </p>
-                ))}
-            </div>
+                <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+                    {headers.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
 
-            <div className="flex flex-col items-center justify-center pt-20">
-                <XOctagon size={44} />
-                <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
-            </div>
+                <div className="flex flex-col items-center justify-center pt-20">
+                    <XOctagon size={44} />
+                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching report data!</p>
+                </div>
             </div>
         );
     }
@@ -295,71 +295,71 @@ export const CombinedSpecialsReport = () => {
     if (hasFiltered && filteredData.length === 0) {
         return (
             <div className="h-screen overflow-y-auto pl-2 pt-4">
-            <div className='flex gap-4'>
-                <div className="pt-6">
-                    <div className="flex gap-4">
-                        <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                Start Date:
-                            </Label>
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
-                        </div>
-                        <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
-                                End Date:
-                            </Label>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                <div className='flex gap-4'>
+                    <div className="pt-6">
+                        <div className="flex gap-4">
+                            <div className="w-[270px]">
+                                <label htmlFor="username" className="text-left pt-4 text-black">
+                                    Start Date:
+                                </label>
+                                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
+                            <div className="w-[270px]">
+                                <label htmlFor="username" className="text-left pt-4 text-black">
+                                    End Date:
+                                </label>
+                                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            </div>
                         </div>
                     </div>
+                    <div className="w-[300px] flex flex-col pt-4">
+                        <label htmlFor="storeid" className="text-left pt-2 text-black">
+                            Store ID:
+                        </label>
+                        <select
+                            className="w-full p-2 rounded-lg border border-gray-300"
+                            value={selectedStore}
+                            onChange={(e) => setSelectedStore(e.target.value)}
+                        >
+                            <option value="All">All</option>
+                            {stores.map(({ id, store_id, store }) => (
+                                <option key={id} value={store_id}>
+                                    {store_id}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="w-[300px] flex flex-col pt-4">
+                        <label htmlFor="storeid" className="text-left pt-2 text-black">
+                            Regions:
+                        </label>
+                        <select
+                            className="w-full p-2 rounded-lg border border-gray-300"
+                            value={selectedRegion}
+                            onChange={(e) => setSelectedRegion(e.target.value)}
+                        >
+                            <option value="All">All</option>
+                            {storeRegions.map((region) => (
+                                <option key={region.id} value={region.region}>
+                                    {region.region}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex justify-end w-full pt-12">
+                        <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
+                            <Filter />
+                        </button>
+                    </div>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
-                        Store ID:
-                    </Label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedStore}
-                        onChange={(e) => setSelectedStore(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
-                        Regions:
-                    </Label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="flex justify-end w-full pt-12">
-                    <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
-                        <Filter />
-                    </button>
-                </div>
-            </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
-                {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
-                        {header}
-                    </p>
-                ))}
-            </div>
+                <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+                    {headers.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
 
                 <div className="flex flex-col items-center justify-center pt-20">
                     <XOctagon size={44} />
@@ -375,23 +375,23 @@ export const CombinedSpecialsReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
-                            </Label>
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -406,9 +406,9 @@ export const CombinedSpecialsReport = () => {
                     </select>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -429,9 +429,9 @@ export const CombinedSpecialsReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}

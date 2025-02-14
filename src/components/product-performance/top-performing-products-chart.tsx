@@ -48,8 +48,8 @@ export function TopPerformanceProductsChart() {
         <ChartStyle id={id} config={chartConfig} />
         <CardHeader className="flex-row items-start space-y-0 pb-0">
           <div className="grid gap-1">
-            <h5>Top Performing Stores</h5>
-            <CardDescription>Total Count for Top Performing Stores</CardDescription>
+            <h5 className="text-black font-bold">Top Performing Stores</h5>
+            <CardDescription className="text-gray-500">Total Count for Top Performing Stores</CardDescription>
           </div>
           <Select value={activeStore} onValueChange={setActiveStore}>
             <SelectTrigger
@@ -61,7 +61,7 @@ export function TopPerformanceProductsChart() {
             <SelectContent align="end" className="rounded-xl">
               {productData.map(({ store, fill }) => (
                 <SelectItem key={store} value={store} className="rounded-lg [&_span]:flex">
-                  <div className="flex items-center gap-2 text-xs">
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
                     <span
                       className="flex h-3 w-3 shrink-0 rounded-sm"
                       style={{ backgroundColor: fill }}
@@ -136,16 +136,16 @@ export function TopPerformanceProductsChart() {
           </ChartContainer>
         </CardContent>
         <CardFooter className="flex-col items-center gap-2 text-sm">
-          <div className="text-lg font-bold">
+          <div className="text-lg text-black font-bold">
             Total Revenue for {productData[activeIndex].product} at {activeStore}: R{productData[activeIndex].revenue.toLocaleString()}
           </div>
-          <div className="leading-none text-muted-foreground">
+          <div className="leading-none text-gray-500">
             Special: {productData[activeIndex].special} ({productData[activeIndex].specialType})
           </div>
-          <div className="leading-none text-muted-foreground">
+          <div className="leading-none text-gray-500">
             Showing redemption counts for top stores
           </div>
-          <div className="flex items-center justify-center gap-2 font-medium">
+          <div className="flex items-center justify-center gap-2 text-black font-bold">
             Top Performing Products <Popcorn className="h-4 w-4" />
           </div>
         </CardFooter>

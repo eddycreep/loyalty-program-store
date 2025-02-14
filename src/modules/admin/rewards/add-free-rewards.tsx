@@ -248,7 +248,7 @@ export function AddNewRewards({ onClose }: any) {
             <div className="space-y-4">
               <div className="flex gap-4">
                 <div className="w-full">
-                    <Label htmlFor="special-name">Reward Title</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Reward Title</label>
                     <Input
                       id="special-name"
                       value={currentSpecial.name}
@@ -257,7 +257,7 @@ export function AddNewRewards({ onClose }: any) {
                     />
                 </div>
                 <div className="w-full">
-                    <Label htmlFor="special-name">Description</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Description</label>
                     <Input
                       id="special-name"
                       value={currentSpecial.special}
@@ -268,7 +268,7 @@ export function AddNewRewards({ onClose }: any) {
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                  <Label htmlFor="special-type">Reward Type</Label>
+                  <label htmlFor="special-type" className="text-black text-sm">Reward Type</label>
                   <Select
                     value={currentSpecial.specialValue}
                     onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, specialValue: value as 'Percentage' | 'Amount' }))}
@@ -283,7 +283,7 @@ export function AddNewRewards({ onClose }: any) {
                   </Select>
                 </div>
                 <div className="w-full">
-                    <Label htmlFor="special-price">Reward Price</Label>
+                    <label htmlFor="special-price" className="text-black text-sm">Reward Price</label>
                     <Input
                       id="special-price"
                       // type="number"
@@ -295,7 +295,7 @@ export function AddNewRewards({ onClose }: any) {
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                  <Label htmlFor="start-date">Start Date</Label>
+                  <label htmlFor="start-date" className="text-black text-sm">Start Date</label>
                   <Input
                     id="start-date"
                     type="date"
@@ -304,7 +304,7 @@ export function AddNewRewards({ onClose }: any) {
                   />
                 </div>
                 <div className="w-full">
-                  <Label htmlFor="end-date">End Date</Label>
+                  <label htmlFor="end-date" className="text-black text-sm">End Date</label>
                   <Input
                     id="end-date"
                     type="date"
@@ -315,7 +315,7 @@ export function AddNewRewards({ onClose }: any) {
               </div>
               <div className="flex gap-4">
                   <div className="w-full">
-                    <Label htmlFor="store-id">Store ID</Label>
+                    <label htmlFor="store-id" className="text-black text-sm">Store ID</label>
                     {/* Changed the input field to a select dropdown to display store IDs */}
                       <Select
                         value={currentSpecial.storeId}
@@ -336,7 +336,7 @@ export function AddNewRewards({ onClose }: any) {
                       </Select>
                   </div>
                   <div className="w-full">
-                    <Label htmlFor="store-id">Region</Label>
+                    <label htmlFor="store-id" className="text-black text-sm">Region</label>
                     {/* Changed the input field to a select dropdown to display store IDs */}
                       <Select
                         value={currentSpecial.storeId}

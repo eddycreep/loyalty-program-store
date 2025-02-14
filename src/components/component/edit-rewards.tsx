@@ -177,14 +177,14 @@ export function EditRewards({ onClose, selectedReward }: any) {
                 </button>
               </div>
             <div className="pl-6 pb-4">
-                <p className="text-xl font-bold">Edit Reward</p>
-                <p className="text-gray-600">Edit existing customer rewards</p>
+                <CardTitle className="text-xl font-bold">Edit Reward</CardTitle>
+                <CardDescription className="text-gray-600">Edit existing customer rewards</CardDescription>
             </div>
           <CardContent>
             <div className="space-y-4">
               <div className="flex gap-4">
                 <div className="w-full">
-                    <Label htmlFor="special-name">Title</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Title</label>
                     <Input
                       id="reward-title"
                       value={currentReward.reward_title} 
@@ -193,7 +193,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
                     />
                 </div>
                 <div className="w-full">
-                    <Label htmlFor="special-name">Description</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Description</label>
                     <Input
                       id="special-name"
                       value={currentReward.description} 
@@ -204,7 +204,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                    <Label htmlFor="special-name">Reward</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Reward</label>
                     <Input
                       id="special-name"
                       value={currentReward.reward} 
@@ -213,7 +213,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
                     />
                 </div>
                 <div className="w-full">
-                  <Label htmlFor="special-type">Type</Label>
+                  <label htmlFor="special-type" className="text-black text-sm">Type</label>
                   <Select
                     value={currentReward.reward_type}
                     onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, reward_type: value as 'Percentage' | 'Amount' }))} 
@@ -230,7 +230,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
               </div>
               <div className="flex gap-4">
                   <div className="w-full">
-                    <Label htmlFor="store-id">Tier</Label>
+                    <label htmlFor="store-id" className="text-black text-sm">Tier</label>
                       <Select
                         value={currentReward.loyalty_tier}
                         onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, loyalty_tier: value }))}
@@ -249,7 +249,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
                       </Select>
                   </div>
                   <div className="w-full">
-                      <Label htmlFor="special-price">Price</Label>
+                      <label htmlFor="special-price" className="text-black text-sm">Price</label>
                       <Input
                           id="special-price"
                           type="number"
@@ -261,7 +261,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                  <Label htmlFor="start-date">Start Date</Label>
+                  <label htmlFor="start-date" className="text-black text-sm">Start Date</label>
                   <input 
                     type="datetime-local" 
                     name="start-date"
@@ -271,7 +271,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
                   </input>
                 </div>
                 <div className="w-full">
-                  <Label htmlFor="end-date">End Date</Label>
+                  <label htmlFor="end-date" className="text-black text-sm">End Date</label>
                   <input 
                     type="datetime-local" 
                     name="end-date"
@@ -283,7 +283,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
               </div>
               <div className="flex gap-4">
                   <div className="w-full">
-                    <Label htmlFor="store-id">Store ID</Label>
+                    <label htmlFor="store-id" className="text-black text-sm">Store ID</label>
                       <Select
                         value={currentReward.store_id}
                         onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
@@ -302,7 +302,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
                       </Select>
                   </div>
                   <div className="w-full">
-                    <Label htmlFor="age-group">Age Group</Label>
+                    <label htmlFor="age-group" className="text-black text-sm">Age Group</label>
                     <Select
                       value={currentReward.age_group}
                       onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, age_group: value }))}
@@ -323,9 +323,9 @@ export function EditRewards({ onClose, selectedReward }: any) {
               </div>
               <div className="flex gap-4">
                   <div className="flex flex-col space-x-2 pt-2">
-                      <Label htmlFor="active-toggle">
+                      <label htmlFor="active-toggle" className="text-black text-sm">
                         Active
-                      </Label>
+                      </label>
                       <div className="pt-2">
                         <Switch
                           id="active-toggle"
@@ -338,9 +338,17 @@ export function EditRewards({ onClose, selectedReward }: any) {
                   </div>
               </div>
 
-              <Button className="bg-green hover:bg-emerald-300" onClick={ updateReward }>
+              {/* <Button className="bg-green hover:bg-emerald-300" onClick={ updateReward }>
                   Update Reward
-              </Button>
+              </Button> */}
+                            <div className="flex gap-4">
+                                <Button onClick={ onClose } className="bg-red hover:bg-rose-300 text-white w-full">
+                                    Cancel
+                                </Button>
+                                <Button className="bg-green hover:bg-emerald-300 text-white w-full" onClick={ updateReward }>
+                                Save Reward
+                                </Button>
+            </div>
             </div>
           </CardContent>
         </Card>

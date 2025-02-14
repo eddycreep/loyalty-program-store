@@ -192,7 +192,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
             <div className="space-y-4">
               <div className="flex gap-4">
                 <div className="w-full">
-                    <Label htmlFor="special-name">Title</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Title</label>
                     <Input
                       id="reward-title"
                       value={currentReward.reward_title} 
@@ -201,7 +201,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
                     />
                 </div>
                 <div className="w-full">
-                    <Label htmlFor="special-name">Description</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Description</label>
                     <Input
                       id="special-name"
                       value={currentReward.description} 
@@ -212,7 +212,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                    <Label htmlFor="special-name">Reward</Label>
+                    <label htmlFor="special-name" className="text-black text-sm">Reward</label>
                     <Input
                       id="special-name"
                       value={currentReward.reward} 
@@ -221,7 +221,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
                     />
                 </div>
                 <div className="w-full">
-                  <Label htmlFor="special-type">Type</Label>
+                  <label htmlFor="special-type" className="text-black text-sm">Type</label>
                   <Select
                     value={currentReward.reward_type}
                     onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, reward_type: value as 'Percentage' | 'Amount' }))} 
@@ -238,7 +238,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
               </div>
               <div className="flex gap-4">
                   <div className="w-full">
-                    <Label htmlFor="store-id">Tier</Label>
+                    <label htmlFor="store-id" className="text-black text-sm">Tier</label>
                       <Select
                         value={currentReward.loyaltyTier}
                         onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, loyaltyTier: value }))}
@@ -257,7 +257,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
                       </Select>
                   </div>
                   <div className="w-full">
-                      <Label htmlFor="special-price">Price</Label>
+                      <label htmlFor="special-price" className="text-black text-sm">Price</label>
                       <Input
                           id="special-price"
                           type="number" // Changed from 'text' or other types to 'number' to allow numeric input
@@ -270,7 +270,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                  <Label htmlFor="start-date">Start Date</Label>
+                  <label htmlFor="start-date" className="text-black text-sm">Start Date</label>
                   <input 
                     type="datetime-local" 
                     name="start-date"
@@ -280,7 +280,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
                   </input>
                 </div>
                 <div className="w-full">
-                  <Label htmlFor="end-date">End Date</Label>
+                  <label htmlFor="end-date" className="text-black text-sm">End Date</label>
                   <input 
                     type="datetime-local" 
                     name="end-date"
@@ -292,7 +292,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
               </div>
               <div className="flex gap-4">
                   <div className="w-full">
-                    <Label htmlFor="store-id">Store ID</Label>
+                    <label htmlFor="store-id" className="text-black text-sm">Store ID</label>
                       <Select
                         value={currentReward.store_id}
                         onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
@@ -311,7 +311,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
                       </Select>
                   </div>
                   <div className="w-full">
-                    <Label htmlFor="store-id">Age Group</Label>
+                    <label htmlFor="store-id" className="text-black text-sm">Age Group</label>
                     <Select
                       value={currentReward.ageGroup}
                       onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, ageGroup: value }))}
@@ -332,9 +332,9 @@ export function AddNewAlternativeReward({ onClose }: any) {
               </div>
               <div className="flex gap-4">
                   <div className="flex flex-col space-x-2 pt-2">
-                      <Label htmlFor="active-toggle">
+                      <label htmlFor="active-toggle" className="text-black text-sm">
                         Active
-                      </Label>
+                      </label>
                       <div className="pt-2">
                         <Switch
                           id="active-toggle"
