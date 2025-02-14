@@ -8,7 +8,7 @@ import { X, Check } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { useSession } from '@/context';
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data';
@@ -157,14 +157,14 @@ export function AddNewTiers({ onClose }: any) {
                     </button>
                 </div>
                 <div className="pl-6 pb-4">
-                    <p className="text-xl font-bold">Add Tier</p>
-                    <p className="text-gray-600">Create new tiers for a loyalty program</p>
+                    <CardTitle className="text-xl font-bold">Add Tier</CardTitle>
+                    <CardDescription className="text-gray-600">Create new tiers for a loyalty program</CardDescription>
                 </div>
                 <CardContent>
                     <div className="space-y-4">
                         <div className="flex gap-4">
                             <div className="w-full">
-                                <Label htmlFor="tier">Tier</Label>
+                                <label htmlFor="tier" className="text-black text-sm">Tier</label>
                                 <Input
                                     id="tier"
                                     value={currentTier.tier} 
@@ -173,7 +173,7 @@ export function AddNewTiers({ onClose }: any) {
                                 />
                             </div>
                             <div className="w-full">
-                                <Label htmlFor="eligibility">Eligibility</Label>
+                                <Label htmlFor="eligibility" className="text-black text-sm">Eligibility</Label>
                                 <Input
                                     id="eligibility"
                                     value={currentTier.eligibility} 
@@ -184,7 +184,7 @@ export function AddNewTiers({ onClose }: any) {
                         </div>
                         <div className="flex gap-4">
                             <div className="w-full">
-                                <Label htmlFor="min-spending-amount">Minimum Spending Amount</Label>
+                                <Label htmlFor="min-spending-amount" className="text-black text-sm">Minimum Spending Amount</Label>
                                 <Input
                                     id="min-spending-amount"
                                     type="number"
@@ -194,7 +194,7 @@ export function AddNewTiers({ onClose }: any) {
                                 />
                             </div>
                             <div className="w-full">
-                                <Label htmlFor="max-spending-amount">Maximum Spending Amount</Label>
+                                <Label htmlFor="max-spending-amount" className="text-black text-sm">Maximum Spending Amount</Label>
                                 <Input
                                     id="max-spending-amount"
                                     type="number"
@@ -206,7 +206,7 @@ export function AddNewTiers({ onClose }: any) {
                         </div>
                         <div className="flex flex-col gap-4">
                             <div className="w-full">
-                                <Label htmlFor="discount">Discount</Label>
+                                <Label htmlFor="discount" className="text-black text-sm">Discount</Label>
                                 <Textarea 
                                     id="discount"
                                     value={currentTier.discounts} 
@@ -215,7 +215,7 @@ export function AddNewTiers({ onClose }: any) {
                                 />
                             </div>
                             <div className="w-full">
-                                <Label htmlFor="rewards">Reward</Label>
+                                <Label htmlFor="rewards" className="text-black text-sm">Reward</Label>
                                 <Textarea 
                                     id="rewards"
                                     value={currentTier.rewards} 
@@ -224,9 +224,14 @@ export function AddNewTiers({ onClose }: any) {
                                 />
                             </div>
                         </div>
-                        <Button className="bg-green hover:bg-emerald-300" onClick={ saveTier }>
-                            Save Tier
-                        </Button>
+                        <div className="flex gap-4">
+                                <Button onClick={ onClose } className="bg-red hover:bg-rose-300 text-white w-full">
+                                    Cancel
+                                </Button>
+                                <Button className="bg-green hover:bg-emerald-300 text-white w-full" onClick={ saveTier }>
+                                Save Tier
+                                </Button>
+            </div>
                     </div>
                 </CardContent>
             </Card>

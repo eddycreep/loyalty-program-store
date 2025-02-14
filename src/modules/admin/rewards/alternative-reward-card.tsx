@@ -141,8 +141,8 @@ export const AlternativeRewardCard = () => {
                                     <Trash2 />
                                 </button>
                             </div>
-                        <h3 className="text-lg font-semibold mb-2">{reward_title}</h3>
-                        <p className="text-sm text-muted-foreground">{description}</p>
+                        <h3 className="text-lg font-bold pb-2 text-black">{reward_title}</h3>
+                        <p className="text-sm text-gray-400">{description}</p>
                       </CardContent>
                     </Card>
                   </div>

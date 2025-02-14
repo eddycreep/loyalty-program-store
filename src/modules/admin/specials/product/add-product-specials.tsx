@@ -320,7 +320,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                         <div className="space-y-4">
                         <div className="flex gap-4">
                             <div className="w-full">
-                                <Label htmlFor="special-name">Special Name</Label>
+                                <label htmlFor="special-name" className="text-black text-sm">Special Name</label>
                                 <Input
                                     id="special-name"
                                     value={currentSpecial.special_name}
@@ -329,7 +329,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 />
                             </div>
                             <div className="w-full">
-                                <Label htmlFor="special-name">Special</Label>
+                                <label htmlFor="special-name" className="text-black text-sm">Special</label>
                                 <Input
                                     id="special-name"
                                     value={currentSpecial.special}
@@ -340,7 +340,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                         </div>
                         <div className="flex gap-4">
                             <div className="w-full">
-                                <Label htmlFor="description">Description</Label>
+                                <label htmlFor="description" className="text-black text-sm">Description</label>
                                 <Input
                                     id="description"
                                     value={currentSpecial.description}
@@ -349,13 +349,13 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 />
                             </div>
                             <div className="w-full">
-                                <Label htmlFor="special-type">Special Type</Label>
+                                <label htmlFor="special-type" className="text-black text-sm">Special Type</label>
                                 <Select
                                     value={currentSpecial.special_type}
                                     onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_type: value as 'Percentage' | 'Amount' }))}
                                 >
                                     <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select special type" />
+                                    <SelectValue placeholder="Select special type" className="text-gray-400"/>
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="Percentage">Percentage</SelectItem>
@@ -366,7 +366,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                         </div>
                         <div className="flex gap-4">
                             <div className="w-full">
-                                <Label htmlFor="tier">Loyalty Tier</Label>
+                                <label htmlFor="tier" className="text-black text-sm">Loyalty Tier</label>
                                 <Select
                                     value={currentSpecial.loyalty_tier}
                                     onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, loyalty_tier: value }))}
@@ -385,7 +385,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </Select>
                             </div>
                             <div className="w-full">
-                                <Label htmlFor="age-group">Age Group</Label>
+                                <label htmlFor="age-group" className="text-black text-sm">Age Group</label>
                                 <Select
                                     value={currentSpecial.age_group}
                                     onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, age_group: value }))}
@@ -407,7 +407,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                         
                         <div className="flex gap-4">
                             <div className="w-full">
-                            <Label htmlFor="start-date">Start Date</Label>
+                            <label htmlFor="start-date" className="text-black text-sm">Start Date</label>
                             <Input
                                 id="start-date"
                                 type="date"
@@ -416,7 +416,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                             />
                             </div>
                             <div className="w-full">
-                            <Label htmlFor="end-date">End Date</Label>
+                            <label htmlFor="end-date" className="text-black text-sm">End Date</label>
                             <Input
                                 id="end-date"
                                 type="date"
@@ -427,8 +427,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                         </div>
                         <div className="flex gap-4">
                             <div className="w-[500px]">
-                                <Label htmlFor="store-id">Store ID</Label>
-                                {/* Changed the input field to a select dropdown to display store IDs */}
+                                <label htmlFor="store-id" className="text-black text-sm">Store ID</label>
                                 <Select
                                     value={currentSpecial.store_id}
                                     onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, store_id: value }))}
@@ -437,8 +436,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                     <SelectValue placeholder="Select store ID" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                    {/* Mapping through the stores array to create options for the dropdown */}
-                                    <SelectItem value="All">All</SelectItem> {/* Added "All" option */}
+                                    <SelectItem value="All">All</SelectItem>
                                     {allStores.map((branch) => (
                                         <SelectItem key={branch.id} value={branch.code}>
                                             {branch.code}
@@ -448,9 +446,9 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </Select>
                             </div>
                             <div className="flex flex-col items-center space-x-2 pt-2">
-                                <Label htmlFor="active-toggle">
+                                <label htmlFor="active-toggle" className="text-black text-sm">
                                     Active
-                                </Label>
+                                </label>
                                 <div className="pt-2">
                                     <Switch
                                         id="active-toggle"
@@ -464,11 +462,10 @@ export function AddProductsSpecials({ onClose }: Props) {
                         </div>
                         <div className="flex gap-4">
                             <div className="w-full">
-                                <Label htmlFor="special-price">Price</Label>
+                                <label htmlFor="special-price" className="text-black text-sm">Price</label>
                                 <Input
                                     id="special-price"
-                                    type="number" // Changed from 'text' or other types to 'number' to allow numeric input
-                                    // step="0.01" // Added 'step' attribute to allow decimal numbers
+                                    type="number"
                                     value={currentSpecial.special_price || ''}
                                     onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_price: parseFloat(e.target.value) }))}
                                     placeholder="Enter special price"
@@ -477,7 +474,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                         </div>
 
                         <div>
-                            <Label htmlFor="product-search">Search Products</Label>
+                            <label htmlFor="product-search" className="text-black text-sm">Search Products</label>
                             <div className="flex space-x-2">
                             <Input
                                 id="product-search"
@@ -495,19 +492,18 @@ export function AddProductsSpecials({ onClose }: Props) {
                             {displayedProducts.map((product) => (
                                 <Button
                                     key={product.id}
-                                    variant="outline"
                                     onClick={() => addProductToSpecial(product)}
                                     disabled={currentSpecial.product !== null}
-                                    className="justify-start"
+                                    className="justify-start bg-white text-black"
                                 >
                                     <PlusCircle className="h-4 w-4 mr-2" />
-                                    {product.inventory.description_1}
+                                    <span className="text-black">{product.inventory.description_1}</span>
                                 </Button>
                             ))}
                         </div>
 
                         <div className="mt-4">
-                            <Label>Selected Product</Label>
+                            <label className="text-black text-sm">Selected Product</label>
                             {currentSpecial.product && (
                                 <Card className="p-2 flex justify-between items-center">
                                     <span>{currentSpecial.product.name}</span>

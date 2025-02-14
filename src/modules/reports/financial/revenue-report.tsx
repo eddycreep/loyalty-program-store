@@ -127,23 +127,23 @@ export const RevenueReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
-                            </Label>
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -158,9 +158,9 @@ export const RevenueReport = () => {
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -181,9 +181,9 @@ export const RevenueReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}
@@ -205,23 +205,23 @@ export const RevenueReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
-                            </Label>
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -236,9 +236,9 @@ export const RevenueReport = () => {
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -259,9 +259,9 @@ export const RevenueReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}
@@ -283,23 +283,23 @@ export const RevenueReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
-                            </Label>
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -314,9 +314,9 @@ export const RevenueReport = () => {
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -337,9 +337,9 @@ export const RevenueReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}
@@ -359,23 +359,23 @@ export const RevenueReport = () => {
                 <div className="pt-6">
                     <div className="flex gap-4">
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
-                            </Label>
+                            </label>
                             <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                         <div className="w-[270px]">
-                            <Label htmlFor="username" className="text-left pt-4">
+                            <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
-                            </Label>
+                            </label>
                             <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
                         </div>
                     </div>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Store ID:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
@@ -390,9 +390,9 @@ export const RevenueReport = () => {
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
-                    <Label htmlFor="storeid" className="text-left pt-4 pb-1">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
                         Regions:
-                    </Label>
+                    </label>
                     <select
                         className="w-full p-2 rounded-lg border border-gray-300"
                         value={selectedRegion}
@@ -413,16 +413,16 @@ export const RevenueReport = () => {
                 </div>
             </div>
 
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
+            <div className="bg-white text-black font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 rounded shadow-lg">
                 {headers.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                         {header}
                     </p>
                 ))}
             </div>
             <div className="pt-2 max-h-screen pb-2 space-y-2">
                 {filteredData.map(({ store_id, store_name, date, total_revenue, total_active_members, revenue_per_member, new_members, churned_members, revenue_new_members, revenue_returning_members, top_selling_categories,avg_transaction_value }) => (
-                    <div key={store_id} className="bg-white flex flex-col p-3 rounded shadow-lg">
+                    <div key={store_id} className="bg-white text-gray-500 flex flex-col p-3 rounded shadow-lg">
                         <div className="flex items-center justify-between divide-x divide-gray-300">
                             <p className="text-sm flex-1 text-center text-purple">{store_id}</p>
                             <p className="text-sm flex-1 text-center text">{store_name}</p>

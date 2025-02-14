@@ -104,7 +104,7 @@ export const RewardsModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
+                        <h4 className="text-xl font-semibold text-purple">Customer Rewards</h4>
                         <p className="text-gray-400">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
@@ -144,8 +144,8 @@ export const RewardsModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
-                        <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
+                        <h4 className="text-xl font-semibold text-purple">Customer Rewards</h4>
+                        <p className="text-gray-400">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
                         <button onClick={ toggleAddRewards } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
@@ -184,8 +184,8 @@ export const RewardsModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
-                        <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
+                        <h4 className="text-xl font-semibold text-purple">Customer Rewards</h4>
+                        <p className="text-gray-400">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
                         <button onClick={ toggleAddRewards } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
