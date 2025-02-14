@@ -366,20 +366,20 @@ export default function EditSurvey() {
                     </div>
                 </div>
                 <div className="flex gap-4">
-                    <div className="w-[350px] flex flex-col pt-3">
-                        <label>Survey Title:</label>
+                    <div className="w-[350px] flex flex-col pt-4">
+                        <label className="text-black">Survey Title:</label>
                         <input
                             type="input"
                             placeholder="enter survey title"
-                            className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                            className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                             value={surveyName}
                             onChange={(e) => setSurveyName(e.target.value)}
                         />
                     </div>
                     <div className="w-[350px] flex flex-col pt-4">
-                        <label>Survey Category:</label>
+                        <label className="text-black">Survey Category:</label>
                         <select
-                            className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                            className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                             value={surveyCategory}
                             onChange={(e) => setSurveyCategory(e.target.value)}
                         >
@@ -390,9 +390,9 @@ export default function EditSurvey() {
                         </select>
                     </div>
                     <div className="w-[350px] flex flex-col pt-4">
-                        <label>Store ID:</label>
+                        <label className="text-black">Store ID:</label>
                         <select
-                            className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                            className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                             value={selectedStore}
                             onChange={(e) => setSelectedStore(e.target.value)}
                         >
@@ -405,9 +405,9 @@ export default function EditSurvey() {
                         </select>
                     </div>
                     <div className="w-[350px] flex flex-col pt-4">
-                        <label>Loyalty Tiers:</label>
+                        <label className="text-black">Loyalty Tiers:</label>
                         <select
-                            className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                            className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                             value={selectedTier}
                             onChange={(e) => setSelectedTier(e.target.value)}
                         >
@@ -422,28 +422,28 @@ export default function EditSurvey() {
                 </div>
                 <div className="flex gap-4 pt-10">
                     <div className="w-[350px] flex flex-col pt-4">
-                        <label>Start Date:</label>
+                        <label className="text-black">Start Date:</label>
                         <input 
                             type="datetime-local" 
                             name="start-date"
                             value={startDate} 
                             onChange={(e) => setStartDate(e.target.value)}
-                            className="w-full h-12 p-2 rounded-lg border border-gray-300">
+                            className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300">
                         </input>
                     </div>
                     <div className="w-[350px] flex flex-col pt-4">
-                        <label>Expiry Date:</label>
+                        <label className="text-black">Expiry Date:</label>
                         <input 
                             type="datetime-local" 
                             name="expiry-date"
                             value={expiryDate} 
                             onChange={(e) => setExpiryDate(e.target.value)}
-                            className="w-full h-12 p-2 rounded-lg border border-gray-300">
+                            className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300">
                         </input>
                     </div>
                     <div className="flex gap-4">
                       <div className="flex flex-col space-x-2 pt-4">
-                          <label htmlFor="active-toggle">
+                          <label htmlFor="active-toggle" className="text-black">
                             Active
                           </label>
                           <div>
@@ -463,11 +463,11 @@ export default function EditSurvey() {
                         <div className="grid grid-cols-4 gap-4">
                             {surveyQuestionsData?.map(({ question_id, question_text, question_type }, index) => (
                                 <div key={question_id} className="flex flex-col pt-3">
-                                    <label>Question {index + 1}:</label>
+                                    <label className="text-black">Question {index + 1}:</label>
                                     <input
                                         type="input"
                                         placeholder="Enter question"
-                                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                                         value={question_text}
                                         onChange={(e) => setSurveyName(e.target.value)}
                                     />
@@ -482,13 +482,13 @@ export default function EditSurvey() {
                             <h5 className="text-purple font-bold">Multiple Choice Options</h5>
                         </div>
                         <div className="grid grid-cols-4 gap-4">
-                            {surveyQuestionsChoicesData?.map(({ option_id, question_id, option_text, option_order }) => (
+                            {surveyQuestionsChoicesData?.map(({ option_id, question_id, option_text, option_order }, index) => (
                                 <div key={option_id} className="flex flex-col pt-3">
-                                    <label>Options for {question_id}:</label>
+                                    <label className="text-black">Options for {index + 1}:</label>
                                     <input
                                         type="input"
                                         placeholder="Enter option"
-                                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                                         value={option_text}
                                         onChange={(e) => setSurveyName(e.target.value)}
                                     />
