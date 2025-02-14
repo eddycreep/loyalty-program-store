@@ -114,15 +114,15 @@ export const ActiveSpecialCards = () => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {activeSpecials?.map(({ special_id, special_name, special, special_type, store_id, start_date, expiry_date, special_value, isActive }) => (
-            <Card key={special_id} className="shadow-lg hover:shadow-xl w-full">
+            <Card key={special_id} className="w-full shadow-lg hover:shadow-xl">
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
-                            <CardTitle className="text-base sm:text-lg">{special_name}</CardTitle>
+                            <CardTitle className="text-base sm:text-lg font-bold">{special_name}</CardTitle>
                             <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    {getSpecialTypeIcon(special_value)} { /* render different icons based on special value */ }
+                                    {getSpecialTypeIcon(special_value)}
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>{special_value === 'Free' ? 'Free Item' : special_value}</p>
@@ -144,22 +144,22 @@ export const ActiveSpecialCards = () => {
                     {/* <Badge variant="secondary" className="w-fit bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm mt-2">
                         {special_type}
                     </Badge> */}
-                    <div className="flex items-center text-xs sm:text-sm text-muted-foreground space-x-1">
+                    <div className="flex items-center text-xs sm:text-sm space-x-1 text-gray-400">
                         <span>{special_type}</span>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <p className="font-bold text-base sm:text-lg">{special}</p>
+                    <p className="font-bold text-base sm:text-lg text-black">{special}</p>
                     <div className="flex flex-col pt-2">
-                        <p className="text-xs sm:text-sm text-muted-foreground">Valid From:</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{start_date} - {expiry_date}</p>
+                        <p className="text-xs sm:text-sm text-gray-400">Valid From:</p>
+                        <p className="text-xs sm:text-sm text-gray-400">{start_date ? start_date.split(" ")[0] : '--:--'} - {expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                                    <span className="text-xs sm:text-sm text-black font-semibold pl-2">0</span>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Customer Redemptions</p>

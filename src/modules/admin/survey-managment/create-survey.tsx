@@ -267,9 +267,9 @@ export const CreateSurveys = () => {
 
     return (
         <div className="pb-20">
-            <div className="flex justify-between pt-4">
+            <div className="flex justify-between pt-10">
                 <div>
-                    <h4 className="text-purple font-bold">Create Survey</h4>
+                    <h4 className="text-xl font-semibold text-purple">Create Survey</h4>
                 </div>
                 <div>
                     <div className="flex gap-2">

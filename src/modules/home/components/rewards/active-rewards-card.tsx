@@ -148,17 +148,17 @@ export const ActiveRewardsCards = () => {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <p className="font-bold text-base sm:text-lg">{reward}</p>
+                    <p className="font-bold text-base sm:text-lg text-black">{reward}</p>
                     <div className="flex flex-col pt-2">
-                        <p className="text-xs sm:text-sm text-muted-foreground">Valid From:</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{start_date} - {expiry_date}</p>
+                        <p className="text-xs sm:text-sm text-gray-400">Valid From:</p>
+                        <p className="text-xs sm:text-sm text-gray-400">{start_date ? start_date.split(" ")[0] : '--:--'} - {expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                                    <span className="text-xs sm:text-sm text-black font-semibold pl-2">0</span>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Customer Redemptions</p>

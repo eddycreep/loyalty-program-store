@@ -73,41 +73,37 @@ export const ProductReviews = () => {
 
 
     return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 shadow-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
                 {productReviews.map(({ id, customerName, avatar, rating, productName, category, comment, date }) => (
-                    <Card key={id} className="flex flex-col shadow-lg hover:shadow-xl">
+                    <Card key={id} className="col-span-1 rounded-lg overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl">
                         <CardHeader className="flex flex-row items-center gap-4">
                         <Avatar>
                             <AvatarImage
-                            src={avatar}
-                            alt={customerName}
-                            width={40}
-                            height={40}
-                            className="rounded-full"
+                                src={avatar}
+                                alt={customerName}
+                                width={40}
+                                height={40}
+                                className="rounded-full"
                             />
                         </Avatar>
                         <div className="flex flex-col">
-                            <CardTitle className="text-lg">{customerName}</CardTitle>
-                            <p className="text-sm text-muted-foreground">
-                                {new Date(date).toDateString()}
-                            </p>
+                            <CardTitle className="text-sm font-bold">{customerName}</CardTitle>
+                            <p className="text-sm text-gray-400">{new Date(date).toDateString()}</p>
                         </div>
                         </CardHeader>
                         <CardContent className="flex-grow flex flex-col">
                         <div className="flex justify-between items-center mb-2">
-                            <Badge variant="secondary">
-                                {productName}
-                            </Badge>
+                            <Badge variant="secondary">{productName}</Badge>
                             <div className="flex">
                                 {[...Array(5)].map((_, i) => (
                                     <Star
-                                    key={i}
-                                    className={`w-4 h-4 ${i < rating ? "text-yellow fill-yellow" : "text-gray-300"}`}
+                                        key={i}
+                                        className={`w-4 h-4 ${i < rating ? "text-yellow fill-yellow" : "text-gray-300"}`}
                                     />
                                 ))}
                             </div>
                         </div>
-                        <p className="text-sm text-muted-foreground">{comment}</p>
+                        <p className="text-sm text-gray-600">{comment}</p>
                         </CardContent>
                     </Card>
                 ))}

@@ -11,9 +11,11 @@ import SquareCircleLoader from "@/lib/square-circle-loader"
 interface SurveyProps {
     survey_id: number,
     survey_title: string,
+    description: string,
     survey_category: string,
     store_id: string,
     region: string,
+    reward: string,
     loyalty_tier: string,
     start_date: string,
     expiry_date: string,
@@ -110,7 +112,7 @@ export const ActiveSurveyCards = () => {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {activeSurveys?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
+        {activeSurveys?.map(({ survey_id, survey_title, description, survey_category, store_id, region, reward, loyalty_tier, start_date, expiry_date, isActive }) => (
             <Card key={survey_id} className="shadow-lg hover:shadow-xl w-full">
                 <CardHeader>
                     <div className="flex justify-between items-center">
@@ -147,16 +149,17 @@ export const ActiveSurveyCards = () => {
                     </div>
                 </CardHeader>
                 <CardContent>
+                    <p className="font-bold text-base sm:text-lg text-black">{survey_category}</p>
                     <div className="flex flex-col pt-2">
-                        <p className="text-xs sm:text-sm text-muted-foreground">Valid From:</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{start_date || "'no start date'"} - {expiry_date || "'no expiry date'"}</p>
+                        <p className="text-xs sm:text-sm text-gray-400">Valid From:</p>
+                        <p className="text-xs sm:text-sm text-gray-400">{start_date ? start_date.split(" ")[0] : '--:--'} - {expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">19</span>
+                                    <span className="text-xs sm:text-sm text-black font-semibold pl-2">0</span>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Customer Redemptions</p>

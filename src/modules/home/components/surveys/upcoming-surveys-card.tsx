@@ -115,11 +115,11 @@ export const UpcomingSurveyCards = () => {
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
-                            <CardTitle className="text-base sm:text-lg">{survey_title}</CardTitle>
+                            <CardTitle className="text-base sm:text-lg text-black">{survey_title}</CardTitle>
                             <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    {getSurveyCategoryIcon(survey_category)} { /* render different icons based on special value */ }
+                                    {getSurveyCategoryIcon(survey_category)} 
                                 </TooltipTrigger>
                                 <TooltipContent>
                                 <p>
@@ -148,12 +148,12 @@ export const UpcomingSurveyCards = () => {
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col pt-2">
-                        <p className="text-xs sm:text-sm text-muted-foreground">Valid From:</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{start_date} - {expiry_date}</p>
+                        <p className="text-xs sm:text-sm text-gray-400">Valid From:</p>
+                        <p className="text-xs sm:text-sm text-gray-400">{start_date} - {expiry_date}</p>
                     </div>
                     <div className="mt-2 flex items-center">
                         <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-purple" />
-                        <span className="text-xs sm:text-sm text-purple-600 font-semibold pl-2">0</span>
+                        <span className="text-xs sm:text-sm text-black font-semibold pl-2">0</span>
                     </div>
                 </CardContent>
             </Card>

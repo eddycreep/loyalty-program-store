@@ -65,13 +65,13 @@ export function RewardSummaryCards() {
     ];
 
     return cardData.map((card, index) => (
-      <Card key={index} className="col-span-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-          <CardTitle className="text-sm font-semibold text-gray-700 dark:text-gray-200">{card.title}</CardTitle>
+      <Card key={index} className="col-span-1 shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-gray-200">
+          <CardTitle className="text-sm font-bold">{card.title}</CardTitle>
           {card.icon}
         </CardHeader>
         <CardContent className="pt-4">
-          <div className="text-xs font-medium text-gray-600 dark:text-gray-300 whitespace-pre-line">{card.content}</div>
+          <div className="text-xs font-medium text-gray-600 whitespace-pre-line">{card.content}</div>
         </CardContent>
       </Card>
     ));
