@@ -43,11 +43,9 @@ export const ViewSurveys = () => {
 
     const headers = ['Survey ID', 'Survey Name', 'Category', 'Store', 'Region', 'Loyalty Tier', 'Start Date', 'Expiry Date', 'Status', 'Action']
 
-
     const handleSurveyClick = (survey_id: number) => {
         router.push(`/surveys/view-detailed-survey/${survey_id}`);
     };
-
 
     const handleEditSurvey = (survey_id: number) => {
         router.push(`/surveys/edit-survey/${survey_id}`);
@@ -88,10 +86,10 @@ export const ViewSurveys = () => {
         return (
             <div className="h-screen w-full">
                 <div className="pl-4 pt-4">
-                    <h4 className="text-purple font-bold">Surveys</h4>
+                    <h4 className="text-xl font-semibold text-purple">Surveys</h4>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
-                    {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
+                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
+                    {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
                 </div>
                 <div className="pt-20 flex flex-col items-center justify-center">
                     <SquareCircleLoader />
@@ -106,7 +104,7 @@ export const ViewSurveys = () => {
         return (
             <div className="h-screen w-full">
                 <div className="pl-4 pt-4">
-                    <h4 className="text-purple font-bold">Surveys</h4>
+                    <h4 className="text-xl font-semibold text-purple">Surveys</h4>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
@@ -124,7 +122,7 @@ export const ViewSurveys = () => {
         return (
             <div className="h-screen w-full">
                 <div className="pl-4 pt-4">
-                    <h4 className="text-purple font-bold">Surveys</h4>
+                    <h4 className="text-xl font-semibold text-purple">Surveys</h4>
                 </div>
                 <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
@@ -141,17 +139,17 @@ export const ViewSurveys = () => {
     return (
         <div className="h-screen w-full pb-2">
             {surveyDeletePopUp && (<DeleteSurveyConfirmation surveyID={selectedSurveyID} isOpen={surveyDeletePopUp} onClose={toggleSurveyDeletePage}/> )}
-            <div className="pl-4 pt-4">
-                <h4 className="text-purple font-bold">View Surveys</h4>
+            <div className="pt-10">
+                <h4 className="text-xl font-semibold text-purple">View Surveys</h4>
             </div>
-            <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 mx-2 rounded shadow-lg">
-                {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
+            <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-2 mt-4 rounded shadow-lg">
+                {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
             </div>
             <div className="pt-2 max-h-screen pb-2 space-y-2 overflow-y-auto">
             {surveys?.map(({ survey_id, survey_title, survey_category, store_id, region, loyalty_tier, start_date, expiry_date, isActive }) => (
-                <div key={survey_id} className="bg-white flex flex-col p-2 mx-2 rounded shadow-md cursor-pointer">
+                <div key={survey_id} className="bg-white text-gray-600 flex flex-col p-2 rounded shadow-md cursor-pointer">
                     <div className="flex items-center justify-between">
-                        <p onClick={() => handleSurveyClick(survey_id)}  className="text-sm flex-1 text-center cursor-pointer text-gray-400">{survey_id}</p>
+                        <p onClick={() => handleSurveyClick(survey_id)}  className="text-sm flex-1 text-center text-purple">{survey_id}</p>
                         <p className="text-sm flex-1 text-center">{survey_title || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{survey_category || '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{store_id || '--:--'}</p>

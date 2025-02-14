@@ -3,19 +3,19 @@ import { DollarSign, TrendingUp, ShoppingCart, Users, Trophy, Coins } from "luci
 
 // Dummy data for cards
 const activeMembersData = [
-    { title: "Active Loyalty Members", value: "15,234", isCurrency: false, increase: "234 from last month" }
+    { title: "Active Loyalty Members", value: "0", isCurrency: false, increase: "0 from last month" }
 ];
 
 const redeemedSpecialsData = [
-    { title: "Total Specials Redeemed", value: "45,678", isCurrency: false, increase: "1,234 from last month" }
+    { title: "Total Specials Redeemed", value: "0", isCurrency: false, increase: "0 from last month" }
 ];
 
 const redeemedRewardsData = [
-    { title: "Rewards Redeemed", value: "12,345", isCurrency: false, increase: "543 from last month" }
+    { title: "Rewards Redeemed", value: "0", isCurrency: false, increase: "0 from last month" }
 ];
 
 const revenueSpecialsData = [
-    { title: "Revenue from Specials", value: "234,567", isCurrency: true, increase: "12,345 from last month" }
+    { title: "Revenue from Specials", value: "0", isCurrency: true, increase: "0 from last month" }
 ];
 
 export const LoyaltySummaryCards = () => {
@@ -26,14 +26,14 @@ export const LoyaltySummaryCards = () => {
                     <Card key={index} className="shadow-lg hover:shadow-xl w-full">
                         <CardHeader>
                             <div className="flex items-center justify-between">
-                                <p className="text-gray-500 text-sm p-2">Active Loyalty Members</p>
+                                <p className="text-black font-bold text-sm p-2">Active Loyalty Members</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
                                     <Users size={24} />
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">
+                            <div className="text-2xl text-black font-bold">
                                 {card.isCurrency ? `R${card.value || 0}` : card.value || 0}
                             </div>
                             <div className="text-gray-400 text-sm">+{card.increase}</div>
@@ -46,14 +46,14 @@ export const LoyaltySummaryCards = () => {
                     <Card key={index} className="shadow-lg hover:shadow-xl w-full">
                         <CardHeader>
                             <div className="flex items-center justify-between">
-                                <p className="text-gray-500 text-sm">Total Specials Redeemed</p>
+                                <p className="text-black font-bold text-sm">Total Specials Redeemed</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
                                     <ShoppingCart size={24} />
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">
+                            <div className="text-2xl text-black font-bold">
                                 {card.isCurrency ? `R${card.value || 0}` : card.value || 0}
                             </div>
                             <div className="text-gray-400 text-sm">+{card.increase}</div>
@@ -66,14 +66,14 @@ export const LoyaltySummaryCards = () => {
                     <Card key={index} className="shadow-lg hover:shadow-xl w-full">
                         <CardHeader>
                             <div className="flex items-center justify-between">
-                                <p className="text-gray-500 text-sm">Rewards Redeemed</p>
+                                <p className="text-black font-bold text-sm">Rewards Redeemed</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
                                     <Trophy size={24} />
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">
+                            <div className="text-2xl text-black font-bold">
                                 {card.isCurrency ? `R${card.value || 0}` : card.value || 0}
                             </div>
                             <div className="text-gray-400 text-sm">+{card.increase}</div>
@@ -86,17 +86,17 @@ export const LoyaltySummaryCards = () => {
                     <Card key={index} className="shadow-lg hover:shadow-xl w-full">
                         <CardHeader>
                             <div className="flex items-center justify-between">
-                                <p className="text-gray-500 text-sm">Revenue from Specials</p>
+                                <p className="text-black font-bold text-sm">Revenue from Specials</p>
                                 <div className="p-2 bg-indigo-300 text-indigo-600 rounded-full">
                                     <Coins size={24} />
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">
+                            <div className="text-2xl text-black font-bold">
                                 {card.isCurrency ? `R${card.value || 0}` : card.value || 0}
                             </div>
-                            <div className="text-gray-400 text-sm">+{card.increase}</div>
+                            <div className="text-gray-400 text-sm">+R{card.increase}</div>
                         </CardContent>
                     </Card>
                 ))}

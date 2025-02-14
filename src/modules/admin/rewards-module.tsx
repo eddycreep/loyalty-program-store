@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { useState, useEffect } from "react"
 import { apiEndPoint, colors } from '@/utils/colors';
-import { Expand, Shrink, Edit, X, Check, Trash2, ShieldAlert, XOctagon} from "lucide-react"
+import { Expand, Shrink, Edit, X, Check, Trash2, ShieldAlert, XOctagon, PlusCircle} from "lucide-react"
 import { AddNewRewards } from "./rewards/add-new-rewards";
 import { EditRewards } from "@/components/component/edit-rewards";
 import { DeleteRewardConfirmation } from "@/components/component/delete-reward-confirmation";
@@ -105,17 +105,17 @@ export const RewardsModule = () => {
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
                         <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
-                        <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
+                        <p className="text-gray-400">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddRewards } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                            Add Rewards
+                        <button onClick={ toggleAddRewards } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
@@ -148,14 +148,14 @@ export const RewardsModule = () => {
                         <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddRewards } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                            Add Rewards
+                        <button onClick={ toggleAddRewards } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
@@ -188,14 +188,14 @@ export const RewardsModule = () => {
                         <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddRewards } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                            Add Rewards
+                        <button onClick={ toggleAddRewards } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
@@ -222,32 +222,32 @@ export const RewardsModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-24">
-                        <h4 className="text-2xl font-semibold text-purple">Customer Rewards</h4>
-                        <p className="text-gray-500">Provide customers with multiple options to redeem their rewards.</p>
+                        <h4 className="text-xl font-semibold text-purple">Customer Rewards</h4>
+                        <p className="text-gray-400">Provide customers with multiple options to redeem their rewards.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddRewards } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                            Add Rewards
+                        <button onClick={ toggleAddRewards } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
                 {rewards?.map(({ reward_id, reward_title, description, reward, reward_type, reward_price, store_id, region, start_date, expiry_date, loyalty_tier, age_group, isActive }) => (
-                            <div key={reward_id} className="bg-white flex flex-col p-3 mx-2 rounded shadow-lg">
+                            <div key={reward_id} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-sm flex-1 text-center text-gray-400">{reward_id}</p>
+                                    <p className="text-sm flex-1 text-center text-purple">{reward_id}</p>
                                     <p className="text-sm flex-1 text-center">{reward_title || '--:--'}</p>
                                     <p className="text-sm flex-1 text-center">{description || '--:--'}</p>
                                     <p className="text-sm flex-1 text-center">{reward || '--:--'}</p>
                                     <p className="text-sm flex-1 text-center">{reward_type || '--:--'}</p>
-                                    <p className="text-sm flex-1 text-center">{reward_price || '--:--'}</p>
+                                    <p className="text-sm flex-1 text-center">R{reward_price || '--:--'}</p>
                                     <p className="text-sm flex-1 text-center">{store_id || '--:--'}</p>
                                     <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                         <button onClick={() => handleExpandClick(reward_id)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
@@ -266,27 +266,27 @@ export const RewardsModule = () => {
                                         <div className="grid grid-cols-8 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
                                             <p className="font-medium text-gray-600"></p>
                                         <div>
-                                            <p className="text-md font-bold text-gray-600">Region</p>
-                                            <p className="text-sm pt-1">{region || '--:--'}</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Region</p>
+                                            <p className="text-sm text-gray-500 pt-1">{region || '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="text-md font-bold text-gray-600">Loyalty Tier</p>
-                                            <p className="text-sm pt-1">{loyalty_tier || '--:--'}</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Loyalty Tier</p>
+                                            <p className="text-sm text-gray-500 pt-1">{loyalty_tier || '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="text-md font-bold text-gray-600">Age Group</p>
-                                            <p className="text-sm pt-1">{age_group || '--:--'}</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Age Group</p>
+                                            <p className="text-sm text-gray-500 pt-1">{age_group || '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="text-md font-bold text-gray-600">Start Date</p>
-                                            <p className="text-sm pt-1">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Start Date</p>
+                                            <p className="text-sm text-gray-500 pt-1">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="text-md font-bold text-gray-600">Expiry Date</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Expiry Date</p>
                                             <p className="text-sm pt-1 text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                                         </div>
                                         <div>
-                                            <p className="text-md font-bold text-gray-600">Status</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Status</p>
                                             <p className={`text-sm pt-1 ${isActive === true ? 'text-green' : 'text-red'}`}>
                                                 {isActive === true ? 'Active' : 'Inactive'}
                                             </p>

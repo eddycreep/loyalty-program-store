@@ -20,6 +20,10 @@ export const DeleteSurveyConfirmation = ({ isOpen, onClose, surveyID }: any) => 
       toast.success('Survey Deleted', {
         icon: <Check color={colors.green} size={24} />,
         duration: 3000,
+        style: {
+          backgroundColor: 'black', 
+          color: 'white',
+        },
       });
 
       onClose() 
@@ -46,21 +50,14 @@ export const DeleteSurveyConfirmation = ({ isOpen, onClose, surveyID }: any) => 
           <X className="h-4 w-4" />
         </Button>
         <div>
-          <div className="text-lg font-semibold mb-2">Confirm Deletion</div>
-          <p className="text-gray-600 mb-4">Are you sure you want to delete this survey? This action cannot be undone.</p>
+          <div className="text-lg font-bold pb-2 text-gray-600">Confirm Deletion</div>
+          <p className="text-gray-600 pb-4">Are you sure you want to delete this survey? This action cannot be undone.</p>
         </div>
         <div className="flex justify-end space-x-2">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="bg-purple text-white hover:bg-indigo-300 hover:text-white h-8"
-          >
+          <Button onClick={onClose} className="bg-purple text-white border-purple hover:bg-indigo-300 hover:border-indigo-300 hover:text-white h-8">
             Cancel
           </Button>
-          <Button
-            onClick={() => { deleteSurvey(surveyID)}}
-            className="bg-red text-white hover:bg-rose-300 h-8"
-          >
+          <Button onClick={() => { deleteSurvey(surveyID)}} className="bg-red text-white border-red hover:bg-rose-300 hover:border-rose-300 h-8">
             Confirm
           </Button>
         </div>

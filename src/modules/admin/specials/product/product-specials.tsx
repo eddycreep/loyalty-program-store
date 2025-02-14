@@ -4,7 +4,7 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Edit, Expand, Trash2, Shrink, X, Check, XOctagon, ShieldAlert } from "lucide-react";
+import { Edit, Expand, Trash2, Shrink, X, Check, XOctagon, ShieldAlert, PlusCircle } from "lucide-react";
 
 import { AddProductsSpecials } from "@/modules/admin/specials/product/add-product-specials";
 import { EditProductSpecials } from "@/modules/admin/specials/product/edit-product-specials";
@@ -116,12 +116,12 @@ export const ProductSpecials = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
+                        <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
                         <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                            Add Special
+                        <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21}/> 
                         </button>
                     </div>
                 </div>
@@ -146,12 +146,12 @@ export const ProductSpecials = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
+                        <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
                         <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                            Add Special
+                        <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21}/> 
                         </button>
                     </div>
                 </div>
@@ -176,12 +176,12 @@ export const ProductSpecials = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
+                        <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
                         <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                            Add Special
+                        <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21}/> 
                         </button>
                     </div>
                 </div>
@@ -209,31 +209,31 @@ export const ProductSpecials = () => {
                 {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-2xl font-semibold text-purple">Product Specials</h4>
-                        <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
+                        <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
+                        <p className="text-gray-400">Assign exclusive product specials that customers can purchase</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-green text-white p-2 w-40 h-10 rounded-lg hover:bg-emerald-300">
-                            Add Special
+                        <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21}/> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
                     {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
                             {header}
                         </p>
                     ))}
                 </div>
                 {productSpecials?.map(({ special_id, special_name, special, special_price, special_type, store_id, start_date, expiry_date, special_value, isActive, specialItem }) => (
                     <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2">
-                        <div className="bg-white flex flex-col p-2 mx-2 rounded shadow-md">
+                        <div className="bg-white text-gray-600 flex flex-col p-2 mx-2 rounded shadow-md">
                             <div className="flex items-center justify-between">
-                                <p className="text-sm flex-1 text-center text-gray-400">{special_id}</p>
+                                <p className="text-sm flex-1 text-center text-purple">{special_id}</p>
                                 <p className="text-sm flex-1 text-center">{special_name || '--:--'}</p>
                                 <p className="text-sm flex-1 text-center">{special || '--:--'}</p>
                                 <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{specialItem?.product_description || '--:--'}</p>
-                                <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>{special_price || '--:--'}</p>
+                                <p className={`text-sm flex-1 text-center ${'hidden sm:block'}`}>R{special_price || '--:--'}</p>
                                 <p className="text-sm flex-1 text-center">{special_value || '--:--'}</p>
                                 <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                     <button className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg" onClick={() => handleExpandClick(special_id)}>
@@ -249,27 +249,27 @@ export const ProductSpecials = () => {
                             </div>
                             {expandedRow === special_id && (
                                 <div className="pt-4">
-                                    <div className="grid grid-cols-7 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
+                                    <div className="grid grid-cols-7 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4">
                                         <p className="font-medium text-gray-600"></p>
                                     <div>
-                                        <p className="font-medium text-gray-600">Special Type</p>
-                                        <p className="text-sm">{special_type || '--:--'}</p>
+                                        <p className="font-bold text-gray-600 text-xs uppercase">Special Type</p>
+                                        <p className="text-sm text-gray-500">{special_type || '--:--'}</p>
                                     </div>
                                     <div>
-                                        <p className="font-medium text-gray-600">Store ID</p>
-                                        <p className="text-sm uppercase">{store_id || '--:--'}</p>
+                                        <p className="font-bold text-gray-600 text-xs uppercase">Store ID</p>
+                                        <p className="text-sm text-gray-500">{store_id || '--:--'}</p>
                                     </div>
                                     <div>
-                                        <p className="font-medium text-gray-600">Start Date</p>
-                                        <p className="text-sm uppercase">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
+                                        <p className="font-bold text-gray-600 text-xs uppercase">Start Date</p>
+                                        <p className="text-sm text-gray-500">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
                                     </div>
                                     <div>
-                                        <p className="font-medium text-gray-600">Expiry Date</p>
-                                        <p className="text-sm uppercase text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
+                                        <p className="font-bold text-gray-600 text-xs uppercase">Expiry Date</p>
+                                        <p className="text-sm text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                                     </div>
                                     <div>
-                                        <p className="font-medium text-gray-600">Status</p>
-                                        <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>
+                                        <p className="font-bold text-gray-600 text-xs uppercase">Status</p>
+                                        <p className={`text-sm text-gray-500 ${isActive === true ? 'text-green' : 'text-red'}`}>
                                             {isActive === true ? 'Active' : 'Inactive'}
                                         </p>
                                     </div>

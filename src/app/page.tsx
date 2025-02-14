@@ -15,13 +15,13 @@ export default function Home() {
   const [activeRewardsTab, setActiveRewardsTab] = useState("active-rewards")
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center gap-2 p-2 rounded bg-white">
+    <div className="w-full h-full flex flex-col justify-center items-center gap-2 p-2 rounded">
       <div className="w-full h-screen flex flex-col rounded">
-        <div className="h-screen bg-gray-100 overflow-y-auto pb-20">
+        <div className="h-screen overflow-y-auto pb-20">
           <main className="py-4 sm:py-6 md:py-8 px-2s sm:px-6 lg:px-8">
             <div className="w-full mx-auto">
               <header className="mb-6 sm:mb-8">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Loyalty Program Management</h1>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl text-purple font-bold">Loyalty Program Management</h1>
               </header>
 
               {/* Summary Cards */}
@@ -33,7 +33,7 @@ export default function Home() {
               <section className="mb-6 sm:mb-8">
                 <h2 className="text-xl sm:text-2xl font-bold mb-4 text-purple">Specials</h2>
                 <Tabs defaultValue="active" onValueChange={setActiveTab}>
-                  <TabsList className="mb-4">
+                  <TabsList className="mb-4 bg-white">
                     <TabsTrigger value="active">Active Specials</TabsTrigger>
                     <TabsTrigger value="upcoming">Upcoming Specials</TabsTrigger>
                   </TabsList>

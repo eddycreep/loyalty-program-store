@@ -76,13 +76,13 @@ export const ProductSummaryCards = () => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
             {productsData.map(({ id, title, icon, content }) => (
-                <Card key={id} className="col-span-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                        <CardTitle className="text-sm font-semibold text-gray-700 dark:text-gray-200">{title}</CardTitle>
+                <Card key={id} className="w-full shadow-lg hover:shadow-xl">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-gray-200">
+                        <CardTitle className="text-sm font-bold">{title}</CardTitle>
                         {icon}
                     </CardHeader>
                     <CardContent className="pt-4">
-                        <div className="text-xs font-medium text-gray-600 dark:text-gray-300 whitespace-pre-line">{content}</div>
+                        <div className="text-xs font-medium text-gray-600 whitespace-pre-line">{content}</div>
                     </CardContent>
                 </Card>
             ))}
