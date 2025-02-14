@@ -317,20 +317,20 @@ export const CreateSurveys = () => {
                 </div>
             </div>
             <div className="flex gap-4">
-                <div className="w-[350px] flex flex-col pt-3">
-                    <label>Survey Title</label>
+                <div className="w-[350px] flex flex-col pt-4">
+                    <label className="text-black">Survey Title</label>
                     <input
                         type="input"
                         placeholder="enter survey title"
-                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                         value={surveyName}
                         onChange={(e) => setSurveyName(e.target.value)}
                     />
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <label>Survey Category</label>
+                    <label className="text-black">Survey Category</label>
                     <select
-                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                         onChange={(e) => setSurveyCategory(e.target.value)}
                     >
                         <option value="All">All</option>
@@ -340,9 +340,9 @@ export const CreateSurveys = () => {
                     </select>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <label>Store ID</label>
+                    <label className="text-black">Store ID</label>
                     <select
-                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
@@ -355,9 +355,9 @@ export const CreateSurveys = () => {
                     </select>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <label>Loyalty Tiers</label>
+                    <label className="text-black">Loyalty Tiers</label>
                     <select
-                        className="w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                         value={selectedTier}
                         onChange={(e) => setSelectedTier(e.target.value)}
                     >
@@ -372,23 +372,23 @@ export const CreateSurveys = () => {
             </div>
             <div className="flex gap-4 pt-10">
                 <div className="w-[350px] flex flex-col pt-4">
-                    <label>Start Date:</label>
+                    <label className="text-black">Start Date:</label>
                     <input 
                         type="datetime-local" 
                         name="start-date"
                         value={startDate} 
                         onChange={(e) => setStartDate(e.target.value)}
-                        className="w-full h-12 p-2 rounded-lg border border-gray-300">
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300">
                     </input>
                 </div>
                 <div className="w-[350px] flex flex-col pt-4">
-                    <label>Expiry Date:</label>
+                    <label className="text-black">Expiry Date:</label>
                     <input 
                         type="datetime-local" 
                         name="expiry-date"
                         value={expiryDate} 
                         onChange={(e) => setExpiryDate(e.target.value)}
-                        className="w-full h-12 p-2 rounded-lg border border-gray-300">
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300">
                     </input>
                 </div>
             </div>
@@ -401,7 +401,7 @@ export const CreateSurveys = () => {
                             <input
                                 type="input"
                                 placeholder="Enter your question here..."
-                                className="w-full p-2 rounded-lg border border-gray-300"
+                                className="bg-white text-black w-full p-2 rounded-lg border border-gray-300"
                                 value={q.question}
                                 onChange={(e) => updateQuestionText(index, e.target.value)}
                             />
@@ -417,7 +417,7 @@ export const CreateSurveys = () => {
                         <div className="w-[300px] flex flex-col pt-4">
                             <label>Action</label>
                             <select
-                                className="w-full p-2 rounded-lg border border-gray-300"
+                                className="bg-white text-black w-full p-2 rounded-lg border border-gray-300"
                                 value={q.action}
                                 onChange={(e) => {
                                     const updatedQuestions = [...questions];
@@ -441,7 +441,7 @@ export const CreateSurveys = () => {
                                     <input
                                         type="input"
                                         placeholder={`Option ${optionIndex + 1}`}
-                                        className="w-full p-2 rounded-lg border border-gray-300"
+                                        className="bg-white text-black w-full p-2 rounded-lg border border-gray-300"
                                         value={q.options?.[optionIndex] || ""}
                                         onChange={(e) => updateOption(index, optionIndex, e.target.value)}
                                     />
