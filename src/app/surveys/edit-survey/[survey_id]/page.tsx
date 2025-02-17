@@ -68,6 +68,9 @@ export default function EditSurvey() {
     const [surveyQuestionsData, setSurveyQuestionsData] = useState<SurveyQuestions[]>([]);
     const [surveyQuestionsChoicesData, setSurveyQuestionsChoicesData] = useState<SurveyQuestionsChoices[]>([]);
 
+    const [questionText, setQuestionText] = useState<string>("");
+    const [questionChoiceText, setQuestionChoiceText] = useState<string>("");
+
     // Convert surveyId from params to a number
     const surveyID = Number(params?.survey_id); // Conversion to number
 
@@ -258,7 +261,7 @@ export default function EditSurvey() {
                         </div>
                     </div>
                 </div>
-                <div className="min-h-[200px] w-full flex flex-col items-center py-20 justify-center">
+                <div className="min-h-[200px] w-full flex flex-col items-center py-20 pt-10 justify-center">
                     <SquareCircleLoader />
                     <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
                 </div>
@@ -294,8 +297,8 @@ export default function EditSurvey() {
                         </div>
                     </div>
                 </div>
-                <div className="min-h-[200px] w-full flex flex-col items-center py-20 justify-center">
-                    <XOctagon size={34} />
+                <div className="min-h-[200px] w-full flex flex-col items-center py-20 pt-10 justify-center">
+                    <XOctagon size={34} color={colors.black} />
                     <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching survey data</p>
                 </div>
             </div>
@@ -330,8 +333,8 @@ export default function EditSurvey() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-center justify-center py-20 w-full">
-                    <ShieldAlert size={34} />
+                <div className="flex flex-col items-center justify-center py-20 pt-10 w-full">
+                    <ShieldAlert size={34} color={colors.black} />
                     <p className="ml-2 uppercase pt-2 text-green">The survey has no responses yet or is inactive</p>
                 </div>
             </div>
@@ -444,16 +447,15 @@ export default function EditSurvey() {
                     <div className="flex gap-4">
                       <div className="flex flex-col space-x-2 pt-4">
                           <label htmlFor="active-toggle" className="text-black">
-                            Active
+                            {isActive ? 'Active' : 'Inactive'}
                           </label>
                           <div>
-                            <div className="toggle-switch">
-                                <input className="toggle-input" id="toggle" type="checkbox"/>
-                                <label className="toggle-label" id="toggle"></label>
+                            <div className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer ${isActive ? 'bg-green' : 'bg-gray-400'}`} onClick={() => setIsActive(!isActive)}>
+                              <div className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-300 ${isActive ? 'translate-x-7' : ''}`}></div>
                             </div>
                           </div>
                       </div>
-                  </div>
+                    </div>
                 </div>
                 <div className="py-10">
                     <div className="border-purple border-t-2 py-4">
@@ -469,7 +471,7 @@ export default function EditSurvey() {
                                         placeholder="Enter question"
                                         className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                                         value={question_text}
-                                        onChange={(e) => setSurveyName(e.target.value)}
+                                        onChange={(e) => setQuestionText(e.target.value)}
                                     />
                                 </div>
                             ))}
@@ -490,7 +492,7 @@ export default function EditSurvey() {
                                         placeholder="Enter option"
                                         className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
                                         value={option_text}
-                                        onChange={(e) => setSurveyName(e.target.value)}
+                                        onChange={(e) => setQuestionChoiceText(e.target.value)}
                                     />
                                 </div>
                             ))}
