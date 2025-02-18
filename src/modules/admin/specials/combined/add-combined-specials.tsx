@@ -386,7 +386,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                             />
                         </div>
                         <div className="w-full">
-                            <Label htmlFor="special-name">Special</Label>
+                            <label htmlFor="special-name">Special</label>
                             <Input
 
                                 id="special-name"
@@ -398,7 +398,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                     </div>
                     <div className="flex gap-4">
                         <div className="w-full">
-                            <Label htmlFor="description">Description</Label>
+                            <label htmlFor="description" className="text-black text-sm">Description</label>
                             <Input
                                 id="description"
                                 value={currentSpecial.description}
@@ -407,7 +407,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                             />
                         </div>
                         <div className="w-full">
-                            <Label htmlFor="special-type">Special Type</Label>
+                            <label htmlFor="special-type" className="text-black text-sm">Special Type</label>
                             <Select
                                 value={currentSpecial.special_value}
                                 onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_value: value as 'Percentage' | 'Amount' }))}
@@ -424,7 +424,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                     </div>
                     <div className="flex gap-4">
                         <div className="w-full">
-                            <Label htmlFor="tier">Loyalty Tier</Label>
+                            <label htmlFor="tier" className="text-black text-sm">Loyalty Tier</label>
                             <Select
                                 value={currentSpecial.loyalty_tier}
                                 onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, loyalty_tier: value }))}
@@ -443,7 +443,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                             </Select>
                         </div>
                         <div className="w-full">
-                            <Label htmlFor="age-group">Age Group</Label>
+                            <label htmlFor="age-group" className="text-black text-sm">Age Group</label>
                             <Select
                                 value={currentSpecial.age_group}
                                 onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, age_group: value }))}
@@ -465,7 +465,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                     
                     <div className="flex gap-4">
                         <div className="w-full">
-                        <Label htmlFor="start-date">Start Date</Label>
+                        <label htmlFor="start-date" className="text-black text-sm">Start Date</label>
                         <Input
                             id="start-date"
                             type="date"
@@ -474,7 +474,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                         />
                         </div>
                         <div className="w-full">
-                        <Label htmlFor="end-date">End Date</Label>
+                        <label htmlFor="end-date" className="text-black text-sm">End Date</label>
                         <Input
                             id="end-date"
                             type="date"
@@ -485,7 +485,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                     </div>
                     <div className="flex gap-4">
                         <div className="w-[500px]">
-                            <Label htmlFor="store-id">Store ID</Label>
+                            <label htmlFor="store-id" className="text-black text-sm">Store ID</label>
                             {/* Changed the input field to a select dropdown to display store IDs */}
                             <Select
                                 value={currentSpecial.store_id}
@@ -506,9 +506,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
                             </Select>
                         </div>
                         <div className="flex flex-col items-center space-x-2 pt-2">
-                            <Label htmlFor="active-toggle">
+                            <label htmlFor="active-toggle" className="text-black text-sm">
                                 Active
-                            </Label>
+                            </label>
                             <div className="pt-2">
                                 <Switch
                                     id="active-toggle"
@@ -522,7 +522,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                     </div>
                     <div className="flex gap-4">
                         <div className="w-full">
-                            <Label htmlFor="special-price">Price</Label>
+                            <label htmlFor="special-price" className="text-black text-sm">Price</label>
                             <Input
                                 id="special-price"
                                 type="number" // Changed from 'text' or other types to 'number' to allow numeric input
@@ -535,7 +535,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                     </div>
 
                     <div>
-                        <Label htmlFor="product-search">Search Products</Label>
+                        <label htmlFor="product-search" className="text-black text-sm">Search Products</label>
                         <div className="flex space-x-2">
                         <Input
                             id="product-search"
@@ -565,7 +565,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                 </div>
 
                 <div className="mt-4">
-                    <Label>Products (Max 5)</Label>
+                    <label className="text-black text-sm">Products (Max 5)</label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {currentSpecial.products.map((product) => (
                         <Card key={product.id} className="p-2 flex justify-between items-center">
@@ -578,9 +578,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
                             className="w-32"
                             /> */}
                             <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeProductFromSpecial(product.id)}
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => removeProductFromSpecial(product.id)}
                             >
                             <X className="h-4 w-4" />
                             </Button>
@@ -592,10 +592,10 @@ export function AddCombinedSpecials({ onClose }: Props) {
 
                         <div className="flex gap-4">
                             <Button onClick={ onClose } className="bg-red hover:bg-rose-300 w-full">
-                                Cancel
+                                <span className="text-white">Cancel</span>
                             </Button>
                             <Button onClick={ saveSpecial } className="bg-green hover:bg-emerald-300 w-full">
-                                Save Special
+                                <span className="text-white">Save Special</span>
                             </Button>
                         </div>
                     </div>
