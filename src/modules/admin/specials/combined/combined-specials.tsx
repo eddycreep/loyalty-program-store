@@ -113,12 +113,14 @@ export const CombinedSpecials = () => {
     useEffect(() => {
         getCombinedSpecials();
     
-        const specialInterval = setInterval(() => {
-            getCombinedSpecials();
-        }, 120000); // 1 minutes
+        // Only set up the interval if no modals are open
+        const specialInterval = !combinedSpecialsComponent && !editCombinedSpecialsPopup ? 
+            setInterval(() => {getCombinedSpecials()}, 120000) : null;
     
-        return () => clearInterval(specialInterval); // Clean up interval on unmount
-    },[]);
+        return () => {
+            if (specialInterval) clearInterval(specialInterval);
+        }; 
+    }, [combinedSpecialsComponent, editCombinedSpecialsPopup]); 
 
 
     if (loadingData) {

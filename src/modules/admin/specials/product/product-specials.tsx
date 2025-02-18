@@ -102,13 +102,17 @@ export const ProductSpecials = () => {
     useEffect(() => {
         geAllProductSpecials();
     
-        const specialInterval = setInterval(() => {
-            geAllProductSpecials();
-
-        }, 120000); // 2 minutes
+        // Only set up the interval if the add/edit popups are NOT open
+        const specialInterval = !productSpecialsComponent && !editProductsPopup ? 
+            setInterval(() => {
+                geAllProductSpecials();
+            }, 120000) // 2 minutes
+            : null;
     
-        return () => clearInterval(specialInterval); // Clean up interval on unmount
-    },[]);
+        return () => {
+            if (specialInterval) clearInterval(specialInterval);
+        }; 
+    }, [productSpecialsComponent, editProductsPopup]); // Add dependencies
 
 
     if (loadingData) {

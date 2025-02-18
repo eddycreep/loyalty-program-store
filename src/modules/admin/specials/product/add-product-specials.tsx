@@ -8,17 +8,16 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import { X, Search, Check, PlusCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductDescription, ProductsResponse, UserActivity } from '@/modules/types/data-types'
-import { Special, SaveSpecial, SpecialItems, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
+import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductsResponse, UserActivity } from '@/modules/types/data-types'
+import { Special, SpecialItems, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { useSession } from '@/context';
 
 
 interface Props {
-  onClose: () => void;  // Corrected syntax here
+    onClose: () => void; 
 }
 
 //old product data
@@ -69,6 +68,7 @@ export function AddProductsSpecials({ onClose }: Props) {
         isActive: false,
         product: null
     })
+
     const [searchTerm, setSearchTerm] = useState('')
     const [specialID, setSpecialID] = useState<SpecialInfoRes>([])
 
@@ -77,12 +77,11 @@ export function AddProductsSpecials({ onClose }: Props) {
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
 
-    // First filter products based on search term
+
     const searchProducts = allProducts.filter(product =>
         product.inventory.description_1.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    // Then limit to first 3 matches
     const displayedProducts = searchProducts.slice(0, 3);
 
     const fetchProducts = async () => {
@@ -204,9 +203,9 @@ export function AddProductsSpecials({ onClose }: Props) {
             setSpecialID(response?.data);
     
             if (response.data.length > 0) {
-                saveSpecialItems(response.data[0].special_id); // save the items
+                saveSpecialItems(response.data[0].special_id);
                 
-                logUserActivity(response.data[0]); // Pass the fetched data directly to logUserActivity
+                logUserActivity(response.data[0]);
     
                 toast.success('Special Info Fetched, now saving items', {
                     icon: <Check color={colors.blue} size={24} />,
@@ -235,7 +234,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                 special_id: specialId,
                 product_description: currentSpecial.product?.name,
             }
-            //http://localhost:4400/specials/save-special-items
+
             console.log('special items payload: ', payload)
 
             const url = `specials/save-special-items`
@@ -411,6 +410,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <Input
                                 id="start-date"
                                 type="date"
+                                className="cursor-pointer"
                                 value={currentSpecial.start_date}
                                 onChange={(e) => setCurrentSpecial(prev => ({ ...prev, start_date: e.target.value }))}
                             />
@@ -420,6 +420,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <Input
                                 id="end-date"
                                 type="date"
+                                className="cursor-pointer"
                                 value={currentSpecial.expiry_date}
                                 onChange={(e) => setCurrentSpecial(prev => ({ ...prev, expiry_date: e.target.value }))}
                             />
@@ -521,10 +522,10 @@ export function AddProductsSpecials({ onClose }: Props) {
                         </div>
 
                             <div className="flex gap-4">
-                                <Button onClick={ onClose } className="bg-red hover:bg-rose-300 w-full">
+                                <Button onClick={ onClose } className="bg-red hover:bg-rose-300 text-white w-full">
                                     Cancel
                                 </Button>
-                                <Button onClick={ saveSpecial } className="bg-green hover:bg-emerald-300 w-full">
+                                <Button onClick={ saveSpecial } className="bg-green hover:bg-emerald-300 text-white w-full">
                                     Save Special
                                 </Button>
                             </div>
