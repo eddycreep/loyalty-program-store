@@ -248,6 +248,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                 })
             }
 
+            onClose();
         } catch (error) {
             console.error('Error saving special with its product:', error)
             
@@ -302,155 +303,160 @@ export function AddProductsSpecials({ onClose }: Props) {
 
     return (
         <div className="fixed inset-0 z-50">
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                <Card className="mb-6 w-[600px]">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+                <Card className="w-full max-w-[95vw] md:max-w-[600px] max-h-[90vh] overflow-y-auto">
                     <div className="flex justify-end pr-4 pt-4">
-                        <button onClick={ onClose }>
+                        <button onClick={onClose}>
                             <X className="h-4 w-4" color="red" />
                         </button>
                     </div>
                     <CardHeader>
                         <CardTitle>Create Special</CardTitle>
-                        <CardDescription>
+                        <CardDescription className="text-xs sm:text-sm">
                             Set the special with the required fields and assign all the products linked to the special. Click Save Special once completed.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
-                        <div className="flex gap-4">
-                            <div className="w-full">
-                                <label htmlFor="special-name" className="text-black text-sm">Special Name</label>
-                                <Input
-                                    id="special-name"
-                                    value={currentSpecial.special_name}
-                                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_name: e.target.value }))}
-                                    placeholder="back to school special"
-                                />
+                        <div className="space-y-3 sm:space-y-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="special-name" className="text-black text-xs sm:text-sm">Special Name</label>
+                                    <Input
+                                        id="special-name"
+                                        value={currentSpecial.special_name}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_name: e.target.value }))}
+                                        placeholder="back to school special"
+                                        className="mt-1"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="special" className="text-black text-xs sm:text-sm">Special</label>
+                                    <Input
+                                        id="special"
+                                        value={currentSpecial.special}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special: e.target.value }))}
+                                        placeholder="10% OFF"
+                                        className="mt-1"
+                                    />
+                                </div>
                             </div>
-                            <div className="w-full">
-                                <label htmlFor="special-name" className="text-black text-sm">Special</label>
-                                <Input
-                                    id="special-name"
-                                    value={currentSpecial.special}
-                                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special: e.target.value }))}
-                                    placeholder="10% OFF"
-                                />
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="description" className="text-black text-xs sm:text-sm">Description</label>
+                                    <Input
+                                        id="description"
+                                        value={currentSpecial.description}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, description: e.target.value }))}
+                                        placeholder="buy 3 or more school supplies..."
+                                        className="mt-1"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="special-type" className="text-black text-xs sm:text-sm">Special Type</label>
+                                    <Select
+                                        value={currentSpecial.special_type}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_type: value as 'Percentage' | 'Amount' }))}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select special type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Percentage">Percentage</SelectItem>
+                                            <SelectItem value="Amount">Amount</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="w-full">
-                                <label htmlFor="description" className="text-black text-sm">Description</label>
-                                <Input
-                                    id="description"
-                                    value={currentSpecial.description}
-                                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, description: e.target.value }))}
-                                    placeholder="buy 3 or more school supplies and get 20% off your total purchase."
-                                />
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
+                                    <Select
+                                        value={currentSpecial.loyalty_tier}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, loyalty_tier: value }))}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select Tier" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="All">All</SelectItem>
+                                            {loyaltyTiers.map((loyalty) => (
+                                                <SelectItem key={loyalty.tier_id} value={loyalty.tier}>
+                                                    {loyalty.tier}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <label htmlFor="age-group" className="text-black text-xs sm:text-sm">Age Group</label>
+                                    <Select
+                                        value={currentSpecial.age_group}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, age_group: value }))}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select Age Group" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="All">All</SelectItem>
+                                            {ageGroups.map((group) => (
+                                                <SelectItem key={group.age_group_id} value={group.age_range}>
+                                                    {group.group_name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
-                            <div className="w-full">
-                                <label htmlFor="special-type" className="text-black text-sm">Special Type</label>
-                                <Select
-                                    value={currentSpecial.special_type}
-                                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_type: value as 'Percentage' | 'Amount' }))}
-                                >
-                                    <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select special type" className="text-gray-400"/>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Percentage">Percentage</SelectItem>
-                                        <SelectItem value="Amount">Amount</SelectItem>
-                                    </SelectContent>
-                                </Select>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="start-date" className="text-black text-xs sm:text-sm">Start Date</label>
+                                    <Input
+                                        id="start-date"
+                                        type="date"
+                                        className="cursor-pointer"
+                                        value={currentSpecial.start_date}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, start_date: e.target.value }))}
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="end-date" className="text-black text-xs sm:text-sm">End Date</label>
+                                    <Input
+                                        id="end-date"
+                                        type="date"
+                                        className="cursor-pointer"
+                                        value={currentSpecial.expiry_date}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, expiry_date: e.target.value }))}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="w-full">
-                                <label htmlFor="tier" className="text-black text-sm">Loyalty Tier</label>
-                                <Select
-                                    value={currentSpecial.loyalty_tier}
-                                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, loyalty_tier: value }))}
-                                >
-                                    <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select Tier" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="All">All</SelectItem>
-                                        {loyaltyTiers.map((loyalty) => (
-                                            <SelectItem key={loyalty.tier_id} value={loyalty.tier}>
-                                                {loyalty.tier}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="w-full">
-                                <label htmlFor="age-group" className="text-black text-sm">Age Group</label>
-                                <Select
-                                    value={currentSpecial.age_group}
-                                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, age_group: value }))}
-                                >
-                                    <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select Age Group" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="All">All</SelectItem>
-                                        {ageGroups.map((group) => (
-                                            <SelectItem key={group.age_group_id} value={group.age_range}>
-                                                {group.group_name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                        
-                        <div className="flex gap-4">
-                            <div className="w-full">
-                            <label htmlFor="start-date" className="text-black text-sm">Start Date</label>
-                            <Input
-                                id="start-date"
-                                type="date"
-                                className="cursor-pointer"
-                                value={currentSpecial.start_date}
-                                onChange={(e) => setCurrentSpecial(prev => ({ ...prev, start_date: e.target.value }))}
-                            />
-                            </div>
-                            <div className="w-full">
-                            <label htmlFor="end-date" className="text-black text-sm">End Date</label>
-                            <Input
-                                id="end-date"
-                                type="date"
-                                className="cursor-pointer"
-                                value={currentSpecial.expiry_date}
-                                onChange={(e) => setCurrentSpecial(prev => ({ ...prev, expiry_date: e.target.value }))}
-                            />
-                            </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="w-[500px]">
-                                <label htmlFor="store-id" className="text-black text-sm">Store ID</label>
-                                <Select
-                                    value={currentSpecial.store_id}
-                                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, store_id: value }))}
-                                >
-                                    <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select store ID" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                    <SelectItem value="All">All</SelectItem>
-                                    {allStores.map((branch) => (
-                                        <SelectItem key={branch.id} value={branch.code}>
-                                            {branch.code}
-                                        </SelectItem>
-                                    ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="flex flex-col items-center space-x-2 pt-2">
-                                <label htmlFor="active-toggle" className="text-black text-sm">
-                                    Active
-                                </label>
-                                <div className="pt-2">
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-end">
+                                <div>
+                                    <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
+                                    <Select
+                                        value={currentSpecial.store_id}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, store_id: value }))}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select store ID" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="All">All</SelectItem>
+                                            {allStores.map((branch) => (
+                                                <SelectItem key={branch.id} value={branch.code}>
+                                                    {branch.code}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex flex-col items-center justify-center space-x-2 pr-56 pb-4">
+                                    <label htmlFor="active-toggle" className="text-black text-xs sm:text-sm">
+                                        Active
+                                    </label>
                                     <Switch
                                         id="active-toggle"
                                         checked={currentSpecial.isActive}
@@ -460,55 +466,55 @@ export function AddProductsSpecials({ onClose }: Props) {
                                     />
                                 </div>
                             </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="w-full">
-                                <label htmlFor="special-price" className="text-black text-sm">Price</label>
-                                <Input
-                                    id="special-price"
-                                    type="number"
-                                    value={currentSpecial.special_price || ''}
-                                    onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_price: parseFloat(e.target.value) }))}
-                                    placeholder="Enter special price"
-                                />
+
+                            <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="special-price" className="text-black text-xs sm:text-sm">Price</label>
+                                    <Input
+                                        id="special-price"
+                                        type="number"
+                                        value={currentSpecial.special_price || ''}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_price: parseFloat(e.target.value) }))}
+                                        placeholder="Enter special price"
+                                        className="mt-1"
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        <div>
-                            <label htmlFor="product-search" className="text-black text-sm">Search Products</label>
-                            <div className="flex space-x-2">
-                            <Input
-                                id="product-search"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder="Search for products"
-                            />
-                            <Button variant="outline" size="icon">
-                                <Search className="h-4 w-4" />
-                            </Button>
+                            <div>
+                                <label htmlFor="product-search" className="text-black text-xs sm:text-sm">Search Products</label>
+                                <div className="flex space-x-2 mt-1">
+                                    <Input
+                                        id="product-search"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        placeholder="Search for products"
+                                    />
+                                    <Button variant="outline" size="icon">
+                                        <Search className="h-4 w-4" />
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                            {displayedProducts.map((product) => (
-                                <Button
-                                    key={product.id}
-                                    onClick={() => addProductToSpecial(product)}
-                                    disabled={currentSpecial.product !== null}
-                                    className="justify-start bg-white text-black"
-                                >
-                                    <PlusCircle className="h-4 w-4 mr-2" />
-                                    <span className="text-black">{product.inventory.description_1}</span>
-                                </Button>
-                            ))}
-                        </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                {displayedProducts.map((product) => (
+                                    <Button
+                                        key={product.id}
+                                        onClick={() => addProductToSpecial(product)}
+                                        disabled={currentSpecial.product !== null}
+                                        className="justify-start bg-white text-black text-xs sm:text-sm"
+                                    >
+                                        <PlusCircle className="h-4 w-4 mr-2" />
+                                        <span className="truncate">{product.inventory.description_1}</span>
+                                    </Button>
+                                ))}
+                            </div>
 
-                        <div className="mt-4">
-                            <label className="text-black text-sm">Selected Product</label>
-                            {currentSpecial.product && (
-                                <Card className="p-2 flex justify-between items-center">
-                                    <span>{currentSpecial.product.name}</span>
-                                    <div className="flex items-center space-x-2">
+                            <div>
+                                <label className="text-black text-xs sm:text-sm">Selected Product</label>
+                                {currentSpecial.product && (
+                                    <Card className="p-2 flex justify-between items-center mt-1">
+                                        <span className="text-xs sm:text-sm truncate">{currentSpecial.product.name}</span>
                                         <Button
                                             variant="ghost"
                                             size="icon"
@@ -516,16 +522,15 @@ export function AddProductsSpecials({ onClose }: Props) {
                                         >
                                             <X className="h-4 w-4" />
                                         </Button>
-                                    </div>
-                                </Card>
-                            )}
-                        </div>
+                                    </Card>
+                                )}
+                            </div>
 
-                            <div className="flex gap-4">
-                                <Button onClick={ onClose } className="bg-red hover:bg-rose-300 text-white w-full">
+                            <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
+                                <Button onClick={onClose} className="bg-red hover:bg-rose-300 text-white">
                                     Cancel
                                 </Button>
-                                <Button onClick={ saveSpecial } className="bg-green hover:bg-emerald-300 text-white w-full">
+                                <Button onClick={saveSpecial} className="bg-green hover:bg-emerald-300 text-white">
                                     Save Special
                                 </Button>
                             </div>
