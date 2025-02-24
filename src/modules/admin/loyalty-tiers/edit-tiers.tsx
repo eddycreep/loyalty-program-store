@@ -7,7 +7,7 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import { X, Check } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle, CardHeader } from "@/components/ui/card";
 import { useSession } from '@/context';
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data';
@@ -157,93 +157,116 @@ export function EditTiers({ onClose, selectedTier }: any) {
 
 
     return (
-        <div className="container mx-auto p-4 relative">
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <Card className="mb-6 w-[600px]">
-                <div className="flex justify-end pr-4 pt-4">
-                    <button onClick={ onClose }>
-                        <X className="h-4 w-4" color="red" />
-                    </button>
-                </div>
-                <div className="pl-6 pb-4">
-                    <CardTitle className="text-xl font-bold">Edit Tier</CardTitle>
-                    <CardDescription className="text-gray-600">Edit existing tiers for a loyalty program</CardDescription>
-                </div>
-                <CardContent>
-                    <div className="space-y-4">
-                        <div className="flex gap-4">
-                            <div className="w-full">
-                                <label htmlFor="tier" className="text-black text-sm">Tier</label>
-                                <Input
-                                    id="tier"
-                                    value={currentTier.tier} 
-                                    onChange={(e) => setCurrentTier(prev => ({ ...prev, tier: e.target.value }))} 
-                                    placeholder="Enter tier"
-                                />
+        <div className="fixed inset-0 z-50">
+            {/* Responsive container with padding for smaller screens */}
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+                {/* Card with dynamic width based on screen size */}
+                <Card className="w-full max-w-[95vw] md:max-w-[600px] max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-end pr-4 pt-4">
+                        <button onClick={onClose}>
+                            <X className="h-4 w-4" color="red" />
+                        </button>
+                    </div>
+                    <CardHeader>
+                        <CardTitle>Edit Tier</CardTitle>
+                        <CardDescription className="text-xs sm:text-sm">
+                            Edit existing tiers for a loyalty program
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-3 sm:space-y-4">
+                            {/* Tier and Eligibility */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="tier" className="text-black text-xs sm:text-sm">Tier</label>
+                                    <Input
+                                        id="tier"
+                                        value={currentTier.tier}
+                                        onChange={(e) => setCurrentTier(prev => ({ ...prev, tier: e.target.value }))}
+                                        placeholder="Enter tier"
+                                        className="mt-1"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="eligibility" className="text-black text-xs sm:text-sm">Eligibility</label>
+                                    <Input
+                                        id="eligibility"
+                                        value={currentTier.eligibility}
+                                        onChange={(e) => setCurrentTier(prev => ({ ...prev, eligibility: e.target.value }))}
+                                        placeholder="Enter eligibility"
+                                        className="mt-1"
+                                    />
+                                </div>
                             </div>
-                            <div className="w-full">
-                                <label htmlFor="eligibility" className="text-black text-sm">Eligibility</label>
-                                <Input
-                                    id="eligibility"
-                                    value={currentTier.eligibility} 
-                                    onChange={(e) => setCurrentTier(prev => ({ ...prev, eligibility: e.target.value }))}
-                                    placeholder="Enter eligibility"
-                                />
+
+                            {/* Spending Amounts */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="min-spending-amount" className="text-black text-xs sm:text-sm">
+                                        Minimum Spending Amount
+                                    </label>
+                                    <Input
+                                        id="min-spending-amount"
+                                        type="number"
+                                        value={currentTier.min_spending_amount}
+                                        onChange={(e) => setCurrentTier(prev => ({ ...prev, min_spending_amount: parseFloat(e.target.value) }))}
+                                        placeholder="Enter minimum amount"
+                                        className="mt-1"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="max-spending-amount" className="text-black text-xs sm:text-sm">
+                                        Maximum Spending Amount
+                                    </label>
+                                    <Input
+                                        id="max-spending-amount"
+                                        type="number"
+                                        value={currentTier.max_spending_amount || ''}
+                                        onChange={(e) => setCurrentTier(prev => ({ ...prev, max_spending_amount: parseFloat(e.target.value) }))}
+                                        placeholder="Enter maximum amount"
+                                        className="mt-1"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="w-full">
-                                <label htmlFor="min-spending-amount" className="text-black text-sm">Minimum Spending Amount</label>
-                                <Input
-                                    id="min-spending-amount"
-                                    type="number"
-                                    value={currentTier.min_spending_amount} 
-                                    onChange={(e) => setCurrentTier(prev => ({ ...prev, min_spending_amount: parseFloat(e.target.value) }))} 
-                                    placeholder="Enter maximum spending amount"
-                                />
+
+                            {/* Textarea fields with controlled height */}
+                            <div className="space-y-3">
+                                {/* Discount textarea with max height */}
+                                <div>
+                                    <label htmlFor="discount" className="text-black text-xs sm:text-sm">Discount</label>
+                                    <Textarea
+                                        id="discount"
+                                        value={currentTier.discounts}
+                                        onChange={(e) => setCurrentTier(prev => ({ ...prev, discounts: e.target.value }))}
+                                        placeholder="Enter discounts available"
+                                        className="mt-1 min-h-[80px] max-h-[120px] resize-y"
+                                    />
+                                </div>
+                                {/* Reward textarea with max height */}
+                                <div>
+                                    <label htmlFor="rewards" className="text-black text-xs sm:text-sm">Reward</label>
+                                    <Textarea
+                                        id="rewards"
+                                        value={currentTier.rewards}
+                                        onChange={(e) => setCurrentTier(prev => ({ ...prev, rewards: e.target.value }))}
+                                        placeholder="Enter rewards available"
+                                        className="mt-1 min-h-[80px] max-h-[120px] resize-y"
+                                    />
+                                </div>
                             </div>
-                            <div className="w-full">
-                                <label htmlFor="max-spending-amount" className="text-black text-sm">Maximum Spending Amount</label>
-                                <Input
-                                    id="max-spending-amount"
-                                    type="number"
-                                    value={currentTier.max_spending_amount || ''} 
-                                    onChange={(e) => setCurrentTier(prev => ({ ...prev, max_spending_amount: parseFloat(e.target.value) }))}
-                                    placeholder="Enter maximum spending amount"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-4">
-                            <div className="w-full">
-                                <label htmlFor="discount" className="text-black text-sm">Discount</label>
-                                <Textarea 
-                                    id="discount"
-                                    value={currentTier.discounts} 
-                                    onChange={(e) => setCurrentTier(prev => ({ ...prev, discounts: e.target.value }))}
-                                    placeholder="Enter discounts available"
-                                />
-                            </div>
-                            <div className="w-full">
-                                <label htmlFor="rewards" className="text-black text-sm">Reward</label>
-                                <Textarea 
-                                    id="rewards"
-                                    value={currentTier.rewards} 
-                                    onChange={(e) => setCurrentTier(prev => ({ ...prev, rewards: e.target.value }))}
-                                    placeholder="Enter rewards available"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex gap-4">
-                                <Button onClick={ onClose } className="bg-red hover:bg-rose-300 text-white w-full">
+
+                            {/* Action Buttons */}
+                            <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
+                                <Button onClick={onClose} className="bg-red hover:bg-rose-300 text-white">
                                     Cancel
                                 </Button>
-                                <Button className="bg-green hover:bg-emerald-300 text-white w-full" onClick={ updateTier }>
-                                Update Tier
+                                <Button onClick={updateTier} className="bg-green hover:bg-emerald-300 text-white">
+                                    Update Tier
                                 </Button>
-            </div>
-                    </div>
-                </CardContent>
-            </Card>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     )

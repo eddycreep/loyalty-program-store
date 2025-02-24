@@ -131,14 +131,14 @@ export function EditAlternativeRewards({ onClose, selectedReward }: any) {
         console.log('The Alternative Reward has been updated successfully:', response.data)
 
         if (response.status === 200) {
-            toast.success('The Alternative Reward has been updated successfully', {
+            toast.success('Alternative Reward Updated', {
                 icon: <Check color={colors.green} size={24} />,
                 duration: 3000,
             })
         }
         onClose();
     } catch (error) {
-        console.error('Error updating Reward:', error)
+        console.error('Error updating Alternative Reward:', error)
         
         toast.success('There was an error when updating the Reward', {
             icon: <X color={colors.red} size={24} />,
@@ -168,58 +168,63 @@ export function EditAlternativeRewards({ onClose, selectedReward }: any) {
   }, [selectedReward, ageGroups]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <Card className="mb-6 w-[600px]">
-              <div className="flex justify-end pr-4 pt-4">
-                <button onClick={ onClose }>
-                  <X className="h-4 w-4" color="red" />
-                </button>
-              </div>
-            <div className="pl-6 pb-4">
-              <CardTitle className="text-xl font-bold">Edit Reward</CardTitle>
-              <CardDescription className="text-gray-600">Edit existing customer rewards</CardDescription>
-            </div>
+    <div className="fixed inset-0 z-50">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+        <Card className="w-full max-w-[95vw] md:max-w-[600px] max-h-[90vh] overflow-y-auto">
+          <div className="flex justify-end pr-4 pt-4">
+            <button onClick={onClose}>
+              <X className="h-4 w-4" color="red" />
+            </button>
+          </div>
+          <CardHeader>
+            <CardTitle>Edit Alternative Reward</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Update the alternative reward information below
+            </CardDescription>
+          </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex gap-4">
-                <div className="w-full">
-                    <label htmlFor="special-name" className="text-black text-sm">Title</label>
-                    <Input
-                      id="reward-title"
-                      value={currentReward.reward_title} 
-                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_title: e.target.value }))} 
-                      placeholder="Enter reward title"
-                    />
+            <div className="space-y-3 sm:space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <label htmlFor="reward-title" className="text-black text-xs sm:text-sm">Title</label>
+                  <Input
+                    id="reward-title"
+                    value={currentReward.reward_title}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_title: e.target.value }))}
+                    placeholder="Enter reward title"
+                    className="mt-1"
+                  />
                 </div>
-                <div className="w-full">
-                    <label htmlFor="special-name" className="text-black text-sm">Description</label>
-                    <Input
-                      id="special-name"
-                      value={currentReward.description} 
-                      onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))}
-                      placeholder="Enter reward"
-                    />
+                <div>
+                  <label htmlFor="description" className="text-black text-xs sm:text-sm">Description</label>
+                  <Input
+                    id="description"
+                    value={currentReward.description}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, description: e.target.value }))}
+                    placeholder="Enter description"
+                    className="mt-1"
+                  />
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="w-full">
-                    <label htmlFor="special-name" className="text-black text-sm">Reward</label>
-                    <Input
-                      id="special-name"
-                      value={currentReward.reward} 
-                      onChange={(e) => setCurrentReward(prev => ({ ...prev, reward: e.target.value }))}
-                      placeholder="Enter reward"
-                    />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <label htmlFor="reward" className="text-black text-xs sm:text-sm">Reward</label>
+                  <Input
+                    id="reward"
+                    value={currentReward.reward}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, reward: e.target.value }))}
+                    placeholder="Enter reward"
+                    className="mt-1"
+                  />
                 </div>
-                <div className="w-full">
-                  <label htmlFor="special-type" className="text-black text-sm">Type</label>
+                <div>
+                  <label htmlFor="reward-type" className="text-black text-xs sm:text-sm">Type</label>
                   <Select
                     value={currentReward.reward_type}
-                    onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, reward_type: value as 'Percentage' | 'Amount' }))} 
+                    onValueChange={(value) => setCurrentReward(prev => ({ ...prev, reward_type: value }))}
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select reward type" />
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Percentage">Percentage</SelectItem>
@@ -228,131 +233,122 @@ export function EditAlternativeRewards({ onClose, selectedReward }: any) {
                   </Select>
                 </div>
               </div>
-              <div className="flex gap-4">
-                  <div className="w-full">
-                    <label htmlFor="store-id" className="text-black text-sm">Tier</label>
-                      <Select
-                        value={currentReward.loyalty_tier}
-                        onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, loyalty_tier: value }))}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select tier" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="All">All</SelectItem>
-                          {loyaltyTiers.map((loyalty) => (
-                            <SelectItem key={loyalty.tier_id} value={loyalty.tier}>
-                              {loyalty.tier}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                  </div>
-                  <div className="w-full">
-                      <label htmlFor="special-price" className="text-black text-sm">Price</label>
-                      <Input
-                          id="special-price"
-                          type="number"
-                          value={currentReward.reward_price || ''}
-                          onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_price: parseFloat(e.target.value) }))}
-                          placeholder="Enter reward price"
-                        />
-                  </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="w-full">
-                  <label htmlFor="start-date" className="text-black text-sm">Start Date</label>
-                  <input 
-                    type="datetime-local" 
-                    name="start-date"
-                    value={currentReward.start_date} 
-                    onChange={(e) => setCurrentReward(prev => ({ ...prev, start_date: e.target.value }))} 
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-black shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
-                  </input>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <label htmlFor="loyalty-tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
+                  <Select
+                    value={currentReward.loyalty_tier}
+                    onValueChange={(value) => setCurrentReward(prev => ({ ...prev, loyalty_tier: value }))}
+                  >
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select tier" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All">All</SelectItem>
+                      {loyaltyTiers.map((loyalty) => (
+                        <SelectItem key={loyalty.tier_id} value={loyalty.tier}>
+                          {loyalty.tier}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div className="w-full">
-                  <label htmlFor="end-date" className="text-black text-sm">End Date</label>
-                  <input 
-                    type="datetime-local" 
-                    name="end-date"
-                    value={currentReward.expiry_date} 
-                    onChange={(e) => setCurrentReward(prev => ({ ...prev, expiry_date: e.target.value }))} 
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-black shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
-                  </input>
+                <div>
+                  <label htmlFor="reward-price" className="text-black text-xs sm:text-sm">Price</label>
+                  <Input
+                    id="reward-price"
+                    type="number"
+                    value={currentReward.reward_price || ''}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_price: parseFloat(e.target.value) }))}
+                    placeholder="Enter price"
+                    className="mt-1"
+                  />
                 </div>
               </div>
-              <div className="flex gap-4">
-                  <div className="w-full">
-                    <label htmlFor="store-id" className="text-black text-sm">Store ID</label>
-                      <Select
-                        value={currentReward.store_id}
-                        onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select store ID" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="All">All</SelectItem>
-                          {allStores.map((branch) => (
-                            <SelectItem key={branch.id} value={branch.code}>
-                              {branch.code}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                  </div>
-                  <div className="w-full">
-                    <label htmlFor="age-group" className="text-black text-sm">Age Group</label>
-                    <Select
-                      value={currentReward.age_group}
-                      onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, age_group: value }))}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Age Group" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="All">All</SelectItem>
-                        {ageGroups.map((age) => (
-                          <SelectItem key={age.age_group_id} value={age.age_range}>
-                            {age.group_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <label htmlFor="start-date" className="text-black text-xs sm:text-sm">Start Date</label>
+                  <Input
+                    type="datetime-local"
+                    value={currentReward.start_date}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, start_date: e.target.value }))}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="end-date" className="text-black text-xs sm:text-sm">End Date</label>
+                  <Input
+                    type="datetime-local"
+                    value={currentReward.expiry_date}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, expiry_date: e.target.value }))}
+                    className="mt-1"
+                  />
+                </div>
               </div>
-              <div className="flex gap-4">
-                  <div className="flex flex-col space-x-2 pt-2">
-                      <label htmlFor="active-toggle" className="text-black text-sm">
-                        Active
-                      </label>
-                      <div className="pt-2">
-                        <Switch
-                          id="active-toggle"
-                          checked={currentReward.isActive}
-                          onCheckedChange={(checked) =>
-                            setCurrentReward(prev => ({ ...prev, isActive: checked }))
-                          }
-                        />
-                      </div>
-                  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
+                  <Select
+                    value={currentReward.store_id}
+                    onValueChange={(value) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
+                  >
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select store" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All">All</SelectItem>
+                      {allStores.map((store) => (
+                        <SelectItem key={store.id} value={store.code}>
+                          {store.code}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor="age-group" className="text-black text-xs sm:text-sm">Age Group</label>
+                  <Select
+                    value={currentReward.age_group}
+                    onValueChange={(value) => setCurrentReward(prev => ({ ...prev, age_group: value }))}
+                  >
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select age group" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All">All</SelectItem>
+                      {ageGroups.map((age) => (
+                        <SelectItem key={age.age_group_id} value={age.age_range}>
+                          {age.group_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-
-              {/* <Button className="bg-green hover:bg-emerald-300" onClick={ updateReward }>
-                  Update Reward
-              </Button> */}
-              <div className="flex gap-4">
-                  <Button onClick={ onClose } className="bg-red hover:bg-rose-300 text-white w-full">
-                      Cancel
-                  </Button>
-                  <Button className="bg-green hover:bg-emerald-300 text-white w-full" onClick={ updateReward }>
-                      Update Reward
-                  </Button>
+              <div className="flex items-center space-x-2">
+                <label htmlFor="active-toggle" className="text-black text-xs sm:text-sm">
+                  Active
+                </label>
+                <Switch
+                  id="active-toggle"
+                  checked={currentReward.isActive}
+                  onCheckedChange={(checked) =>
+                    setCurrentReward(prev => ({ ...prev, isActive: checked }))
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
+                <Button onClick={onClose} className="bg-red hover:bg-rose-300 text-white">
+                  Cancel
+                </Button>
+                <Button onClick={updateReward} className="bg-green hover:bg-emerald-300 text-white">
+                  Update
+                </Button>
               </div>
             </div>
           </CardContent>
         </Card>
-        </div>
+      </div>
     </div>
   )
 }
