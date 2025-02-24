@@ -82,7 +82,7 @@ const config: Config = {
   			}
   		},
   		backgroundImage: {
-			login: "url('/covers/attract-customers.jpg')",
+			login: "url('/covers/heart-customer.jpg')",
 		},		  
   		borderRadius: {
   			lg: 'var(--radius)',
