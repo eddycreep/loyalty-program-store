@@ -1,18 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { LoyaltySummaryCards } from '@/components/loyalty-summary-cards'
-import { ActiveSpecialCards } from '@/modules/home/components/specials/active-specials-card'
-import { UpcomingSpecialCards } from '@/modules/home/components/specials/upcoming-specials-card'
-import { ActiveRewardsCards } from '@/modules/home/components/rewards/active-rewards-card'
-import { UpcomingRewardsCards } from '@/modules/home/components/rewards/upcoming-rewards-cards'
-import { ActiveSurveyCards } from '@/modules/home/components/surveys/active-surveys-card'
-import { UpcomingSurveyCards } from '@/modules/home/components/surveys/upcoming-surveys-card'
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LoyaltySummaryCards } from '@/components/loyalty-summary-cards';
+import { ActiveSpecialCards } from '@/modules/home/components/specials/active-specials-card';
+import { UpcomingSpecialCards } from '@/modules/home/components/specials/upcoming-specials-card';
+import { ActiveRewardsCards } from '@/modules/home/components/rewards/active-rewards-card';
+import { UpcomingRewardsCards } from '@/modules/home/components/rewards/upcoming-rewards-cards';
+import { ActiveSurveyCards } from '@/modules/home/components/surveys/active-surveys-card';
+import { UpcomingSurveyCards } from '@/modules/home/components/surveys/upcoming-surveys-card';
+import { useSession } from '@/context';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("active")
   const [activeRewardsTab, setActiveRewardsTab] = useState("active-rewards")
+
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center gap-2 p-2 rounded">
