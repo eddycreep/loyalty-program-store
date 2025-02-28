@@ -4,13 +4,12 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import * as React from "react";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
-import { Check, X, BadgeAlert, AlertTriangle, Filter, XOctagon, ShieldAlert } from "lucide-react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { X, Filter, XOctagon, ShieldAlert } from "lucide-react";
 import SquareCircleLoader from "@/lib/square-circle-loader"
-import { Label } from "@/components/ui/label";
+import axios from "axios";
+import { StoresResponse } from '@/modules/types/data-types';
 
-// Define the interface for RedemptionRate data
-// Define the interface for MemberConversion data
+
 interface MemberConversion {
     store_id: string;
     store_name: string;
@@ -137,20 +136,20 @@ const memberConversionData: MemberConversion[] = [
 
 
 
-const stores = [
-    { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
-    { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
-    { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
-    { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
-    { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
-    { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
-    { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
-    { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
-];
+// const stores = [
+//     { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
+//     { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
+//     { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
+//     { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' },  // Random place added
+//     { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
+//     { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' },  // Random place added
+//     { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
+//     { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' },  // Random place added
+//     { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' },  // Random place added
+//     { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
+//     { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
+//     { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
+// ];
 
 
 const storeRegions = [
@@ -177,6 +176,18 @@ export const MemberConversionReport = () => {
     const [isLoading, setIsLoading] = useState(false); 
     const [isError, setIsError] = useState(false); 
     const [hasFiltered, setDataHasFiltered] = useState(false);
+
+    const [allStores, setAllStores] = useState<StoresResponse>([]);
+
+    const getStores = async () => {
+        try {
+            const url = `inventory/get-stores`
+            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            setAllStores(response.data)
+        } catch (error) {
+            console.error('Error RETURNING STORES:', error)
+        }
+    }
 
 
     const handleFilter = () => {
@@ -210,6 +221,9 @@ export const MemberConversionReport = () => {
         setIsLoading(false);  
     };
 
+    useEffect(() => {
+        getStores();
+    }, []);
 
     if (isLoading) {
         return (
@@ -241,11 +255,11 @@ export const MemberConversionReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
+                            {allStores.map((branch) => (
+                                <option key={branch.id} value={branch.code}>
+                                    {branch.code}
+                                </option>
+                            ))}
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
@@ -319,11 +333,11 @@ export const MemberConversionReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
+                            {allStores.map((branch) => (
+                                <option key={branch.id} value={branch.code}>
+                                    {branch.code}
+                                </option>
+                            ))}
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
@@ -396,11 +410,11 @@ export const MemberConversionReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
+                            {allStores.map((branch) => (
+                                <option key={branch.id} value={branch.code}>
+                                    {branch.code}
+                                </option>
+                            ))}
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">
@@ -441,6 +455,7 @@ export const MemberConversionReport = () => {
             </div>
         );
     }
+    
 
     return (
         <div className="h-screen overflow-y-auto pl-2 pt-4">
@@ -471,11 +486,11 @@ export const MemberConversionReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
+                            {allStores.map((branch) => (
+                                <option key={branch.id} value={branch.code}>
+                                    {branch.code}
+                                </option>
+                            ))}
                     </select>
                 </div>
                 <div className="w-[300px] flex flex-col pt-4">

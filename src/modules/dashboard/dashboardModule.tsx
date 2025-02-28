@@ -228,8 +228,8 @@ export const DashboardModule = () => {
     const [activeTab, setActiveTab] = useState('customer-engagement')
     
     return (
-        <div className="h-screen mb-72">
-            <div className="w-full mb-72">
+        <div className="w-full h-screen overflow-y-scroll p-2 flex flex-col justify-start space-y-2">
+            <div className="">
                 <h1 className="text-3xl font-bold mb-4 text-purple">Loyalty Program Dashboard</h1>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
                     <TabsList>
@@ -240,9 +240,9 @@ export const DashboardModule = () => {
                     <TabsTrigger value="effectiveness">Effectiveness</TabsTrigger>
                     <TabsTrigger value="performance">Product Performance</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="customer-engagement" className="space-y-4 h-screen w-full">
-                    <div className="h-screen w-full">
-                        <div className="flex justify-between gap-2 pb-2">
+                    <TabsContent value="customer-engagement" className="w-full">
+                    <div>
+                        <div className="grid grid-cols-4 gap-2">
                             <div className="">
                                 <LoyaltyMembersChart/>
                             </div>

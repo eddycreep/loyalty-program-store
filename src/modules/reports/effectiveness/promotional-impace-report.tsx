@@ -4,10 +4,11 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import * as React from "react";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
-import { Check, X, BadgeAlert, AlertTriangle, Filter, XOctagon, ShieldAlert } from "lucide-react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { X, Filter, XOctagon, ShieldAlert } from "lucide-react";
 import SquareCircleLoader from "@/lib/square-circle-loader"
-import { Label } from "@/components/ui/label";
+import axios from "axios";
+import { StoresResponse } from '@/modules/types/data-types';
+
 
 // Interface for promotionalImpactData
 interface PromotionalImpact {
@@ -169,7 +170,18 @@ export const PromotionalImpactReport = () => {
     const [isError, setIsError] = useState(false); 
     const [hasFiltered, setDataHasFiltered] = useState(false);
 
-    
+    const [allStores, setAllStores] = useState<StoresResponse>([]);
+
+    const getStores = async () => {
+        try {
+            const url = `inventory/get-stores`
+            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            setAllStores(response.data)
+        } catch (error) {
+            console.error('Error RETURNING STORES:', error)
+        }
+    }
+
     const handleFilter = () => {
         setIsLoading(true);
         let filtered = promotionalImpactData;
@@ -206,6 +218,10 @@ export const PromotionalImpactReport = () => {
 
         setIsLoading(false);
     };
+
+    useEffect(() => {
+        getStores();
+    }, []);
 
 
     if (isLoading) {
