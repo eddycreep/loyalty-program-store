@@ -4,10 +4,10 @@ import { apiEndPoint, colors } from '@/utils/colors';
 import * as React from "react";
 import { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
-import { Check, X, BadgeAlert, AlertTriangle, Filter, XOctagon, ShieldAlert } from "lucide-react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { X, Filter, XOctagon, ShieldAlert } from "lucide-react";
 import SquareCircleLoader from "@/lib/square-circle-loader"
-import { Label } from "@/components/ui/label";
+import axios from "axios";
+import { StoresResponse } from '@/modules/types/data-types';
 
 interface FirstRedemptionData {
     store_id: string;
@@ -34,21 +34,6 @@ const firstRedemptionData: FirstRedemptionData[] = [
 ];
 
 
-const stores = [
-    { id: 1, store_id: 'SOO1', store: 'PLUS DC Stellenbosch' },
-    { id: 2, store_id: 'SOO2', store: 'PLUS DC Albertin' },
-    { id: 3, store_id: 'SOO3', store: 'PLUS DC Bellville' },
-    { id: 4, store_id: 'SOO4', store: 'PLUS DC Nelspruit' }, 
-    { id: 5, store_id: 'SOO5', store: 'PLUS DC Durbanville' },
-    { id: 6, store_id: 'SOO6', store: 'PLUS DC Bloemfontein' }, 
-    { id: 7, store_id: 'SOO7', store: 'PLUS DC Cape Town' },
-    { id: 8, store_id: 'SOO8', store: 'PLUS DC Pietermaritzburg' }, 
-    { id: 9, store_id: 'SOO9', store: 'PLUS DC East London' }, 
-    { id: 10, store_id: 'SOO10', store: 'PLUS DC Pretoria' },
-    { id: 11, store_id: 'SOO11', store: 'PLUS DC Germiston' },
-    { id: 12, store_id: 'SOO12', store: 'PLUS DC Polokwane' },
-];
-
 const storeRegions = [
     { id: 1, region: 'Eastern Cape'}, 
     { id: 2, region: 'Free State'}, 
@@ -73,6 +58,18 @@ export const FirstRedemptionReport = () => {
     const [isLoading, setIsLoading] = useState(false); 
     const [isError, setIsError] = useState(false);
     const [hasFiltered, setDataHasFiltered] = useState(false);
+
+    const [allStores, setAllStores] = useState<StoresResponse>([]);
+
+    const getStores = async () => {
+        try {
+            const url = `inventory/get-stores`
+            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            setAllStores(response.data)
+        } catch (error) {
+            console.error('Error RETURNING STORES:', error)
+        }
+    }
 
     // Filter function to handle filtering by date range and store
     const handleFilter = () => {
@@ -110,7 +107,10 @@ export const FirstRedemptionReport = () => {
     
         setIsLoading(false);  // Disable loader after filtering
     };
-    
+
+    useEffect(() => {
+        getStores();
+    }, []);
 
 
     if (isLoading) {
@@ -123,46 +123,29 @@ export const FirstRedemptionReport = () => {
                             <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
                             </label>
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300 [color-scheme:light]'/>
                         </div>
                         <div className="w-[270px]">
                             <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
                             </label>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300 [color-scheme:light]'/>
                         </div>
                     </div>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-2 text-black">
+                <div className="w-[570px] flex flex-col pt-4">
+                    <label htmlFor="storeid" className="text-left text-black pt-2">
                         Store ID:
                     </label>
                     <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-2 text-black">
-                        Regions:
-                    </label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
@@ -201,46 +184,29 @@ export const FirstRedemptionReport = () => {
                             <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
                             </label>
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300 [color-scheme:light]'/>
                         </div>
                         <div className="w-[270px]">
                             <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
                             </label>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300 [color-scheme:light]'/>
                         </div>
                     </div>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-2 text-black">
+                <div className="w-[570px] flex flex-col pt-4">
+                    <label htmlFor="storeid" className="text-left text-black pt-2">
                         Store ID:
                     </label>
                     <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-2 text-black">
-                        Regions:
-                    </label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
@@ -279,46 +245,29 @@ export const FirstRedemptionReport = () => {
                             <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
                             </label>
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300 [color-scheme:light]'/>
                         </div>
                         <div className="w-[270px]">
                             <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
                             </label>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300 [color-scheme:light]'/>
                         </div>
                     </div>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-2 text-black">
+                <div className="w-[570px] flex flex-col pt-4">
+                    <label htmlFor="storeid" className="text-left text-black pt-2">
                         Store ID:
                     </label>
                     <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-2 text-black">
-                        Regions:
-                    </label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
@@ -355,46 +304,29 @@ export const FirstRedemptionReport = () => {
                             <label htmlFor="username" className="text-left pt-4 text-black">
                                 Start Date:
                             </label>
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300 [color-scheme:light]'/>
                         </div>
                         <div className="w-[270px]">
                             <label htmlFor="username" className="text-left pt-4 text-black">
                                 End Date:
                             </label>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300 [color-scheme:light]'/>
                         </div>
                     </div>
                 </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-2 text-black">
+                <div className="w-[570px] flex flex-col pt-4">
+                    <label htmlFor="storeid" className="text-left text-black pt-2">
                         Store ID:
                     </label>
                     <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="w-[300px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-2 text-black">
-                        Regions:
-                    </label>
-                    <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                    >
-                        <option value="All">All</option>
-                        {storeRegions.map((region) => (
-                            <option key={region.id} value={region.region}>
-                                {region.region}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>

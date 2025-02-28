@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../loyalty-program-server-1"
+		},
+		{
+			"path": "../../../../loyalty-app"
+		}
+	],
+	"settings": {}
+}

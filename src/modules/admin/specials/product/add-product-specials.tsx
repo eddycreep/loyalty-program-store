@@ -100,6 +100,8 @@ export function AddProductsSpecials({ onClose }: Props) {
             const url = `inventory/get-stores`
             const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
             setAllStores(response.data)
+
+            console.log('all stores: ', response.data)
         } catch (error) {
             console.error('Error RETURNING STORES:', error)
         }

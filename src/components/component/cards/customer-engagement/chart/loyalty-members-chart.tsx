@@ -64,7 +64,7 @@ export function LoyaltyMembersChart() {
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
           <h5>Loyalty Members</h5>
-          <CardDescription>Membership distribution by category</CardDescription>
+          <p className="text-gray-400 text-sm">Membership distribution by category</p>
         </div>
         <Select value={activeCategory} onValueChange={setActiveCategory}>
           <SelectTrigger
@@ -130,7 +130,7 @@ export function LoyaltyMembersChart() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-black text-3xl font-bold"
                         >
                           {membersData[activeIndex].count.toLocaleString()}
                         </tspan>

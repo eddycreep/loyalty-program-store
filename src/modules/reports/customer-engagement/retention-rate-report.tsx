@@ -259,9 +259,9 @@ export const RetentionRateReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
@@ -337,9 +337,9 @@ export const RetentionRateReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
@@ -407,9 +407,9 @@ export const RetentionRateReport = () => {
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {stores.map(({ id, store_id, store }) => (
-                            <option key={id} value={store_id}>
-                                {store_id}
+                        {allStores.map((branch) => (
+                            <option key={branch.id} value={branch.code}>
+                                {branch.code}
                             </option>
                         ))}
                     </select>
@@ -466,22 +466,39 @@ export const RetentionRateReport = () => {
                     </div>
                 </div>
                 <div className="w-[570px] flex flex-col pt-4">
-                    <label htmlFor="storeid" className="text-left pt-4 pb-1 text-black">
+                    <label htmlFor="storeid" className="text-left text-black pt-2">
                         Store ID:
                     </label>
                     <select
-                        className="w-full p-2 rounded-lg border border-gray-300"
+                        className="bg-white text-black w-full h-11 p-2 rounded-lg border border-gray-300"
                         value={selectedStore}
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
                         <option value="All">All</option>
                         {allStores.map((branch) => (
-                            <option key={branch.id} value={branch.id}>
+                            <option key={branch.id} value={branch.code}>
                                 {branch.code}
                             </option>
                         ))}
                     </select>
                 </div>
+                {/* <div className="w-[300px] flex flex-col pt-4">
+                    <label htmlFor="storeid" className="text-left pt-2 text-black">
+                        Regions:
+                    </label>
+                    <select
+                        className="w-full p-2 rounded-lg border border-gray-300"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {storeRegions.map((region) => (
+                            <option key={region.id} value={region.region}>
+                                {region.region}
+                            </option>
+                        ))}
+                    </select>
+                </div> */}
                 <div className="flex justify-end w-full pt-12">
                     <button className="bg-purple hover:bg-black text-white w-20 h-11 rounded shadow-lg flex items-center justify-center" onClick={handleFilter}>
                         <Filter />
