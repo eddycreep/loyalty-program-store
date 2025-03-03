@@ -195,7 +195,7 @@ export default function LoyaltyProgramTiers() {
                     <TableRow>
                       <TableCell colSpan={5} className="p-0">
                         <div className="min-h-[200px] w-full flex flex-col items-center justify-center">
-                          <XOctagon size={34} />
+                          <XOctagon size={34} className="text-black" />
                           <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching tiers</p>
                         </div>
                       </TableCell>
@@ -243,29 +243,19 @@ export default function LoyaltyProgramTiers() {
                     </button>
                 </div>
             </div>
-              <div className="overflow-x-auto pt-4">
-                <Table className="w-full border border-gray-200 rounded-lg">
-                  <TableHeader>
-                    <TableRow className="bg-gray-100 text-black">
-                        <TableHead className="w-[170px] py-4 text-center">Tier</TableHead>
-                        <TableHead className="w-[200px] py-4 text-center">Eligibility</TableHead>
-                        <TableHead className="w-[600px] py-4 text-center">Discounts</TableHead>
-                        <TableHead className="w-[600px] py-4 text-center">Rewards</TableHead>
-                        <TableHead className="w-[110px] py-4 text-center">Action</TableHead>
-                      </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell colSpan={5} className="p-0">
-                        <div className="min-h-[200px] w-full flex flex-col items-center justify-center">
-                          <ShieldAlert size={44} />
-                          <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
+              <div className="min-w-[800px]">
+                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                    {headers?.map((header, index) => (
+                        <p key={index} className="text-xs uppercase flex-1 text-center">
+                            {header}
+                        </p>
+                    ))}
+                  </div>
+                  <div className="min-h-[200px] w-full flex flex-col items-center justify-center">
+                      <ShieldAlert size={44} className="text-black" />
+                      <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
+                  </div>
+                </div>
 
               <div className="pt-10">
                   <div className="flex justify-between">
