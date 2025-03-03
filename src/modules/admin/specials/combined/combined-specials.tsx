@@ -54,7 +54,7 @@ export const CombinedSpecials = () => {
     const [isError, setIsError] = useState(false);
     const [selectedCombinedSpecialID, setSelectedCombinedSpecialID] = useState(0);
 
-    const headers = ['Special ID', 'Special Group ID', 'Special Name', 'Special', 'Products', 'Special Price', 'Special Value', 'Action']
+    const headers = ['Special ID', 'Group ID', 'Special Name', 'Special', 'Products', 'Special Price', 'Special Value', 'Action']
 
     const getCombinedSpecials = async () => {
         setLoadingData(true);
@@ -226,67 +226,70 @@ export const CombinedSpecials = () => {
                     </button>
                 </div>
             </div>
-            <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                {headers?.map((header, index) => (
-                    <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
-                        {header}
-                    </p>
-                ))}
-            </div>
-            {/* Render each grouped special as a row */}
-            {combinedSpecials.map(({ special_id, special_name, special, special_type, special_price, store_id, start_date, expiry_date, special_value, isActive, combinedSpecialItem }) => (
-                <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
-                    <div className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-md">
-                        <div className="grid grid-cols-8 gap-2 items-center">
-                            <p className="text-sm text-center text-purple">{special_id || '--:--'}</p>
-                            <p className="text-sm text-center text-purple">{combinedSpecialItem.special_group_id || '--:--'}</p>
-                            <p className="text-sm text-center">{special_name || '--:--'}</p>
-                            <p className="text-sm text-center">{special || '--:--'}</p>
-                            <p className="text-sm text-center">{combinedSpecialItem.product_description || '--:--'}</p>
-                            <p className="text-sm text-center">R{special_price || '--:--'}</p>
-                            <p className="text-sm text-center">{special_value || '--:--'}</p>
-                            <div className="flex items-center justify-center gap-4">
-                            <button className="flex items-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg" onClick={() => handleExpandCombinedClick(special_id)}>
-                                {expandedCombinedRow === special_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
-                            </button>
-                            <button className="flex items-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" onClick={() => handleEditCombinedSpecial(special_id)}>
-                                <Edit size={21} /> 
-                            </button>
-                            <button className="flex items-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleCombinedDeletePage(special_id)}>
-                                <Trash2 size={21} /> 
-                            </button>
+            <div className="overflow-x-auto">
+                <div className="min-w-[900px]">
+                    <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                        {headers?.map((header, index) => (
+                            <p key={index} className="text-xs uppercase flex-1 text-center">
+                                {header}
+                            </p>
+                        ))}
+                    </div>
+                    {combinedSpecials.map(({ special_id, special_name, special, special_type, special_price, store_id, start_date, expiry_date, special_value, isActive, combinedSpecialItem }) => (
+                        <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2 overflow-y-auto">
+                            <div className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-md">
+                                <div className="grid grid-cols-8 gap-2 items-center">
+                                    <p className="text-sm text-center text-purple">{special_id || '--:--'}</p>
+                                    <p className="text-sm text-center text-purple">{combinedSpecialItem.special_group_id || '--:--'}</p>
+                                    <p className="text-sm text-center">{special_name || '--:--'}</p>
+                                    <p className="text-sm text-center">{special || '--:--'}</p>
+                                    <p className="text-sm text-center">{combinedSpecialItem.product_description || '--:--'}</p>
+                                    <p className="text-sm text-center">R{special_price || '--:--'}</p>
+                                    <p className="text-sm text-center">{special_value || '--:--'}</p>
+                                    <div className="flex items-center justify-center gap-4">
+                                    <button className="flex items-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg" onClick={() => handleExpandCombinedClick(special_id)}>
+                                        {expandedCombinedRow === special_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
+                                    </button>
+                                    <button className="flex items-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" onClick={() => handleEditCombinedSpecial(special_id)}>
+                                        <Edit size={21} /> 
+                                    </button>
+                                    <button className="flex items-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg" onClick={() => toggleCombinedDeletePage(special_id)}>
+                                        <Trash2 size={21} /> 
+                                    </button>
+                                    </div>
+                                </div>
+                                {expandedCombinedRow === special_id && (
+                                    <div className="pt-4">
+                                        <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-center text-sm">
+                                            <p></p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Group ID</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Product</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Store ID</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Start Date</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Expiry Date</p>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Status</p>
+                                            <p></p>
+                                            <React.Fragment key={combinedSpecialItem.special_group_id}>
+                                                <p></p>
+                                                <p className="text-sm text-purple pr-4">{combinedSpecialItem.special_group_id || '--:--'}</p>
+                                                <p className="text-sm text-gray-500">{combinedSpecialItem.product_description || '--:--'}</p>
+                                                <p className="text-sm text-gray-500">{store_id || '--:--'}</p>
+                                                <p className="text-sm text-gray-500">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
+                                                <p className="text-sm text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
+                                                <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>{isActive ? 'Active' : 'Inactive'}</p>
+                                                <p></p>
+                                            </React.Fragment>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
-                        {expandedCombinedRow === special_id && (
-                            <div className="pt-4">
-                                <div className="grid grid-cols-8 gap-2 pt-2 bg-gray-100 rounded shadow-inner p-4 text-center text-sm">
-                                    <p></p>
-                                    <p className="font-bold text-gray-600 text-xs uppercase">Special Group ID</p>
-                                    <p className="font-bold text-gray-600 text-xs uppercase">Product</p>
-                                    <p className="font-bold text-gray-600 text-xs uppercase">Store ID</p>
-                                    <p className="font-bold text-gray-600 text-xs uppercase">Start Date</p>
-                                    <p className="font-bold text-gray-600 text-xs uppercase">Expiry Date</p>
-                                    <p className="font-bold text-gray-600 text-xs uppercase">Status</p>
-                                    <p></p>
-                                    <React.Fragment key={combinedSpecialItem.special_group_id}>
-                                        <p></p>
-                                        <p className="text-sm text-purple pr-4">{combinedSpecialItem.special_group_id || '--:--'}</p>
-                                        <p className="text-sm text-gray-500">{combinedSpecialItem.product_description || '--:--'}</p>
-                                        <p className="text-sm text-gray-500">{store_id || '--:--'}</p>
-                                        <p className="text-sm text-gray-500">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
-                                        <p className="text-sm text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
-                                        <p className={`text-sm ${isActive === true ? 'text-green' : 'text-red'}`}>{isActive ? 'Active' : 'Inactive'}</p>
-                                        <p></p>
-                                    </React.Fragment>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    ))}
                 </div>
-            ))}
+            </div>
             {combinedSpecialsComponent && (<AddCombinedSpecials onClose={ toggleCombinedSpecials } />)}
             {editCombinedSpecialsPopup && <EditCombinedSpecials onClose={ closeEditSpecialsPopup } selectedCombinedSpecial={selectedCombinedSpecial} />}
             {combinedDeletePopUp && (<CombinedDeleteConfirmation specialID={selectedCombinedSpecialID} isOpen={combinedDeletePopUp} onClose={toggleCombinedDeletePage}/> )}
-    </div>
+        </div>
     )
 }
