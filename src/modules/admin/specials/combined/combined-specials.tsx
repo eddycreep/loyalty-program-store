@@ -175,7 +175,7 @@ export const CombinedSpecials = () => {
                     ))}
                 </div>
                 <div className="flex flex-col items-center justify-center pt-10">
-                    <XOctagon size={34} />
+                    <XOctagon size={34} className="text-black" />
                     <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching combined specials</p>
                 </div>
             </div>
@@ -205,7 +205,7 @@ export const CombinedSpecials = () => {
                 ))}
             </div>
             <div className="flex flex-col items-center justify-center pt-10">
-                <ShieldAlert size={34} />
+                <ShieldAlert size={34} className="text-black" />
                 <p className="ml-2 uppercase pt-2 text-green">No combined specials have been set for customers. Add new specials to enhance their experience!</p>
             </div>
         </div>

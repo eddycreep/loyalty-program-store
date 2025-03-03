@@ -161,7 +161,7 @@ export const RewardsModule = () => {
                     ))}
                 </div>
                 <div className="flex flex-col items-center justify-center pt-10">
-                    <XOctagon size={44} />
+                    <XOctagon size={44} className="text-black" />
                     <p className="ml-2 uppercase pt-2 text-red">An error occoured when fetching the rewards!</p>
                 </div>
             </div>
@@ -201,7 +201,7 @@ export const RewardsModule = () => {
                     ))}
                 </div>
                 <div className="flex flex-col items-center justify-center pt-10">
-                    <ShieldAlert size={44} />
+                    <ShieldAlert size={44} className="text-black" />
                     <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
                 </div>
             </div>

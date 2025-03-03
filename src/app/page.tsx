@@ -20,7 +20,7 @@ export default function Home() {
     <div className="w-full h-full flex flex-col justify-center items-center gap-2 p-2 rounded">
       <div className="w-full h-screen flex flex-col rounded">
         <div className="h-screen overflow-y-auto pb-20">
-          <main className="py-4 sm:py-6 md:py-8 px-2s sm:px-6 lg:px-8">
+          <main className="">
             <div className="w-full mx-auto">
               <header className="mb-6 sm:mb-8">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl text-purple font-bold">Loyalty Program Management</h1>

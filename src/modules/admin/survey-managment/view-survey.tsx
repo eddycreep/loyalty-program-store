@@ -110,7 +110,7 @@ export const ViewSurveys = () => {
                     {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
                 </div>
                 <div className="flex flex-col items-center justify-center pt-10">
-                    <XOctagon size={44} />
+                    <XOctagon size={44} className="text-black" />
                     <p className="ml-2 uppercase pt-2 text-red">An error occoured when fetching surveys!</p>
                 </div>
             </div>
@@ -128,7 +128,7 @@ export const ViewSurveys = () => {
                     {headers?.map((header, index) => (<p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>{header}</p>))}
                 </div>
                 <div className="flex flex-col items-center justify-center pt-10">
-                    <ShieldAlert size={44} />
+                    <ShieldAlert size={44} className="text-black" />
                     <p className="ml-2 uppercase pt-2 text-green">No surveys have been set for customers. Create new surveys to engage them and gather valuable feedback!</p>
                 </div>
             </div>
