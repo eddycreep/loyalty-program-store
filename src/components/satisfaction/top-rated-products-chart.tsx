@@ -12,11 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export const description = "An interactive pie chart showing top-rated products with customer ratings and rating counts.";
 
 const productData = [
-  { product: "Coke 2L", rating: 4.5, customerCount: 200, fill: "#ff2257" },
-  { product: "Lay's Chips", rating: 4.2, customerCount: 150, fill: "#00d384" },
-  { product: "Red Bull", rating: 4.8, customerCount: 100, fill: "#ffa726" },
-  { product: "Oreo Cookies", rating: 4.0, customerCount: 120, fill: "#1ec3ff" },
-  { product: "Pepsi 2L", rating: 4.3, customerCount: 90, fill: "#D4D4D4" },
+  { product: "SINIAT BOARD 6.4X.0.9X2.7", rating: 4.5, customerCount: 200, fill: "#ff2257" },
+  { product: "GYPROC-R/BOARD 6.4X0.9X2.4", rating: 4.2, customerCount: 150, fill: "#00d384" },
+  { product: "BIT BOARD 6.4X0.9X2.7", rating: 4.8, customerCount: 100, fill: "#ffa726" },
+  { product: "SINIAT BOARD 6.4X0.9X2.7", rating: 4.0, customerCount: 120, fill: "#1ec3ff" },
+  { product: "GYPROC-R/BOARD 6.4X0.9X2.7", rating: 4.3, customerCount: 90, fill: "#D4D4D4" },
 ];
 
 const chartConfig = {

@@ -12,11 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export const description = "An interactive pie chart showing lowest redeemed products with special types by count and revenue.";
 
 const productData = [
-  { product: "Oreo Cookies", count: 50, fill: "#1ec3ff", revenue: 5000, specialType: "Amount" },
-  { product: "Pepsi 2L", count: 70, fill: "#D4D4D4", revenue: 6000, specialType: "Percentage" },
-  { product: "Lay's Chips", count: 100, fill: "#00d384", revenue: 7000, specialType: "Amount" },
-  { product: "Coke 2L", count: 120, fill: "#ff2257", revenue: 8000, specialType: "Percentage" },
-  { product: "Red Bull", count: 140, fill: "#ffa726", revenue: 9000, specialType: "Percentage" },
+  { product: "BIT BOARD 6.4X0.9X3.0", count: 50, fill: "#1ec3ff", revenue: 5000, specialType: "Amount" },
+  { product: "GYPROC-R/BOARD 6.4X0.9X3.0", count: 70, fill: "#D4D4D4", revenue: 6000, specialType: "Percentage" },
+  { product: "GYPROC-R/BOARD 6.4X0.9X3.6", count: 100, fill: "#00d384", revenue: 7000, specialType: "Amount" },
+  { product: "BIT BOARD 6.4X0.9X4.2", count: 120, fill: "#ff2257", revenue: 8000, specialType: "Percentage" },
+  { product: "BIT BOARD 6.4X0.9X3.0", count: 140, fill: "#ffa726", revenue: 9000, specialType: "Percentage" },
 ];
 
 const chartConfig = {
