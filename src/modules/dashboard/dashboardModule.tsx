@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import { ActiveMembersCard } from "@/components/component/cards/customer-engagement/active-members-card"
-// import { EngagementRateCard } from "@/components/component/cards/customer-engagement/engagement-rate-card"
+
 import { CommonRedeemedSpecialsChart } from "@/components/component/cards/customer-engagement/chart/common-redeemed-specials"
 import { CommonRedeemedRewardsChart } from "@/components/component/cards/customer-engagement/chart/common-redeemed-rewards"
 import LoyaltyTierMembersChart  from "@/components/component/cards/customer-engagement/chart/tier-members-chart"
@@ -17,7 +17,6 @@ import { SurveysCompletedChart } from "@/components/component/cards/customer-eng
 import { SpecialsRevenueChart } from "@/components/financial/specials-revenue-chart"
 import { TopProductsRevenueChart } from "@/components/financial/top-products-revenue-chart"
 import { TiersRevenueChart } from "@/components/financial/tiers-revenue-chart"
-// import { LoyaltyRevenueChart } from "@/components/financial/radial-revenue-chart"
 
 
 // REDEMPTIONS
@@ -194,7 +193,6 @@ const crossSellUpsellRate = [
     { month: 'Oct', crossSell: 21, upSell: 13 }
 ];
 
-
 const memberConversionRate = [
     { stage: 'Visitors', value: 10000 },
     { stage: 'Registered', value: 5000 },
@@ -202,14 +200,12 @@ const memberConversionRate = [
     { stage: 'Loyal', value: 1000 },
 ]
 
-
 const programROI = [
     { year: 2020, roi: 120 },
     { year: 2021, roi: 135 },
     { year: 2022, roi: 150 },
     { year: 2023, roi: 165 },
 ]
-
 
 const promotionalImpact = [
     { month: 'Jan', sales: 100000, promotion: false },
@@ -244,7 +240,7 @@ export const DashboardModule = () => {
                     <div>
                         <div className="grid grid-cols-4 gap-2">
                             <div className="">
-                                <LoyaltyMembersChart/>
+                                <LoyaltyMembersChart />
                             </div>
                             <div className="">
                                 <CommonRedeemedSpecialsChart />
@@ -256,95 +252,94 @@ export const DashboardModule = () => {
                                 <SurveysCompletedChart />
                             </div>
                         </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
-                        <Card>
-                        <CardHeader>
-                            <CardTitle>Active Members</CardTitle>
-                            <CardDescription>Number of active members over time</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <ChartContainer config={{ members: { label: "Active Members", color: "hsl(var(--chart-1))" } }} className="h-[300px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={activeMembers}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" />
-                                <YAxis />
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                                <Line type="monotone" dataKey="members" stroke="var(--color-members)" />
-                                </LineChart>
-                            </ResponsiveContainer>
-                            </ChartContainer>
-                        </CardContent>
-                        </Card>
-                        <Card>
-                        <CardHeader>
-                            <CardTitle>Enrollment Rate</CardTitle>
-                            <CardDescription>New members joining the program</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <ChartContainer config={{ newMembers: { label: "New Members", color: "hsl(var(--chart-2))" } }} className="h-[300px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={enrollmentRate}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" />
-                                <YAxis />
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                                <Bar dataKey="newMembers" fill="var(--color-newMembers)" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                            </ChartContainer>
-                        </CardContent>
-                        </Card>
-                        <Card>
-                        <CardHeader>
-                            <CardTitle>Retention vs. Churn Rate</CardTitle>
-                            <CardDescription>Percentage of customers retained vs. churned</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <ChartContainer config={{ retention: { label: "Retention", color: "hsl(var(--chart-3))" }, churn: { label: "Churn", color: "hsl(var(--chart-4))" } }} className="h-[300px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={retentionChurn}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" />
-                                <YAxis />
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                                <Bar dataKey="retention" fill="var(--color-retention)" />
-                                <Bar dataKey="churn" fill="var(--color-churn)" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                            </ChartContainer>
-                        </CardContent>
-                        </Card>
-                        <Card>
-                        <CardHeader>
-                            <CardTitle>Redemption Rate</CardTitle>
-                            <CardDescription>Percentage of redeemed vs unredeemed discounts</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={300}>
-                            <PieChart>
-                                <Pie data={redemptionRate} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="hsl(var(--chart-4))" label />
-                                <Tooltip />
-                                <Legend />
-                            </PieChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                        </Card>
-                    </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
+                            <Card>
+                            <CardHeader>
+                                <CardTitle>Active Members</CardTitle>
+                                <CardDescription>Number of active members over time</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ChartContainer config={{ members: { label: "Active Members", color: "hsl(var(--chart-1))" } }} className="h-[300px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <LineChart data={activeMembers}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                    <Line type="monotone" dataKey="members" stroke="var(--color-members)" />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                                </ChartContainer>
+                            </CardContent>
+                            </Card>
+                            <Card>
+                            <CardHeader>
+                                <CardTitle>Enrollment Rate</CardTitle>
+                                <CardDescription>New members joining the program</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ChartContainer config={{ newMembers: { label: "New Members", color: "hsl(var(--chart-2))" } }} className="h-[300px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={enrollmentRate}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                    <Bar dataKey="newMembers" fill="var(--color-newMembers)" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                                </ChartContainer>
+                            </CardContent>
+                            </Card>
+                            <Card>
+                            <CardHeader>
+                                <CardTitle>Retention vs. Churn Rate</CardTitle>
+                                <CardDescription>Percentage of customers retained vs. churned</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ChartContainer config={{ retention: { label: "Retention", color: "hsl(var(--chart-3))" }, churn: { label: "Churn", color: "hsl(var(--chart-4))" } }} className="h-[300px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={retentionChurn}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                    <Bar dataKey="retention" fill="var(--color-retention)" />
+                                    <Bar dataKey="churn" fill="var(--color-churn)" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                                </ChartContainer>
+                            </CardContent>
+                            </Card>
+                            <Card>
+                            <CardHeader>
+                                <CardTitle>Redemption Rate</CardTitle>
+                                <CardDescription>Percentage of redeemed vs unredeemed discounts</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ResponsiveContainer width="100%" height={300}>
+                                <PieChart>
+                                    <Pie data={redemptionRate} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="hsl(var(--chart-4))" label />
+                                    <Tooltip />
+                                    <Legend />
+                                </PieChart>
+                                </ResponsiveContainer>
+                            </CardContent>
+                            </Card>
+                        </div>
                     </div>
                     </TabsContent>
                     <TabsContent value="financial" className="space-y-4 h-screen w-full">
-                    {/* <div className="h-screen w-full"> */}
                         <div className="flex justify-between gap-2 pb-2">
-                        <div className="w-1/3">
-                            <SpecialsRevenueChart />
-                        </div>
-                        <div className="w-1/3">
-                            <TiersRevenueChart />
-                        </div>
-                        <div className="w-1/3">
-                            <TopProductsRevenueChart />
-                        </div>
+                            <div className="w-1/3">
+                                <SpecialsRevenueChart />
+                            </div>
+                            <div className="w-1/3">
+                                <TiersRevenueChart />
+                            </div>
+                            <div className="w-1/3">
+                                <TopProductsRevenueChart />
+                            </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
                         <Card>
@@ -427,7 +422,6 @@ export const DashboardModule = () => {
                             </CardContent>
                         </Card>
                         </div>
-                    {/* </div> */}
                     </TabsContent>
                     <TabsContent value="redemption" className="space-y-4 h-screen w-full">
                         <div className="flex justify-between gap-2">

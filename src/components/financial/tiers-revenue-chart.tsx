@@ -59,8 +59,8 @@ export function TiersRevenueChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Loyalty Members Tier Revenue</h5>
-          <CardDescription>Total Revenue per Tier</CardDescription>
+          <h5 className="text-black font-bold text-md">Loyalty Members Tier Revenue</h5>
+          <p className="text-gray-400 text-sm">Total Revenue per Tier</p>
         </div>
         <Select value={activeCategory} onValueChange={setActiveCategory}>
           <SelectTrigger
@@ -126,7 +126,7 @@ export function TiersRevenueChart() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-black text-3xl font-bold"
                         >
                           {membersData[activeIndex].count.toLocaleString()}
                         </tspan>
@@ -148,12 +148,13 @@ export function TiersRevenueChart() {
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
         <div className="flex items-center justify-center gap-2 font-medium">
-          Membership Categories <Trophy className="h-4 w-4" />
+          <span className="text-black font-bold text-md">Membership Categories</span>
+          <Trophy className="h-4 w-4" color="black" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing the distribution of loyalty members
         </div>
-        <div className="text-lg font-bold">
+        <div className="text-black text-lg font-bold">
           Total Revenue for {activeCategory}: R{membersData[activeIndex].revenue.toLocaleString()}
         </div>
       </CardFooter>
