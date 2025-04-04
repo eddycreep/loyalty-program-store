@@ -34,11 +34,11 @@ const chartConfig = {
   },
   diamond: {
     label: "Diamond Members",
-    color: "#1ec3ff", // Adjust color if needed
+    color: "#1ec3ff",
   },
   platinum: {
     label: "Platinum Members",
-    color: "#D4D4D4", // Adjust color if needed
+    color: "#D4D4D4",
   },
 } satisfies ChartConfig;
 
@@ -63,7 +63,7 @@ export function LoyaltyMembersChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Loyalty Members</h5>
+          <h5 className="text-black font-bold text-md">Loyalty Members</h5>
           <p className="text-gray-400 text-sm">Membership distribution by category</p>
         </div>
         <Select value={activeCategory} onValueChange={setActiveCategory}>
@@ -152,7 +152,8 @@ export function LoyaltyMembersChart() {
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
         <div className="flex items-center justify-center gap-2 font-medium">
-          Membership Categories <Trophy className="h-4 w-4" />
+          <span className="text-black font-bold text-md">Membership Categories</span>
+          <Trophy className="h-4 w-4" color="black" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing the distribution of loyalty members

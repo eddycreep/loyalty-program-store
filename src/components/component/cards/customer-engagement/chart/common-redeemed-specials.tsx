@@ -77,8 +77,8 @@ export function CommonRedeemedSpecialsChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Common Specials</h5>
-          <CardDescription>Most redeemed offers by category</CardDescription>
+          <h5 className="text-black font-bold text-md">Common Specials</h5>
+          <p className="text-gray-400 text-sm">Most redeemed offers by category</p>
         </div>
         <Select value={activeCategory} onValueChange={setActiveCategory}>
           <SelectTrigger
@@ -161,7 +161,7 @@ export function CommonRedeemedSpecialsChart() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-black text-3xl font-bold"
                         >
                           {specialsData[activeIndex].redemptions.toLocaleString()}
                         </tspan>
@@ -183,7 +183,8 @@ export function CommonRedeemedSpecialsChart() {
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
         <div className="flex items-center justify-center gap-2 font-medium">
-          Common Specials <Gem className="h-4 w-4" />
+          <span className="text-black font-bold text-md">Common Specials</span>
+          <Gem className="h-4 w-4" color="black" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing the most common specials redeemed

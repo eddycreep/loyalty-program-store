@@ -47,8 +47,8 @@ const surveysData = [
         <ChartStyle id={id} config={chartConfig} />
         <CardHeader className="flex-row items-start space-y-0 pb-0">
           <div className="grid gap-1">
-            <h5>Survey Completions</h5>
-            <CardDescription>Completions per category</CardDescription>
+            <h5 className="text-black font-bold text-md">Survey Completions</h5>
+            <p className="text-gray-400 text-sm">Completions per category</p>
           </div>
           <Select value={activeCategory} onValueChange={setActiveCategory}>
             <SelectTrigger
@@ -129,7 +129,7 @@ const surveysData = [
                           <tspan
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            className="text-black text-3xl font-bold"
                           >
                             {surveysData[activeIndex].completions.toLocaleString()}
                           </tspan>
@@ -151,7 +151,8 @@ const surveysData = [
         </CardContent>
         <CardFooter className="flex-col items-center gap-2 text-sm">
           <div className="flex items-center justify-center gap-2 font-medium">
-            Survey Categories <TrendingUp className="h-4 w-4" />
+            <span className="text-black font-bold text-md">Survey Categories</span>
+            <TrendingUp className="h-4 w-4" color="black" />
           </div>
           <div className="leading-none text-muted-foreground">
             Showing survey completions per category

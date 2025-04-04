@@ -48,8 +48,8 @@ export function TopProductsRevenueChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Top-Selling Products Revenue</h5>
-          <CardDescription>Total Revenue per Product with Special Type</CardDescription>
+          <h5 className="text-black font-bold text-md">Top-Selling Products Revenue</h5>
+          <p className="text-gray-400 text-sm">Total Revenue per Product with Special Type</p>
         </div>
         <Select value={activeCategory} onValueChange={setActiveCategory}>
           <SelectTrigger
@@ -115,7 +115,7 @@ export function TopProductsRevenueChart() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-black text-3xl font-bold"
                         >
                           {productData[activeIndex].count.toLocaleString()}
                         </tspan>
@@ -137,12 +137,13 @@ export function TopProductsRevenueChart() {
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
         <div className="flex items-center justify-center gap-2 font-medium">
-          Special Types <Trophy className="h-4 w-4" />
+          <span className="text-black font-bold text-md">Top-Selling Products</span>
+          <Trophy className="h-4 w-4" color="black" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing revenue distribution of top-selling products
         </div>
-        <div className="text-lg font-bold">
+        <div className="text-black text-lg font-bold">
           Total Revenue for {activeCategory}: R{productData[activeIndex].revenue.toLocaleString()}
         </div>
       </CardFooter>
