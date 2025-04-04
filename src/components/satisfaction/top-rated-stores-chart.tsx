@@ -44,8 +44,8 @@ export function TopRatedStoresChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Top Rated Stores</h5>
-          <CardDescription>Customer Ratings, Counts, and Region</CardDescription>
+          <h5 className="text-black font-bold text-md">Top Rated Stores</h5>
+          <p className="text-gray-400 text-sm">Customer Ratings, Counts, and Region</p>
         </div>
         <Select value={activeStore} onValueChange={setActiveStore}>
           <SelectTrigger
@@ -111,7 +111,7 @@ export function TopRatedStoresChart() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-black text-3xl font-bold"
                         >
                           {storeData[activeIndex].rating.toFixed(1)} / 5
                         </tspan>
@@ -122,13 +122,13 @@ export function TopRatedStoresChart() {
                         >
                           {storeData[activeIndex].customerCount.toLocaleString()} ratings
                         </tspan>
-                        <tspan
+                        {/* <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 40}
                           className="fill-muted-foreground text-sm"
                         >
                           Region: {storeData[activeIndex].region}
-                        </tspan>
+                        </tspan> */}
                       </text>
                     );
                   }
@@ -140,10 +140,11 @@ export function TopRatedStoresChart() {
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
         <div className="flex items-center justify-center gap-2 font-medium">
-          Store Ratings <Trophy className="h-4 w-4" />
+        <span className="text-black font-bold text-md">Store Ratings</span>
+          <Trophy className="h-4 w-4" color="black" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing average rating, total number of customer ratings, and region for each store
+          Average rating, total number of customer ratings, and region for each store
         </div>
       </CardFooter>
     </Card>

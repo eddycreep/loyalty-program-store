@@ -44,8 +44,8 @@ export function TopRatedProductsChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Top Rated Products</h5>
-          <CardDescription>Customer Ratings and Rating Counts</CardDescription>
+          <h5 className="text-black font-bold text-md">Top Rated Products</h5>
+          <p className="text-gray-400 text-sm">Customer Ratings and Rating Counts</p>
         </div>
         <Select value={activeProduct} onValueChange={setActiveProduct}>
           <SelectTrigger
@@ -111,7 +111,7 @@ export function TopRatedProductsChart() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-black text-3xl font-bold"
                         >
                           {productData[activeIndex].rating.toFixed(1)} / 5
                         </tspan>
@@ -120,7 +120,7 @@ export function TopRatedProductsChart() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Rated by {productData[activeIndex].customerCount.toLocaleString()} customers
+                          {productData[activeIndex].customerCount.toLocaleString()} customers
                         </tspan>
                       </text>
                     );
@@ -133,10 +133,11 @@ export function TopRatedProductsChart() {
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
         <div className="flex items-center justify-center gap-2 font-medium">
-          Product Ratings <Trophy className="h-4 w-4" />
+        <span className="text-black font-bold text-md">Product Ratings</span>
+          <Trophy className="h-4 w-4" color="black" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing average rating and number of customer ratings for top products
+          Average rating and number of customer ratings for top products
         </div>
       </CardFooter>
     </Card>
