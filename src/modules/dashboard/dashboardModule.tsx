@@ -344,20 +344,20 @@ export const DashboardModule = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
                         <Card>
                             <CardHeader>
-                            <CardTitle>Revenue per Member</CardTitle>
-                            <CardDescription>Average revenue by customer segment</CardDescription>
+                                <CardTitle>Revenue per Member</CardTitle>
+                                <CardDescription>Average revenue by customer segment</CardDescription>
                             </CardHeader>
                             <CardContent>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <BarChart data={revenuePerMember}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="segment" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Bar dataKey="revenue" fill="hsl(var(--chart-5))" />
-                                </BarChart>
-                            </ResponsiveContainer>
+                                <ResponsiveContainer width="100%" height={300}>
+                                    <BarChart data={revenuePerMember}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="segment" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="revenue" fill="hsl(var(--chart-5))" />
+                                    </BarChart>
+                                </ResponsiveContainer>
                             </CardContent>
                         </Card>
                         <Card>
@@ -426,34 +426,34 @@ export const DashboardModule = () => {
                     <TabsContent value="redemption" className="space-y-4 h-screen w-full">
                         <div className="flex justify-between gap-2">
                             <div className="">
-                            <TopRedeemedProductsChart />
+                                <TopRedeemedProductsChart />
                             </div>
                             <div className="">
-                            <TopStoreRedemptionsChart />
+                                <TopStoreRedemptionsChart />
                             </div>
                             <div className="">
-                            <LowestRedeemedProductsChart />
+                                <LowestRedeemedProductsChart />
                             </div>
                         </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
                         <Card>
-                        <CardHeader>
-                            <CardTitle>Time to First Redemption</CardTitle>
-                            <CardDescription>Average time for new members to redeem first reward</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-13))" } }} className="h-[300px] w-[800px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={timeToFirstRedemption}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="days" />
-                                <YAxis />
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                                <Bar dataKey="count" fill="var(--color-count)" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                            </ChartContainer>
-                        </CardContent>
+                            <CardHeader>
+                                <CardTitle>Time to First Redemption</CardTitle>
+                                <CardDescription>Average time for new members to redeem first reward</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-13))" } }} className="h-[300px] w-[800px]">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={timeToFirstRedemption}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="days" />
+                                        <YAxis />
+                                        <ChartTooltip content={<ChartTooltipContent />} />
+                                        <Bar dataKey="count" fill="var(--color-count)" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </ChartContainer>
+                            </CardContent>
                         </Card>
                         <Card>
                         <CardHeader>
@@ -481,31 +481,31 @@ export const DashboardModule = () => {
                         </CardHeader>
                         <CardContent className="flex items-center justify-center">
                             <div className="relative w-48 h-48">
-                            <svg className="w-full h-full" viewBox="0 0 100 100">
-                                <circle
-                                className="text-muted-foreground"
-                                strokeWidth="10"
-                                stroke="currentColor"
-                                fill="transparent"
-                                r="45"
-                                cx="50"
-                                cy="50"
-                                />
-                                <circle
-                                className="text-primary"
-                                strokeWidth="10"
-                                strokeDasharray={`${unusedPointsLiability * 2.83} 283`}
-                                strokeLinecap="round"
-                                stroke="currentColor"
-                                fill="transparent"
-                                r="45"
-                                cx="50"
-                                cy="50"
-                                />
-                            </svg>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="text-2xl font-bold">{unusedPointsLiability}%</span>
-                            </div>
+                                <svg className="w-full h-full" viewBox="0 0 100 100">
+                                    <circle
+                                        className="text-muted-foreground"
+                                        strokeWidth="10"
+                                        stroke="currentColor"
+                                        fill="transparent"
+                                        r="45"
+                                        cx="50"
+                                        cy="50"
+                                    />
+                                    <circle
+                                        className="text-primary"
+                                        strokeWidth="10"
+                                        strokeDasharray={`${unusedPointsLiability * 2.83} 283`}
+                                        strokeLinecap="round"
+                                        stroke="currentColor"
+                                        fill="transparent"
+                                        r="45"
+                                        cx="50"
+                                        cy="50"
+                                    />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <span className="text-black text-2xl font-bold">{unusedPointsLiability}%</span>
+                                </div>
                             </div>
                         </CardContent>
                         </Card>
@@ -514,13 +514,13 @@ export const DashboardModule = () => {
                     <TabsContent value="satisfaction" className="space-y-4 h-screen w-full">
                         <div className="flex justify-between gap-2">
                             <div className="">
-                            <TopRatedProductsChart />
+                                <TopRatedProductsChart />
                             </div>
                             <div className="">
-                            <TopRatedStoresChart />
+                                <TopRatedStoresChart />
                             </div>
                             <div className="">
-                            <TopRatedStaffChart />
+                                <TopRatedStaffChart />
                             </div>
                         </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-10">
@@ -727,64 +727,64 @@ export const DashboardModule = () => {
                         </div>
                     </TabsContent>
                     <TabsContent value="performance" className="space-y-4 h-screen w-full">
-                    <div className="flex justify-between gap-2">
+                        <div className="flex justify-between gap-2">
                             <div className="">
-                            <TopPerformanceProductsChart />
+                                <TopPerformanceProductsChart />
                             </div>
                             <div className="">
-                            <LowPerformanceProductsChart />
+                                <LowPerformanceProductsChart />
                             </div>
                         </div>
-                    <div className="flex gap-4 pb-10">
-                        <Card className="w-[800px]">
-                            <CardHeader>
-                                <CardTitle>Top Performing Products</CardTitle>
-                                <CardDescription>Products with the highest special redemptions</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <ResponsiveContainer width="100%" height={300}>
-                                    <BarChart data={[
-                                        { product: 'Organic Apples', redemptions: 320, store: 'Store A' },
-                                        { product: 'Whole Wheat Bread', redemptions: 290, store: 'Store B' },
-                                        { product: 'Almond Milk', redemptions: 260, store: 'Store C' },
-                                        { product: 'Granola Bars', redemptions: 240, store: 'Store A' },
-                                        { product: 'Chicken Breasts', redemptions: 220, store: 'Store B' }
-                                    ]}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="product" />
-                                        <YAxis />
-                                        <Tooltip formatter={(value, name, props) => [`${value}`, `Store: ${props.payload.store}`]} />
-                                        <Legend />
-                                        <Bar dataKey="redemptions" fill="var(--color-high-performance)" name="Redemptions" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </CardContent>
-                        </Card>
-                        <Card className="w-[800px]">
-                            <CardHeader>
-                                <CardTitle>Low Performing Products</CardTitle>
-                                <CardDescription>Products with the lowest special redemptions</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <ResponsiveContainer width="100%" height={300}>
-                                    <BarChart data={[
-                                        { product: 'Orange Juice', redemptions: 100, store: 'Store C' },
-                                        { product: 'Instant Coffee', redemptions: 90, store: 'Store A' },
-                                        { product: 'Rice Cakes', redemptions: 80, store: 'Store B' },
-                                        { product: 'Diet Soda', redemptions: 70, store: 'Store C' },
-                                        { product: 'Canned Beans', redemptions: 65, store: 'Store B' }
-                                    ]}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="product" />
-                                        <YAxis />
-                                        <Tooltip formatter={(value, name, props) => [`${value}`, `Store: ${props.payload.store}`]} />
-                                        <Legend />
-                                        <Bar dataKey="redemptions" fill="var(--color-low-performance)" name="Redemptions" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </CardContent>
-                        </Card>
-                    </div>
+                        {/* <div className="flex gap-4 pb-10">
+                            <Card className="w-[800px]">
+                                <CardHeader>
+                                    <CardTitle>Top Performing Products</CardTitle>
+                                    <CardDescription>Products with the highest special redemptions</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <ResponsiveContainer width="100%" height={300}>
+                                        <BarChart data={[
+                                            { product: 'Organic Apples', redemptions: 320, store: 'Store A' },
+                                            { product: 'Whole Wheat Bread', redemptions: 290, store: 'Store B' },
+                                            { product: 'Almond Milk', redemptions: 260, store: 'Store C' },
+                                            { product: 'Granola Bars', redemptions: 240, store: 'Store A' },
+                                            { product: 'Chicken Breasts', redemptions: 220, store: 'Store B' }
+                                        ]}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="product" />
+                                            <YAxis />
+                                            <Tooltip formatter={(value, name, props) => [`${value}`, `Store: ${props.payload.store}`]} />
+                                            <Legend />
+                                            <Bar dataKey="redemptions" fill="var(--color-high-performance)" name="Redemptions" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </CardContent>
+                            </Card>
+                            <Card className="w-[800px]">
+                                <CardHeader>
+                                    <CardTitle>Low Performing Products</CardTitle>
+                                    <CardDescription>Products with the lowest special redemptions</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <ResponsiveContainer width="100%" height={300}>
+                                        <BarChart data={[
+                                            { product: 'Orange Juice', redemptions: 100, store: 'Store C' },
+                                            { product: 'Instant Coffee', redemptions: 90, store: 'Store A' },
+                                            { product: 'Rice Cakes', redemptions: 80, store: 'Store B' },
+                                            { product: 'Diet Soda', redemptions: 70, store: 'Store C' },
+                                            { product: 'Canned Beans', redemptions: 65, store: 'Store B' }
+                                        ]}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="product" />
+                                            <YAxis />
+                                            <Tooltip formatter={(value, name, props) => [`${value}`, `Store: ${props.payload.store}`]} />
+                                            <Legend />
+                                            <Bar dataKey="redemptions" fill="var(--color-low-performance)" name="Redemptions" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </CardContent>
+                            </Card>
+                        </div> */}
                     </TabsContent>
                 </Tabs>
                 </div>

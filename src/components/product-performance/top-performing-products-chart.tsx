@@ -9,14 +9,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/co
 import { ChartConfig, ChartContainer, ChartStyle, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export const description = "An interactive pie chart showing top-redeemed products with special types by count.";
+export const description = "An interactive pie chart showing top-performing products with special types by count.";
 
 const productData = [
-    { product: "Coke 2L", special: "Buy One Get One", specialType: "Combined Special", revenue: 15000, store: "PLUS DC Stellenbosch", count: 200, fill: "#ff2257" },
-    { product: "Lay's Chips", special: "20% Off", specialType: "Special", revenue: 12000, store: "PLUS DC Albertin", count: 150, fill: "#00d384" },
-    { product: "Red Bull", special: "Buy 2 for R50", specialType: "Combined Special", revenue: 18000, store: "PLUS DC Bellville", count: 100, fill: "#ffa726" },
-    { product: "Oreo Cookies", special: "15% Off", specialType: "Special", revenue: 10000, store: "PLUS DC Nelspruit", count: 120, fill: "#1ec3ff" },
-    { product: "Pepsi 2L", special: "10% Off", specialType: "Special", revenue: 14000, store: "PLUS DC Durbanville", count: 90, fill: "#D4D4D4" },
+    { product: "BIT BOARD 6.4X0.9X3.0", special: "Drywall Triple Treat", specialType: "Combined Special", revenue: 15000, store: "BOKSBURG", count: 200, fill: "#ff2257" },
+    { product: "GYPROC-R/BOARD 6.4X0.9X2.4", special: "Gyproc Board BOGO Deal", specialType: "Special", revenue: 12000, store: "LANSERIA", count: 150, fill: "#00d384" },
+    { product: "SINIAT BOARD 6.4X.0.9X2.7", special: "Siniat Premium Deal", specialType: "Combined Special", revenue: 18000, store: "MIDRAND", count: 100, fill: "#ffa726" },
+    { product: "SINIAT BOARD 6.4X0.9X2.7", special: "Bit Board Special Offer", specialType: "Special", revenue: 10000, store: "SOWETO", count: 120, fill: "#1ec3ff" },
+    { product: "SINIAT BOARD 6.4X0.9X3.3", special: "50% OFF Weekend Blowout", specialType: "Special", revenue: 14000, store: "BURGERSFORT", count: 90, fill: "#D4D4D4" },
 ];
 
 const chartConfig = {
@@ -48,8 +48,8 @@ export function TopPerformanceProductsChart() {
         <ChartStyle id={id} config={chartConfig} />
         <CardHeader className="flex-row items-start space-y-0 pb-0">
           <div className="grid gap-1">
-            <h5 className="text-black font-bold">Top Performing Stores</h5>
-            <CardDescription className="text-gray-500">Total Count for Top Performing Stores</CardDescription>
+            <h5 className="text-black font-bold text-md">Top Performing Stores</h5>
+            <p className="text-gray-400 text-sm">Total Count for Top Performing Stores</p>
           </div>
           <Select value={activeStore} onValueChange={setActiveStore}>
             <SelectTrigger
@@ -115,7 +115,7 @@ export function TopPerformanceProductsChart() {
                           <tspan
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            className="text-black text-3xl font-bold"
                           >
                             {productData[activeIndex].count.toLocaleString()}
                           </tspan>
@@ -136,17 +136,15 @@ export function TopPerformanceProductsChart() {
           </ChartContainer>
         </CardContent>
         <CardFooter className="flex-col items-center gap-2 text-sm">
-          <div className="text-lg text-black font-bold">
-            Total Revenue for {productData[activeIndex].product} at {activeStore}: R{productData[activeIndex].revenue.toLocaleString()}
+          <div className="flex items-center justify-center gap-2 text-black font-bold">
+            <span className="text-black font-bold text-md">Top Performing Products</span>
+            <Popcorn className="h-4 w-4" />
           </div>
           <div className="leading-none text-gray-500">
             Special: {productData[activeIndex].special} ({productData[activeIndex].specialType})
           </div>
-          <div className="leading-none text-gray-500">
-            Showing redemption counts for top stores
-          </div>
-          <div className="flex items-center justify-center gap-2 text-black font-bold">
-            Top Performing Products <Popcorn className="h-4 w-4" />
+          <div className="text-lg text-black font-bold">
+            Total Revenue for {productData[activeIndex].product} at {activeStore}: R{productData[activeIndex].revenue.toLocaleString()}
           </div>
         </CardFooter>
       </Card>

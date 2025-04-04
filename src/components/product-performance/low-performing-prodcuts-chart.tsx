@@ -12,11 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export const description = "An interactive pie chart showing low-performing products with specials per store by revenue.";
 
 const productData = [
-  { product: "Oreo Cookies", special: "Oreo Discount", specialType: "Special", revenue: 1100, store: "PLUS DC Pretoria", count: 80, fill: "#1ec3ff" },
-  { product: "Apple", special: "Healthy Special", specialType: "Combined Special", revenue: 2300, store: "PLUS DC Germiston", count: 120, fill: "#D4D4D4" },
-  { product: "Doritos", special: "Doritos Discount", specialType: "Special", revenue: 1800, store: "PLUS DC Polokwane", count: 100, fill: "#00d384" },
-  { product: "Maynards", special: "Sweet Special", specialType: "Combined Special", revenue: 800, store: "PLUS DC East London", count: 140, fill: "#ff2257" },
-  { product: "KINGSLEY 2L", special: "KINGSLEY Combo", specialType: "Special", revenue: 200, store: "PLUS DC Pietermaritzburg", count: 160, fill: "#ffa726" },
+  { product: "SINIAT BOARD 6.4X.0.9X2.7", special: "Siniat Board 10% Off", specialType: "Special", revenue: 1100, store: "BOKSBURG", count: 80, fill: "#1ec3ff" },
+  { product: "GYPROC-R/BOARD 6.4X0.9X2.4", special: "Drywall Combo Discount", specialType: "Combined Special", revenue: 2300, store: "LANSERIA", count: 120, fill: "#D4D4D4" },
+  { product: "BIT BOARD 6.4X0.9X2.7", special: "Gyproc Board BOGO Deal", specialType: "Special", revenue: 1800, store: "MIDRAND", count: 100, fill: "#00d384" },
+  { product: "SINIAT BOARD 6.4X0.9X2.7", special: "Board Bundle Savings", specialType: "Combined Special", revenue: 800, store: "SOWETO", count: 140, fill: "#ff2257" },
+  { product: "BIT BOARD 6.4X0.9X3.6", special: "Bit Board Special Offer", specialType: "Special", revenue: 200, store: "BURGERSFORT", count: 160, fill: "#ffa726" },
 ];
 
 const chartConfig = {
@@ -48,8 +48,8 @@ export function LowPerformanceProductsChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Low Performing Products</h5>
-          <CardDescription>Total Count for Low Performing Products</CardDescription>
+          <h5 className="text-black font-bold text-md">Low Performing Products</h5>
+          <p className="text-gray-400 text-sm">Total Count for Low Performing Products</p>
         </div>
         <Select value={activeStore} onValueChange={setActiveStore}>
           <SelectTrigger className="ml-auto h-7 w-[200px] rounded-lg pl-2.5" aria-label="Select a store">
@@ -90,7 +90,7 @@ export function LowPerformanceProductsChart() {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
                       <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                        <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-bold">
+                        <tspan x={viewBox.cx} y={viewBox.cy} className="text-black text-3xl font-bold">
                           {productData[activeIndex].count.toLocaleString()}
                         </tspan>
                         <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
@@ -106,17 +106,18 @@ export function LowPerformanceProductsChart() {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
-        <div className="text-lg font-bold">
-          Total Revenue for {productData[activeIndex].product} at {activeStore}: R{productData[activeIndex].revenue.toLocaleString()}
+        <div className="flex items-center justify-center gap-2 font-medium">
+          <span className="text-black font-bold text-md">Low Performing Products</span>
+          <Popcorn className="h-4 w-4" color="black" />
         </div>
         <div className="leading-none text-muted-foreground">
           Special: {productData[activeIndex].special} ({productData[activeIndex].specialType})
         </div>
-        <div className="leading-none text-muted-foreground">
+        {/* <div className="leading-none text-muted-foreground">
           Showing redemption counts for low products
-        </div>
-        <div className="flex items-center justify-center gap-2 font-medium">
-          Low Performing Products <Popcorn className="h-4 w-4" />
+        </div> */}
+        <div className="text-lg text-black font-bold">
+          Total Revenue for {productData[activeIndex].product} at {activeStore}: R{productData[activeIndex].revenue.toLocaleString()}
         </div>
       </CardFooter>
     </Card>

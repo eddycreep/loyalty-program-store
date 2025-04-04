@@ -45,8 +45,8 @@ export function TopStoreRedemptionsChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <h5>Top Stores by Customer Redemptions</h5>
-          <CardDescription>Total Customer Redemptions by Store</CardDescription>
+          <h5 className="text-black font-bold text-md">Top Stores</h5>
+          <p className="text-gray-400 text-sm">Total Customer Redemptions by Store</p>
         </div>
         <Select value={activeStore} onValueChange={setActiveStore}>
           <SelectTrigger
@@ -112,7 +112,7 @@ export function TopStoreRedemptionsChart() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-black text-3xl font-bold"
                         >
                           {storeData[activeIndex].count.toLocaleString()}
                         </tspan>
@@ -134,12 +134,13 @@ export function TopStoreRedemptionsChart() {
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
         <div className="flex items-center justify-center gap-2 font-medium">
-          Top Redemption Stores <Trophy className="h-4 w-4" />
+          <span className="text-black font-bold text-md">Top Stores</span>
+          <Trophy className="h-4 w-4" color="black" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing redemption counts for top stores
         </div>
-        <div className="text-lg font-bold">
+        <div className="text-black text-lg font-bold">
           Total Revenue for {activeStore}: R{storeData[activeIndex].revenue.toLocaleString()}
         </div>
       </CardFooter>
