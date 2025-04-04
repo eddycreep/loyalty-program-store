@@ -13,11 +13,11 @@ export const description = "An interactive pie chart showing stores with the hig
 
 // Update store data with provided store names and dummy redemption count and revenue values
 const storeData = [
-  { storeName: "PLUS DC Stellenbosch", count: 500, fill: "#ff2257", revenue: 20000 },
-  { storeName: "PLUS DC Albertin", count: 400, fill: "#00d384", revenue: 15000 },
-  { storeName: "PLUS DC Bellville", count: 300, fill: "#ffa726", revenue: 13000 },
-  { storeName: "PLUS DC Nelspruit", count: 250, fill: "#1ec3ff", revenue: 11000 },
-  { storeName: "PLUS DC Durbanville", count: 200, fill: "#D4D4D4", revenue: 10000 },
+  { storeName: "BOKSBURG", count: 500, fill: "#ff2257", revenue: 20000 },
+  { storeName: "LANSERIA", count: 400, fill: "#00d384", revenue: 15000 },
+  { storeName: "MIDRAND", count: 300, fill: "#ffa726", revenue: 13000 },
+  { storeName: "SOWETO", count: 250, fill: "#1ec3ff", revenue: 11000 },
+  { storeName: "BURGERSFORT", count: 200, fill: "#D4D4D4", revenue: 10000 },
 ];
 
 const chartConfig = {

@@ -12,11 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export const description = "An interactive pie chart showing top-rated stores with customer ratings and rating counts.";
 
 const storeData = [
-  { store: "PLUS DC Stellenbosch", store_id: "SOO1", rating: 4.7, customerCount: 250, region: "Stellenbosch", fill: "#ff2257" },
-  { store: "PLUS DC Albertin", store_id: "SOO2", rating: 4.5, customerCount: 180, region: "Albertin", fill: "#00d384" },
-  { store: "PLUS DC Bellville", store_id: "SOO3", rating: 4.6, customerCount: 220, region: "Bellville", fill: "#ffa726" },
-  { store: "PLUS DC Nelspruit", store_id: "SOO4", rating: 4.2, customerCount: 140, region: "Nelspruit", fill: "#1ec3ff" },
-  { store: "PLUS DC Durbanville", store_id: "SOO5", rating: 4.4, customerCount: 170, region: "Durbanville", fill: "#D4D4D4" },
+  { store: "BOKSBURG", store_id: "SOO1", rating: 4.7, customerCount: 250, region: "BOKSBURG", fill: "#ff2257" },
+  { store: "SOWETO", store_id: "SOO2", rating: 4.5, customerCount: 180, region: "GAUTENG", fill: "#00d384" },
+  { store: "POLOKWANE", store_id: "SOO3", rating: 4.6, customerCount: 220, region: "POLOKWANE", fill: "#ffa726" },
+  { store: "NELSPRUIT", store_id: "SOO4", rating: 4.2, customerCount: 140, region: "CROCODILE RIVER", fill: "#1ec3ff" },
+  { store: "SOUTHGATE", store_id: "SOO5", rating: 4.4, customerCount: 170, region: "SOUTHGATE", fill: "#D4D4D4" },
 ];
 
 const chartConfig = {
