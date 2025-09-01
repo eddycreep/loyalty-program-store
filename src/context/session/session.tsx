@@ -3,14 +3,7 @@
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-
-type UserData = {
-    id: string | null,
-    emp_id: string | null;
-    emp_name: string | null;
-    emp_surname: string | null;
-    role: string | null;
-};
+import { UserData } from '@/types/user-types';
 
 export const UserSessionContext = createContext<{
     user: UserData;
@@ -31,9 +24,10 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
     const router = useRouter();
 
     useEffect(() => {
-        if (user?.id === null || user?.emp_id === null) {
+        if (user?.uid === null) {
             router.push('/login')
         }
+        
     }, [user, router]);
 
     const login = async (data: UserData) => {
@@ -56,7 +50,7 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
 
         setUser(data);
 
-        toast(`Welcome ${data?.emp_name}`,
+        toast(`Welcome ${data?.emp_name}, Role: ${data?.role}`,
             {
                 icon: '👋',
                 style: {
