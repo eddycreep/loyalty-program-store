@@ -56,34 +56,16 @@ export default function Page() {
 
             addAuditLog({ action: `login attempt` })
 
-            const url = `user/login`
+            const url = `auth/login`
             const response = await axios.post(`${apiEndPoint}/${url}`, payLoad)
+            console.log("users login response: ", response)
 
-            if (response.data.msg === "Success, Logged in!") {
-                login(response?.data)
-                setIsLoading(false);
-
-                addAuditLog({ action: `login success` })
-            }
-            else {
-                setIsLoading(false);
-
-                addAuditLog({ action: `login attempt: Error -- ${response.data}` })
-
-                toast('Login failed, please try again', {
-                    icon: '❌',
-                    style: {
-                        borderRadius: '10px',
-                        background: '#333',
-                        color: '#fff',
-                    },
-                    duration: 3000,
-                });
-            }
-
-        }
-        catch (error: any) {
+            login(response?.data)
             setIsLoading(false);
+
+        } catch (error: any) {
+            setIsLoading(false);
+            console.log("users login error: ", error)
 
             addAuditLog({ action: `login attempt: Error -- ${error?.message}` })
 
