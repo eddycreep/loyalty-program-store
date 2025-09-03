@@ -12,6 +12,7 @@ import { EditCombinedSpecials } from "@/modules/admin/specials/combined/edit-com
 import { CombinedDeleteConfirmation } from "@/modules/admin/specials/combined/delete-combined-confirmation";
 import { SpecialItems } from "@/modules/types/special/product/data-types";
 import SquareCircleLoader from "@/lib/square-circle-loader";
+import { apiClient } from '@/utils/api-client';
 
 //get-active-group-specials
 export interface CombinedProps {
@@ -61,7 +62,8 @@ export const CombinedSpecials = () => {
 
         try{
             const url = `specials/get-all-combined-specials`
-            const response = await axios.get<CombinedSpecialsResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<CombinedSpecialsResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
             setCombinedSpecials(response?.data)
             console.log("RETRIEVED ALL ACTIVE GROUP SPECIALS:", response)
             setLoadingData(false);

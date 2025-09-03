@@ -12,6 +12,7 @@ import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, Use
 import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data'
 import EditSurvey from "./edit-survey";
 import { useSession } from '@/context';
+import { apiClient } from "@/utils/api-client";
 
 
 export const CreateSurveys = () => {
@@ -33,7 +34,8 @@ export const CreateSurveys = () => {
     const getStores = async () => {
         try {
             const url = `inventory/get-stores`
-            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
             setAllStores(response.data)
         } catch (error) {
             console.error('Error RETURNING STORES:', error)
@@ -43,7 +45,8 @@ export const CreateSurveys = () => {
     const getLoyaltyTiers = async () => {
         try {
             const url = `tiers/get-loyalty-tiers`
-            const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
             console.log('TIERS RETURNED !!', response.data)
             setLoyaltyTiers(response.data)
         } catch (error) {
@@ -54,7 +57,8 @@ export const CreateSurveys = () => {
     const getAgeGroups = async () => {
         try {
             const url = `age-group/get-age-groups`
-            const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
             console.log('AGE_GROUPS RETURNED !!', response.data)
             setAgeGroups(response.data)
         } catch (error) {
@@ -132,7 +136,8 @@ export const CreateSurveys = () => {
 
 
             const url = `survey/save-survey`
-            const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
+            // const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
+            const response = await apiClient.post(url, payload) // Note: no need for full URL since apiClient has baseURL
 
             await getSurveyInfo();
         } catch (error) {
@@ -147,7 +152,8 @@ export const CreateSurveys = () => {
     const getSurveyInfo = async () => {
         try {
             const url = `survey/get-survey-id/${surveyName}`
-            const response = await axios.get<SurveyInfoResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<SurveyInfoResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
             setSurveyInfo(response?.data);
 
             await saveSurveyQuestions(response.data[0]);
@@ -174,7 +180,8 @@ export const CreateSurveys = () => {
 
             // Use a bulk API call instead of looping (if supported by the backend)
             const url = `survey/save-survey-questions`;
-            const response = await axios.post(`${apiEndPoint}/${url}`, questionPayloads);
+            // const response = await axios.post(`${apiEndPoint}/${url}`, questionPayloads);
+            const response = await apiClient.post(url, questionPayloads) // Note: no need for full URL since apiClient has baseURL
 
             if (response.status === 201 || response.status === 200) {
                 console.log('Questions saved successfully:', response.data);
@@ -201,7 +208,7 @@ export const CreateSurveys = () => {
     
         try {
             const payload = {
-                emp_id: user.id,
+                emp_id: user.uid,
                 emp_name: user.emp_name,
                 activity_id: surveyData.survey_id,
                 activity: surveyData.survey_title,
@@ -210,7 +217,8 @@ export const CreateSurveys = () => {
             };
     
             const url = `logs/log-user-activity`;
-            const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+            // const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+            const response = await apiClient.post(url, payload) // Note: no need for full URL since apiClient has baseURL
             console.log('The Users activity has been logged!', response.data);
 
             toast.success('Activity Logged Successufully', {

@@ -9,6 +9,7 @@ import { ViewDetailedSurvey } from "./view-detailed-survey";
 import { useRouter } from 'next/navigation';
 import { DeleteSurveyConfirmation  } from '@/components/component/delete-survey-confirmation';
 import SquareCircleLoader from "@/lib/square-circle-loader";
+import { apiClient } from '@/utils/api-client';
 
 interface SurveyProps {
     survey_id: number,
@@ -61,7 +62,8 @@ export const ViewSurveys = () => {
 
         try {
             const url = `survey/get-all-surveys`
-            const response = await axios.get(`${apiEndPoint}/${url}`);
+            // const response = await axios.get(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
             setSurveys(response?.data)
             setLoadingData(false);
 

@@ -15,7 +15,7 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
     const [user, setUser] = useState<UserData>(() => {
 
         if (typeof window !== 'undefined') {
-            const storedData = sessionStorage.getItem(`trainLog`);
+            const storedData = sessionStorage.getItem(`user`);
 
             return storedData ? JSON.parse(storedData) : { emp_id: null, serverIndex: 1, id: null, accessLevel: null }
         }
@@ -66,10 +66,10 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
         router.push(path);
     };
 
-    useEffect(() => { sessionStorage.setItem(`trainLog`, JSON.stringify(user)) }, [user]);
+    useEffect(() => { sessionStorage.setItem(`user`, JSON.stringify(user)) }, [user]);
 
     const logout = () => {
-        sessionStorage.removeItem(`trainLog`);
+        sessionStorage.removeItem(`user`);
 
         router.push("/login");
 

@@ -9,6 +9,7 @@ import { EditRewards } from "@/components/component/edit-rewards";
 import { RewardSummaryCards } from "./rewards/reward-cards";
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { DeleteReviewConfirmation } from '@/components/component/delete-review-confirmation';
+import { apiClient } from '@/utils/api-client';
 
 export interface ReviewProps {
     review_id: number,
@@ -54,7 +55,9 @@ export const ReviewsModule = () => {
 
         try {
             const url = `reviews/get-all-reviews`
-            const response = await axios.get<ReviewsResponse>(`${apiEndPoint}/${url}`);
+            // const response = await axios.get<ReviewsResponse>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+
             setReviews(response?.data);
             setLoadingData(false);
 
