@@ -15,6 +15,10 @@ import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductDesc
 import { Special, SaveSpecial, SpecialItems, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { apiClient } from '@/utils/api-client';
 import { Item, ItemsResponse } from '@/modules/types/products/product-types';
+import { Organisation } from '@/modules/types/organisation/organisation-types';
+import { Branch } from '@/modules/types/branch/branches-types';
+import { getOrganisations } from '@/components/data/organisation/get-organisations-data';
+import { getBranches } from '@/components/data/branch/get-branches-data';
 
 
 interface Props {
@@ -47,6 +51,7 @@ interface Specials {
 export interface CombinedSpecialItems {
     special_id: number,
     special_group_id: number,
+    item_code: string,
     product_description: string,
 }
 
@@ -75,6 +80,8 @@ type CombinedSpecial = {
   loyalty_tier: string
   age_group: string
   isActive: boolean
+  organisation: string
+  branch: string
   product: SpecialProduct | null
   products: SpecialProduct[]
 }
@@ -93,6 +100,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
         loyalty_tier: '',
         age_group: '',
         isActive: false,
+        organisation: '',
+        branch: '',
         product: null,
         products: []
     })
@@ -105,9 +114,11 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
 
+    //organisations x branches
+    const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
+    const [branches, setBranches] = useState<Branch[] | null>(null);
 
-
-        // Filter products based on search term, show all if search is empty
+    // Filter products based on search term, show all if search is empty
     const searchProducts = allProducts.filter(product =>
         !searchTerm || // Show all products when search term is empty
         product?.description_1?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -165,6 +176,26 @@ export function AddCombinedSpecials({ onClose }: Props) {
             setAgeGroups(response.data)
         } catch (error) {
             console.error('Error RETURNING AGE_GROUPS:', error)
+        }
+    }
+
+    const getAllOrganisations = async () => {
+        try {
+            const orgData = await getOrganisations()
+            setOrganisations(orgData)
+            console.log("all organisations returned bro: ", orgData)
+        } catch (error) {
+            console.error('error fetching all organisations bro:', error)
+        }
+    }
+
+    const getAllBranches = async () => {
+        try {
+            const branchesData = await getBranches()
+            setBranches(branchesData)
+            console.log("all branches returned bro: ", branchesData)
+        } catch (error) {
+            console.error('error fetching all branches bro:', error)
         }
     }
 
@@ -233,10 +264,11 @@ export function AddCombinedSpecials({ onClose }: Props) {
                 loyalty_tier: currentSpecial.loyalty_tier,
                 age_group: currentSpecial.age_group,
                 isActive: currentSpecial.isActive,
+                organisation: currentSpecial.organisation,
+                branch: currentSpecial.branch,
             }
 
             const url = `specials/save-special`
-            // const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
             const response = await apiClient.post<Special>(`${apiEndPoint}/${url}`, payload);
             console.log('The Special has been saved successfully:', response.data)
 
@@ -261,9 +293,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const fetchSpecialInfo = async () => {
         try {
             const url = `specials/get-special-info/${currentSpecial.special_name}`;
-            // const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
             const response = await apiClient.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
-            console.log('The Special ID has been fetched successfully:', response.data);
 
             setSpecialID(response?.data);
 
@@ -302,16 +332,13 @@ export function AddCombinedSpecials({ onClose }: Props) {
                 const payload: CombinedSpecialItems = {
                     special_id: specialId,
                     special_group_id: i + 1, // Assign sequential group IDs (1, 2, 3)
+                    item_code: product.item_code,
                     product_description: product.name // Use the product name from the SpecialProduct
                 };
 
                 console.log('saving special item payload:', payload);
 
                 const url = `specials/save-combined-special-items`;
-                // const response = await axios.post<CombinedSpecialItems>(
-                //     `${apiEndPoint}/${url}`, 
-                //     payload
-                // );
                 const response = await apiClient.post<CombinedSpecialItems>(`${apiEndPoint}/${url}`, payload);
                 console.log('Special item saved successfully:', response.data);
             }
@@ -373,6 +400,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
+        getAllOrganisations();
+        getAllBranches();
     }, []);
 
     return (
@@ -440,8 +469,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                             <SelectValue placeholder="Select special type" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Percentage">Percentage</SelectItem>
-                                            <SelectItem value="Amount">Amount</SelectItem>
+                                            <SelectItem value="Percentage" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Percentage</SelectItem>
+                                            <SelectItem value="Amount" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Amount</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -459,9 +488,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                             <SelectValue placeholder="Select Tier" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All">All</SelectItem>
+                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
                                             {loyaltyTiers.map((loyalty) => (
-                                                <SelectItem key={loyalty.tier_id} value={loyalty.tier}>
+                                                <SelectItem key={loyalty.tier_id} value={loyalty.tier} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                                     {loyalty.tier}
                                                 </SelectItem>
                                             ))}
@@ -478,9 +507,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                             <SelectValue placeholder="Select Age Group" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All">All</SelectItem>
+                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
                                             {ageGroups.map((group) => (
-                                                <SelectItem key={group.age_group_id} value={group.age_range}>
+                                                <SelectItem key={group.age_group_id} value={group.age_range} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                                     {group.group_name}
                                                 </SelectItem>
                                             ))}
@@ -513,6 +542,48 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
+                            { /* Organisation x Branch */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
+                                    <Select
+                                        value={currentSpecial.organisation}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, organisation: value }))}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select Organisation" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
+                                            {organisations?.map((org) => (
+                                                <SelectItem key={org.uid} value={org.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                                    {org.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
+                                    <Select
+                                        value={currentSpecial.branch}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, branch: value }))}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select Branch" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
+                                            {branches?.map((branch) => (
+                                                <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                                    {branch.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
                             {/* Store and Active Toggle */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-end">
                                 <div>
@@ -525,9 +596,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                             <SelectValue placeholder="Select store ID" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All">All</SelectItem>
+                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
                                             {allStores.map((branch) => (
-                                                <SelectItem key={branch.id} value={branch.code}>
+                                                <SelectItem key={branch.id} value={branch.code} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                                     {branch.code}
                                                 </SelectItem>
                                             ))}

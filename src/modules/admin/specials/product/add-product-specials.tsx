@@ -89,7 +89,6 @@ export function AddProductsSpecials({ onClose }: Props) {
     const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
     const [branches, setBranches] = useState<Branch[] | null>(null);
 
-
     // Filter products based on search term, show all if search is empty
     const searchProducts = allProducts.filter(product =>
         !searchTerm || // Show all products when search term is empty
@@ -415,8 +414,8 @@ export function AddProductsSpecials({ onClose }: Props) {
                                             <SelectValue placeholder="Select special type" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Percentage">Percentage</SelectItem>
-                                            <SelectItem value="Amount">Amount</SelectItem>
+                                            <SelectItem value="Percentage" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Percentage</SelectItem>
+                                            <SelectItem value="Amount" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Amount</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -500,9 +499,9 @@ export function AddProductsSpecials({ onClose }: Props) {
                                             <SelectValue placeholder="Select Organisation" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All">All</SelectItem>
+                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
                                             {organisations?.map((org) => (
-                                                <SelectItem key={org.uid} value={org.uid.toString()}>
+                                                <SelectItem key={org.uid} value={org.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                                     {org.name}
                                                 </SelectItem>
                                             ))}
@@ -519,9 +518,9 @@ export function AddProductsSpecials({ onClose }: Props) {
                                             <SelectValue placeholder="Select Branch" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All">All</SelectItem>
+                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
                                             {branches?.map((branch) => (
-                                                <SelectItem key={branch.uid} value={branch.uid.toString()}>
+                                                <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                                     {branch.name}
                                                 </SelectItem>
                                             ))}
@@ -542,9 +541,9 @@ export function AddProductsSpecials({ onClose }: Props) {
                                             <SelectValue placeholder="Select store ID" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All">All</SelectItem>
+                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
                                             {allStores.map((branch) => (
-                                                <SelectItem key={branch.id} value={branch.code}>
+                                                <SelectItem key={branch.id} value={branch.code} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                                     {branch.code}
                                                 </SelectItem>
                                             ))}
