@@ -17,8 +17,9 @@ import { useSession } from '@/context';
 import { Item, ItemsResponse } from "@/modules/types/products/product-types";
 import { apiClient } from "@/utils/api-client";
 import { getOrganisations } from "@/components/data/organisation/get-organisations-data";
-import { OrganisationsResponse } from "@/modules/types/organisation/organisation-types";
-import { Organisation } from "@/types/user-types";
+import { Organisation, OrganisationsResponse } from "@/modules/types/organisation/organisation-types";
+import { Branch } from "@/modules/types/branch/branches-types";
+import { getBranches } from "@/components/data/branch/get-branches-data";
 
 interface Props {
     onClose: () => void; 
@@ -51,6 +52,8 @@ export type CombinedSpecial = {
     loyalty_tier: string
     age_group: string
     isActive: boolean
+    organisation: string
+    branch: string
     product: Item | null
 }
 
@@ -69,6 +72,8 @@ export function AddProductsSpecials({ onClose }: Props) {
         loyalty_tier: '',
         age_group: '',
         isActive: false,
+        organisation: '',
+        branch: '',
         product: null
     })
 
@@ -82,6 +87,7 @@ export function AddProductsSpecials({ onClose }: Props) {
 
     //organisations x branches
     const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
+    const [branches, setBranches] = useState<Branch[] | null>(null);
 
 
     // Filter products based on search term, show all if search is empty
@@ -143,11 +149,21 @@ export function AddProductsSpecials({ onClose }: Props) {
 
     const getAllOrganisations = async () => {
         try {
-            const organisationData = await getOrganisations()
-            // setOrganisations(organisationData?.data || [])
-            console.log("all organisations returned bro: ", organisationData)
+            const orgData = await getOrganisations()
+            setOrganisations(orgData)
+            console.log("all organisations returned bro: ", orgData)
         } catch (error) {
             console.error('error fetching all organisations bro:', error)
+        }
+    }
+
+    const getAllBranches = async () => {
+        try {
+            const branchesData = await getBranches()
+            setBranches(branchesData)
+            console.log("all branches returned bro: ", branchesData)
+        } catch (error) {
+            console.error('error fetching all branches bro:', error)
         }
     }
     
@@ -173,6 +189,8 @@ export function AddProductsSpecials({ onClose }: Props) {
     const saveSpecial = async () => {
         try {
             const specialType = 'Special'
+            console.log("selected organisation value: ", currentSpecial.organisation)
+            console.log("selected branch value: ", currentSpecial.branch)
 
             // const selectedStore = allStores.find(store => store.code === currentReward.store_id);
             // const region = selectedStore ? selectedStore.address_4 : ''; 
@@ -196,6 +214,8 @@ export function AddProductsSpecials({ onClose }: Props) {
                 loyalty_tier: currentSpecial.loyalty_tier,
                 age_group: currentSpecial.age_group,
                 isActive: currentSpecial.isActive,
+                organisation: currentSpecial.organisation,
+                branch: currentSpecial.branch,
             }
 
             const url = `specials/save-special`
@@ -260,13 +280,13 @@ export function AddProductsSpecials({ onClose }: Props) {
         try {
             const payload = {
                 special_id: specialId,
+                item_code: currentSpecial.product?.item_code,
                 product_description: currentSpecial.product?.description_1,
             }
 
             console.log('special items payload: ', payload)
 
             const url = `specials/save-special-items`
-            // const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
             const response = await apiClient.post<Special>(`${apiEndPoint}/${url}`, payload)
             console.log('The Special item has been saved with its ID:', response.data)
 
@@ -329,6 +349,7 @@ export function AddProductsSpecials({ onClose }: Props) {
         getLoyaltyTiers();
         getAgeGroups();
         getAllOrganisations();
+        getAllBranches();
     }, []);
 
     return (
@@ -341,13 +362,14 @@ export function AddProductsSpecials({ onClose }: Props) {
                         </button>
                     </div>
                     <CardHeader>
-                        <CardTitle>Create Special</CardTitle>
+                        <CardTitle>Create Product Special</CardTitle>
                         <CardDescription className="text-xs sm:text-sm">
                             Set the special with the required fields and assign all the products linked to the special. Click Save Special once completed.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-3 sm:space-y-4">
+                            { /* Special Name x Special Fields */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="special-name" className="text-black text-xs sm:text-sm">Special Name</label>
@@ -371,6 +393,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
+                            { /* Description x Special Type */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="description" className="text-black text-xs sm:text-sm">Description</label>
@@ -385,8 +408,8 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 <div>
                                     <label htmlFor="special-type" className="text-black text-xs sm:text-sm">Special Type</label>
                                     <Select
-                                        value={currentSpecial.special_type}
-                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_type: value as 'Percentage' | 'Amount' }))}
+                                        value={currentSpecial.special_value}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_value: value as 'Percentage' | 'Amount' }))}
                                     >
                                         <SelectTrigger className="w-full mt-1">
                                             <SelectValue placeholder="Select special type" />
@@ -399,6 +422,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
+                            { /* Loyalty Tier x Age Group */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
@@ -440,6 +464,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
+                            { /* StartDate x EndDate */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="start-date" className="text-black text-xs sm:text-sm">Start Date</label>
@@ -463,6 +488,49 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
+                            { /* Organisation x Branch */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
+                                    <Select
+                                        value={currentSpecial.organisation}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, organisation: value }))}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select Organisation" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="All">All</SelectItem>
+                                            {organisations?.map((org) => (
+                                                <SelectItem key={org.uid} value={org.uid.toString()}>
+                                                    {org.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
+                                    <Select
+                                        value={currentSpecial.branch}
+                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, branch: value }))}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select Branch" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="All">All</SelectItem>
+                                            {branches?.map((branch) => (
+                                                <SelectItem key={branch.uid} value={branch.uid.toString()}>
+                                                    {branch.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            { /* StoreID x Active */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-end">
                                 <div>
                                     <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
@@ -497,6 +565,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
+                            { /* Price */}
                             <div className="grid grid-cols-1 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="special-price" className="text-black text-xs sm:text-sm">Price</label>
@@ -511,6 +580,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
+                            { /* Search Products */}
                             <div>
                                 <label htmlFor="product-search" className="text-black text-xs sm:text-sm">Search Products</label>
                                 <div className="flex space-x-2 mt-1">
@@ -526,6 +596,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
+                            { /* Displayed Products */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                                 {displayedProducts.length > 0 ? (
                                     displayedProducts.map((product) => (
@@ -552,6 +623,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 )}
                             </div>
 
+                            { /* Selected Product */}
                             <div>
                                 <label className="text-black text-xs sm:text-sm">Selected Product</label>
                                 {currentSpecial.product && (
@@ -568,6 +640,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 )}
                             </div>
 
+                            { /* Action Buttons: SaveSpecial x Cancel */}
                             <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
                                 <Button onClick={onClose} className="bg-red hover:bg-rose-300 text-white">
                                     Cancel
