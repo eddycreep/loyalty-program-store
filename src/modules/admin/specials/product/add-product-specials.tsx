@@ -14,23 +14,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Special, SpecialItems, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { useSession } from '@/context';
-
+import { Item, ItemsResponse } from "@/modules/types/products/product-types";
+import { apiClient } from "@/utils/api-client";
+import { getOrganisations } from "@/components/data/organisation/get-organisations-data";
+import { OrganisationsResponse } from "@/modules/types/organisation/organisation-types";
+import { Organisation } from "@/types/user-types";
 
 interface Props {
     onClose: () => void; 
 }
 
 //old product data
-type Product = {
-    id: string
-    name: string
-    price: number
-    item_code: string
-}
+// type Product = {
+//     id: string
+//     name: string
+//     price: number
+//     item_code: string
+// }
 
-type SpecialProduct = Product & {
+// type SpecialProduct = Product & {
     
-}
+// }
 
 
 export type CombinedSpecial = {
@@ -47,9 +51,8 @@ export type CombinedSpecial = {
     loyalty_tier: string
     age_group: string
     isActive: boolean
-    product: SpecialProduct | null
+    product: Item | null
 }
-
 
 export function AddProductsSpecials({ onClose }: Props) {
     const { user } = useSession();
@@ -72,26 +75,37 @@ export function AddProductsSpecials({ onClose }: Props) {
     const [searchTerm, setSearchTerm] = useState('')
     const [specialID, setSpecialID] = useState<SpecialInfoRes>([])
 
-    const [allProducts, setAllProducts] = useState<Products[]>([])
+    const [allProducts, setAllProducts] = useState<Item[]>([])
     const [allStores, setAllStores] = useState<StoresResponse>([]);
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
 
+    //organisations x branches
+    const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
 
+
+    // Filter products based on search term, show all if search is empty
     const searchProducts = allProducts.filter(product =>
-        product.inventory.description_1.toLowerCase().includes(searchTerm.toLowerCase())
+        !searchTerm || // Show all products when search term is empty
+        product?.description_1?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     const displayedProducts = searchProducts.slice(0, 3);
 
+    console.log('Search term:', searchTerm); // Debug log for search term
+    console.log('Filtered products count:', searchProducts.length); // Debug log for filtered results
+
     const fetchProducts = async () => {
         try {
             const url = `inventory/get-products`;
-            const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`);
-            setAllProducts(response?.data.results || []);
+            const response = await axios.get<ItemsResponse>(`${apiEndPoint}/${url}`);
+            const products = response?.data || []; // Added safer access to nested property
+            setAllProducts(products);
+            console.log('All Products Returned My Gee: ', response?.data);
 
         } catch (error) {
-            console.error('error fetching products: ', error);
+            console.error('Error fetching products:', error);
+            setAllProducts([]); // Ensure state is reset on error
         }
     };
 
@@ -126,17 +140,27 @@ export function AddProductsSpecials({ onClose }: Props) {
             console.error('Error RETURNING AGE_GROUPS:', error)
         }
     }
+
+    const getAllOrganisations = async () => {
+        try {
+            const organisationData = await getOrganisations()
+            // setOrganisations(organisationData?.data || [])
+            console.log("all organisations returned bro: ", organisationData)
+        } catch (error) {
+            console.error('error fetching all organisations bro:', error)
+        }
+    }
     
-    const addProductToSpecial = (product: Products) => {
+    const addProductToSpecial = (product: Item) => {
         setCurrentSpecial(prev => ({
             ...prev,
-            product: {
+            product: product,
                 id: product.id.toString(),
-                name: product.inventory.description_1,
+                description_1: product.description_1,
                 price: product.selling_incl_1,
                 item_code: product.item_code
-            }
-        }))
+            }))
+        // }))
     }
 
     const removeProductFromSpecial = () => {
@@ -175,7 +199,8 @@ export function AddProductsSpecials({ onClose }: Props) {
             }
 
             const url = `specials/save-special`
-            const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
+            // const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
+            const response = await apiClient.post<Special>(`${apiEndPoint}/${url}`, payload)
             console.log('The Special has been saved successfully:', response.data)
 
             if (response.status === 200) {
@@ -199,7 +224,8 @@ export function AddProductsSpecials({ onClose }: Props) {
     const fetchSpecialInfo = async () => {
         try {
             const url = `specials/get-special-info/${currentSpecial.special_name}`;
-            const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
+            // const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
             console.log('The Special ID has been fetched successfully:', response.data);
     
             setSpecialID(response?.data);
@@ -234,13 +260,14 @@ export function AddProductsSpecials({ onClose }: Props) {
         try {
             const payload = {
                 special_id: specialId,
-                product_description: currentSpecial.product?.name,
+                product_description: currentSpecial.product?.description_1,
             }
 
             console.log('special items payload: ', payload)
 
             const url = `specials/save-special-items`
-            const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
+            // const response = await axios.post<SpecialItems>(`${apiEndPoint}/${url}`, payload)
+            const response = await apiClient.post<Special>(`${apiEndPoint}/${url}`, payload)
             console.log('The Special item has been saved with its ID:', response.data)
 
             if (response.status === 200) {
@@ -267,7 +294,7 @@ export function AddProductsSpecials({ onClose }: Props) {
     
         try {
             const payload = {
-                emp_id: user.emp_id,
+                // emp_id: user.emp_id,
                 emp_name: user.emp_name,
                 activity_id: special.special_id,
                 activity: special.special_name,
@@ -301,6 +328,7 @@ export function AddProductsSpecials({ onClose }: Props) {
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
+        getAllOrganisations();
     }, []);
 
     return (
@@ -499,24 +527,36 @@ export function AddProductsSpecials({ onClose }: Props) {
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                                {displayedProducts.map((product) => (
-                                    <Button
-                                        key={product.id}
-                                        onClick={() => addProductToSpecial(product)}
-                                        disabled={currentSpecial.product !== null}
-                                        className="justify-start bg-white text-black text-xs sm:text-sm"
-                                    >
-                                        <PlusCircle className="h-4 w-4 mr-2" />
-                                        <span className="truncate">{product.inventory.description_1}</span>
-                                    </Button>
-                                ))}
+                                {displayedProducts.length > 0 ? (
+                                    displayedProducts.map((product) => (
+                                        <Button
+                                            key={product.id}
+                                            onClick={() => addProductToSpecial(product)}
+                                            disabled={currentSpecial.product !== null}
+                                            className="justify-start bg-white text-black text-xs sm:text-sm"
+                                        >
+                                            <PlusCircle className="h-4 w-4 mr-2" />
+                                            <span className="truncate">{product.description_1}</span>
+                                        </Button>
+                                    ))
+                                ) : (
+                                    // Show message when no products match search or no products loaded
+                                    <div className="col-span-full text-center text-gray-500 text-sm py-4">
+                                        {allProducts.length === 0 
+                                            ? "Loading products..." 
+                                            : searchTerm 
+                                                ? "No products found matching your search." 
+                                                : "No products available."
+                                        }
+                                    </div>
+                                )}
                             </div>
 
                             <div>
                                 <label className="text-black text-xs sm:text-sm">Selected Product</label>
                                 {currentSpecial.product && (
                                     <Card className="p-2 flex justify-between items-center mt-1">
-                                        <span className="text-xs sm:text-sm truncate">{currentSpecial.product.name}</span>
+                                        <span className="text-black font-bold text-xs sm:text-sm truncate">{currentSpecial.product.description_1}</span>
                                         <Button
                                             variant="ghost"
                                             size="icon"

@@ -13,6 +13,8 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductDescription, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Special, SaveSpecial, SpecialItems, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
+import { apiClient } from '@/utils/api-client';
+import { Item, ItemsResponse } from '@/modules/types/products/product-types';
 
 
 interface Props {
@@ -98,36 +100,46 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const [searchTerm, setSearchTerm] = useState('')
     const [specialID, setSpecialID] = useState<SpecialInfoRes>([])
 
-    const [allProducts, setAllProducts] = useState<Products[]>([])
+    const [allProducts, setAllProducts] = useState<Item[]>([])
     const [allStores, setAllStores] = useState<StoresResponse>([]);
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
 
 
 
-        // First filter products based on search term
+        // Filter products based on search term, show all if search is empty
     const searchProducts = allProducts.filter(product =>
-        product.inventory.description_1.toLowerCase().includes(searchTerm.toLowerCase())
+        !searchTerm || // Show all products when search term is empty
+        product?.description_1?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     // Then limit to first 3 matches
     const displayedProducts = searchProducts.slice(0, 3);
 
+    console.log('Search term:', searchTerm); // Debug log for search term
+    console.log('Filtered products count:', searchProducts.length); // Debug log for filtered results
+
     const fetchProducts = async () => {
         try {
             const url = `inventory/get-products`;
-            const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`);
-            setAllProducts(response?.data.results || []);
+            // const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get<ItemsResponse>(`${apiEndPoint}/${url}`);
+            const products = response?.data || []; // Safer access to response data
+            setAllProducts(products);
+            console.log('Fetched products count:', products.length); // Debug log for product count
+            console.log('Sample product:', products[0]); // Debug log to see product structure
 
         } catch (error) {
-            console.error('error fetching products: ', error);
+            console.error('Error fetching products:', error);
+            setAllProducts([]); // Ensure state is reset on error
         }
     };
 
     const getStores = async () => {
         try {
             const url = `inventory/get-stores`
-            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get<StoresResponse>(`${apiEndPoint}/${url}`);
             setAllStores(response.data)
         } catch (error) {
             console.error('Error RETURNING STORES:', error)
@@ -137,7 +149,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const getLoyaltyTiers = async () => {
         try {
             const url = `tiers/get-loyalty-tiers`
-            const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get<TiersResponse>(`${apiEndPoint}/${url}`);
             setLoyaltyTiers(response.data)
         } catch (error) {
             console.error('Error RETURNING TIERS:', error)
@@ -147,14 +160,15 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const getAgeGroups = async () => {
         try {
             const url = `age-group/get-age-groups`
-            const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`);
             setAgeGroups(response.data)
         } catch (error) {
             console.error('Error RETURNING AGE_GROUPS:', error)
         }
     }
 
-    const addProductToSpecial = (product: Products) => {
+    const addProductToSpecial = (product: Item) => {
         // Check if we haven't reached the product limit
         if (currentSpecial.products.length >= 5) {
         toast.error('Maximum of 5 products allowed per special');
@@ -164,7 +178,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
         // Convert the inventory product to the SpecialProduct format
         const specialProduct: SpecialProduct = {
             id: product.id.toString(), // Convert to string since SpecialProduct.id is string
-            name: product.inventory.description_1,
+            name: product.description_1,
             price: product.selling_incl_1, // Access from product directly, not from inventory
             item_code: product.item_code, // Access from product directly, not from inventory
             groupId: ''
@@ -222,7 +236,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
             }
 
             const url = `specials/save-special`
-            const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
+            // const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
+            const response = await apiClient.post<Special>(`${apiEndPoint}/${url}`, payload);
             console.log('The Special has been saved successfully:', response.data)
 
             // if (response.status === 200) {
@@ -246,7 +261,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const fetchSpecialInfo = async () => {
         try {
             const url = `specials/get-special-info/${currentSpecial.special_name}`;
-            const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
+            // const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
             console.log('The Special ID has been fetched successfully:', response.data);
 
             setSpecialID(response?.data);
@@ -292,11 +308,11 @@ export function AddCombinedSpecials({ onClose }: Props) {
                 console.log('saving special item payload:', payload);
 
                 const url = `specials/save-combined-special-items`;
-                const response = await axios.post<CombinedSpecialItems>(
-                    `${apiEndPoint}/${url}`, 
-                    payload
-                );
-
+                // const response = await axios.post<CombinedSpecialItems>(
+                //     `${apiEndPoint}/${url}`, 
+                //     payload
+                // );
+                const response = await apiClient.post<CombinedSpecialItems>(`${apiEndPoint}/${url}`, payload);
                 console.log('Special item saved successfully:', response.data);
             }
 
@@ -565,17 +581,29 @@ export function AddCombinedSpecials({ onClose }: Props) {
 
                             {/* Product Grid */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                                {displayedProducts.map((product) => (
-                                    <Button
-                                        key={product.id}
-                                        onClick={() => addProductToSpecial(product)}
-                                        disabled={currentSpecial.products.length >= 5}
-                                        className="justify-start bg-white text-black text-xs sm:text-sm"
-                                    >
-                                        <PlusCircle className="h-4 w-4 mr-2" />
-                                        <span className="truncate">{product.inventory.description_1}</span>
-                                    </Button>
-                                ))}
+                                {displayedProducts.length > 0 ? (
+                                    displayedProducts.map((product) => (
+                                        <Button
+                                            key={product.id}
+                                            onClick={() => addProductToSpecial(product)}
+                                            disabled={currentSpecial.products.length >= 5}
+                                            className="justify-start bg-white text-black text-xs sm:text-sm"
+                                        >
+                                            <PlusCircle className="h-4 w-4 mr-2" />
+                                            <span className="truncate">{product.description_1}</span>
+                                        </Button>
+                                    ))
+                                ) : (
+                                    // Show message when no products match search or no products loaded
+                                    <div className="col-span-full text-center text-gray-500 text-sm py-4">
+                                        {allProducts.length === 0 
+                                            ? "Loading products..." 
+                                            : searchTerm 
+                                                ? "No products found matching your search." 
+                                                : "No products available."
+                                        }
+                                    </div>
+                                )}
                             </div>
 
                             {/* Selected Products */}
@@ -584,7 +612,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                 <div className="space-y-2 mt-1">
                                     {currentSpecial.products.map((product) => (
                                         <Card key={product.id} className="p-2 flex justify-between items-center">
-                                            <span className="text-xs sm:text-sm truncate">{product.name}</span>
+                                            <span className="text-black font-bold text-xs sm:text-sm truncate">{product.name}</span>
                                             <div className="flex items-center space-x-2">
                                                 <Input
                                                     type="text"

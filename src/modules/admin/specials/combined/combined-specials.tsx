@@ -154,7 +154,6 @@ export const CombinedSpecials = () => {
         )
     }
 
-
     if (isError) {
         return (
             <div className="pb-16 pt-20">
@@ -184,7 +183,6 @@ export const CombinedSpecials = () => {
         )
     }
 
-
     if (combinedSpecials.length === 0) {
         return (
             <div className="pb-16 pt-20">
@@ -213,7 +211,6 @@ export const CombinedSpecials = () => {
         </div>
         )
     }
-
 
     return (
         <div className="pb-14 pt-20">

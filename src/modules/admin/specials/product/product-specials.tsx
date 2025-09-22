@@ -147,7 +147,6 @@ export const ProductSpecials = () => {
         )
     }
 
-
     if (isError) {
         return (
             <div>
@@ -176,7 +175,6 @@ export const ProductSpecials = () => {
             </div>
         )
     }
-
 
     if (productSpecials.length === 0) {
         return (
