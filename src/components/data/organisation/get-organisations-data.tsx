@@ -6,9 +6,9 @@ export const getOrganisations = async () => {
     try {
         const url = `organisation/get-organisations`;
         const response = await apiClient.get<OrganisationsResponse>(`${apiEndPoint}/${url}`)
-        console.log('organisations returned my gee: ', response?.data);
+        console.log('organisations returned my gee: ', response?.data?.data);
 
-        return response?.data;
+        return response?.data?.data;
     } catch (error) {
         console.error('Error fetching organisations:', error);
         return null;
