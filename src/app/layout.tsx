@@ -18,7 +18,7 @@ const nunito_sans = Nunito_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "STORE-LOYALTY",
+  title: "Legend-Loyalty | Company-Platform",
   description: "Setup specials, discounts, rewards and more for your customers",
 };
 

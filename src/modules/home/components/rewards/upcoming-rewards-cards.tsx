@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { PercentDiamond, Coins, Coffee, BadgeCheck, BadgeInfo, AlertTriangle, Users, Clock } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
+import { apiClient } from '@/utils/api-client';
 
 interface RewardProps {
     reward_id: number,
@@ -44,7 +45,9 @@ export const UpcomingRewardsCards = () => {
 
         try {
             const url = `rewards/get-upcoming-rewards`
-            const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
+            // const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+
             setUpcomingRewards(response.data.results);
             console.log('Upcoming Rewards: ', response.data);
     

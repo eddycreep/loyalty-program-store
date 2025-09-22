@@ -9,6 +9,7 @@ import { EditRewards } from "@/components/component/edit-rewards";
 import { DeleteRewardConfirmation } from "@/components/component/delete-reward-confirmation";
 import { RewardSummaryCards } from "./rewards/reward-cards";
 import SquareCircleLoader from "@/lib/square-circle-loader";
+import { apiClient } from '@/utils/api-client';
 
 export interface RewardProps {
     reward_id: number,
@@ -53,7 +54,8 @@ export const RewardsModule = () => {
 
         try {
             const url = `rewards/get-all-rewards`
-            const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
+            // const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
             setRewards(response?.data);
             setLoadingData(false);
 

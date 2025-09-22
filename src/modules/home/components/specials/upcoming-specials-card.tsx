@@ -11,6 +11,7 @@ import SquareCircleLoader from "@/lib/square-circle-loader"
 import { BlueLoader } from "@/lib/blueLoader"
 import MultiColorLoader from "@/lib/loaders"
 import ThreeDotsLoader from "@/lib/three-dots-loader"
+import { apiClient } from '@/utils/api-client';
 
 interface SpecialProps {
     uid: number,
@@ -46,7 +47,9 @@ export const UpcomingSpecialCards = () => {
     
         try {
             const url = `specials/get-all-upcoming-specials`
-            const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
+            // const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+
             setUpcomingSpecials(response?.data.results || []);
             console.log('Upcoming Specials: ', response.data);
     

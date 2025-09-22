@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { UserData } from '@/types/user-types';
+import { setUserDataCookies, getUserDataFromCookies, clearUserDataCookies } from '../../../cookie-utils';
 
 export const UserSessionContext = createContext<{
     user: UserData;
@@ -13,11 +14,21 @@ export const UserSessionContext = createContext<{
 
 export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserData>(() => {
-
         if (typeof window !== 'undefined') {
-            const storedData = sessionStorage.getItem(`trainLog`);
-
-            return storedData ? JSON.parse(storedData) : { emp_id: null, serverIndex: 1, id: null, accessLevel: null }
+            // First try to get from sessionStorage for immediate access
+            const storedData = sessionStorage.getItem(`user`);
+            if (storedData) {
+                return JSON.parse(storedData);
+            }
+            
+            // Fall back to cookies if sessionStorage is empty
+            const cookieData = getUserDataFromCookies();
+            if (cookieData) {
+                return cookieData;
+            }
+            
+            // Default empty user state
+            return { accessToken: null, uid: null, id_no: null, emp_name: null, emp_surname: null, role: null, organisation: null, branch: null };
         }
     });
 
@@ -49,6 +60,9 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
         }
 
         setUser(data);
+        
+        // Store user data in both sessionStorage and cookies
+        setUserDataCookies(data);
 
         toast(`Welcome ${data?.emp_name}, Role: ${data?.role}`,
             {
@@ -66,10 +80,12 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
         router.push(path);
     };
 
-    useEffect(() => { sessionStorage.setItem(`trainLog`, JSON.stringify(user)) }, [user]);
+    useEffect(() => { sessionStorage.setItem(`user`, JSON.stringify(user)) }, [user]);
 
     const logout = () => {
-        sessionStorage.removeItem(`trainLog`);
+        // Clear both sessionStorage and cookies
+        sessionStorage.removeItem(`user`);
+        clearUserDataCookies();
 
         router.push("/login");
 

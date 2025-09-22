@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BadgeCheck, BadgeInfo, AlertTriangle, Users, ScrollText, Store, UserRound, Popcorn, Clock } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
+import { apiClient } from '@/utils/api-client';
 
 interface SurveyProps {
     survey_id: number,
@@ -40,7 +41,9 @@ export const UpcomingSurveyCards = () => {
 
         try {
             const url = `survey/get-upcoming-surveys`
-            const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
+            // const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+
             setUpcomingSurveys(response.data.results);
             console.log('Upcoming Surveys: ', response.data);
     

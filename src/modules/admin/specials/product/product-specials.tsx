@@ -10,6 +10,7 @@ import { AddProductsSpecials } from "@/modules/admin/specials/product/add-produc
 import { EditProductSpecials } from "@/modules/admin/specials/product/edit-product-specials";
 import { DeleteSpecialConfirmation } from "@/modules/admin/specials/product/delete-special-confirmation";
 import SquareCircleLoader from "@/lib/square-circle-loader";
+import { apiClient } from '@/utils/api-client';
 
 //get-all-active-product-specials
 export interface ProductSpecialsProps {
@@ -57,7 +58,9 @@ export const ProductSpecials = () => {
 
         try{
             const url = `specials/get-all-product-specials`
-            const response = await axios.get<ProductSpecialsResponse>(`${apiEndPoint}/${url}`)
+            // const response = await axios.get<ProductSpecialsResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+
             setProductSpecials(response?.data)
             setLoadingData(false);
 
@@ -144,7 +147,6 @@ export const ProductSpecials = () => {
         )
     }
 
-
     if (isError) {
         return (
             <div>
@@ -173,7 +175,6 @@ export const ProductSpecials = () => {
             </div>
         )
     }
-
 
     if (productSpecials.length === 0) {
         return (

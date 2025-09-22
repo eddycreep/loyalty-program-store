@@ -15,7 +15,6 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("active")
   const [activeRewardsTab, setActiveRewardsTab] = useState("active-rewards")
 
-
   return (
     <div className="w-full h-full flex flex-col justify-center items-center gap-2 p-2 rounded">
       <div className="w-full h-screen flex flex-col rounded">

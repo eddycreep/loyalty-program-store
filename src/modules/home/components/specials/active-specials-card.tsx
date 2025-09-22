@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { PercentDiamond, Coins, Coffee, BadgeCheck, BadgeInfo, AlertTriangle, Users } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
+import { apiClient } from '@/utils/api-client';
 
 interface SpecialProps {
     uid: number,
@@ -43,7 +44,9 @@ export const ActiveSpecialCards = () => {
     
         try {
             const url = `specials/get-all-active-specials`
-            const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
+            // const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+
             setActiveSpecials(response?.data.results || []);
             console.log('Active Specials: ', response.data);
     
