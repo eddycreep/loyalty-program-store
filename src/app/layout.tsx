@@ -8,6 +8,7 @@ import AppWrapper from "@/layout/mainLayout";
 import { SessionProvider } from "@/context";
 import { AuditProvider } from "@/shared/tools/auditMonit";
 import { ThemeProvider } from "@/components/component/theme.provider"
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 // const inter = Inter({ subsets: ["latin"] });
 const nunito_sans = Nunito_Sans({
@@ -34,7 +35,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 defaultTheme="system"
                 enableSystem
                 disableTransitionOnChange>
-                {children}
+
+                {/* ✅ Wrap children in TooltipProvider */}
+                <TooltipProvider>
+                  {children}
+                </TooltipProvider>
               </ThemeProvider>
               <Toaster
                 position="bottom-center"
