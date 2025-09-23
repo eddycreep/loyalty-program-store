@@ -8,7 +8,7 @@ export const getOrganisation = async (orgId: number) => {
         const response = await apiClient.get<OrganisationResponse>(`${apiEndPoint}/${url}`)
         console.log('organisation returned my gee: ', response?.data);
 
-        return response?.data;
+        return response?.data?.data;
     } catch (error) {
         console.error('Error fetching organisation:', error);
         return null;

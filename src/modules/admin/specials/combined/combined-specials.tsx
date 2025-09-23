@@ -239,10 +239,10 @@ export const CombinedSpecials = () => {
                             <div className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-md">
                                 <div className="grid grid-cols-8 gap-2 items-center">
                                     <p className="text-sm text-center text-purple">{special_id || '--:--'}</p>
-                                    <p className="text-sm text-center text-purple">{combinedSpecialItem.special_group_id || '--:--'}</p>
+                                    <p className="text-sm text-center text-purple">{combinedSpecialItem?.special_group_id || '--:--'}</p>
                                     <p className="text-sm text-center">{special_name || '--:--'}</p>
                                     <p className="text-sm text-center">{special || '--:--'}</p>
-                                    <p className="text-sm text-center">{combinedSpecialItem.product_description || '--:--'}</p>
+                                    <p className="text-sm text-center">{combinedSpecialItem?.product_description || '--:--'}</p>
                                     <p className="text-sm text-center">R{special_price || '--:--'}</p>
                                     <p className="text-sm text-center">{special_value || '--:--'}</p>
                                     <div className="flex items-center justify-center gap-4">

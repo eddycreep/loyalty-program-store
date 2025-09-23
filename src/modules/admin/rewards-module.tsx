@@ -54,7 +54,6 @@ export const RewardsModule = () => {
 
         try {
             const url = `rewards/get-all-rewards`
-            // const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
             const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
             setRewards(response?.data);
             setLoadingData(false);
@@ -135,7 +134,6 @@ export const RewardsModule = () => {
         )
     }
 
-
     if (isError) {
         return (
             <div>
@@ -174,7 +172,6 @@ export const RewardsModule = () => {
         </div>
         )
     }
-
 
     if (rewards.length === 0) {
         return (
