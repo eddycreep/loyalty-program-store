@@ -20,6 +20,7 @@ import { DeactivateBranchConfirmation } from "./branch/deactivate-branch-confirm
 import { DeleteBranchConfirmation } from "./branch/delete-branch-confirmation";
 import { RestoreBranchConfirmation } from "./branch/restore-branch-confirmation";
 import { AddNewBranch } from "./branch/add-new-branch";
+import { EditBranch } from "./branch/edit-branch";
 
 export const BranchModule = () => {
     const [branches, setBranches] = useState<Branch[] | null>(null);
@@ -285,7 +286,7 @@ export const BranchModule = () => {
                                         </p>
                                     </div>
                                     <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                        {/* Edit Organisation */}
+                                        {/* Edit Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
                                                 <button onClick={() => handleEditBranch(uid)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
@@ -297,7 +298,7 @@ export const BranchModule = () => {
                                             </TooltipContent>
                                         </Tooltip>
 
-                                        {/* Activate Organisation */}
+                                        {/* Activate Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
                                                 <button onClick={() => toggleActivationPage(uid)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
@@ -309,7 +310,7 @@ export const BranchModule = () => {
                                             </TooltipContent>
                                         </Tooltip>
 
-                                        {/* Deactivate Organisation */}
+                                        {/* Deactivate Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
                                                 <button onClick={() => toggleDeactivationPage(uid)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
@@ -321,7 +322,7 @@ export const BranchModule = () => {
                                             </TooltipContent>
                                         </Tooltip>
 
-                                        {/* Restore Organisation */}
+                                        {/* Restore Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
                                                 <button onClick={() => toggleRestorePage(uid)} className="flex items-center justify-center cursor-pointer bg-white text-green border border-green hover:bg-green-100 p-1 rounded-lg">
@@ -418,13 +419,13 @@ export const BranchModule = () => {
             /> 
         )}
         
-        {/* {editBranchPopup && 
-            <EditOrganisation 
+        {editBranchPopup && 
+            <EditBranch
                 onClose={closeEditBranchPopup} 
                 selectedBranch={selectedBranch}
                 onSuccess={handleSuccess}
             />
-        } */}
+        }
         
         {addBranchPopUp && 
             <AddNewBranch 
