@@ -13,22 +13,24 @@ import { DeleteBranchConfirmation } from "./branch/delete-branch-confirmation";
 import { RestoreBranchConfirmation } from "./branch/restore-branch-confirmation";
 import { AddNewBranch } from "./branch/add-new-branch";
 import { EditBranch } from "./branch/edit-branch";
+import { getAllUsers } from "@/components/data/user/get-all-users-data";
+import { User } from "@/modules/types/user/user-types";
 
-export const BranchModule = () => {
-    const [branches, setBranches] = useState<Branch[] | null>(null);
+export const UserModule = () => {
+    const [users, setUsers] = useState<User[] | null>(null);
 
-    const [addBranchPopUp, setAddBranchPopUp] = useState(false);
-    const [editBranchPopup, setEditBranchPopup] = useState(false);
+    const [addUserPopUp, setAddUserPopUp] = useState(false);
+    const [editUserPopup, setEditUserPopup] = useState(false);
     const [activationPopUp, setActivationPopUp] = useState(false);
     const [deactivationPopUp, setDeactivationPopUp] = useState(false);
     const [restorePopUp, setRestorePopUp] = useState(false);
 
-    const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null);
-    const [selectedBranchID, setSelectedBranchID] = useState(0);
-    const [selectedBranchName, setSelectedBranchName] = useState('');
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [selectedUserID, setSelectedUserID] = useState(0);
+    const [selectedUserName, setSelectedUserName] = useState('');
 
     // Updated headers array: Removed 'Logo' column to maintain alignment
-    const headers = ['ID', 'Name', 'Email', 'Manager', 'Status', 'Deleted', 'Action']
+    const headers = ['ID', 'Name', 'Role', 'ID Number', 'Status', 'Deleted', 'Action']
 
     const [deletePopUp, setDeletePopUp] = useState(false);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
@@ -42,57 +44,56 @@ export const BranchModule = () => {
 
     const toggleActivationPage = (uid: number) => {
         setActivationPopUp(!activationPopUp);
-        setSelectedBranchID(uid)
+        setSelectedUserID(uid)
     };
 
     const toggleDeactivationPage = (uid: number) => {
         setDeactivationPopUp(!deactivationPopUp);
-        setSelectedBranchID(uid)
+        setSelectedUserID(uid)
     };
 
     const toggleRestorePage = (uid: number) => {
         setRestorePopUp(!restorePopUp);
-        setSelectedBranchID(uid)
+        setSelectedUserID(uid)
     };
 
-    const fetchBranches = async () => {
+    const fetchUsers = async () => {
         setLoadingData(true);
 
         try {
-            const branchesData = await getAllBranches()
-            setBranches(branchesData)
-            console.log("all branches returned bro: ", branchesData)
+            const usersData = await getAllUsers()
+            setUsers(usersData)
+            console.log("all users returned bro: ", usersData)
         } catch (error) {
-            console.error('error fetching all branches bro:', error)
+            console.error('error fetching all users bro:', error)
             setIsError(true);
         }
         setLoadingData(false);
     }
 
     const toggleAddBranch = () => {
-        setAddBranchPopUp(!addBranchPopUp);
+        setAddUserPopUp(!addUserPopUp);
     }
 
     const handleEditBranch = (uid: any) => {
-        const selected = branches?.find((item) => item.uid === uid) || null;
+        const selected = users?.find((item) => item.uid === uid) || null;
         
         if (selected) {
-            setSelectedBranch(selected);
-            setEditBranchPopup(true);
+            setSelectedUser(selected);
+            setEditUserPopup(true);
 
         } else {
             console.log("No selected Branch, sumn wrong with the code my nigga:" + selected);
         }
     }; 
 
-    const toggleDeletePage = (uid: number, name: string) => {
+    const toggleDeletePage = (uid: number) => {
         setDeletePopUp(!deletePopUp);
-        setSelectedBranchID(uid)
-        setSelectedBranchName(name)
+        setSelectedUserID(uid)
     };
 
     const closeEditBranchPopup = () => {
-        setEditBranchPopup(false);
+        setEditUserPopup(false);
     }
 
     const closeActivationPopup = () => {
@@ -101,11 +102,11 @@ export const BranchModule = () => {
 
     const handleSuccess = () => {
         // Refresh the organisations data after successful activation
-        fetchBranches();
+        fetchUsers();
     };
 
     useEffect(() => {
-        fetchBranches();
+        fetchUsers();
     }, []);
 
     if (loadingData) {
@@ -113,32 +114,29 @@ export const BranchModule = () => {
             <div>
             <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
                 <div>
-                    <RewardSummaryCards />
-                </div>
-            <div>
-                <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-xl font-semibold text-purple">Branches</h4>
-                        <p className="text-gray-400">Manage your branches details and settings.</p>
+                    <div className="flex justify-between">
+                        <div className="flex flex-col pl-2 pt-6">
+                            <h4 className="text-xl font-semibold text-purple">Users</h4>
+                            <p className="text-gray-400">Manage your users details and settings.</p>
+                        </div>
+                        <div className='flex gap-2 pt-8 pr-2'>
+                            <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                <PlusCircle size={21} /> 
+                            </button>
+                        </div>
                     </div>
-                    <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
-                            <PlusCircle size={21} /> 
-                        </button>
+                    <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                        {headers?.map((header, index) => (
+                            <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                                {header}
+                            </p>
+                        ))}
+                    </div>
+                    <div className="pt-20 flex flex-col items-center justify-center">
+                        <SquareCircleLoader />
+                        <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                    {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
-                            {header}
-                        </p>
-                    ))}
-                </div>
-                <div className="pt-20 flex flex-col items-center justify-center">
-                    <SquareCircleLoader />
-                    <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
-                </div>
-            </div>
         </div>
         {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
         {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
@@ -150,78 +148,72 @@ export const BranchModule = () => {
     if (isError) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
-                <div>
-                    <RewardSummaryCards />
-                </div>
-            <div>
-                <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-xl font-semibold text-purple">Branches</h4>
-                        <p className="text-gray-400">Manage your branches details and settings.</p>
+                <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                    <div>
+                        <div className="flex justify-between">
+                            <div className="flex flex-col pl-2 pt-6">
+                                <h4 className="text-xl font-semibold text-purple">Users</h4>
+                                <p className="text-gray-400">Manage your users details and settings.</p>
+                            </div>
+                            <div className='flex gap-2 pt-8 pr-2'>
+                                <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                    <PlusCircle size={21} /> 
+                                </button>
+                            </div>
+                        </div>
+                        <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                            {headers?.map((header, index) => (
+                                <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                                    {header}
+                                </p>
+                            ))}
+                        </div>
+                        <div className="flex flex-col items-center justify-center pt-10">
+                            <XOctagon size={44} className="text-black" />
+                            <p className="ml-2 uppercase pt-2 text-red">An error occoured when fetching the rewards!</p>
+                        </div>
                     </div>
-                    <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
-                            <PlusCircle size={21} /> 
-                        </button>
-                    </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                    {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
-                            {header}
-                        </p>
-                    ))}
-                </div>
-                <div className="flex flex-col items-center justify-center pt-10">
-                    <XOctagon size={44} className="text-black" />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occoured when fetching the rewards!</p>
-                </div>
+                {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+                {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
+                {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />} */}
             </div>
-        </div>
-        {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
-        {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
-        {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />} */}
-        </div>
         )
     }
 
-    if (branches?.length === 0) {
+    if (users?.length === 0) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
-                <div>
-                    <RewardSummaryCards />
-                </div>
-            <div>
-                <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
-                    <h4 className="text-xl font-semibold text-purple">Branches</h4>
-                    <p className="text-gray-400">Manage your branches details and settings.</p>
+                <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                    <div>
+                        <div className="flex justify-between">
+                            <div className="flex flex-col pl-2 pt-6">
+                                <h4 className="text-xl font-semibold text-purple">Users</h4>
+                                <p className="text-gray-400">Manage your users details and settings.</p>
+                            </div>
+                            <div className='flex gap-2 pt-8 pr-2'>
+                                <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                    <PlusCircle size={21} /> 
+                                </button>
+                            </div>
+                        </div>
+                        <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                            {headers?.map((header, index) => (
+                                <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                                    {header}
+                                </p>
+                            ))}
+                        </div>
+                        <div className="flex flex-col items-center justify-center pt-10">
+                            <ShieldAlert size={44} className="text-black" />
+                            <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
+                        </div>
                     </div>
-                    <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
-                            <PlusCircle size={21} /> 
-                        </button>
-                    </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                    {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
-                            {header}
-                        </p>
-                    ))}
-                </div>
-                <div className="flex flex-col items-center justify-center pt-10">
-                    <ShieldAlert size={44} className="text-black" />
-                    <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
-                </div>
+                {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+                {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
+                {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />} */}
             </div>
-        </div>
-        {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
-        {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
-        {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />} */}
-        </div>
         )
     }
 
@@ -231,8 +223,8 @@ export const BranchModule = () => {
             <div>
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-24">
-                        <h4 className="text-xl font-semibold text-purple">Branches</h4>
-                        <p className="text-gray-400">Manage your branches details and settings.</p>
+                        <h4 className="text-xl font-semibold text-purple">Users</h4>
+                        <p className="text-gray-400">Manage your users details and settings.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
                         <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
@@ -248,7 +240,7 @@ export const BranchModule = () => {
                     ))}
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
-                        {branches?.map(({ uid, name, contactNumber, email, isActive, managerName, operatingHours, isDeleted }) => (
+                        {users?.map(({ uid, username, password, id_no, emp_name, emp_surname, active, isDeleted, role }) => (
                             <div key={uid} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
                                     {/* Fixed alignment: All columns now use consistent structure and padding */}
@@ -256,20 +248,20 @@ export const BranchModule = () => {
                                         <p className="text-purple">{uid}</p>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
-                                        <p>{name || '--:--'}</p>
+                                        <p>{emp_name || '--:--'}</p>
                                     </div>
                                     {/* <div className="text-sm flex-1 text-center">
                                         <p>{contactNumber|| '--:--'}</p>
                                     </div> */}
                                     <div className="text-sm flex-1 text-center">
-                                        <p>{email || '--:--'}</p>
+                                        <p>{role || '--:--'}</p>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
-                                        <p>{managerName || '--:--'}</p>
+                                        <p>{id_no || '--:--'}</p>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
-                                        <p className={`${isActive === true ? 'text-green' : 'text-red'}`}>
-                                            {isActive === true ? 'Active' : 'Inactive'}
+                                        <p className={`${active === true ? 'text-green' : 'text-red'}`}>
+                                            {active === true ? 'Active' : 'Inactive'}
                                         </p>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
@@ -329,7 +321,7 @@ export const BranchModule = () => {
                                         {/* Delete Organisation */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeletePage(uid, name)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeletePage(uid)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
                                                     <Trash2 size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -377,7 +369,7 @@ export const BranchModule = () => {
                 </div>
             </div>
         </div>  
-        {deletePopUp && (
+        {/* {deletePopUp && (
             <DeleteBranchConfirmation 
                 branchID={selectedBranchID} 
                 isOpen={ deletePopUp } 
@@ -424,7 +416,7 @@ export const BranchModule = () => {
                 onClose={ toggleAddBranch } 
                 onSuccess={handleSuccess} 
             />
-        }
+        } */}
         </div>
     );
 }
