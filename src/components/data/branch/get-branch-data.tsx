@@ -6,9 +6,9 @@ export const getBranch = async (branchId: number) => {
     try {
         const url = `branch/get-branch/${branchId}`;
         const response = await apiClient.get<BranchResponse>(`${apiEndPoint}/${url}`)
-        console.log('branch returned my gee: ', response?.data);
+        console.log('branch returned my gee: ', response?.data?.data);
 
-        return response?.data;
+        return response?.data?.data;
     } catch (error) {
         console.error('Error fetching branch:', error);
         return null;

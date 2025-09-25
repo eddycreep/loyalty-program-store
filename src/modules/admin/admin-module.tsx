@@ -7,6 +7,7 @@ import { ReviewsModule } from './reviews-module';
 import { SurveyModule } from './survey-module';
 import { Tiers } from './loyalty-tiers/tiers'
 import { OrganizationModule } from './organization-module';
+import { BranchModule } from './branch-module';
 
 export const AdminModule = () => {
     const [currentTab, setCurrentTab] = useState('specials');
@@ -29,8 +30,8 @@ export const AdminModule = () => {
             {currentTab === 'surveys' && <SurveyModule />}
             {currentTab === 'tiers' && <Tiers />}
             {currentTab === 'organisation' && <OrganizationModule />}
-            {/* {currentTab === 'branch' && <BranchModule />}
-            {currentTab === 'users' && <UsersModule />} */}
+            {currentTab === 'branch' && <BranchModule />}
+            {/* {currentTab === 'users' && <UsersModule />} */}
         </div>
     );
 }

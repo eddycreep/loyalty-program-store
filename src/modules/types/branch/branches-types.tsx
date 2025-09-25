@@ -4,7 +4,7 @@ export interface Branch {
     address: string,
     contactNumber: string,
     email: string,
-    isActive: true,
+    isActive: boolean,
     managerName: string,
     operatingHours: JSON,
     isDeleted: boolean,
@@ -20,4 +20,24 @@ export type BranchesResponse = {
 export type BranchResponse = {
     message: string;
     data: Branch;
+}
+
+// Create Branch
+export interface CreateBranch {
+    name: string,
+    address: string,
+    contactNumber: string,
+    email: string,
+    managerName: string,
+    operatingHours: {
+        days: string[],
+        opening: string,
+        closing: string
+    },
+    organisationId: number
+}
+
+
+export interface SuccessResponse {
+    message: string;
 }

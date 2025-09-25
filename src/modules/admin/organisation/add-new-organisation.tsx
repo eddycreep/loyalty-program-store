@@ -21,7 +21,7 @@ export function AddNewOrganisation({ onClose, onSuccess }: any) {
       website: '',
       logo: ''
     })
-
+2
     const saveOrganisation = async () => {
         try {
             const payload = {
