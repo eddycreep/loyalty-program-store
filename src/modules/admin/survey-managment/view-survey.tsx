@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { DeleteSurveyConfirmation  } from '@/components/component/delete-survey-confirmation';
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { apiClient } from '@/utils/api-client';
+import { Badge } from '@/components/ui/badge';
 
 interface SurveyProps {
     survey_id: number,
@@ -170,9 +171,9 @@ export const ViewSurveys = () => {
                         </p>
                         <p className="text-sm flex-1 text-center">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
                         <p className="text-sm flex-1 text-center">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
-                        <p className={`text-sm flex-1 text-center flex items-center justify-center space-x-2 ${isActive === true ? 'text-green' : 'text-red'}`}>
+                        <Badge className={`text-sm flex-1 text-center flex items-center justify-center sBadgeace-x-2 ${isActive === true ? 'text-green' : 'text-red'}`}>
                             {isActive ? 'Active' : 'Inactive'}
-                        </p>
+                        </Badge>
                         <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                             <button onClick={() => handleEditSurvey(survey_id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg" >
                                 <Edit size={21} /> 

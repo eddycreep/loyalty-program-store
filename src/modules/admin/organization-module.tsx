@@ -13,6 +13,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { ActivateOrganisationConfirmation } from './organisation/activate-organisation-confirmation';
 import { DeactivateOrganisationConfirmation } from './organisation/deactivate-organisation-confirmation';
 import { RestoreOrganisationConfirmation } from './organisation/restore-organisation-confimation';
+import { Badge } from "@/components/ui/badge";
 
 export const OrganizationModule = () => {
     const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
@@ -268,14 +269,14 @@ export const OrganizationModule = () => {
                                         <p>{website || '--:--'}</p>
                                     </div> */}
                                     <div className="text-sm flex-1 text-center">
-                                        <p className={`${active === true ? 'text-green' : 'text-red'}`}>
+                                        <Badge className={`${active === true ? 'bg-green hover:bg-green-100 text-white' : 'bg-red hover:bg-red-100 text-white'}`}>
                                             {active === true ? 'Active' : 'Inactive'}
-                                        </p>
+                                        </Badge>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
-                                        <p className={`${isDeleted === true ? 'text-green' : 'text-red'}`}>
+                                        <Badge className={`${isDeleted === true ? 'bg-red hover:bg-red-100 text-white' : 'bg-green hover:bg-green-100 text-white'}`}>
                                             {isDeleted === true ? 'Deleted' : 'Not Deleted'}
-                                        </p>
+                                        </Badge>
                                     </div>
                                     <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                         {/* Edit Organisation */}

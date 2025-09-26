@@ -2,19 +2,17 @@
 
 import { useState, useEffect } from "react"
 import { Edit, Trash2, ShieldAlert, XOctagon, PlusCircle, ArchiveRestore, Activity} from "lucide-react"
-import { RewardSummaryCards } from "./rewards/reward-cards";
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { getAllBranches } from "@/components/data/branch/get-all-branches-data";
-import { Branch } from "@/modules/types/branch/branches-types";
-import { ActivateBranchConfirmation } from "./branch/activate-branch-confirmation";
-import { DeactivateBranchConfirmation } from "./branch/deactivate-branch-confirmation";
-import { DeleteBranchConfirmation } from "./branch/delete-branch-confirmation";
-import { RestoreBranchConfirmation } from "./branch/restore-branch-confirmation";
-import { AddNewBranch } from "./branch/add-new-branch";
-import { EditBranch } from "./branch/edit-branch";
 import { getAllUsers } from "@/components/data/user/get-all-users-data";
 import { User } from "@/modules/types/user/user-types";
+import { Badge } from "@/components/ui/badge";
+import { DeactivateUserConfirmation } from "./user/deactivate-user-confirmation";
+import { ActivateUserConfirmation } from "./user/activate-user-confirmation";
+import { DeleteUserConfirmation } from "./user/delete-user-confirmation";
+import { RestoreUserConfirmation } from "./user/restore-user-confirmation";
+import { AddNewUser } from "./user/add-new-user";
+import { EditUser } from "./user/edit-user";
 
 export const UserModule = () => {
     const [users, setUsers] = useState<User[] | null>(null);
@@ -71,11 +69,11 @@ export const UserModule = () => {
         setLoadingData(false);
     }
 
-    const toggleAddBranch = () => {
+    const toggleAddUser = () => {
         setAddUserPopUp(!addUserPopUp);
     }
 
-    const handleEditBranch = (uid: any) => {
+    const handleEditUser = (uid: any) => {
         const selected = users?.find((item) => item.uid === uid) || null;
         
         if (selected) {
@@ -92,7 +90,7 @@ export const UserModule = () => {
         setSelectedUserID(uid)
     };
 
-    const closeEditBranchPopup = () => {
+    const closeEditUserPopup = () => {
         setEditUserPopup(false);
     }
 
@@ -117,10 +115,10 @@ export const UserModule = () => {
                     <div className="flex justify-between">
                         <div className="flex flex-col pl-2 pt-6">
                             <h4 className="text-xl font-semibold text-purple">Users</h4>
-                            <p className="text-gray-400">Manage your users details and settings.</p>
+                            <p className="text-gray-400">View, manage, and update user information, roles, and preferences.</p>
                         </div>
                         <div className='flex gap-2 pt-8 pr-2'>
-                            <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <button onClick={ toggleAddUser } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
                                 <PlusCircle size={21} /> 
                             </button>
                         </div>
@@ -153,10 +151,10 @@ export const UserModule = () => {
                         <div className="flex justify-between">
                             <div className="flex flex-col pl-2 pt-6">
                                 <h4 className="text-xl font-semibold text-purple">Users</h4>
-                                <p className="text-gray-400">Manage your users details and settings.</p>
+                                <p className="text-gray-400">View, manage, and update user information, roles, and preferences.</p>
                             </div>
                             <div className='flex gap-2 pt-8 pr-2'>
-                                <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                <button onClick={ toggleAddUser } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
                                     <PlusCircle size={21} /> 
                                 </button>
                             </div>
@@ -189,10 +187,10 @@ export const UserModule = () => {
                         <div className="flex justify-between">
                             <div className="flex flex-col pl-2 pt-6">
                                 <h4 className="text-xl font-semibold text-purple">Users</h4>
-                                <p className="text-gray-400">Manage your users details and settings.</p>
+                                <p className="text-gray-400">View, manage, and update user information, roles, and preferences.</p>
                             </div>
                             <div className='flex gap-2 pt-8 pr-2'>
-                                <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                <button onClick={ toggleAddUser } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
                                     <PlusCircle size={21} /> 
                                 </button>
                             </div>
@@ -224,10 +222,10 @@ export const UserModule = () => {
                 <div className="flex justify-between">
                     <div className="flex flex-col pl-2 pt-24">
                         <h4 className="text-xl font-semibold text-purple">Users</h4>
-                        <p className="text-gray-400">Manage your users details and settings.</p>
+                        <p className="text-gray-400">View, manage, and update user information, roles, and preferences.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddBranch } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddUser } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
@@ -260,20 +258,26 @@ export const UserModule = () => {
                                         <p>{id_no || '--:--'}</p>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
-                                        <p className={`${active === true ? 'text-green' : 'text-red'}`}>
+                                        {/* <p className={`${active === true ? 'text-green' : 'text-red'}`}>
                                             {active === true ? 'Active' : 'Inactive'}
-                                        </p>
+                                        </p> */}
+                                        <Badge className={`${active === true ? 'bg-green hover:bg-green-100 text-white' : 'bg-red hover:bg-red-100 text-white'}`}>
+                                            {active === true ? 'Active' : 'Inactive'}
+                                        </Badge>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
-                                        <p className={`${isDeleted === true ? 'text-green' : 'text-red'}`}>
+                                        {/* <p className={`${isDeleted === true ? 'text-green' : 'text-red'}`}>
                                             {isDeleted === true ? 'Deleted' : 'Not Deleted'}
-                                        </p>
+                                        </p> */}
+                                        <Badge className={`${isDeleted === true ? 'bg-red hover:bg-red-100 text-white' : 'bg-green hover:bg-green-100 text-white'}`}>
+                                            {isDeleted === true ? 'Deleted' : 'Not Deleted'}
+                                        </Badge>
                                     </div>
                                     <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                         {/* Edit Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => handleEditBranch(uid)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
+                                                <button onClick={() => handleEditUser(uid)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
                                                     <Edit size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -369,54 +373,54 @@ export const UserModule = () => {
                 </div>
             </div>
         </div>  
-        {/* {deletePopUp && (
-            <DeleteBranchConfirmation 
-                branchID={selectedBranchID} 
-                isOpen={ deletePopUp } 
-                onClose={ toggleDeletePage }
+        {deletePopUp && (
+            <DeleteUserConfirmation
+                userID={selectedUserID} 
+                isOpen={deletePopUp} 
+                onClose={toggleDeletePage}
                 onSuccess={handleSuccess}
-                /> 
+            /> 
         )}
         {activationPopUp && (
-            <ActivateBranchConfirmation
-                branchID={selectedBranchID} 
+            <ActivateUserConfirmation
+                userID={selectedUserID} 
                 isOpen={activationPopUp} 
                 onClose={closeActivationPopup}
                 onSuccess={handleSuccess}
             />
-        )}
+        )} 
         {deactivationPopUp && (
-            <DeactivateBranchConfirmation 
-                branchID={selectedBranchID} 
-                isOpen={ deactivationPopUp } 
-                onClose={ toggleDeactivationPage }
+            <DeactivateUserConfirmation
+                userID={selectedUserID} 
+                isOpen={deactivationPopUp} 
+                onClose={toggleDeactivationPage}
                 onSuccess={handleSuccess}
             /> 
         )}
         
         {restorePopUp && (
-            <RestoreBranchConfirmation
-                branchID={selectedBranchID} 
-                isOpen={ restorePopUp } 
-                onClose={ toggleRestorePage }
+            <RestoreUserConfirmation
+                userID={selectedUserID} 
+                isOpen={restorePopUp} 
+                onClose={toggleRestorePage}
                 onSuccess={handleSuccess}
             /> 
         )}
         
-        {editBranchPopup && 
-            <EditBranch
-                onClose={closeEditBranchPopup} 
-                selectedBranch={selectedBranch}
+        {editUserPopup && 
+            <EditUser
+                onClose={closeEditUserPopup} 
+                selectedUser={selectedUser}
                 onSuccess={handleSuccess}
             />
         }
         
-        {addBranchPopUp && 
-            <AddNewBranch 
-                onClose={ toggleAddBranch } 
+        {addUserPopUp && 
+            <AddNewUser
+                onClose={toggleAddUser} 
                 onSuccess={handleSuccess} 
             />
-        } */}
+        }
         </div>
     );
 }

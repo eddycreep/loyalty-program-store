@@ -13,6 +13,7 @@ import { DeleteBranchConfirmation } from "./branch/delete-branch-confirmation";
 import { RestoreBranchConfirmation } from "./branch/restore-branch-confirmation";
 import { AddNewBranch } from "./branch/add-new-branch";
 import { EditBranch } from "./branch/edit-branch";
+import { Badge } from "@/components/ui/badge";
 
 export const BranchModule = () => {
     const [branches, setBranches] = useState<Branch[] | null>(null);
@@ -268,14 +269,17 @@ export const BranchModule = () => {
                                         <p>{managerName || '--:--'}</p>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
-                                        <p className={`${isActive === true ? 'text-green' : 'text-red'}`}>
+                                        {/* <p className={`${isActive === true ? 'text-green' : 'text-red'}`}>
                                             {isActive === true ? 'Active' : 'Inactive'}
-                                        </p>
+                                        </p> */}
+                                        <Badge className={`${isActive === true ? 'bg-green hover:bg-green-100 text-white' : 'bg-red hover:bg-red-100 text-white'}`}>
+                                            {isActive === true ? 'Active' : 'Inactive'}
+                                        </Badge>
                                     </div>
                                     <div className="text-sm flex-1 text-center">
-                                        <p className={`${isDeleted === true ? 'text-green' : 'text-red'}`}>
+                                        <Badge className={`${isDeleted === true ? 'bg-red hover:bg-red-100 text-white' : 'bg-green hover:bg-green-100 text-white'}`}>
                                             {isDeleted === true ? 'Deleted' : 'Not Deleted'}
-                                        </p>
+                                        </Badge>
                                     </div>
                                     <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
                                         {/* Edit Branch */}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:4400' // process.env.NEXT_PUBLIC_API_ENDPOINT || 'https://hr-server-znv3.onrender.com'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || 'https://hr-server-znv3.onrender.com'
 
 // const API_BASE_URL = "http://localhost:4400";
 
