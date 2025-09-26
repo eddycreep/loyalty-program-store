@@ -25,17 +25,14 @@ export type UserResponse = {
 
 // Create Branch
 export interface CreateUser {
-    name: string,
-    address: string,
-    contactNumber: string,
-    email: string,
-    managerName: string,
-    operatingHours: {
-        days: string[],
-        opening: string,
-        closing: string
-    },
-    organisationId: number
+    username: string;
+    password: string;
+    id_no: string;
+    emp_name: string;
+    emp_surname: string;
+    role: UserRole;
+    organisation: number;
+    branch: number;
 }
 
 // UserRole 
