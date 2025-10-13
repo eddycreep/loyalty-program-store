@@ -1,10 +1,10 @@
 'use client'
 
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
-import { X, Check } from 'lucide-react';
+import { X, Check, Upload, Image as ImageIcon } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -12,29 +12,101 @@ import { useSession } from '@/context';
 import { CreateOrganisation, OrganisationResponse } from '@/modules/types/organisation/organisation-types';
 import { apiClient } from '@/utils/api-client';
 
+interface OrganisationFormData {
+    name: string;
+    description: string;
+    email: string;
+    website: string;
+}
+
 export function AddNewOrganisation({ onClose, onSuccess }: any) {
     const { user } = useSession();
-    const [currentOrganisation, setCurrentOrganisation] = useState<CreateOrganisation>({
-      name: '',
-      description: '',
-      email: '',
-      website: '',
-      logo: ''
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    
+    // Separate logo file state from text fields
+    const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoPreview, setLogoPreview] = useState<string | null>(null);
+    const [uploadError, setUploadError] = useState<string>('');
+    
+    const [currentOrganisation, setCurrentOrganisation] = useState<OrganisationFormData>({
+        name: '',
+        description: '',
+        email: '',
+        website: '',
     })
-2
-    const saveOrganisation = async () => {
-        try {
-            const payload = {
-                name: currentOrganisation.name,
-                description: currentOrganisation.description,
-                email: currentOrganisation.email,
-                website: currentOrganisation.website,
-                logo: currentOrganisation.logo,
+
+    // Handle file selection and validation
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        setUploadError('');
+
+        if (file) {
+            // Validate file type - only accept images
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                setUploadError('Please select a valid image file (JPEG, PNG, GIF, or WebP)');
+                return;
             }
 
-            const url = `organisation/create-organisation`
-            const response = await apiClient.post<OrganisationResponse>(`${apiEndPoint}/${url}`, payload)
-            console.log('The Organisation has been saved:', response)
+            // Validate file size - max 5MB
+            const maxSizeInBytes = 5 * 1024 * 1024;
+            if (file.size > maxSizeInBytes) {
+                setUploadError('File size must be less than 5MB');
+                return;
+            }
+
+            // Set the file and create preview
+            setLogoFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setLogoPreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // Trigger file input click
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    // Remove selected file
+    const handleRemoveFile = () => {
+        setLogoFile(null);
+        setLogoPreview(null);
+        setUploadError('');
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
+    const saveOrganisation = async () => {
+        try {
+            // Create FormData to handle multipart/form-data submission
+            const formData = new FormData();
+            formData.append('name', currentOrganisation.name);
+            formData.append('description', currentOrganisation.description);
+            formData.append('email', currentOrganisation.email);
+            formData.append('website', currentOrganisation.website);
+            
+            // Append logo file if selected
+            if (logoFile) {
+                formData.append('logo', logoFile);
+            }
+
+            const url = `organisation/create-organisation`;
+            // Use axios directly for FormData to ensure proper headers
+            const response = await apiClient.post<OrganisationResponse>(
+                `${url}`, 
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+            
+            console.log('The Organisation has been saved:', response);
 
             if (response.status === 201) {
                 toast.success('Organisation Saved!', {
@@ -54,12 +126,12 @@ export function AddNewOrganisation({ onClose, onSuccess }: any) {
 
             onClose();
         } catch (error) {
-            console.error('Error saving Organisation:', error)
+            console.error('Error saving Organisation:', error);
             
             toast.error('Organisation not saved', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
-            })
+            });
         }
     }
 
@@ -80,6 +152,55 @@ export function AddNewOrganisation({ onClose, onSuccess }: any) {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-3 sm:space-y-4">
+                            {/* Logo Upload Section - positioned above Name and Description */}
+                            <div className="w-full">
+                                <label className="text-black text-xs sm:text-sm font-medium">Organisation Logo</label>
+                                <div className="mt-2">
+                                    {/* Hidden file input */}
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                                        onChange={handleFileChange}
+                                        className="hidden"
+                                    />
+                                    
+                                    {/* Upload area with dotted border */}
+                                    {!logoPreview ? (
+                                        <div
+                                            onClick={handleUploadClick}
+                                            className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-purple transition-colors"
+                                        >
+                                            <Upload className="mx-auto h-10 w-10 text-gray-400" />
+                                            <p className="mt-2 text-sm text-gray-600">Click to upload logo</p>
+                                            <p className="mt-1 text-xs text-gray-500">PNG, JPG, GIF, WebP up to 5MB</p>
+                                        </div>
+                                    ) : (
+                                        // Image preview with remove option
+                                        <div className="relative border-2 border-gray-300 rounded-lg p-4">
+                                            <img
+                                                src={logoPreview}
+                                                alt="Logo preview"
+                                                className="mx-auto max-h-32 object-contain"
+                                            />
+                                            <button
+                                                onClick={handleRemoveFile}
+                                                className="absolute top-2 right-2 bg-red text-white rounded-full p-1 hover:bg-rose-600"
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </button>
+                                            <p className="mt-2 text-xs text-center text-gray-600">{logoFile?.name}</p>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Display upload error if any */}
+                                    {uploadError && (
+                                        <p className="mt-1 text-xs text-red">{uploadError}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Name and Description fields */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="name" className="text-black text-xs sm:text-sm">Name</label>
@@ -103,6 +224,7 @@ export function AddNewOrganisation({ onClose, onSuccess }: any) {
                                 </div>
                             </div>
 
+                            {/* Email and Website fields */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="email" className="text-black text-xs sm:text-sm">Email</label>
@@ -126,19 +248,7 @@ export function AddNewOrganisation({ onClose, onSuccess }: any) {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-3 sm:gap-4">
-                                <div>
-                                    <label htmlFor="logo" className="text-black text-xs sm:text-sm">Logo URL</label>
-                                    <Input
-                                        id="logo"
-                                        value={currentOrganisation.logo}
-                                        onChange={(e) => setCurrentOrganisation(prev => ({ ...prev, logo: e.target.value }))}
-                                        placeholder="Enter logo URL"
-                                        className="mt-1"
-                                    />
-                                </div>
-                            </div>
-
+                            {/* Action buttons */}
                             <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
                                 <Button onClick={onClose} className="bg-red hover:bg-rose-300 text-white">
                                     Cancel

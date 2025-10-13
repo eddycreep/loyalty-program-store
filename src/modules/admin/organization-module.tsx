@@ -29,7 +29,7 @@ export const OrganizationModule = () => {
     const [selectedOrganisationName, setSelectedOrganisationName] = useState('');
 
     // Updated headers array: Removed 'Logo' column to maintain alignment
-    const headers = ['ID', 'Name', 'Description', 'Email', 'Status', 'Deleted', 'Action']
+    const headers = ['ID', 'Name', 'Description', 'Logo', 'Status', 'Deleted', 'Action']
 
     const [deletePopUp, setDeletePopUp] = useState(false);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
@@ -249,7 +249,7 @@ export const OrganizationModule = () => {
                     ))}
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
-                        {organisations?.map(({ uid, name, description, email, website, active, isDeleted }) => (
+                        {organisations?.map(({ uid, name, description, email, website, logo, active, isDeleted }) => (
                             <div key={uid} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
                                     {/* Fixed alignment: All columns now use consistent structure and padding */}
@@ -262,8 +262,15 @@ export const OrganizationModule = () => {
                                     <div className="text-sm flex-1 text-center">
                                         <p>{description || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    {/* <div className="text-sm flex-1 text-center">
                                         <p>{email || '--:--'}</p>
+                                    </div> */}
+                                    <div className="text-sm flex-1 text-center">
+                                        <img 
+                                            src={logo || '--:--'} 
+                                            alt="Logo" 
+                                            className="w-45 h-10 rounded-lg pl-8" 
+                                        />
                                     </div>
                                     {/* <div className="text-sm flex-1 text-center">
                                         <p>{website || '--:--'}</p>
