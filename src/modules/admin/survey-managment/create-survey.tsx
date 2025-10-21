@@ -13,6 +13,10 @@ import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards
 import EditSurvey from "./edit-survey";
 import { useSession } from '@/context';
 import { apiClient } from "@/utils/api-client";
+import { Organisation } from "@/modules/types/organisation/organisation-types";
+import { Branch } from "@/modules/types/branch/branches-types";
+import { getOrganisations } from "@/components/data/organisation/get-organisations-data";
+import { getBranches } from "@/components/data/branch/get-branches-data";
 
 
 export const CreateSurveys = () => {
@@ -25,17 +29,26 @@ export const CreateSurveys = () => {
     const [startDate, setStartDate] = useState("");
     const [expiryDate, setExpiryDate] = useState("");
     const [isActive, setIsActive] = useState(false);
+    const [reward, setReward] = useState("");
+    const [description, setDescription] = useState("");
+
+    // store whats selected
+    const [selectedOrganisation, setSelectedOrganisation] = useState("");
+    const [selectedBranch, setSelectedBranch] = useState("");
 
     const [allStores, setAllStores] = useState<StoresResponse>([]);
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
     const [surveyInfo, setSurveyInfo] = useState<SurveyInfoResponse>([]);
 
+    //organisations x branches data
+    const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
+    const [branches, setBranches] = useState<Branch[] | null>(null);
+
     const getStores = async () => {
         try {
             const url = `inventory/get-stores`
-            // const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+            const response = await apiClient.get(url)
             setAllStores(response.data)
         } catch (error) {
             console.error('Error RETURNING STORES:', error)
@@ -45,8 +58,7 @@ export const CreateSurveys = () => {
     const getLoyaltyTiers = async () => {
         try {
             const url = `tiers/get-loyalty-tiers`
-            // const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+            const response = await apiClient.get(url)
             console.log('TIERS RETURNED !!', response.data)
             setLoyaltyTiers(response.data)
         } catch (error) {
@@ -57,12 +69,31 @@ export const CreateSurveys = () => {
     const getAgeGroups = async () => {
         try {
             const url = `age-group/get-age-groups`
-            // const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+            const response = await apiClient.get(url) 
             console.log('AGE_GROUPS RETURNED !!', response.data)
             setAgeGroups(response.data)
         } catch (error) {
             console.error('Error RETURNING AGE_GROUPS:', error)
+        }
+    }
+
+    const getAllOrganisations = async () => {
+        try {
+            const orgData = await getOrganisations()
+            setOrganisations(orgData)
+            console.log("all organisations returned bro: ", orgData)
+        } catch (error) {
+            console.error('error fetching all organisations bro:', error)
+        }
+    }
+
+    const getAllBranches = async () => {
+        try {
+            const branchesData = await getBranches()
+            setBranches(branchesData)
+            console.log("all branches returned bro: ", branchesData)
+        } catch (error) {
+            console.error('error fetching all branches bro:', error)
         }
     }
 
@@ -116,28 +147,33 @@ export const CreateSurveys = () => {
     
             const formattedStartDate = formatDateTime(startDate);
             const formattedExpiryDate = formatDateTime(expiryDate);
-
-
             console.log('startdate: ', formattedStartDate);
             console.log('enddate: ', formattedExpiryDate);
 
 
+            const newOrgId = Number(selectedOrganisation);
+            const newBrId = Number(selectedBranch);
+            console.log('org id: ', newOrgId);
+            console.log('br id: ', newBrId);
+
             const payload = {
                 survey_title: surveyName,
                 survey_category: surveyCategory,
+                description: description,
                 store_id: selectedStore,
                 region: region,
                 loyalty_tier: selectedTier,
                 start_date: formattedStartDate,
                 expiry_date: formattedExpiryDate,
-                isActive: true
-                // isActive: isActive
+                isActive: true,
+                reward: reward,
+                organisationId: newOrgId,
+                branchId: newBrId
             }
 
-
             const url = `survey/save-survey`
-            // const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`, payload)
-            const response = await apiClient.post(url, payload) // Note: no need for full URL since apiClient has baseURL
+            const response = await apiClient.post(url, payload)
+            console.log("response on saving survey: ", response.data)
 
             await getSurveyInfo();
         } catch (error) {
@@ -152,8 +188,7 @@ export const CreateSurveys = () => {
     const getSurveyInfo = async () => {
         try {
             const url = `survey/get-survey-id/${surveyName}`
-            // const response = await axios.get<SurveyInfoResponse>(`${apiEndPoint}/${url}`)
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+            const response = await apiClient.get(url)
             setSurveyInfo(response?.data);
 
             await saveSurveyQuestions(response.data[0]);
@@ -180,16 +215,17 @@ export const CreateSurveys = () => {
 
             // Use a bulk API call instead of looping (if supported by the backend)
             const url = `survey/save-survey-questions`;
-            // const response = await axios.post(`${apiEndPoint}/${url}`, questionPayloads);
-            const response = await apiClient.post(url, questionPayloads) // Note: no need for full URL since apiClient has baseURL
+            const response = await apiClient.post(url, questionPayloads)
 
-            if (response.status === 201 || response.status === 200) {
-                console.log('Questions saved successfully:', response.data);
-                toast.success('Survey Saved Successfully!');
-                logUserActivity(surveyData);
-            } else {
-                throw new Error('Failed to save questions');
-            }
+            toast.success('Survey Saved Successfully!');
+            logUserActivity(surveyData);
+            // if (response.status === 201 || response.status === 200) {
+            //     console.log('Questions saved successfully:', response.data);
+            //     toast.success('Survey Saved Successfully!');
+            //     logUserActivity(surveyData);
+            // } else {
+            //     throw new Error('Failed to save questions');
+            // }
         } catch (error) {
             console.error('Error Saving Survey:', error)
             toast.error('Survey Not Saved', {
@@ -271,7 +307,12 @@ export const CreateSurveys = () => {
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
+        getAllOrganisations();
+        getAllBranches();
     }, []);
+
+    const userOrganisation = user?.organisation?.name
+    const userOrganisationUid = user?.organisation?.uid
 
     return (
         <div className="pb-20">
@@ -325,6 +366,7 @@ export const CreateSurveys = () => {
                 </div>
             </div>
             <div className="flex gap-4">
+                {/* Survey Title */}
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Survey Title</label>
                     <input
@@ -335,6 +377,8 @@ export const CreateSurveys = () => {
                         onChange={(e) => setSurveyName(e.target.value)}
                     />
                 </div>
+
+                {/* Survey Category */}
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Survey Category</label>
                     <select
@@ -347,6 +391,8 @@ export const CreateSurveys = () => {
                         <option value="Store">Store</option>
                     </select>
                 </div>
+
+                {/* Store ID */}
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Store ID</label>
                     <select
@@ -362,6 +408,8 @@ export const CreateSurveys = () => {
                         ))}
                     </select>
                 </div>
+
+                {/* Loyalty Tiers */}
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Loyalty Tiers</label>
                     <select
@@ -378,7 +426,10 @@ export const CreateSurveys = () => {
                     </select>
                 </div>
             </div>
+
+            {/* 2nd Row */}
             <div className="flex gap-4 pt-10">
+                {/* Start Date */}
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Start Date:</label>
                     <input 
@@ -389,6 +440,8 @@ export const CreateSurveys = () => {
                         className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300">
                     </input>
                 </div>
+
+                {/* Expiry Date */}
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Expiry Date:</label>
                     <input 
@@ -398,6 +451,67 @@ export const CreateSurveys = () => {
                         onChange={(e) => setExpiryDate(e.target.value)}
                         className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300">
                     </input>
+                </div>
+
+                {/* Organisation */}
+                <div className="w-[350px] flex flex-col pt-4">
+                    <label className="text-black">Organisation</label>
+                    <select
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        value={selectedOrganisation}
+                        onChange={(e) => setSelectedOrganisation(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {/* {organisations && organisations.map((organisation) => ( */}
+                            <option key={userOrganisationUid} value={userOrganisationUid.toString()}>
+                                {userOrganisation}
+                            </option>
+                        {/* // ))} */}
+                    </select>
+                </div>
+
+                {/* Branch */}
+                <div className="w-[350px] flex flex-col pt-4">
+                    <label className="text-black">Branch</label>
+                    <select
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        value={selectedBranch}
+                        onChange={(e) => setSelectedBranch(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {branches && branches.map((branch) => (
+                            <option key={branch.uid} value={branch.uid.toString()}>
+                                {branch.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            {/* 3rd Row */}
+            <div className="flex gap-4 pt-10">
+                {/* Reward */}
+                <div className="w-[350px] flex flex-col pt-4">
+                    <label className="text-black">Reward</label>
+                    <input
+                        type="input"
+                        placeholder="enter reward"
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        value={reward}
+                        onChange={(e) => setReward(e.target.value)}
+                    />
+                </div>
+
+                {/* Description */}
+                <div className="w-[350px] flex flex-col pt-4">
+                    <label className="text-black">Description</label>
+                    <input
+                        type="input"
+                        placeholder="enter description"
+                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
                 </div>
             </div>
 
