@@ -1,46 +1,33 @@
 'use client'
 
 import toast from 'react-hot-toast';
-import axios from 'axios'
 import React from 'react'
 import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
+import { apiClient } from '@/utils/api-client';
 
 export const DeleteSpecialConfirmation = ({ isOpen, onClose, specialID }: any) => {
   if (!isOpen) return null; // Return null if dialog is not open
 
   const deleteSpecial = async (specialId: number) => {
     try{
-      const url = `admin/deletespecial/${specialId}`
-      const response = await axios.delete(`${apiEndPoint}/${url}`)
+      const url = `specials/delete-special/${specialId}`
+      const response = await apiClient.patch(`${apiEndPoint}/${url}`)
+      console.log("Special deleted successfully:", response)
 
-
-      deleteSpecialItem(specialID);
-      console.log("DELETION SUCCESSFUL:", response)
-    } catch (error) {
-      console.error('Error deleting special:', error)
-    }
-  }
-
-  const deleteSpecialItem = async (specialId: number) => {
-    try{
-      const url = `admin/deletespecialitem/${specialId}`
-      const response = await axios.delete(`${apiEndPoint}/${url}`)
-      console.log("The Product linked to special has been deleted:", response)
-
-      toast.success('special has been deleted', {
+      toast.success('Special deleted successfully', {
         icon: <Check color={colors.green} size={24} />,
         duration: 3000,
-      });
+      })
 
-      onClose() 
+      onClose()
     } catch (error) {
-      console.error('Error deleting special item:', error)
-      toast.error('Error deleting special item', {
+      console.error('Error deleting special:', error)
+      toast.error('Error deleting special', {
         icon: <X color={colors.red} size={24} />,
         duration: 3000,
-      });
+      })
     }
   }
 

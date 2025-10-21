@@ -1,7 +1,6 @@
 'use client'
 
 import { format } from "date-fns";
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
@@ -12,31 +11,18 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductsResponse, UserActivity } from '@/modules/types/data-types'
-import { Special, SpecialItems, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
+import { Special, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { useSession } from '@/context';
 import { Item, ItemsResponse } from "@/modules/types/products/product-types";
 import { apiClient } from "@/utils/api-client";
 import { getOrganisations } from "@/components/data/organisation/get-organisations-data";
-import { Organisation, OrganisationsResponse } from "@/modules/types/organisation/organisation-types";
+import { Organisation } from "@/modules/types/organisation/organisation-types";
 import { Branch } from "@/modules/types/branch/branches-types";
 import { getBranches } from "@/components/data/branch/get-branches-data";
 
 interface Props {
     onClose: () => void; 
 }
-
-//old product data
-// type Product = {
-//     id: string
-//     name: string
-//     price: number
-//     item_code: string
-// }
-
-// type SpecialProduct = Product & {
-    
-// }
-
 
 export type CombinedSpecial = {
     id?: string 
@@ -97,16 +83,12 @@ export function AddProductsSpecials({ onClose }: Props) {
 
     const displayedProducts = searchProducts.slice(0, 3);
 
-    console.log('Search term:', searchTerm); // Debug log for search term
-    console.log('Filtered products count:', searchProducts.length); // Debug log for filtered results
-
     const fetchProducts = async () => {
         try {
             const url = `inventory/get-products`;
-            const response = await axios.get<ItemsResponse>(`${apiEndPoint}/${url}`);
+            const response = await apiClient.get<ItemsResponse>(`${apiEndPoint}/${url}`);
             const products = response?.data || []; // Added safer access to nested property
             setAllProducts(products);
-            console.log('All Products Returned My Gee: ', response?.data);
 
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -117,10 +99,8 @@ export function AddProductsSpecials({ onClose }: Props) {
     const getStores = async () => {
         try {
             const url = `inventory/get-stores`
-            const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get<StoresResponse>(`${apiEndPoint}/${url}`)
             setAllStores(response.data)
-
-            console.log('all stores: ', response.data)
         } catch (error) {
             console.error('Error RETURNING STORES:', error)
         }
@@ -129,8 +109,9 @@ export function AddProductsSpecials({ onClose }: Props) {
     const getLoyaltyTiers = async () => {
         try {
             const url = `tiers/get-loyalty-tiers`
-            const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get<TiersResponse>(`${apiEndPoint}/${url}`)
             setLoyaltyTiers(response.data)
+            console.log("response on loyalty-tiers fetched: ", response.data)
         } catch (error) {
             console.error('Error RETURNING TIERS:', error)
         }
@@ -139,7 +120,7 @@ export function AddProductsSpecials({ onClose }: Props) {
     const getAgeGroups = async () => {
         try {
             const url = `age-group/get-age-groups`
-            const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
             setAgeGroups(response.data)
         } catch (error) {
             console.error('Error RETURNING AGE_GROUPS:', error)
@@ -191,6 +172,11 @@ export function AddProductsSpecials({ onClose }: Props) {
             console.log("selected organisation value: ", currentSpecial.organisation)
             console.log("selected branch value: ", currentSpecial.branch)
 
+            // const newOrgId = currentSpecial.organisation
+            // const newBrId = currentSpecial.branch
+            const newOrgId = Number(currentSpecial.organisation);
+            const newBrId = Number(currentSpecial.branch);
+            
             // const selectedStore = allStores.find(store => store.code === currentReward.store_id);
             // const region = selectedStore ? selectedStore.address_4 : ''; 
     
@@ -213,27 +199,23 @@ export function AddProductsSpecials({ onClose }: Props) {
                 loyalty_tier: currentSpecial.loyalty_tier,
                 age_group: currentSpecial.age_group,
                 isActive: currentSpecial.isActive,
-                organisation: currentSpecial.organisation,
-                branch: currentSpecial.branch,
+                organisationId: currentSpecial.organisation,
+                branchId: currentSpecial.branch,
             }
 
             const url = `specials/save-special`
-            // const response = await axios.post<Special>(`${apiEndPoint}/${url}`, payload)
             const response = await apiClient.post<Special>(`${apiEndPoint}/${url}`, payload)
-            console.log('The Special has been saved successfully:', response.data)
 
-            if (response.status === 200) {
-                toast.success('The special has been saved successfully', {
-                    icon: <Check color={colors.green} size={24} />,
-                    duration: 3000,
-                })
-            }
+            toast.success('Special saved successfully', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+            })
 
             fetchSpecialInfo()
         } catch (error) {
             console.error('Error saving special:', error)
             
-            toast.success('There was an error when saving the special', {
+            toast.error('Error saving special', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
             })
@@ -243,7 +225,6 @@ export function AddProductsSpecials({ onClose }: Props) {
     const fetchSpecialInfo = async () => {
         try {
             const url = `specials/get-special-info/${currentSpecial.special_name}`;
-            // const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
             const response = await apiClient.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
             console.log('The Special ID has been fetched successfully:', response.data);
     
@@ -254,12 +235,10 @@ export function AddProductsSpecials({ onClose }: Props) {
                 
                 logUserActivity(response.data[0]);
     
-                toast.success('Special Info Fetched, now saving items', {
-                    icon: <Check color={colors.blue} size={24} />,
-                    duration: 3000,
-                });
-    
-                console.error('Special info returned: ', response.data);
+                // toast.success('Special Info Fetched, now saving items', {
+                //     icon: <Check color={colors.blue} size={24} />,
+                //     duration: 3000,
+                // });
             } else if (response.data.length == 0) {
                 toast.success('No special data, returning', {
                     icon: <Check color={colors.blue} size={24} />,
@@ -313,25 +292,16 @@ export function AddProductsSpecials({ onClose }: Props) {
     
         try {
             const payload = {
-                // emp_id: user.emp_id,
+                emp_id: user.uid,
                 emp_name: user.emp_name,
                 activity_id: special.special_id,
                 activity: special.special_name,
                 activity_type: special.special_type,
-                time_logged: timeLogged,
                 log_message: message,
             };
     
             const url = `logs/log-user-activity`;
-            const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
-            console.log('The User\'s activity has been logged!', response.data);
-    
-            if (response.status === 200) {
-                toast.success('Activity logged!', {
-                    icon: <Check color={colors.orange} size={24} />,
-                    duration: 3000,
-                });
-            }
+            const response = await apiClient.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
         } catch (error) {
             console.error('Error logging activity:', error);
     
@@ -350,6 +320,9 @@ export function AddProductsSpecials({ onClose }: Props) {
         getAllOrganisations();
         getAllBranches();
     }, []);
+
+    const userOrganisation = user?.organisation?.name
+    const userOrganisationUid = user?.organisation?.uid
 
     return (
         <div className="fixed inset-0 z-50">
@@ -500,11 +473,11 @@ export function AddProductsSpecials({ onClose }: Props) {
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                            {organisations?.map((org) => (
-                                                <SelectItem key={org.uid} value={org.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                                    {org.name}
+                                            {/* {organisations?.map((org) => ( */}
+                                                <SelectItem  value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                                    {userOrganisation}
                                                 </SelectItem>
-                                            ))}
+                                            {/* // ))} */}
                                         </SelectContent>
                                     </Select>
                                 </div>

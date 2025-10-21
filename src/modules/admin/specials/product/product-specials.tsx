@@ -59,7 +59,7 @@ export const ProductSpecials = () => {
         try{
             const url = `specials/get-all-product-specials`
             // const response = await axios.get<ProductSpecialsResponse>(`${apiEndPoint}/${url}`)
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
+            const response = await apiClient.get(url)
 
             setProductSpecials(response?.data)
             setLoadingData(false);

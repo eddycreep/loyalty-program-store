@@ -10,6 +10,7 @@ import { RewardSummaryCards } from "./rewards/reward-cards";
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { DeleteReviewConfirmation } from '@/components/component/delete-review-confirmation';
 import { apiClient } from '@/utils/api-client';
+import { EditReview } from './reviews/edit-review';
 
 export interface ReviewProps {
     review_id: number,
@@ -308,7 +309,7 @@ export const ReviewsModule = () => {
             </div>
         </div>
         {deletePopUp && (<DeleteReviewConfirmation reviewID={selectedReviewID} reviewTitle={selectedReviewTitle} isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
-        {/* {editProductsPopup && <EditReviews onClose={closeEditReviewsPopup} selectedReview={selectedReview} />} */}
+        {editProductsPopup && <EditReview onClose={closeEditReviewsPopup} selectedReview={selectedReview} />}
         {addReviewsPopUp && <AddReview onClose={ toggleAddReviews } />} 
         </div>
     );

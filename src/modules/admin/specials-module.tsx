@@ -4,7 +4,6 @@ import React from 'react';
 import { ProductSpecials } from "./specials/product/product-specials"
 import { CombinedSpecials } from "./specials/combined/combined-specials"
 
-
 export const SpecialsModule = () => {
 
     return (

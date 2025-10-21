@@ -15,7 +15,12 @@ import { useSession } from '@/context';
 import { format } from "date-fns";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Rewards, RewardInfo, RewardInfoResponse } from '@/modules/types/rewards/rewards-data'
-
+import { apiClient } from '@/utils/api-client';
+// import { Branch, Organisation } from '@/types/user-types';
+import { getOrganisations } from '@/components/data/organisation/get-organisations-data';
+import { getBranches } from '@/components/data/branch/get-branches-data';
+import { Organisation } from "@/modules/types/organisation/organisation-types";
+import { Branch } from "@/modules/types/branch/branches-types";
 
 export function AddNewRewards({ onClose }: any) {
   const { user } = useSession();
@@ -25,6 +30,10 @@ export function AddNewRewards({ onClose }: any) {
   const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
   const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
   const [rewardInfo, setRewardInfo] = useState<RewardInfoResponse>([])
+
+  //organisations x branches
+  const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
+  const [branches, setBranches] = useState<Branch[] | null>(null);
 
   const [currentReward, setCurrentReward] = useState<Rewards>({
     reward_title: '',
@@ -39,34 +48,24 @@ export function AddNewRewards({ onClose }: any) {
     isActive: false,
     loyaltyTier: '',
     ageGroup: '',
+    organisation: 0,
+    branch: 0,
   })
-
-  // const getProducts = async () => {
-  //   try {
-  //       const url = `products/get-products`
-  //       const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`)
-  //       setProducts(response?.data.results || [])
-  //   } catch (error) {
-  //       console.error('Error RETURNING PRODUCTS:', error)
-  //   }
-  // }
-
 
   const getStores = async () => {
     try {
         const url = `inventory/get-stores`
-        const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
+        const response = await apiClient.get<StoresResponse>(`${apiEndPoint}/${url}`)
         setAllStores(response.data)
     } catch (error) {
         console.error('Error RETURNING STORES:', error)
     }
   }
 
-
   const getLoyaltyTiers = async () => {
     try {
         const url = `tiers/get-loyalty-tiers`
-        const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+        const response = await apiClient.get<TiersResponse>(`${apiEndPoint}/${url}`)
         console.log('TIERS RETURNED !!', response.data)
         setLoyaltyTiers(response.data)
     } catch (error) {
@@ -74,18 +73,36 @@ export function AddNewRewards({ onClose }: any) {
     }
   }
 
+  const getAllOrganisations = async () => {
+    try {
+        const orgData = await getOrganisations()
+        setOrganisations(orgData)
+        console.log("all organisations returned bro: ", orgData)
+    } catch (error) {
+        console.error('error fetching all organisations bro:', error)
+    }
+  }
+
+  const getAllBranches = async () => {
+    try {
+        const branchesData = await getBranches()
+        setBranches(branchesData)
+        console.log("all branches returned bro: ", branchesData)
+    } catch (error) {
+        console.error('error fetching all branches bro:', error)
+    }
+  }
 
   const getAgeGroups = async () => {
     try {
         const url = `age-group/get-age-groups`
-        const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
+        const response = await apiClient.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
         console.log('AGE_GROUPS RETURNED !!', response.data)
         setAgeGroups(response.data)
     } catch (error) {
         console.error('Error RETURNING AGE_GROUPS:', error)
     }
   }
-
 
   const saveReward = async () => {
     try {
@@ -114,10 +131,12 @@ export function AddNewRewards({ onClose }: any) {
             loyalty_tier: currentReward.loyaltyTier,
             age_group: currentReward.ageGroup,
             isActive: currentReward.isActive,
+            organisationId: currentReward.organisation,
+            branchId: currentReward.branch,
         }
 
         const url = `rewards/save-reward`
-        const response = await axios.post<Rewards>(`${apiEndPoint}/${url}`, payload)
+        const response = await apiClient.post<Rewards>(`${apiEndPoint}/${url}`, payload)
         console.log('The Reward has been saved:', response)
 
         if (response.status === 201) {
@@ -142,11 +161,10 @@ export function AddNewRewards({ onClose }: any) {
     }
   }
 
-
   const getRewardInfo = async () => {
     try {
         const url = `rewards/get-reward-info/${currentReward.reward_title}`
-        const response = await axios.get<RewardInfoResponse>(`${apiEndPoint}/${url}`)
+        const response = await apiClient.get<RewardInfoResponse>(`${apiEndPoint}/${url}`)
         console.log('REWARD INFO RETURNED!!', response.data)
         setRewardInfo(response.data)
 
@@ -156,16 +174,13 @@ export function AddNewRewards({ onClose }: any) {
     }
   }
 
-
   const logUserActivity = async (bonus: RewardInfo) => {
     const message = "User created a new reward";
 
     try {
         const payload = {
-          // emp_id: user.id,
-          // emp_name: user.emp_name,
-          emp_id: 102,
-          emp_name: "Eddy", 
+          emp_id: user.uid,
+          emp_name: user.emp_name,
           activity_id: bonus.reward_id,
           activity: bonus.reward_title,
           activity_type: bonus.reward_type,
@@ -173,7 +188,7 @@ export function AddNewRewards({ onClose }: any) {
         };
 
         const url = `logs/log-user-activity`;
-        const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+        const response = await apiClient.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
         console.log('The Users activity has been logged!', response.data);
 
         onClose();
@@ -182,14 +197,16 @@ export function AddNewRewards({ onClose }: any) {
     }
   };
 
-
   useEffect(() => {
-    // getProducts();
     getStores();
     getLoyaltyTiers();
     getAgeGroups();
+    getAllOrganisations();
+    getAllBranches();
   }, []);
 
+  const userOrganisation = user?.organisation?.name
+  const userOrganisationUid = user?.organisation?.uid
 
   return (
     <div className="fixed inset-0 z-50">
@@ -208,6 +225,8 @@ export function AddNewRewards({ onClose }: any) {
           </CardHeader>
           <CardContent>
             <div className="space-y-3 sm:space-y-4">
+
+              {/* Reward Title x Description */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="reward-title" className="text-black text-xs sm:text-sm">Title</label>
@@ -231,6 +250,7 @@ export function AddNewRewards({ onClose }: any) {
                 </div>
               </div>
 
+              {/* Reward x Type */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="reward" className="text-black text-xs sm:text-sm">Reward</label>
@@ -260,6 +280,7 @@ export function AddNewRewards({ onClose }: any) {
                 </div>
               </div>
 
+              {/* Loyalty Tier x Reward Price */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="loyalty-tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
@@ -293,6 +314,7 @@ export function AddNewRewards({ onClose }: any) {
                 </div>
               </div>
 
+              {/* Start Date x End Date */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="start-date" className="text-black text-xs sm:text-sm">Start Date</label>
@@ -314,6 +336,7 @@ export function AddNewRewards({ onClose }: any) {
                 </div>
               </div>
 
+              {/* Store ID x Age Group */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
@@ -355,6 +378,47 @@ export function AddNewRewards({ onClose }: any) {
                 </div>
               </div>
 
+              { /* Organisation x Branch */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                      <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
+                          <Select
+                              value={currentReward.organisation === 0 ? "All" : currentReward.organisation.toString()}
+                              onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, organisation: value === "All" ? 0 : Number(value) }))}
+                          >
+                              <SelectTrigger className="w-full mt-1">
+                                  <SelectValue placeholder="Select Organisation" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                  <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
+                                      <SelectItem  value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                          {userOrganisation}
+                                      </SelectItem>
+                              </SelectContent>
+                          </Select>
+                    </div>
+                    <div>
+                        <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
+                            <Select
+                              value={currentReward.branch === 0 ? "All" : currentReward.branch.toString()}
+                              onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, branch: value === "All" ? 0 : Number(value) }))}
+                            >
+                              <SelectTrigger className="w-full mt-1">
+                                  <SelectValue placeholder="Select Branch" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
+                                    {branches?.map((branch) => (
+                                        <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                          {branch.name}
+                                        </SelectItem>
+                                    ))}
+                              </SelectContent>
+                            </Select>
+                    </div>
+              </div>
+
+              {/* Active Toggle */}
               <div className="flex items-center space-x-2">
                 <label htmlFor="active-toggle" className="text-black text-xs sm:text-sm">
                   Active
@@ -368,6 +432,7 @@ export function AddNewRewards({ onClose }: any) {
                 />
               </div>
 
+              {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
                 <Button onClick={onClose} className="bg-red hover:bg-rose-300 text-white">
                   Cancel
