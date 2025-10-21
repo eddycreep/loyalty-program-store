@@ -20,7 +20,7 @@ import { Branch } from "@/modules/types/branch/branches-types";
 import { getOrganisations } from '@/components/data/organisation/get-organisations-data';
 import { getBranches } from '@/components/data/branch/get-branches-data';
 
-export function AddReview({ onClose }: any) {
+export function EditReview({ onClose, selectedReview }: any) {
     const { user } = useSession();
 
     const [products, setProducts] = useState<ProductsResponse[]>([])
@@ -104,7 +104,7 @@ export function AddReview({ onClose }: any) {
         }
     }
 
-    const saveReview = async () => {
+    const updateReview = async () => {
         try {
             console.log("selected organisation value: ", currentReview.organisation)
             console.log("selected branch value: ", currentReview.branch)
@@ -139,49 +139,42 @@ export function AddReview({ onClose }: any) {
                 branchId: currentReview.branch,
             }
 
-            const url = `reviews/save-review`
-            const response = await apiClient.post<any>(`${apiEndPoint}/${url}`, payload)
-            console.log('The Review has been saved:', response)
+            const url = `reviews/update-review/${selectedReview.review_id}`
+            const response = await apiClient.patch<any>(`${apiEndPoint}/${url}`, payload)
+            console.log('The Review has been updated:', response)
 
-            if (response.status === 201) {
-              toast.success('Review Saved!', {
-                  icon: <Check color={colors.green} size={24} />,
-                  duration: 3000,
-                  style: {
-                      backgroundColor: 'black',
-                      color: 'white', 
-                  },
-              });
+            if (response.status === 200 || response.status === 201) {
+                toast.success('Review Updated!', {
+                    icon: <Check color={colors.green} size={24} />,
+                    duration: 3000,
+                    style: {
+                        backgroundColor: 'black',
+                        color: 'white', 
+                    },
+                });
 
-              const reviewData = response?.data?.data;
-              console.log("review response data ID: ", reviewData?.review_id);
-              console.log("review response data title: ", reviewData?.review_title);
-              console.log("review response data category: ", reviewData?.review_category);
-
-              if (reviewData) {
-                await logUserActivity(reviewData);
-              }
+                await logUserActivity();
             }
         } catch (error) {
-            console.error('Error saving Review:', error)
+            console.error('Error updating Review:', error)
             
-            toast.error('Review not saved', {
+            toast.error('Review not updated', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
             })
         }
     }
 
-    const logUserActivity = async (reviewData: any) => {
-        const message = "User created a new review";
+    const logUserActivity = async () => {
+        const message = "User updated a review";
 
         try {
             const payload = {
                 emp_id: user.uid,
                 emp_name: user.emp_name,
-                activity_id: reviewData.review_id,
-                activity: reviewData.review_title,
-                activity_type: reviewData.review_category,
+                activity_id: currentReview.review_id,
+                activity: currentReview.review_title,
+                activity_type: currentReview.review_category,
                 log_message: message
             };
 
@@ -195,6 +188,21 @@ export function AddReview({ onClose }: any) {
         }
     };
 
+    const formatDateTimeForInput = (dateString: string): string => {
+        if (!dateString) return '';
+        
+        try {
+            const [date, time] = dateString.split(' ');
+            if (!date || !time) return '';
+            
+            const [hours, minutes] = time.split(':');
+            return `${date}T${hours}:${minutes}`;
+        } catch (error) {
+            console.error('Error formatting date:', error);
+            return '';
+        }
+    };
+
     useEffect(() => {
         getStores();
         getLoyaltyTiers();
@@ -202,6 +210,34 @@ export function AddReview({ onClose }: any) {
         getAllOrganisations();
         getAllBranches();
     }, []);
+
+    useEffect(() => {
+        if (selectedReview) {
+            const reviewData = selectedReview as any;
+            
+            const organisationValue = reviewData.organisation?.uid || reviewData.organisation || 0;
+            const branchValue = reviewData.branch?.uid || reviewData.branch || 0;
+            
+            setCurrentReview({
+                review_id: selectedReview.review_id || 0,
+                review_title: selectedReview.review_title || '',
+                description: selectedReview.description || '',
+                review_category: selectedReview.review_category || '',
+                store_id: selectedReview.store_id || '',
+                isActive: selectedReview.isActive || false,
+                reward: selectedReview.reward || '',
+                reward_price: selectedReview.reward_price || 0,
+                reward_type: selectedReview.reward_type || '',
+                region: selectedReview.region || '',
+                loyalty_tier: selectedReview.loyalty_tier || '',
+                age_group: selectedReview.age_group || '',
+                start_date: formatDateTimeForInput(selectedReview.start_date) || '',
+                expiry_date: formatDateTimeForInput(selectedReview.expiry_date) || '',
+                organisation: organisationValue,
+                branch: branchValue,
+            });
+        }
+    }, [selectedReview]);
 
     const userOrganisation = user?.organisation?.name
     const userOrganisationUid = user?.organisation?.uid
@@ -216,9 +252,9 @@ export function AddReview({ onClose }: any) {
                 </button>
               </div>
               <CardHeader>
-                <CardTitle>Add New Review</CardTitle>
+                <CardTitle>Edit Review</CardTitle>
                 <CardDescription className="text-xs sm:text-sm">
-                  Create a new review by filling in the required information below
+                  Update the review information below
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -454,8 +490,8 @@ export function AddReview({ onClose }: any) {
                     <Button onClick={onClose} className="bg-red hover:bg-rose-300 text-white">
                       Cancel
                     </Button>
-                    <Button onClick={saveReview} className="bg-green hover:bg-emerald-300 text-white">
-                      Save
+                    <Button onClick={updateReview} className="bg-green hover:bg-emerald-300 text-white">
+                      Update
                     </Button>
                   </div>
                 </div>

@@ -19,6 +19,7 @@ import { Organisation } from '@/modules/types/organisation/organisation-types';
 import { Branch } from '@/modules/types/branch/branches-types';
 import { getOrganisations } from '@/components/data/organisation/get-organisations-data';
 import { getBranches } from '@/components/data/branch/get-branches-data';
+import { useSession } from '@/context';
 
 
 interface Props {
@@ -87,6 +88,7 @@ type CombinedSpecial = {
 }
 
 export function AddCombinedSpecials({ onClose }: Props) {
+    const { user } = useSession();
     const [specials, setSpecials] = useState<CombinedSpecial[]>([])
     const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
         special_name: '',
@@ -242,6 +244,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
         try {
             const specialType = 'Combined Special'
 
+            const newOrgId = Number(currentSpecial.organisation);
+            const newBrId = Number(currentSpecial.branch);
+
             // const selectedStore = allStores.find(store => store.code === currentReward.store_id);
             // const region = selectedStore ? selectedStore.address_4 : ''; 
 
@@ -264,8 +269,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
                 loyalty_tier: currentSpecial.loyalty_tier,
                 age_group: currentSpecial.age_group,
                 isActive: currentSpecial.isActive,
-                organisation: currentSpecial.organisation,
-                branch: currentSpecial.branch,
+                organisationId: currentSpecial.organisation,
+                branchId: currentSpecial.branch,
             }
 
             const url = `specials/save-special`
@@ -300,20 +305,10 @@ export function AddCombinedSpecials({ onClose }: Props) {
             if (response.data.length > 0) {
                 saveSpecialItems(response.data[0].special_id); // save the items
                 
-                //logUserActivity(response.data[0]); // Pass the fetched data directly to logUserActivity
-
-                toast.success('Special Info Fetched, now saving items', {
-                    icon: <Check color={colors.blue} size={24} />,
-                    duration: 3000,
-                });
+                logUserActivity(response.data[0]); // Pass the fetched data directly to logUserActivity
 
                 console.error('Special info returned: ', response.data);
             } else if (response.data.length == 0) {
-                toast.success('No special data, returning', {
-                    icon: <Check color={colors.blue} size={24} />,
-                    duration: 3000,
-                });
-
                 console.error('No special data returned: ', response.data);
             }
         } catch (error) {
@@ -360,40 +355,30 @@ export function AddCombinedSpecials({ onClose }: Props) {
         }
     }
 
-    // const logUserActivity = async (special: SpecialInfo) => {
-    //     const timeLogged = format(new Date(), "EEE MMM dd yyyy HH:mm:ss 'GMT'XXX");
-    //     const message = "User created a new normal special";
-
-    //     try {
-    //         const payload = {
-    //             emp_id: user.emp_id,
-    //             emp_name: user.emp_name,
-    //             activity_id: special.special_id,
-    //             activity: special.special_name,
-    //             activity_type: special.special_type,
-    //             time_logged: timeLogged,
-    //             log_message: message,
-    //         };
-
-    //         const url = `logs/log-user-activity`;
-    //         const response = await axios.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
-    //         console.log('The User\'s activity has been logged!', response.data);
-
-    //         if (response.status === 200) {
-    //             toast.success('Activity logged!', {
-    //                 icon: <Check color={colors.orange} size={24} />,
-    //                 duration: 3000,
-    //             });
-    //         }
-    //     } catch (error) {
-    //         console.error('Error logging activity:', error);
-
-    //         toast.error('Error logging activity!', {
-    //             icon: <X color={colors.red} size={24} />,
-    //             duration: 3000,
-    //         });
-    //     }
-    // };
+    const logUserActivity = async (special: SpecialInfo) => {
+        const message = "User created a new combined special";
+    
+        try {
+            const payload = {
+                emp_id: user.uid,
+                emp_name: user.emp_name,
+                activity_id: special.special_id,
+                activity: special.special_name,
+                activity_type: special.special_type,
+                log_message: message,
+            };
+    
+            const url = `logs/log-user-activity`;
+            const response = await apiClient.post<UserActivity>(`${apiEndPoint}/${url}`, payload);
+        } catch (error) {
+            console.error('Error logging activity:', error);
+    
+            toast.error('Error logging activity!', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+        }
+    };
 
     useEffect(() => {
         fetchProducts();

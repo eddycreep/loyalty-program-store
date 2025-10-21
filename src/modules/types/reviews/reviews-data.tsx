@@ -13,6 +13,8 @@ export interface Reviews {
     start_date: string,
     expiry_date: string,
     isActive: boolean
+    organisation: number,
+    branch: number,
 }
 
 export interface ReviewInfo {

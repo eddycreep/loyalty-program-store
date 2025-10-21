@@ -11,6 +11,8 @@ export interface Rewards {
     isActive: boolean; 
     loyaltyTier: string,
     ageGroup: string,
+    organisation: number,
+    branch: number,
 }
 
 export interface RewardInfo {
