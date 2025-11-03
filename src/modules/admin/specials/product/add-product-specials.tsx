@@ -474,7 +474,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                         <SelectContent>
                                             <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
                                             {/* {organisations?.map((org) => ( */}
-                                                <SelectItem  value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                                <SelectItem value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                                     {userOrganisation}
                                                 </SelectItem>
                                             {/* // ))} */}

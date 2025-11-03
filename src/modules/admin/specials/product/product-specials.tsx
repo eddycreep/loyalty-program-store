@@ -120,88 +120,109 @@ export const ProductSpecials = () => {
 
     if (loadingData) {
         return (
-            <div>
-                <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
-                        <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
+            <>
+                {/* Render modals in loading state so they can be opened */}
+                {productSpecialsComponent && (<AddProductsSpecials onClose={ toggleProductSpecials } />)}
+                {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial} />}
+                {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
+                
+                <div>
+                    <div className="flex justify-between">
+                        <div className="flex flex-col pl-2 pt-6">
+                            <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
+                            <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
+                        </div>
+                        <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
+                            <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                <PlusCircle size={21}/> 
+                            </button>
+                        </div>
                     </div>
-                    <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
-                            <PlusCircle size={21}/> 
-                        </button>
+                    <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                        {headers?.map((header, index) => (
+                            <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
+                                {header}
+                            </p>
+                        ))}
+                    </div>
+                    <div className="pt-10 flex flex-col items-center justify-center">
+                        <SquareCircleLoader />
+                        <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
                     </div>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                    {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
-                            {header}
-                        </p>
-                    ))}
-                </div>
-                <div className="pt-10 flex flex-col items-center justify-center">
-                    <SquareCircleLoader />
-                    <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
-                </div>
-            </div>
+            </>
         )
     }
 
     if (isError) {
         return (
-            <div>
-                <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
-                        <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
+            <>
+                {/* Render modals in error state so they can be opened */}
+                {productSpecialsComponent && (<AddProductsSpecials onClose={ toggleProductSpecials } />)}
+                {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial} />}
+                {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
+                
+                <div>
+                    <div className="flex justify-between">
+                        <div className="flex flex-col pl-2 pt-6">
+                            <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
+                            <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
+                        </div>
+                        <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
+                            <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                <PlusCircle size={21}/> 
+                            </button>
+                        </div>
                     </div>
-                    <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
-                            <PlusCircle size={21}/> 
-                        </button>
+                    <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                        {headers?.map((header, index) => (
+                            <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
+                                {header}
+                            </p>
+                        ))}
+                    </div>
+                    <div className="flex flex-col items-center justify-center pt-10">
+                        <XOctagon size={34} className="text-black" />
+                        <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching product specials</p>
                     </div>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                    {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
-                            {header}
-                        </p>
-                    ))}
-                </div>
-                <div className="flex flex-col items-center justify-center pt-10">
-                    <XOctagon size={34} className="text-black" />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occured when fetching product specials</p>
-                </div>
-            </div>
+            </>
         )
     }
 
     if (productSpecials.length === 0) {
         return (
-            <div>
-                <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
-                        <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
-                        <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
+            <>
+                {/* Render modals in empty state so they can be opened */}
+                {productSpecialsComponent && (<AddProductsSpecials onClose={ toggleProductSpecials } />)}
+                {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial} />}
+                {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}
+                
+                <div>
+                    <div className="flex justify-between">
+                        <div className="flex flex-col pl-2 pt-6">
+                            <h4 className="text-xl font-semibold text-purple">Product Specials</h4>
+                            <p className="text-gray-500">Assign exclusive product specials that customers can purchase</p>
+                        </div>
+                        <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
+                            <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                <PlusCircle size={21}/> 
+                            </button>
+                        </div>
                     </div>
-                    <div className='flex gap-2 pt-8 pr-2 sm:pt-4 sm:pr-1'>
-                        <button onClick={ toggleProductSpecials } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
-                            <PlusCircle size={21}/> 
-                        </button>
+                    <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                        {headers?.map((header, index) => (
+                            <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
+                                {header}
+                            </p>
+                        ))}
+                    </div>
+                    <div className="flex flex-col items-center justify-center pt-10">
+                        <ShieldAlert size={34} className="text-black" />
+                        <p className="ml-2 uppercase pt-2 text-green">No specials have been set for customers. Add new specials to enhance their experience!</p>
                     </div>
                 </div>
-                <div className="bg-white text-gray-500 flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
-                    {headers?.map((header, index) => (
-                        <p key={index} className={`text-xs uppercase font-medium flex-1 text-center ${header === 'Product' || header === 'Special Price' ? 'hidden sm:block' : ''}`}>
-                            {header}
-                        </p>
-                    ))}
-                </div>
-                <div className="flex flex-col items-center justify-center pt-10">
-                    <ShieldAlert size={34} className="text-black" />
-                    <p className="ml-2 uppercase pt-2 text-green">No specials have been set for customers. Add new specials to enhance their experience!</p>
-                </div>
-            </div>
+            </>
         )
     }
 
@@ -209,6 +230,7 @@ export const ProductSpecials = () => {
     return (
         <>
             <div>
+                {/* Render all modals - Add, Edit, and Delete */}
                 {productSpecialsComponent && (<AddProductsSpecials onClose={ toggleProductSpecials } />)}
                 {editProductsPopup && <EditProductSpecials onClose={ closeEditProductsPopup } selectedSpecial={selectedProductSpecial} />}
                 {deletePopUp && (<DeleteSpecialConfirmation specialID={selectedSpecialID} isOpen={deletePopUp} onClose={toggleDeletePage}/> )}

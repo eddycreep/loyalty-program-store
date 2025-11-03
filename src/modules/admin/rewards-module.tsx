@@ -98,7 +98,7 @@ export const RewardsModule = () => {
     if (loadingData) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg mb-10'>
                 <div>
                     <RewardSummaryCards />
                 </div>
@@ -137,7 +137,7 @@ export const RewardsModule = () => {
     if (isError) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg mb-10'>
                 <div>
                     <RewardSummaryCards />
                 </div>
@@ -176,7 +176,7 @@ export const RewardsModule = () => {
     if (rewards.length === 0) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg mb-80'>
                 <div>
                     <RewardSummaryCards />
                 </div>
@@ -213,8 +213,8 @@ export const RewardsModule = () => {
     }
 
     return (
-        <div className="pb-52">
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+        <div className="pb-10">
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg pb-10'>
                 <div className="pt-6">
                     <RewardSummaryCards />
                 </div>
@@ -237,8 +237,8 @@ export const RewardsModule = () => {
                         </p>
                     ))}
                 </div>
-                <div className="pt-2 max-h-[550px] pb-2 space-y-2">
-                {rewards?.map(({ reward_id, reward_title, description, reward, reward_type, reward_price, store_id, region, start_date, expiry_date, loyalty_tier, age_group, isActive }) => (
+                <div className="pt-2 max-h-[550px] pb-10 space-y-2">
+                    {rewards?.map(({ reward_id, reward_title, description, reward, reward_type, reward_price, store_id, region, start_date, expiry_date, loyalty_tier, age_group, isActive }) => (
                             <div key={reward_id} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm flex-1 text-center text-purple">{reward_id}</p>
@@ -294,7 +294,7 @@ export const RewardsModule = () => {
                                     </div>
                                 )}
                             </div>
-                        ))}
+                    ))}
                 </div>
             </div>
         </div>

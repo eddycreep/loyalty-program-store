@@ -56,6 +56,7 @@ export function AddNewRewards({ onClose }: any) {
     try {
         const url = `inventory/get-stores`
         const response = await apiClient.get<StoresResponse>(`${apiEndPoint}/${url}`)
+        console.log('STORES RETURNED !!', response.data)
         setAllStores(response.data)
     } catch (error) {
         console.error('Error RETURNING STORES:', error)
@@ -275,6 +276,7 @@ export function AddNewRewards({ onClose }: any) {
                       <SelectItem value="All">All</SelectItem>
                       <SelectItem value="Percentage">Percentage</SelectItem>
                       <SelectItem value="Amount">Amount</SelectItem>
+                      <SelectItem value="Free Item">Free Item</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
