@@ -23,11 +23,11 @@ export const AuditProvider: React.FunctionComponent<{ children: ReactNode }> = (
         }
 
         const { action } = data
-        const { emp_id, emp_name } = user;
+        const { uid, emp_name } = user;
         const timeStamp = moment()?.format('YYYY-MM-DD HH:mm:ss');
 
         const payLoad = {
-            emp_id: emp_id,
+            emp_id: uid,
             emp_name: emp_name,
             action: action,
             date_time: timeStamp

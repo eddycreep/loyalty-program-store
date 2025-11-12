@@ -121,7 +121,7 @@ export function AddNewTiers({ onClose }: any) {
 
         try {
             const payload = {
-                emp_id: user.emp_id,
+                emp_id: user.uid,
                 emp_name: user.emp_name,
                 activity_id: tierInfo.tier_id,
                 activity: tierInfo.tier,

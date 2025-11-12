@@ -59,7 +59,7 @@ export const DeleteAlternativeRewardConfirmation = ({ isOpen, onClose, ARID, ART
 
         try {
             const payload = {
-                emp_id: user.emp_id,
+                emp_id: user.uid,
                 emp_name: user.emp_name,
                 activity_id: ARID,
                 activity: ARTitle,

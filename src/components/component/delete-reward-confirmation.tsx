@@ -35,7 +35,7 @@ export const DeleteRewardConfirmation = ({ isOpen, onClose, rewardID, rewardTitl
 
     try {
         const payload = {
-          emp_id: user.id,
+          emp_id: user.uid,
           emp_name: user.emp_name,
           activity_id: bonus.reward_id,
           activity: bonus.reward_title,
