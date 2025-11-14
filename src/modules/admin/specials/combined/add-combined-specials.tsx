@@ -1,18 +1,16 @@
 'use client'
 
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { Check, X, Search, PlusCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductDescription, ProductsResponse, UserActivity } from '@/modules/types/data-types'
-import { Special, SaveSpecial, SpecialItems, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
+import { AgeGroupsResponse, TiersResponse, StoresResponse, UserActivity } from '@/modules/types/data-types'
+import { Special, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { apiClient } from '@/utils/api-client';
 import { Item, ItemsResponse } from '@/modules/types/products/product-types';
 import { Organisation } from '@/modules/types/organisation/organisation-types';
@@ -129,13 +127,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
     // Limit to 9 products to display 3 rows (3 columns × 3 rows = 9 items on medium/large screens)
     const displayedProducts = searchProducts.slice(0, 9);
 
-    console.log('Search term:', searchTerm); // Debug log for search term
-    console.log('Filtered products count:', searchProducts.length); // Debug log for filtered results
-
     const fetchProducts = async () => {
         try {
             const url = `inventory/get-products`;
-            // const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`);
             const response = await apiClient.get<ItemsResponse>(`${apiEndPoint}/${url}`);
             const products = response?.data || []; // Safer access to response data
             setAllProducts(products);
@@ -151,7 +145,6 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const getStores = async () => {
         try {
             const url = `inventory/get-stores`
-            // const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
             const response = await apiClient.get<StoresResponse>(`${apiEndPoint}/${url}`);
             setAllStores(response.data)
         } catch (error) {
@@ -162,7 +155,6 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const getLoyaltyTiers = async () => {
         try {
             const url = `tiers/get-loyalty-tiers`
-            // const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
             const response = await apiClient.get<TiersResponse>(`${apiEndPoint}/${url}`);
             setLoyaltyTiers(response.data)
         } catch (error) {
@@ -173,7 +165,6 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const getAgeGroups = async () => {
         try {
             const url = `age-group/get-age-groups`
-            // const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
             const response = await apiClient.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`);
             setAgeGroups(response.data)
         } catch (error) {
@@ -204,8 +195,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
     const addProductToSpecial = (product: Item) => {
         // Check if we haven't reached the product limit
         if (currentSpecial.products.length >= 5) {
-        toast.error('Maximum of 5 products allowed per special');
-        return;
+            toast.error('Maximum of 5 products allowed per special');
+            return;
         }
 
         // Convert the inventory product to the SpecialProduct format
