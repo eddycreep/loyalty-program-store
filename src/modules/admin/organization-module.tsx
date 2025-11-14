@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
+import Image from 'next/image';
 import { Edit, Trash2, ShieldAlert, XOctagon, PlusCircle, ArchiveRestore, Activity} from "lucide-react"
 import { RewardSummaryCards } from "./rewards/reward-cards";
 import SquareCircleLoader from "@/lib/square-circle-loader";
@@ -265,12 +266,20 @@ export const OrganizationModule = () => {
                                     {/* <div className="text-sm flex-1 text-center">
                                         <p>{email || '--:--'}</p>
                                     </div> */}
-                                    <div className="text-sm flex-1 text-center">
-                                        <img 
-                                            src={logo || '--:--'} 
-                                            alt="Logo" 
-                                            className="w-45 h-10 rounded-lg pl-8" 
-                                        />
+                                    <div className="text-sm flex-1 text-center flex justify-center items-center">
+                                        {logo && logo !== '--:--' ? (
+                                            <div className="relative w-10 h-10">
+                                                <Image 
+                                                    src={logo} 
+                                                    alt={`${name} logo`}
+                                                    fill
+                                                    className="object-contain rounded-lg"
+                                                    unoptimized
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="text-gray-400">--:--</span>
+                                        )}
                                     </div>
                                     {/* <div className="text-sm flex-1 text-center">
                                         <p>{website || '--:--'}</p>

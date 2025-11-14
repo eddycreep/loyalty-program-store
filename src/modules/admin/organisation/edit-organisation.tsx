@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { X, Check, Upload } from 'lucide-react';
@@ -205,11 +206,16 @@ export function EditOrganisation({ onClose, selectedOrganisation, onSuccess }: a
                                 ) : (
                                     // Image preview with remove/replace option
                                     <div className="relative border-2 border-gray-300 rounded-lg p-4">
-                                        <img
-                                            src={logoPreview}
-                                            alt="Logo preview"
-                                            className="mx-auto max-h-32 object-contain"
-                                        />
+                                        <div className="relative mx-auto max-h-32 w-full flex justify-center">
+                                            <Image
+                                                src={logoPreview}
+                                                alt="Logo preview"
+                                                width={128}
+                                                height={128}
+                                                className="max-h-32 object-contain"
+                                                unoptimized
+                                            />
+                                        </div>
                                         <button
                                             onClick={handleRemoveFile}
                                             className="absolute top-2 right-2 bg-red text-white rounded-full p-1 hover:bg-rose-600"

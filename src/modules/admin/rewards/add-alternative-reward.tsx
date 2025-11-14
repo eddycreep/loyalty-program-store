@@ -37,6 +37,8 @@ export function AddNewAlternativeReward({ onClose }: any) {
     isActive: false,
     loyaltyTier: '',
     ageGroup: '',
+    organisation: 0,
+    branch: 0,
   })
 
   const getStores = async () => {
@@ -149,7 +151,7 @@ export function AddNewAlternativeReward({ onClose }: any) {
 
     try {
         const payload = {
-          emp_id: user.id,
+          emp_id: user.uid,
           emp_name: user.emp_name,
           activity_id: bonus.reward_id,
           activity: bonus.reward_title,

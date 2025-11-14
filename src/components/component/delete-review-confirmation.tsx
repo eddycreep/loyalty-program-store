@@ -40,7 +40,7 @@ export const DeleteReviewConfirmation = ({ isOpen, onClose, reviewID, reviewTitl
 
         try {
             const payload = {
-                emp_id: user.id,
+                emp_id: user.uid,
                 emp_name: user.emp_name,
                 activity_id: bonus.review_id,
                 activity: bonus.review_title,

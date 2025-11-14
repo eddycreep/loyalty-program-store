@@ -264,7 +264,7 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
     
         try {
             const payload = {
-                emp_id: user.emp_id,
+                emp_id: user.uid,
                 emp_name: user.emp_name,
                 activity_id: special.special_id,
                 activity: special.special_name,
