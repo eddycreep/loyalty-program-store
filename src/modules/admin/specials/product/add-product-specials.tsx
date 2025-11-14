@@ -81,7 +81,8 @@ export function AddProductsSpecials({ onClose }: Props) {
         product?.description_1?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    const displayedProducts = searchProducts.slice(0, 3);
+    // Limit to 9 products to display 3 rows (3 columns × 3 rows = 9 items on medium/large screens)
+    const displayedProducts = searchProducts.slice(0, 9);
 
     const fetchProducts = async () => {
         try {
@@ -568,8 +569,8 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
-                            { /* Displayed Products */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                            {/* Product Grid - Balanced layout: 1 mobile, 2 small, 3 medium/large with comfortable spacing */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                 {displayedProducts.length > 0 ? (
                                     displayedProducts.map((product) => (
                                         <Button

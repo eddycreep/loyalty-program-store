@@ -126,8 +126,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
         product?.description_1?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    // Then limit to first 3 matches
-    const displayedProducts = searchProducts.slice(0, 3);
+    // Limit to 9 products to display 3 rows (3 columns × 3 rows = 9 items on medium/large screens)
+    const displayedProducts = searchProducts.slice(0, 9);
 
     console.log('Search term:', searchTerm); // Debug log for search term
     console.log('Filtered products count:', searchProducts.length); // Debug log for filtered results
@@ -635,8 +635,8 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                 </div>
                             </div>
 
-                            {/* Product Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                            {/* Product Grid - Balanced layout: 1 mobile, 2 small, 3 medium/large with comfortable spacing */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                 {displayedProducts.length > 0 ? (
                                     displayedProducts.map((product) => (
                                         <Button
