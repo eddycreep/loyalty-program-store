@@ -1,24 +1,15 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Edit, Trash2, ShieldAlert, XOctagon, PlusCircle, ArchiveRestore, Activity} from "lucide-react"
-import SquareCircleLoader from "@/lib/square-circle-loader";
+import { Edit, Trash2, ShieldAlert, PlusCircle, ArchiveRestore, Activity} from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { getAllUsers } from "@/components/data/user/get-all-users-data";
-import { User } from "@/modules/types/user/user-types";
-import { Badge } from "@/components/ui/badge";
-import { DeactivateUserConfirmation } from "./user/deactivate-user-confirmation";
-import { ActivateUserConfirmation } from "./user/activate-user-confirmation";
-import { DeleteUserConfirmation } from "./user/delete-user-confirmation";
-import { RestoreUserConfirmation } from "./user/restore-user-confirmation";
-import { AddNewUser } from "./user/add-new-user";
-import { EditUser } from "./user/edit-user";
 import { AddInventoryItem } from "./inventory/add-inventory-item";
 import { apiClient } from "@/utils/api-client";
 import { Item, ItemsResponse } from "../types/products/product-types";
 import { apiEndPoint } from "@/utils/colors";
 import { EditInventoryItem } from "./inventory/edit-inventory-item";
 import Image from "next/image";
+import { DeleteInventoryItemConfirmation } from "./inventory/delete-inventory-item";
 
 export const InventoryModule = () => {
     const [inventory, setInventory] = useState<Item[]>([])
@@ -229,60 +220,29 @@ export const InventoryModule = () => {
                 </div>
             </div>
         </div>  
-        {/* {deletePopUp && (
-            <DeleteUserConfirmation
-                userID={selectedUserID} 
-                isOpen={deletePopUp} 
-                onClose={toggleDeletePage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        {activationPopUp && (
-            <ActivateUserConfirmation
-                userID={selectedUserID} 
-                isOpen={activationPopUp} 
-                onClose={closeActivationPopup}
-                onSuccess={handleSuccess}
-            />
-        )} 
-        {deactivationPopUp && (
-            <DeactivateUserConfirmation
-                userID={selectedUserID} 
-                isOpen={deactivationPopUp} 
-                onClose={toggleDeactivationPage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        
-        {restorePopUp && (
-            <RestoreUserConfirmation
-                userID={selectedUserID} 
-                isOpen={restorePopUp} 
-                onClose={toggleRestorePage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        
-        {editUserPopup && 
-            <EditUser
-                onClose={closeEditUserPopup} 
-                selectedUser={selectedUser}
-                onSuccess={handleSuccess}
-            />
-        }
-        
-        {addUserPopUp && 
-            <AddNewUser
-                onClose={toggleAddUser} 
-                onSuccess={handleSuccess} 
-            />
-        } */}
         {addInventoryItemPopUp && 
             <AddInventoryItem
                 onClose={toggleAddInventoryItem} 
                 onSuccess={handleSuccess} 
             />
         }
+
+        {editInventoryItemPopUp && 
+            <EditInventoryItem
+                onClose={closeEditInventoryItemPopup} 
+                selectedInventoryItem={selectedInventoryItem}
+                onSuccess={handleSuccess}
+            />
+        }
+
+        {deletePopUp && (
+            <DeleteInventoryItemConfirmation
+                itemCode={selectedInventoryItem?.item_code} 
+                isOpen={deletePopUp} 
+                onClose={toggleDeletePage}
+                onSuccess={handleSuccess}
+            /> 
+        )}
         </div>
         )
     }
@@ -400,60 +360,29 @@ export const InventoryModule = () => {
                 </div>
             </div>
         </div>  
-        {/* {deletePopUp && (
-            <DeleteUserConfirmation
-                userID={selectedUserID} 
-                isOpen={deletePopUp} 
-                onClose={toggleDeletePage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        {activationPopUp && (
-            <ActivateUserConfirmation
-                userID={selectedUserID} 
-                isOpen={activationPopUp} 
-                onClose={closeActivationPopup}
-                onSuccess={handleSuccess}
-            />
-        )} 
-        {deactivationPopUp && (
-            <DeactivateUserConfirmation
-                userID={selectedUserID} 
-                isOpen={deactivationPopUp} 
-                onClose={toggleDeactivationPage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        
-        {restorePopUp && (
-            <RestoreUserConfirmation
-                userID={selectedUserID} 
-                isOpen={restorePopUp} 
-                onClose={toggleRestorePage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        
-        {editUserPopup && 
-            <EditUser
-                onClose={closeEditUserPopup} 
-                selectedUser={selectedUser}
-                onSuccess={handleSuccess}
-            />
-        }
-        
-        {addUserPopUp && 
-            <AddNewUser
-                onClose={toggleAddUser} 
-                onSuccess={handleSuccess} 
-            />
-        } */}
         {addInventoryItemPopUp && 
             <AddInventoryItem
                 onClose={toggleAddInventoryItem} 
                 onSuccess={handleSuccess} 
             />
         }
+
+        {editInventoryItemPopUp && 
+            <EditInventoryItem
+                onClose={closeEditInventoryItemPopup} 
+                selectedInventoryItem={selectedInventoryItem}
+                onSuccess={handleSuccess}
+            />
+        }
+
+        {deletePopUp && (
+            <DeleteInventoryItemConfirmation
+                itemCode={selectedInventoryItem?.item_code} 
+                isOpen={deletePopUp} 
+                onClose={toggleDeletePage}
+                onSuccess={handleSuccess}
+            /> 
+        )}
         </div>
         )
     }
@@ -571,60 +500,29 @@ export const InventoryModule = () => {
                 </div>
             </div>
             </div>  
-        {/* {deletePopUp && (
-            <DeleteUserConfirmation
-                userID={selectedUserID} 
-                isOpen={deletePopUp} 
-                onClose={toggleDeletePage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        {activationPopUp && (
-            <ActivateUserConfirmation
-                userID={selectedUserID} 
-                isOpen={activationPopUp} 
-                onClose={closeActivationPopup}
-                onSuccess={handleSuccess}
-            />
-        )} 
-        {deactivationPopUp && (
-            <DeactivateUserConfirmation
-                userID={selectedUserID} 
-                isOpen={deactivationPopUp} 
-                onClose={toggleDeactivationPage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        
-        {restorePopUp && (
-            <RestoreUserConfirmation
-                userID={selectedUserID} 
-                isOpen={restorePopUp} 
-                onClose={toggleRestorePage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        
-        {editUserPopup && 
-            <EditUser
-                onClose={closeEditUserPopup} 
-                selectedUser={selectedUser}
-                onSuccess={handleSuccess}
-            />
-        }
-        
-        {addUserPopUp && 
-            <AddNewUser
-                onClose={toggleAddUser} 
-                onSuccess={handleSuccess} 
-            />
-        } */}
-        {addInventoryItemPopUp && 
+            {addInventoryItemPopUp && 
             <AddInventoryItem
                 onClose={toggleAddInventoryItem} 
                 onSuccess={handleSuccess} 
             />
         }
+
+        {editInventoryItemPopUp && 
+            <EditInventoryItem
+                onClose={closeEditInventoryItemPopup} 
+                selectedInventoryItem={selectedInventoryItem}
+                onSuccess={handleSuccess}
+            />
+        }
+
+        {deletePopUp && (
+            <DeleteInventoryItemConfirmation
+                itemCode={selectedInventoryItem?.item_code} 
+                isOpen={deletePopUp} 
+                onClose={toggleDeletePage}
+                onSuccess={handleSuccess}
+            /> 
+        )}
         </div>
         )
     }
@@ -660,19 +558,15 @@ export const InventoryModule = () => {
                                         <p className="text-purple">{id}</p>
                                     </div>
                                     <div className="flex-1 text-sm text-center">
-                                        {image && image !== '--:--' ? (
-                                            <div className="relative mx-auto w-10 h-10">
-                                                <Image 
-                                                    src={image} 
-                                                    alt={`${item_code} image`}
-                                                    fill
-                                                    className="object-contain rounded-lg"
-                                                    unoptimized
-                                                />
-                                            </div>
-                                        ) : (
-                                            <span className="text-gray-400">--:--</span>
-                                        )}
+                                        <div className="relative mx-auto w-10 h-10">
+                                            <Image 
+                                                src={image} 
+                                                alt={`${item_code} image`}
+                                                fill
+                                                className="object-contain rounded-lg"
+                                                unoptimized
+                                            />
+                                        </div>
                                     </div>
                                     <div className="flex-1 text-sm text-center">
                                         <p>{item_code || '--:--'}</p>
@@ -699,42 +593,6 @@ export const InventoryModule = () => {
                                             </TooltipContent>
                                         </Tooltip>
 
-                                        {/* Activate Branch */}
-                                        {/* <Tooltip>
-                                            <TooltipTrigger>
-                                                <button onClick={() => toggleActivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
-                                                    <Activity size={21} />
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Activate</p>
-                                            </TooltipContent>
-                                        </Tooltip> */}
-
-                                        {/* Deactivate Branch */}
-                                        {/* <Tooltip>
-                                            <TooltipTrigger>
-                                                <button onClick={() => toggleDeactivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
-                                                    <ShieldAlert size={21} />
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Deactivate</p>
-                                            </TooltipContent>
-                                        </Tooltip> */}
-
-                                        {/* Restore Branch */}
-                                        {/* <Tooltip>
-                                            <TooltipTrigger>
-                                                <button onClick={() => toggleRestorePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-green border-green hover:bg-green-100">
-                                                    <ArchiveRestore size={21} /> 
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Restore</p>
-                                            </TooltipContent>
-                                        </Tooltip> */}
-
                                         {/* Delete Organisation */}
                                         <Tooltip>
                                             <TooltipTrigger>
@@ -752,47 +610,7 @@ export const InventoryModule = () => {
                         ))}
                 </div>
             </div>
-        </div>  
-        {/* {deletePopUp && (
-            <DeleteUserConfirmation
-                userID={selectedUserID} 
-                isOpen={deletePopUp} 
-                onClose={toggleDeletePage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        {activationPopUp && (
-            <ActivateUserConfirmation
-                userID={selectedUserID} 
-                isOpen={activationPopUp} 
-                onClose={closeActivationPopup}
-                onSuccess={handleSuccess}
-            />
-        )} 
-        {deactivationPopUp && (
-            <DeactivateUserConfirmation
-                userID={selectedUserID} 
-                isOpen={deactivationPopUp} 
-                onClose={toggleDeactivationPage}
-                onSuccess={handleSuccess}
-            /> 
-        )}
-        
-        {restorePopUp && (
-            <RestoreUserConfirmation
-                userID={selectedUserID} 
-                isOpen={restorePopUp} 
-                onClose={toggleRestorePage}
-                onSuccess={handleSuccess}
-            /> 
-        )} 
-        
-        {addUserPopUp && 
-            <AddNewUser
-                onClose={toggleAddUser} 
-                onSuccess={handleSuccess} 
-            />
-        } */}
+        </div>
         {addInventoryItemPopUp && 
             <AddInventoryItem
                 onClose={toggleAddInventoryItem} 
@@ -807,6 +625,15 @@ export const InventoryModule = () => {
                 onSuccess={handleSuccess}
             />
         }
+
+        {deletePopUp && (
+            <DeleteInventoryItemConfirmation
+                itemCode={selectedInventoryItem?.item_code} 
+                isOpen={deletePopUp} 
+                onClose={toggleDeletePage}
+                onSuccess={handleSuccess}
+            /> 
+        )}
         </div>
     );
 }
