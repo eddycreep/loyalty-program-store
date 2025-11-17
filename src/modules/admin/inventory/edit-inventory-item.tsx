@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { apiClient } from '@/utils/api-client';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Inventory item form data interface
 interface InventoryItemFormData {
@@ -29,6 +30,17 @@ interface InventoryItemFormData {
     image?: string;
 }
 
+// Organization and Branch interfaces
+interface Organisation {
+    id: number;
+    organisation_name: string;
+}
+
+interface Branch {
+    id: number;
+    branch_name: string;
+}
+
 interface EditInventoryItemProps {
     onClose: () => void;
     onSuccess: () => void;
@@ -44,6 +56,14 @@ export function EditInventoryItem({ onClose, onSuccess, selectedInventoryItem }:
     const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
     const [uploadError, setUploadError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    
+    // Organization and Branch state
+    const [organisations, setOrganisations] = useState<Organisation[]>([]);
+    const [branches, setBranches] = useState<Branch[]>([]);
+    const [selectedOrgId, setSelectedOrgId] = useState<number | null>(null);
+    const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
+    const [loadingOrgs, setLoadingOrgs] = useState(false);
+    const [loadingBranches, setLoadingBranches] = useState(false);
     
     // Inventory item form state
     const [inventoryItem, setInventoryItem] = useState<InventoryItemFormData>({
@@ -63,6 +83,48 @@ export function EditInventoryItem({ onClose, onSuccess, selectedInventoryItem }:
         selling_incl_2: 0,
         image: ''
     })
+
+    // Fetch organisations on component mount
+    useEffect(() => {
+        const fetchOrganisations = async () => {
+            setLoadingOrgs(true);
+            try {
+                const url = `organisation/get-organisations`;
+                const response = await apiClient.get(`${apiEndPoint}/${url}`);
+                setOrganisations(response.data || []);
+            } catch (error) {
+                console.error('Error fetching organisations:', error);
+                toast.error('Failed to load organizations');
+            }
+            setLoadingOrgs(false);
+        };
+
+        fetchOrganisations();
+    }, []);
+
+    // Fetch branches when organization is selected
+    useEffect(() => {
+        if (!selectedOrgId) {
+            setBranches([]);
+            setSelectedBranchId(null);
+            return;
+        }
+
+        const fetchBranches = async () => {
+            setLoadingBranches(true);
+            try {
+                const url = `organisation/get-branches/${selectedOrgId}`;
+                const response = await apiClient.get(`${apiEndPoint}/${url}`);
+                setBranches(response.data || []);
+            } catch (error) {
+                console.error('Error fetching branches:', error);
+                toast.error('Failed to load branches');
+            }
+            setLoadingBranches(false);
+        };
+
+        fetchBranches();
+    }, [selectedOrgId]);
 
     // Load selected inventory item data on mount
     useEffect(() => {
@@ -90,6 +152,14 @@ export function EditInventoryItem({ onClose, onSuccess, selectedInventoryItem }:
             // Set existing image URL if available
             if (selectedInventoryItem.image) {
                 setExistingImageUrl(selectedInventoryItem.image);
+            }
+
+            // Pre-select organization and branch if available
+            if (selectedInventoryItem.organisationId) {
+                setSelectedOrgId(selectedInventoryItem.organisationId);
+            }
+            if (selectedInventoryItem.branchId) {
+                setSelectedBranchId(selectedInventoryItem.branchId);
             }
         }
     }, [selectedInventoryItem]);
@@ -142,11 +212,21 @@ export function EditInventoryItem({ onClose, onSuccess, selectedInventoryItem }:
 
     const updateInventoryItem = async () => {
         try {
+            // Validate organization selection (required for security)
+            if (!selectedOrgId) {
+                toast.error('Please select an organization');
+                return;
+            }
+
             setIsLoading(true);
 
             // Create FormData to handle multipart/form-data submission
             // Backend handles both inventory and pricing updates in a single transaction
             const formData = new FormData();
+            
+            // Append organization ID (required for security check on backend)
+            formData.append('organisationId', selectedOrgId.toString());
+            
             formData.append('description_1', inventoryItem.description_1);
             formData.append('unit_size', inventoryItem.unit_size);
             formData.append('physical_item', inventoryItem.physical_item.toString());
@@ -171,7 +251,7 @@ export function EditInventoryItem({ onClose, onSuccess, selectedInventoryItem }:
             }
 
             // Update inventory item with pricing in a single transaction
-            console.log('Updating inventory item with pricing...');
+            console.log('Updating inventory item for org:', selectedOrgId, 'item:', inventoryItem.item_code);
             const url = `inventory/update-inventory-item/${inventoryItem.item_code}`;
             const response = await apiClient.put(
                 `${url}`, 
@@ -234,6 +314,52 @@ export function EditInventoryItem({ onClose, onSuccess, selectedInventoryItem }:
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-3 sm:space-y-4">
+                            {/* Organization and Branch Selection - Required for Multi-tenancy */}
+                            <div className="grid grid-cols-1 gap-3 pb-4 border-b sm:grid-cols-2 sm:gap-4">
+                                <div>
+                                    <label className="text-xs font-medium text-black sm:text-sm">Organization *</label>
+                                    <Select 
+                                        value={selectedOrgId?.toString() || ''} 
+                                        onValueChange={(value) => setSelectedOrgId(Number(value))}
+                                        disabled={loadingOrgs}
+                                    >
+                                        <SelectTrigger className="mt-1">
+                                            <SelectValue placeholder={loadingOrgs ? "Loading..." : "Select organization"} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {organisations.map((org) => (
+                                                <SelectItem key={org.id} value={org.id.toString()}>
+                                                    {org.organisation_name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <label className="text-xs font-medium text-black sm:text-sm">Branch *</label>
+                                    <Select 
+                                        value={selectedBranchId?.toString() || ''} 
+                                        onValueChange={(value) => setSelectedBranchId(Number(value))}
+                                        disabled={!selectedOrgId || loadingBranches}
+                                    >
+                                        <SelectTrigger className="mt-1">
+                                            <SelectValue placeholder={
+                                                !selectedOrgId ? "Select organization first" : 
+                                                loadingBranches ? "Loading..." : 
+                                                "Select branch"
+                                            } />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {branches.map((branch) => (
+                                                <SelectItem key={branch.id} value={branch.id.toString()}>
+                                                    {branch.branch_name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
                             {/* Item Image Upload Section */}
                             <div className="w-full">
                                 <label className="text-xs font-medium text-black sm:text-sm">Item Image</label>

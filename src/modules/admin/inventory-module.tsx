@@ -237,7 +237,8 @@ export const InventoryModule = () => {
 
         {deletePopUp && (
             <DeleteInventoryItemConfirmation
-                itemCode={selectedInventoryItem?.item_code} 
+                itemCode={selectedInventoryItem?.item_code}
+                organisationId={selectedInventoryItem?.organisationId}
                 isOpen={deletePopUp} 
                 onClose={toggleDeletePage}
                 onSuccess={handleSuccess}
@@ -377,7 +378,8 @@ export const InventoryModule = () => {
 
         {deletePopUp && (
             <DeleteInventoryItemConfirmation
-                itemCode={selectedInventoryItem?.item_code} 
+                itemCode={selectedInventoryItem?.item_code}
+                organisationId={selectedInventoryItem?.organisationId}
                 isOpen={deletePopUp} 
                 onClose={toggleDeletePage}
                 onSuccess={handleSuccess}
@@ -517,7 +519,8 @@ export const InventoryModule = () => {
 
         {deletePopUp && (
             <DeleteInventoryItemConfirmation
-                itemCode={selectedInventoryItem?.item_code} 
+                itemCode={selectedInventoryItem?.item_code}
+                organisationId={selectedInventoryItem?.organisationId}
                 isOpen={deletePopUp} 
                 onClose={toggleDeletePage}
                 onSuccess={handleSuccess}
@@ -628,7 +631,8 @@ export const InventoryModule = () => {
 
         {deletePopUp && (
             <DeleteInventoryItemConfirmation
-                itemCode={selectedInventoryItem?.item_code} 
+                itemCode={selectedInventoryItem?.item_code}
+                organisationId={selectedInventoryItem?.organisationId}
                 isOpen={deletePopUp} 
                 onClose={toggleDeletePage}
                 onSuccess={handleSuccess}

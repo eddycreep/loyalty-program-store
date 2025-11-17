@@ -12,7 +12,7 @@ import { useSession } from '@/context';
 import { Organisation, OrganisationResponse } from '@/modules/types/organisation/organisation-types';
 import { apiClient } from '@/utils/api-client';
 
-export const DeleteInventoryItemConfirmation = ({ isOpen, onClose, itemCode, onSuccess }: any) => {
+export const DeleteInventoryItemConfirmation = ({ isOpen, onClose, itemCode, organisationId, onSuccess }: any) => {
     const { user } = useSession();
     const [organisation, setOrganisation] = useState<Organisation | null>(null);
 
@@ -20,8 +20,9 @@ export const DeleteInventoryItemConfirmation = ({ isOpen, onClose, itemCode, onS
 
     const deleteInventoryItem = async () => {
         try{
-            const url = `inventory/delete-inventory-item/${itemCode}`
-            const response = await apiClient.patch(`${apiEndPoint}/${url}`)
+            // Include organisationId as query parameter for security check
+            const url = `inventory/delete-inventory-item/${itemCode}?organisationId=${organisationId}`
+            const response = await apiClient.delete(`${apiEndPoint}/${url}`)
 
             toast.success('Item Deleted', {
                 icon: <Check color={colors.green} size={24} />,

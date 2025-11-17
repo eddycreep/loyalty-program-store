@@ -16,7 +16,10 @@ export interface Item {
     image: string
     net_mass: string
     tax_description: string,
-    tax_value: string
+    tax_value: string,
+    // Multi-tenancy fields (optional for backward compatibility with legacy items)
+    organisationId?: number,
+    branchId?: number
 }
 
 export type ItemsResponse = Item[]
