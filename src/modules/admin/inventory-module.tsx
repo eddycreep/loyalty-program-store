@@ -17,12 +17,14 @@ import { AddInventoryItem } from "./inventory/add-inventory-item";
 import { apiClient } from "@/utils/api-client";
 import { Item, ItemsResponse } from "../types/products/product-types";
 import { apiEndPoint } from "@/utils/colors";
+import { EditInventoryItem } from "./inventory/edit-inventory-item";
+import Image from "next/image";
 
 export const InventoryModule = () => {
     const [inventory, setInventory] = useState<Item[]>([])
 
     const [addInventoryItemPopUp, setAddInventoryItemPopUp] = useState(false);
-    const [editUserPopup, setEditUserPopup] = useState(false);
+    const [editInventoryItemPopUp, setEditInventoryItemPopUp] = useState(false);
     const [activationPopUp, setActivationPopUp] = useState(false);
     const [deactivationPopUp, setDeactivationPopUp] = useState(false);
     const [restorePopUp, setRestorePopUp] = useState(false);
@@ -33,7 +35,6 @@ export const InventoryModule = () => {
 
     // Updated headers array: Removed 'Logo' column to maintain alignment
     const headers = ['ID', 'Image', 'Item Code', 'Description', 'Selling Price 1', 'Unit Size', 'Action']
-    // const headers = ['ID', 'Name', 'Role', 'ID Number', 'Status', 'Deleted', 'Action']
 
     const [deletePopUp, setDeletePopUp] = useState(false);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
@@ -87,7 +88,7 @@ export const InventoryModule = () => {
         
         if (selected) {
             setSelectedInventoryItem(selected);
-            setEditUserPopup(true);
+            setEditInventoryItemPopUp(true);
 
         } else {
             console.log("No selected Branch, sumn wrong with the code my nigga:" + selected);
@@ -99,8 +100,8 @@ export const InventoryModule = () => {
         setSelectedUserID(uid)
     };
 
-    const closeEditUserPopup = () => {
-        setEditUserPopup(false);
+    const closeEditInventoryItemPopup = () => {
+        setEditInventoryItemPopUp(false);
     }
 
     const closeActivationPopup = () => {
@@ -118,20 +119,20 @@ export const InventoryModule = () => {
     if (loadingData) {
         return (
             <div className="pb-52">
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+            <div className='flex flex-col gap-4 pb-10 w-full h-full rounded-lg overflow-y'>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-24">
+                    <div className="flex flex-col pt-24 pl-2">
                         <h4 className="text-xl font-semibold text-purple">Inventory</h4>
                         <p className="text-gray-400">View, manage, and update inventory items and pricing.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddInventoryItem } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddInventoryItem } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
@@ -140,32 +141,32 @@ export const InventoryModule = () => {
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
                         {inventory?.map(({ id, item_code, store_code, group_num, selling_incl_1, selling_incl_2, description_1, unit_size, physical_item, category_main, category_sub, category_last, sales_tax_type, purchase_tax_type, image, net_mass, tax_description, tax_value }) => (
-                            <div key={id} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
+                            <div key={id} className="flex flex-col p-3 mx-2 text-gray-600 bg-white rounded shadow-lg">
+                                <div className="flex justify-between items-center">
                                     {/* Fixed alignment: All columns now use consistent structure and padding */}
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p className="text-purple">{id}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{image || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{item_code || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{description_1 || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>R{selling_incl_1 || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{unit_size || '--:--'}</p>
                                     </div>
-                                    <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                    <div className="flex flex-1 gap-4 justify-center items-center text-sm text-center">
                                         {/* Edit Inventory Item */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => handleEditInventoryItem(id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
+                                                <button onClick={() => handleEditInventoryItem(id)} className="flex justify-center items-center p-1 text-gray-500 bg-white rounded-lg border border-gray-500 cursor-pointer hover:bg-gray-200">
                                                     <Edit size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -177,7 +178,7 @@ export const InventoryModule = () => {
                                         {/* Activate Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleActivationPage(id)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleActivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
                                                     <Activity size={21} />
                                                 </button>
                                             </TooltipTrigger>
@@ -189,7 +190,7 @@ export const InventoryModule = () => {
                                         {/* Deactivate Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeactivationPage(id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeactivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <ShieldAlert size={21} />
                                                 </button>
                                             </TooltipTrigger>
@@ -201,7 +202,7 @@ export const InventoryModule = () => {
                                         {/* Restore Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleRestorePage(id)} className="flex items-center justify-center cursor-pointer bg-white text-green border border-green hover:bg-green-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleRestorePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-green border-green hover:bg-green-100">
                                                     <ArchiveRestore size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -213,7 +214,7 @@ export const InventoryModule = () => {
                                         {/* Delete Organisation */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeletePage(id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeletePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <Trash2 size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -289,20 +290,20 @@ export const InventoryModule = () => {
     if (isError) {
         return (
             <div className="pb-52">
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+            <div className='flex flex-col gap-4 pb-10 w-full h-full rounded-lg overflow-y'>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-24">
+                    <div className="flex flex-col pt-24 pl-2">
                         <h4 className="text-xl font-semibold text-purple">Inventory</h4>
                         <p className="text-gray-400">View, manage, and update inventory items and pricing.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddInventoryItem } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddInventoryItem } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
@@ -311,32 +312,32 @@ export const InventoryModule = () => {
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
                         {inventory?.map(({ id, item_code, store_code, group_num, selling_incl_1, selling_incl_2, description_1, unit_size, physical_item, category_main, category_sub, category_last, sales_tax_type, purchase_tax_type, image, net_mass, tax_description, tax_value }) => (
-                            <div key={id} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
+                            <div key={id} className="flex flex-col p-3 mx-2 text-gray-600 bg-white rounded shadow-lg">
+                                <div className="flex justify-between items-center">
                                     {/* Fixed alignment: All columns now use consistent structure and padding */}
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p className="text-purple">{id}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{image || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{item_code || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{description_1 || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>R{selling_incl_1 || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{unit_size || '--:--'}</p>
                                     </div>
-                                    <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                    <div className="flex flex-1 gap-4 justify-center items-center text-sm text-center">
                                         {/* Edit Inventory Item */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => handleEditInventoryItem(id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
+                                                <button onClick={() => handleEditInventoryItem(id)} className="flex justify-center items-center p-1 text-gray-500 bg-white rounded-lg border border-gray-500 cursor-pointer hover:bg-gray-200">
                                                     <Edit size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -348,7 +349,7 @@ export const InventoryModule = () => {
                                         {/* Activate Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleActivationPage(id)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleActivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
                                                     <Activity size={21} />
                                                 </button>
                                             </TooltipTrigger>
@@ -360,7 +361,7 @@ export const InventoryModule = () => {
                                         {/* Deactivate Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeactivationPage(id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeactivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <ShieldAlert size={21} />
                                                 </button>
                                             </TooltipTrigger>
@@ -372,7 +373,7 @@ export const InventoryModule = () => {
                                         {/* Restore Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleRestorePage(id)} className="flex items-center justify-center cursor-pointer bg-white text-green border border-green hover:bg-green-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleRestorePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-green border-green hover:bg-green-100">
                                                     <ArchiveRestore size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -384,7 +385,7 @@ export const InventoryModule = () => {
                                         {/* Delete Organisation */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeletePage(id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeletePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <Trash2 size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -460,20 +461,20 @@ export const InventoryModule = () => {
     if (inventory?.length === 0) {
         return (
             <div className="pb-52">
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+            <div className='flex flex-col gap-4 pb-10 w-full h-full rounded-lg overflow-y'>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-24">
+                    <div className="flex flex-col pt-24 pl-2">
                         <h4 className="text-xl font-semibold text-purple">Inventory</h4>
                         <p className="text-gray-400">View, manage, and update inventory items and pricing.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddInventoryItem } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddInventoryItem } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
@@ -482,32 +483,32 @@ export const InventoryModule = () => {
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
                         {inventory?.map(({ id, item_code, store_code, group_num, selling_incl_1, selling_incl_2, description_1, unit_size, physical_item, category_main, category_sub, category_last, sales_tax_type, purchase_tax_type, image, net_mass, tax_description, tax_value }) => (
-                            <div key={id} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
+                            <div key={id} className="flex flex-col p-3 mx-2 text-gray-600 bg-white rounded shadow-lg">
+                                <div className="flex justify-between items-center">
                                     {/* Fixed alignment: All columns now use consistent structure and padding */}
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p className="text-purple">{id}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{image || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{item_code || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{description_1 || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>R{selling_incl_1 || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{unit_size || '--:--'}</p>
                                     </div>
-                                    <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                    <div className="flex flex-1 gap-4 justify-center items-center text-sm text-center">
                                         {/* Edit Inventory Item */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => handleEditInventoryItem(id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
+                                                <button onClick={() => handleEditInventoryItem(id)} className="flex justify-center items-center p-1 text-gray-500 bg-white rounded-lg border border-gray-500 cursor-pointer hover:bg-gray-200">
                                                     <Edit size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -519,7 +520,7 @@ export const InventoryModule = () => {
                                         {/* Activate Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleActivationPage(id)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleActivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
                                                     <Activity size={21} />
                                                 </button>
                                             </TooltipTrigger>
@@ -531,7 +532,7 @@ export const InventoryModule = () => {
                                         {/* Deactivate Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeactivationPage(id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeactivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <ShieldAlert size={21} />
                                                 </button>
                                             </TooltipTrigger>
@@ -543,7 +544,7 @@ export const InventoryModule = () => {
                                         {/* Restore Branch */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleRestorePage(id)} className="flex items-center justify-center cursor-pointer bg-white text-green border border-green hover:bg-green-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleRestorePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-green border-green hover:bg-green-100">
                                                     <ArchiveRestore size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -555,7 +556,7 @@ export const InventoryModule = () => {
                                         {/* Delete Organisation */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeletePage(id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeletePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <Trash2 size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -630,20 +631,20 @@ export const InventoryModule = () => {
 
     return (
         <div className="pb-52">
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+            <div className='flex flex-col gap-4 pb-10 w-full h-full rounded-lg overflow-y'>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-24">
+                    <div className="flex flex-col pt-24 pl-2">
                         <h4 className="text-xl font-semibold text-purple">Inventory</h4>
                         <p className="text-gray-400">View, manage, and update inventory items and pricing.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddInventoryItem } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddInventoryItem } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
@@ -652,32 +653,44 @@ export const InventoryModule = () => {
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
                         {inventory?.map(({ id, item_code, store_code, group_num, selling_incl_1, selling_incl_2, description_1, unit_size, physical_item, category_main, category_sub, category_last, sales_tax_type, purchase_tax_type, image, net_mass, tax_description, tax_value }) => (
-                            <div key={id} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
+                            <div key={id} className="flex flex-col p-3 mx-2 text-gray-600 bg-white rounded shadow-lg">
+                                <div className="flex justify-between items-center">
                                     {/* Fixed alignment: All columns now use consistent structure and padding */}
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p className="text-purple">{id}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
-                                        <p>{image || '--:--'}</p>
+                                    <div className="flex-1 text-sm text-center">
+                                        {image && image !== '--:--' ? (
+                                            <div className="relative mx-auto w-10 h-10">
+                                                <Image 
+                                                    src={image} 
+                                                    alt={`${item_code} image`}
+                                                    fill
+                                                    className="object-contain rounded-lg"
+                                                    unoptimized
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="text-gray-400">--:--</span>
+                                        )}
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{item_code || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{description_1 || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>R{selling_incl_1 || '--:--'}</p>
                                     </div>
-                                    <div className="text-sm flex-1 text-center">
+                                    <div className="flex-1 text-sm text-center">
                                         <p>{unit_size || '--:--'}</p>
                                     </div>
-                                    <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                    <div className="flex flex-1 gap-4 justify-center items-center text-sm text-center">
                                         {/* Edit Inventory Item */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => handleEditInventoryItem(id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
+                                                <button onClick={() => handleEditInventoryItem(id)} className="flex justify-center items-center p-1 text-gray-500 bg-white rounded-lg border border-gray-500 cursor-pointer hover:bg-gray-200">
                                                     <Edit size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -687,45 +700,45 @@ export const InventoryModule = () => {
                                         </Tooltip>
 
                                         {/* Activate Branch */}
-                                        <Tooltip>
+                                        {/* <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleActivationPage(id)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleActivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
                                                     <Activity size={21} />
                                                 </button>
                                             </TooltipTrigger>
                                             <TooltipContent>
                                                 <p>Activate</p>
                                             </TooltipContent>
-                                        </Tooltip>
+                                        </Tooltip> */}
 
                                         {/* Deactivate Branch */}
-                                        <Tooltip>
+                                        {/* <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeactivationPage(id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeactivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <ShieldAlert size={21} />
                                                 </button>
                                             </TooltipTrigger>
                                             <TooltipContent>
                                                 <p>Deactivate</p>
                                             </TooltipContent>
-                                        </Tooltip>
+                                        </Tooltip> */}
 
                                         {/* Restore Branch */}
-                                        <Tooltip>
+                                        {/* <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleRestorePage(id)} className="flex items-center justify-center cursor-pointer bg-white text-green border border-green hover:bg-green-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleRestorePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-green border-green hover:bg-green-100">
                                                     <ArchiveRestore size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
                                             <TooltipContent>
                                                 <p>Restore</p>
                                             </TooltipContent>
-                                        </Tooltip>
+                                        </Tooltip> */}
 
                                         {/* Delete Organisation */}
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <button onClick={() => toggleDeletePage(id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeletePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <Trash2 size={21} /> 
                                                 </button>
                                             </TooltipTrigger>
@@ -772,15 +785,7 @@ export const InventoryModule = () => {
                 onClose={toggleRestorePage}
                 onSuccess={handleSuccess}
             /> 
-        )}
-        
-        {editUserPopup && 
-            <EditUser
-                onClose={closeEditUserPopup} 
-                selectedUser={selectedUser}
-                onSuccess={handleSuccess}
-            />
-        }
+        )} 
         
         {addUserPopUp && 
             <AddNewUser
@@ -792,6 +797,14 @@ export const InventoryModule = () => {
             <AddInventoryItem
                 onClose={toggleAddInventoryItem} 
                 onSuccess={handleSuccess} 
+            />
+        }
+
+        {editInventoryItemPopUp && 
+            <EditInventoryItem
+                onClose={closeEditInventoryItemPopup} 
+                selectedInventoryItem={selectedInventoryItem}
+                onSuccess={handleSuccess}
             />
         }
         </div>
