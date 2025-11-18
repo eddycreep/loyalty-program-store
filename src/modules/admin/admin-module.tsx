@@ -9,6 +9,7 @@ import { Tiers } from './loyalty-tiers/tiers'
 import { OrganizationModule } from './organization-module';
 import { BranchModule } from './branch-module';
 import { UserModule } from './user-module';
+import { InventoryModule } from './inventory-module';
 
 export const AdminModule = () => {
     const [currentTab, setCurrentTab] = useState('specials');
@@ -24,6 +25,7 @@ export const AdminModule = () => {
                 <button onClick={() => setCurrentTab('organisation')} className={`whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'organisation'? 'bg-purple text-white' : 'bg-white text-black'} text-sm p-2 cursor-pointer font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Organisation</button>
                 <button onClick={() => setCurrentTab('branch')} className={`whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'branch'? 'bg-purple text-white' : 'bg-white text-black'} text-sm p-2 cursor-pointer font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Branch</button>
                 <button onClick={() => setCurrentTab('users')} className={`whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'users'? 'bg-purple text-white' : 'bg-white text-black'} text-sm p-2 cursor-pointer font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Users</button>
+                <button onClick={() => setCurrentTab('inventory')} className={`whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'inventory'? 'bg-purple text-white' : 'bg-white text-black'} text-sm p-2 cursor-pointer font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Inventory</button>
             </div>
             {currentTab === 'specials' && <SpecialsModule />}
             {currentTab === 'rewards' && <RewardsModule />}
@@ -33,6 +35,7 @@ export const AdminModule = () => {
             {currentTab === 'organisation' && <OrganizationModule />}
             {currentTab === 'branch' && <BranchModule />}
             {currentTab === 'users' && <UserModule />}
+            {currentTab === 'inventory' && <InventoryModule />}
         </div>
     );
 }

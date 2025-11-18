@@ -83,9 +83,9 @@ export function AddNewUser({ onClose, onSuccess }: any) {
                         </button>
                     </div>
                     <CardHeader>
-                        <CardTitle>Add New Branch</CardTitle>
+                        <CardTitle>Add New User</CardTitle>
                         <CardDescription className="text-xs sm:text-sm">
-                            Create a new branch by filling in the required information below
+                            Create a new user by filling in the required information below
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
