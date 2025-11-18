@@ -126,7 +126,18 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
             try {
                 const url = `organisation/get-organisations`;
                 const response = await apiClient.get(`${apiEndPoint}/${url}`);
-                setOrganisations(response.data || []);
+                console.log("organisations returned: ", response.data)
+                
+                // Extract the data array from response.data.data
+                const organisationsData = response.data?.data || response.data || [];
+                
+                // Map the API response to match the interface (uid -> id, name -> organisation_name)
+                const mappedOrganisations = organisationsData.map((org: any) => ({
+                    id: org.uid || org.id,
+                    organisation_name: org.name || org.organisation_name
+                }));
+                
+                setOrganisations(mappedOrganisations);
             } catch (error) {
                 console.error('Error fetching organisations:', error);
                 toast.error('Failed to load organizations');
@@ -147,10 +158,24 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
 
         const fetchBranches = async () => {
             setLoadingBranches(true);
+            console.log("selectedOrgId: ", selectedOrgId)
+            
             try {
-                const url = `organisation/get-branches/${selectedOrgId}`;
+                // const url = `organisation/get-branches/${selectedOrgId}`;
+                const url = `branch/get-branches/${selectedOrgId}`;
                 const response = await apiClient.get(`${apiEndPoint}/${url}`);
-                setBranches(response.data || []);
+                console.log("branches returned: ", response.data)
+                
+                // Extract the data array from response.data.data
+                const branchesData = response.data?.data || response.data || [];
+                
+                // Map the API response to match the interface (uid -> id, name -> branch_name)
+                const mappedBranches = branchesData.map((branch: any) => ({
+                    id: branch.uid || branch.id,
+                    branch_name: branch.name || branch.branch_name
+                }));
+                
+                setBranches(mappedBranches);
             } catch (error) {
                 console.error('Error fetching branches:', error);
                 toast.error('Failed to load branches');
@@ -280,7 +305,7 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                                             <SelectValue placeholder={loadingOrgs ? "Loading..." : "Select organization"} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {organisations.map((org) => (
+                                            {organisations?.map((org) => (
                                                 <SelectItem key={org.id} value={org.id.toString()}>
                                                     {org.organisation_name}
                                                 </SelectItem>
@@ -303,7 +328,7 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                                             } />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {branches.map((branch) => (
+                                            {branches?.map((branch) => (
                                                 <SelectItem key={branch.id} value={branch.id.toString()}>
                                                     {branch.branch_name}
                                                 </SelectItem>
@@ -405,7 +430,7 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                                     <label htmlFor="physical_item" className="text-xs text-black sm:text-sm">Physical Item</label>
                                     <Input
                                         id="physical_item"
-                                        type="number"
+                                        // type="number"
                                         value={inventoryItem.physical_item}
                                         onChange={(e) => setInventoryItem(prev => ({ ...prev, physical_item: Number(e.target.value) }))}
                                         placeholder="Enter physical item"
@@ -477,7 +502,7 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                                     <label htmlFor="net_mass" className="text-xs text-black sm:text-sm">Net Mass</label>
                                     <Input
                                         id="net_mass"
-                                        type="number"
+                                        // type="number"
                                         step="0.001"
                                         value={inventoryItem.net_mass}
                                         onChange={(e) => setInventoryItem(prev => ({ ...prev, net_mass: Number(e.target.value) }))}
@@ -517,7 +542,7 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                                         <label htmlFor="selling_incl_1" className="text-xs text-black sm:text-sm">Selling Price (Incl. Tax 1)</label>
                                         <Input
                                             id="selling_incl_1"
-                                            type="number"
+                                            // type="number"
                                             step="0.01"
                                             value={inventoryItem.selling_incl_1}
                                             onChange={(e) => setInventoryItem(prev => ({ ...prev, selling_incl_1: Number(e.target.value) }))}
@@ -529,7 +554,7 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                                         <label htmlFor="selling_incl_2" className="text-xs text-black sm:text-sm">Selling Price (Incl. Tax 2) <span className="text-gray-500">(Optional)</span></label>
                                         <Input
                                             id="selling_incl_2"
-                                            type="number"
+                                            // type="number"
                                             step="0.01"
                                             value={inventoryItem.selling_incl_2 || ''}
                                             onChange={(e) => setInventoryItem(prev => ({ ...prev, selling_incl_2: e.target.value ? Number(e.target.value) : undefined }))}

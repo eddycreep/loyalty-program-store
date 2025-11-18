@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Edit, Trash2, ShieldAlert, PlusCircle, ArchiveRestore, Activity} from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { AddInventoryItem } from "./inventory/add-inventory-item";
@@ -10,8 +10,10 @@ import { apiEndPoint } from "@/utils/colors";
 import { EditInventoryItem } from "./inventory/edit-inventory-item";
 import Image from "next/image";
 import { DeleteInventoryItemConfirmation } from "./inventory/delete-inventory-item";
+import { useSession } from '@/context';
 
 export const InventoryModule = () => {
+    const { user } = useSession();
     const [inventory, setInventory] = useState<Item[]>([])
 
     const [addInventoryItemPopUp, setAddInventoryItemPopUp] = useState(false);
@@ -52,12 +54,27 @@ export const InventoryModule = () => {
         setSelectedUserID(uid)
     };
 
-    const fetchInventory = async () => {
+    const fetchInventory = useCallback(async () => {
         setLoadingData(true);
 
         try {
             const url = `inventory/get-inventory`;
-            const response = await apiClient.get<ItemsResponse>(`${apiEndPoint}/${url}`);
+            
+            // Build query parameters from user session
+            const params = new URLSearchParams();
+            if (user?.organisation?.uid) {
+                params.append('organisationId', user.organisation.uid.toString());
+            }
+            if (user?.branch?.uid) {
+                params.append('branchId', user.branch.uid.toString());
+            }
+            
+            const queryString = params.toString();
+            const fullUrl = queryString ? `${url}?${queryString}` : url;
+            
+            const response = await apiClient.get<ItemsResponse>(fullUrl)
+            console.log("inventory returned: ", response.data)
+                
             const inventory = response?.data || [];
             setInventory(inventory);
 
@@ -68,7 +85,7 @@ export const InventoryModule = () => {
         }
 
         setLoadingData(false);
-    };
+    }, [user?.organisation?.uid, user?.branch?.uid]);
 
     const toggleAddInventoryItem = () => {
         setAddInventoryItemPopUp(!addInventoryItemPopUp);
@@ -104,8 +121,11 @@ export const InventoryModule = () => {
     };
 
     useEffect(() => {
-        fetchInventory();
-    }, []);
+        // Only fetch if user data is available (organisation and branch)
+        if (user?.organisation?.uid) {
+            fetchInventory();
+        }
+    }, [fetchInventory, user?.organisation?.uid]);
 
     if (loadingData) {
         return (
@@ -139,7 +159,21 @@ export const InventoryModule = () => {
                                         <p className="text-purple">{id}</p>
                                     </div>
                                     <div className="flex-1 text-sm text-center">
-                                        <p>{image || '--:--'}</p>
+                                        {image ? (
+                                            <div className="relative mx-auto w-10 h-10">
+                                                <Image 
+                                                    src={image} 
+                                                    alt={`${description_1} image`}
+                                                    fill
+                                                    className="object-contain rounded-lg"
+                                                    unoptimized
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center mx-auto w-10 h-10 bg-gray-200 rounded-lg">
+                                                <span className="text-xs text-gray-500">No image</span>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="flex-1 text-sm text-center">
                                         <p>{item_code || '--:--'}</p>
@@ -167,7 +201,7 @@ export const InventoryModule = () => {
                                         </Tooltip>
 
                                         {/* Activate Branch */}
-                                        <Tooltip>
+                                        {/* <Tooltip>
                                             <TooltipTrigger>
                                                 <button onClick={() => toggleActivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
                                                     <Activity size={21} />
@@ -176,10 +210,10 @@ export const InventoryModule = () => {
                                             <TooltipContent>
                                                 <p>Activate</p>
                                             </TooltipContent>
-                                        </Tooltip>
+                                        </Tooltip> */}
 
                                         {/* Deactivate Branch */}
-                                        <Tooltip>
+                                        {/* <Tooltip>
                                             <TooltipTrigger>
                                                 <button onClick={() => toggleDeactivationPage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <ShieldAlert size={21} />
@@ -188,10 +222,10 @@ export const InventoryModule = () => {
                                             <TooltipContent>
                                                 <p>Deactivate</p>
                                             </TooltipContent>
-                                        </Tooltip>
+                                        </Tooltip> */}
 
-                                        {/* Restore Branch */}
-                                        <Tooltip>
+                                        {/* Restore Inventory Item */}
+                                        {/* <Tooltip>
                                             <TooltipTrigger>
                                                 <button onClick={() => toggleRestorePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-green border-green hover:bg-green-100">
                                                     <ArchiveRestore size={21} /> 
@@ -200,9 +234,9 @@ export const InventoryModule = () => {
                                             <TooltipContent>
                                                 <p>Restore</p>
                                             </TooltipContent>
-                                        </Tooltip>
+                                        </Tooltip> */}
 
-                                        {/* Delete Organisation */}
+                                        {/* Delete Inventory Item */}
                                         <Tooltip>
                                             <TooltipTrigger>
                                                 <button onClick={() => toggleDeletePage(id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
@@ -561,15 +595,21 @@ export const InventoryModule = () => {
                                         <p className="text-purple">{id}</p>
                                     </div>
                                     <div className="flex-1 text-sm text-center">
-                                        <div className="relative mx-auto w-10 h-10">
-                                            <Image 
-                                                src={image} 
-                                                alt={`${item_code} image`}
-                                                fill
-                                                className="object-contain rounded-lg"
-                                                unoptimized
-                                            />
-                                        </div>
+                                        {image ? (
+                                            <div className="relative mx-auto w-10 h-10">
+                                                <Image 
+                                                    src={image} 
+                                                    alt={`${item_code} image`}
+                                                    fill
+                                                    className="object-contain rounded-lg"
+                                                    unoptimized
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center mx-auto w-10 h-10 bg-gray-200 rounded-lg">
+                                                <span className="text-xs text-gray-500">No image</span>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="flex-1 text-sm text-center">
                                         <p>{item_code || '--:--'}</p>
