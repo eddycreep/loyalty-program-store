@@ -1,7 +1,7 @@
 'use client'
 
 import { format } from "date-fns";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { X, Search, Check, PlusCircle } from 'lucide-react';
@@ -19,6 +19,7 @@ import { getOrganisations } from "@/components/data/organisation/get-organisatio
 import { Organisation } from "@/modules/types/organisation/organisation-types";
 import { Branch } from "@/modules/types/branch/branches-types";
 import { getBranches } from "@/components/data/branch/get-branches-data";
+import { getInventory } from "@/components/data/inventory/get-inventory";
 
 interface Props {
     onClose: () => void; 
@@ -83,19 +84,20 @@ export function AddProductsSpecials({ onClose }: Props) {
 
     // Limit to 9 products to display 3 rows (3 columns × 3 rows = 9 items on medium/large screens)
     const displayedProducts = searchProducts.slice(0, 9);
+    
+    const fetchInventory = useCallback(async () => {
+        // setLoadingData(true);
 
-    const fetchProducts = async () => {
         try {
-            const url = `inventory/get-products`;
-            const response = await apiClient.get<ItemsResponse>(`${apiEndPoint}/${url}`);
-            const products = response?.data || []; // Added safer access to nested property
-            setAllProducts(products);
-
+            const inventory = await getInventory(user)
+            setAllProducts(inventory)
+            console.log("inventory returned: ", inventory)
+            setAllProducts(inventory);
         } catch (error) {
-            console.error('Error fetching products:', error);
-            setAllProducts([]); // Ensure state is reset on error
+            console.error('Error fetching inventory:', error)
+            setAllProducts([]);
         }
-    };
+    }, [user])
 
     const getStores = async () => {
         try {
@@ -138,15 +140,15 @@ export function AddProductsSpecials({ onClose }: Props) {
         }
     }
 
-    const getAllBranches = async () => {
+    const getAllBranches = useCallback(async () => {
         try {
-            const branchesData = await getBranches()
+            const branchesData = await getBranches(user)
             setBranches(branchesData)
             console.log("all branches returned bro: ", branchesData)
         } catch (error) {
             console.error('error fetching all branches bro:', error)
         }
-    }
+    }, [user])
     
     const addProductToSpecial = (product: Item) => {
         setCurrentSpecial(prev => ({
@@ -314,13 +316,13 @@ export function AddProductsSpecials({ onClose }: Props) {
     };
 
     useEffect(() => {
-        fetchProducts();
+        fetchInventory();
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
         getAllOrganisations();
         getAllBranches();
-    }, []);
+    }, [fetchInventory, getAllBranches]);
 
     const userOrganisation = user?.organisation?.name
     const userOrganisationUid = user?.organisation?.uid

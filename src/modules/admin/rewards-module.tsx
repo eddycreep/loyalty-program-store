@@ -1,7 +1,7 @@
 'use client'
 
 import axios from 'axios';
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { apiEndPoint, colors } from '@/utils/colors';
 import { Expand, Shrink, Edit, X, Check, Trash2, ShieldAlert, XOctagon, PlusCircle} from "lucide-react"
 import { AddNewRewards } from "./rewards/add-new-rewards";
@@ -10,6 +10,8 @@ import { DeleteRewardConfirmation } from "@/components/component/delete-reward-c
 import { RewardSummaryCards } from "./rewards/reward-cards";
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { apiClient } from '@/utils/api-client';
+import { getAllRewards } from '@/components/data/rewards/get-all-rewards';
+import { useSession } from '@/context';
 
 export interface RewardProps {
     reward_id: number,
@@ -30,6 +32,7 @@ export interface RewardProps {
 type RewardsResponse = RewardProps[]
 
 export const RewardsModule = () => {
+    const { user } = useSession()
     const [rewards, setRewards] = useState<RewardsResponse>([]);
     const [addRewardsPopUp, setRewardsPopUp] = useState(false);
     const [editProductsPopup, setEditProductsPopup] = useState(false);
@@ -49,20 +52,20 @@ export const RewardsModule = () => {
         setExpandedRow(expandedRow === id ? null : id);
     };
 
-    const fetchRewards = async () => {
+    const fetchRewards = useCallback(async () => {
         setLoadingData(true);
 
         try {
-            const url = `rewards/get-all-rewards`
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-            setRewards(response?.data);
+            const rewardsData = await getAllRewards(user)
+            setRewards(rewardsData)
+            console.log("rewards data returned my gee: ", rewardsData)
             setLoadingData(false);
 
         } catch (error) {
             console.error('Error fetching rewards:', error);
             setIsError(true);
         }
-    }
+    }, [user])
 
     const toggleAddRewards = () => {
         setRewardsPopUp(!addRewardsPopUp);
@@ -92,7 +95,7 @@ export const RewardsModule = () => {
 
     useEffect(() => {
         fetchRewards();
-    }, []);
+    }, [fetchRewards]);
 
 
     if (loadingData) {

@@ -11,6 +11,8 @@ import SquareCircleLoader from "@/lib/square-circle-loader";
 import { DeleteReviewConfirmation } from '@/components/component/delete-review-confirmation';
 import { apiClient } from '@/utils/api-client';
 import { EditReview } from './reviews/edit-review';
+import { getAllReviews } from '@/components/data/reviews/get-all-reviews';
+import { useSession } from '@/context';
 
 export interface ReviewProps {
     review_id: number,
@@ -32,6 +34,7 @@ export interface ReviewProps {
 type ReviewsResponse = ReviewProps[]
 
 export const ReviewsModule = () => {
+    const { user } = useSession();
     const [reviews, setReviews] = useState<ReviewsResponse>([]);
     const [addReviewsPopUp, setReviewsPopUp] = useState(false);
     const [editProductsPopup, setEditProductsPopup] = useState(false);
@@ -55,13 +58,10 @@ export const ReviewsModule = () => {
         setLoadingData(true);
 
         try {
-            const url = `reviews/get-all-reviews`
-            // const response = await axios.get<ReviewsResponse>(`${apiEndPoint}/${url}`);
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-
-            setReviews(response?.data);
+            const reviewsData = await getAllReviews(user)
+            setReviews(reviewsData)
+            console.log("reviews data returned my gee: ", reviewsData)
             setLoadingData(false);
-
         } catch (error) {
             console.error('Error fetching reviews:', error);
             setIsError(true);

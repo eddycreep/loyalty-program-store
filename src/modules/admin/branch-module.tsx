@@ -14,8 +14,10 @@ import { RestoreBranchConfirmation } from "./branch/restore-branch-confirmation"
 import { AddNewBranch } from "./branch/add-new-branch";
 import { EditBranch } from "./branch/edit-branch";
 import { Badge } from "@/components/ui/badge";
+import { useSession } from "@/context";
 
 export const BranchModule = () => {
+    const { user } = useSession();
     const [branches, setBranches] = useState<Branch[] | null>(null);
 
     const [addBranchPopUp, setAddBranchPopUp] = useState(false);
@@ -60,7 +62,7 @@ export const BranchModule = () => {
         setLoadingData(true);
 
         try {
-            const branchesData = await getAllBranches()
+            const branchesData = await getAllBranches(user)
             setBranches(branchesData)
             console.log("all branches returned bro: ", branchesData)
         } catch (error) {

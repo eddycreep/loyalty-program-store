@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { Check, X, Search, PlusCircle } from 'lucide-react';
@@ -18,6 +18,7 @@ import { Branch } from '@/modules/types/branch/branches-types';
 import { getOrganisations } from '@/components/data/organisation/get-organisations-data';
 import { getBranches } from '@/components/data/branch/get-branches-data';
 import { useSession } from '@/context';
+import { getInventory } from '@/components/data/inventory/get-inventory';
 
 
 interface Props {
@@ -127,22 +128,21 @@ export function AddCombinedSpecials({ onClose }: Props) {
     // Limit to 9 products to display 3 rows (3 columns × 3 rows = 9 items on medium/large screens)
     const displayedProducts = searchProducts.slice(0, 9);
 
-    const fetchProducts = async () => {
+    const fetchInventory = useCallback(async () => {
+        // setLoadingData(true);
+
         try {
-            const url = `inventory/get-products`;
-            const response = await apiClient.get<ItemsResponse>(`${apiEndPoint}/${url}`);
-            const products = response?.data || []; // Safer access to response data
-            setAllProducts(products);
-            console.log('Fetched products count:', products.length); // Debug log for product count
-            console.log('Sample product:', products[0]); // Debug log to see product structure
-
+            const inventory = await getInventory(user)
+            setAllProducts(inventory)
+            console.log("inventory returned: ", inventory)
+            setAllProducts(inventory);
         } catch (error) {
-            console.error('Error fetching products:', error);
-            setAllProducts([]); // Ensure state is reset on error
+            console.error('Error fetching inventory:', error)
+            setAllProducts([]);
         }
-    };
+    }, [user])
 
-    const getStores = async () => {
+    const getStores = useCallback(async () => {
         try {
             const url = `inventory/get-stores`
             const response = await apiClient.get<StoresResponse>(`${apiEndPoint}/${url}`);
@@ -150,9 +150,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
         } catch (error) {
             console.error('Error RETURNING STORES:', error)
         }
-    }
+    }, [])
     
-    const getLoyaltyTiers = async () => {
+    const getLoyaltyTiers = useCallback(async () => {
         try {
             const url = `tiers/get-loyalty-tiers`
             const response = await apiClient.get<TiersResponse>(`${apiEndPoint}/${url}`);
@@ -160,9 +160,9 @@ export function AddCombinedSpecials({ onClose }: Props) {
         } catch (error) {
             console.error('Error RETURNING TIERS:', error)
         }
-    }
+    }, [])
     
-    const getAgeGroups = async () => {
+    const getAgeGroups = useCallback(async () => {
         try {
             const url = `age-group/get-age-groups`
             const response = await apiClient.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`);
@@ -170,27 +170,50 @@ export function AddCombinedSpecials({ onClose }: Props) {
         } catch (error) {
             console.error('Error RETURNING AGE_GROUPS:', error)
         }
-    }
+    }, [])
 
-    const getAllOrganisations = async () => {
+    const getAllOrganisations = useCallback(async () => {
         try {
             const orgData = await getOrganisations()
-            setOrganisations(orgData)
-            console.log("all organisations returned bro: ", orgData)
+            // Filter to only show user's organisation
+            if (orgData && user?.organisation?.uid) {
+                const filteredOrgs = orgData.filter(org => org.uid === user.organisation.uid)
+                setOrganisations(filteredOrgs)
+                console.log("filtered organisations (user's org only): ", filteredOrgs)
+            } else if (orgData) {
+                setOrganisations(orgData)
+            } else {
+                setOrganisations(null)
+            }
         } catch (error) {
             console.error('error fetching all organisations bro:', error)
+            setOrganisations(null)
         }
-    }
+    }, [user?.organisation?.uid])
 
-    const getAllBranches = async () => {
+    const getAllBranches = useCallback(async () => {
         try {
-            const branchesData = await getBranches()
-            setBranches(branchesData)
-            console.log("all branches returned bro: ", branchesData)
+            // Use filtered endpoint if user has organisation, otherwise fetch all
+            if (user?.organisation?.uid) {
+                // Fetch branches filtered by user's organisation
+                const url = `branch/get-branches/${user.organisation.uid}`;
+                const response = await apiClient.get(`${apiEndPoint}/${url}`);
+                console.log("branches returned (filtered by org): ", response.data)
+                
+                // Extract the data array from response.data.data or response.data
+                const branchesData = response.data?.data || response.data || [];
+                setBranches(branchesData)
+                console.log("filtered branches (user's org only): ", branchesData)
+            } else {
+                // Fallback: fetch all branches if no user organisation
+                const branchesData = await getBranches()
+                setBranches(branchesData)
+            }
         } catch (error) {
             console.error('error fetching all branches bro:', error)
+            setBranches(null)
         }
-    }
+    }, [user?.organisation?.uid])
 
     const addProductToSpecial = (product: Item) => {
         // Check if we haven't reached the product limit
@@ -372,13 +395,27 @@ export function AddCombinedSpecials({ onClose }: Props) {
     };
 
     useEffect(() => {
-        fetchProducts();
+        fetchInventory();
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
         getAllOrganisations();
         getAllBranches();
-    }, []);
+        
+        // Set default organisation and branch from user session
+        if (user?.organisation?.uid) {
+            setCurrentSpecial(prev => ({
+                ...prev,
+                organisation: user.organisation.uid.toString()
+            }));
+        }
+        if (user?.branch?.uid) {
+            setCurrentSpecial(prev => ({
+                ...prev,
+                branch: user.branch.uid.toString()
+            }));
+        }
+    }, [fetchInventory, getStores, getLoyaltyTiers, getAgeGroups, getAllOrganisations, getAllBranches, user?.organisation?.uid, user?.branch?.uid]);
 
     return (
         <div className="fixed inset-0 z-50">
@@ -525,17 +562,19 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                     <Select
                                         value={currentSpecial.organisation}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, organisation: value }))}
+                                        disabled={!organisations || organisations.length === 0}
                                     >
                                         <SelectTrigger className="w-full mt-1">
-                                            <SelectValue placeholder="Select Organisation" />
+                                            <SelectValue placeholder={organisations && organisations.length > 0 ? "Select Organisation" : "No organisations available"} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                            {organisations?.map((org) => (
-                                                <SelectItem key={org.uid} value={org.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                                    {org.name}
-                                                </SelectItem>
-                                            ))}
+                                            {organisations && organisations.length > 0 && (
+                                                organisations.map((org) => (
+                                                    <SelectItem key={org.uid} value={org.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                                        {org.name}
+                                                    </SelectItem>
+                                                ))
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -544,17 +583,19 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                     <Select
                                         value={currentSpecial.branch}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, branch: value }))}
+                                        disabled={!branches || branches.length === 0}
                                     >
                                         <SelectTrigger className="w-full mt-1">
-                                            <SelectValue placeholder="Select Branch" />
+                                            <SelectValue placeholder={branches && branches.length > 0 ? "Select Branch" : "No branches available"} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                            {branches?.map((branch) => (
-                                                <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                                    {branch.name}
-                                                </SelectItem>
-                                            ))}
+                                            {branches && branches.length > 0 && (
+                                                branches.map((branch) => (
+                                                    <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                                        {branch.name}
+                                                    </SelectItem>
+                                                ))
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 </div>

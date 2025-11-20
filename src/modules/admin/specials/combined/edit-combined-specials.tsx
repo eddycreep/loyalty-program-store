@@ -1,7 +1,7 @@
 'use client'
 
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { Check, X, Search, PlusCircle } from 'lucide-react';
@@ -14,6 +14,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductDescription, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Special, SaveSpecial, SpecialItems, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { CombinedProps } from './combined-specials';
+import { useSession } from '@/context';
+import { apiClient } from '@/utils/api-client';
+import { Item, ItemsResponse } from '@/modules/types/products/product-types';
 
 interface Props {
     onClose: () => void;
@@ -51,6 +54,7 @@ export interface CombinedSpecialItems {
 
 export interface UpdateCombinedSpecialItems {
     special_group_id: number,
+    item_code: string,
     product_description: string,
 }
 
@@ -84,6 +88,7 @@ type CombinedSpecial = {
 }
 
 export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Props) {
+    const { user } = useSession();
     const [specials, setSpecials] = useState<CombinedSpecial[]>([])
     const [currentSpecial, setCurrentSpecial] = useState<CombinedSpecial>({
         special_name: '',
@@ -104,31 +109,53 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
     const [searchTerm, setSearchTerm] = useState('')
     const [specialID, setSpecialID] = useState<SpecialInfoRes>([])
 
-    const [allProducts, setAllProducts] = useState<Products[]>([])
+    const [allProducts, setAllProducts] = useState<Item[]>([])
     const [allStores, setAllStores] = useState<StoresResponse>([]);
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
 
         // First filter products based on search term
     const searchProducts = allProducts.filter(product =>
-        product.inventory.description_1.toLowerCase().includes(searchTerm.toLowerCase())
+        product.description_1.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     // Then limit to first 3 matches
     const displayedProducts = searchProducts.slice(0, 3);
 
-    const fetchProducts = async () => {
+    const fetchInventory = useCallback(async () => {
+        // setLoadingData(true);
+
         try {
-            const url = `inventory/get-products`;
-            const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`);
-            setAllProducts(response?.data.results || []);
+            const url = `inventory/get-inventory`;
+            
+            // Build query parameters from user session
+            const params = new URLSearchParams();
+            if (user?.organisation?.uid) {
+                params.append('organisationId', user.organisation.uid.toString());
+            }
+            if (user?.branch?.uid) {
+                params.append('branchId', user.branch.uid.toString());
+            }
+            
+            const queryString = params.toString();
+            const fullUrl = queryString ? `${url}?${queryString}` : url;
+            
+            const response = await apiClient.get<ItemsResponse>(fullUrl)
+            console.log("inventory returned: ", response.data)
+                
+            const inventory = response?.data || [];
+            setAllProducts(inventory);
 
         } catch (error) {
-            console.error('error fetching products: ', error);
+            console.error('Error fetching inventory:', error);
+            // setIsError(true);
+            setAllProducts([]); // Ensure state is reset on error
         }
-    };
 
-    const getStores = async () => {
+        // setLoadingData(false);
+    }, [user?.organisation?.uid, user?.branch?.uid]);
+
+    const getStores = useCallback(async () => {
         try {
             const url = `inventory/get-stores`
             const response = await axios.get<StoresResponse>(`${apiEndPoint}/${url}`)
@@ -136,9 +163,9 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
         } catch (error) {
             console.error('Error RETURNING STORES:', error)
         }
-    }
+    }, [])
     
-    const getLoyaltyTiers = async () => {
+    const getLoyaltyTiers = useCallback(async () => {
         try {
             const url = `tiers/get-loyalty-tiers`
             const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
@@ -146,9 +173,9 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
         } catch (error) {
             console.error('Error RETURNING TIERS:', error)
         }
-    }
+    }, [])
     
-    const getAgeGroups = async () => {
+    const getAgeGroups = useCallback(async () => {
         try {
             const url = `age-group/get-age-groups`
             const response = await axios.get<AgeGroupsResponse>(`${apiEndPoint}/${url}`)
@@ -156,9 +183,9 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
         } catch (error) {
             console.error('Error RETURNING AGE_GROUPS:', error)
         }
-    }
+    }, [])
 
-    const addProductToSpecial = (product: Products) => {
+    const addProductToSpecial = (product: Item) => {
         // Check if we haven't reached the product limit
         if (currentSpecial.products.length >= 5) {
         toast.error('Maximum of 5 products allowed per special');
@@ -168,7 +195,7 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
         // Convert the inventory product to the SpecialProduct format
         const specialProduct: SpecialProduct = {
             id: product.id.toString(), // Convert to string since SpecialProduct.id is string
-            name: product.inventory.description_1,
+            name: product.description_1,
             price: product.selling_incl_1, // Access from product directly, not from inventory
             item_code: product.item_code, // Access from product directly, not from inventory
             groupId: ''
@@ -250,27 +277,29 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
 
     const updateSpecialItems = async () => {
         try {
-            // Create an array of all update promises to handle them concurrently
-            const updatePromises = currentSpecial.products.map(async (product, index) => {
-                const payload: UpdateCombinedSpecialItems = {
-                    special_group_id: index + 1, // Keep sequential group IDs (1, 2, 3)
-                    product_description: product.name
-                };
+            // Create an array of all items to update
+            const payload: UpdateCombinedSpecialItems[] = currentSpecial.products.map((product, index) => ({
+                special_group_id: index + 1, // Keep sequential group IDs (1, 2, 3)
+                item_code: product.item_code,
+                product_description: product.name
+            }));
 
-                const url = `specials/update-combined-special-items/${selectedCombinedSpecial?.special_id}`;
-                return axios.patch<UpdateCombinedSpecialItems>(`${apiEndPoint}/${url}`, payload);
-            });
+            const url = `specials/update-combined-special-items/${selectedCombinedSpecial?.special_id}`;
+            const response = await axios.put<{ message: string }>(`${apiEndPoint}/${url}`, payload);
 
-            // Wait for all updates to complete
-            await Promise.all(updatePromises);
+            if (response.status === 200) {
+                toast.success('Special Items Updated Successfully', {
+                    icon: <Check color={colors.green} size={24} />,
+                    duration: 3000,
+                });
 
-            // Show success toast after all items are updated
-            toast.success('Special Items Updated Successfully', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            });
-
-            onClose();
+                onClose();
+            } else {
+                toast.error('Error updating special items', {
+                    icon: <X color={colors.red} size={24} />,
+                    duration: 3000,
+                });
+            }
         } catch (error) {
             console.error('Error updating special items:', error);
             
@@ -317,11 +346,11 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
     // };
 
     useEffect(() => {
-        fetchProducts();
+        fetchInventory();
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
-    }, []);
+    }, [fetchInventory, getStores, getLoyaltyTiers, getAgeGroups]);
 
     // Add useEffect to initialize currentSpecial with selectedCombinedSpecial data
     useEffect(() => {
@@ -559,7 +588,7 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
                                         className="justify-start bg-white text-black text-xs sm:text-sm"
                                     >
                                         <PlusCircle className="h-4 w-4 mr-2" />
-                                        <span className="truncate">{product.inventory.description_1}</span>
+                                        <span className="truncate">{product.description_1}</span>
                                     </Button>
                                 ))}
                             </div>
@@ -570,7 +599,7 @@ export function EditCombinedSpecials ({ onClose, selectedCombinedSpecial }: Prop
                                 <div className="space-y-2 mt-1">
                                     {currentSpecial.products.map((product) => (
                                         <Card key={product.id} className="p-2 flex justify-between items-center">
-                                            <span className="text-xs sm:text-sm truncate">{product.name}</span>
+                                            <span className="text-xs sm:text-sm text-black font-bold truncate">{product.name}</span>
                                             <div className="flex items-center space-x-2">
                                                 <Input
                                                     type="text"

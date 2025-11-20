@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Edit, Trash2, ShieldAlert, XOctagon, PlusCircle, ArchiveRestore, Activity} from "lucide-react"
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -13,8 +13,10 @@ import { DeleteUserConfirmation } from "./user/delete-user-confirmation";
 import { RestoreUserConfirmation } from "./user/restore-user-confirmation";
 import { AddNewUser } from "./user/add-new-user";
 import { EditUser } from "./user/edit-user";
+import { useSession } from '@/context';
 
 export const UserModule = () => {
+    const { user } = useSession();
     const [users, setUsers] = useState<User[] | null>(null);
 
     const [addUserPopUp, setAddUserPopUp] = useState(false);
@@ -55,11 +57,11 @@ export const UserModule = () => {
         setSelectedUserID(uid)
     };
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         setLoadingData(true);
 
         try {
-            const usersData = await getAllUsers()
+            const usersData = await getAllUsers(user)
             setUsers(usersData)
             console.log("all users returned bro: ", usersData)
         } catch (error) {
@@ -67,7 +69,7 @@ export const UserModule = () => {
             setIsError(true);
         }
         setLoadingData(false);
-    }
+    }, [user])
 
     const toggleAddUser = () => {
         setAddUserPopUp(!addUserPopUp);
@@ -105,7 +107,7 @@ export const UserModule = () => {
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [fetchUsers]);
 
     if (loadingData) {
         return (
