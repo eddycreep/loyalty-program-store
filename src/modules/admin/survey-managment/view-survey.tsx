@@ -11,6 +11,8 @@ import { DeleteSurveyConfirmation  } from '@/components/component/delete-survey-
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { apiClient } from '@/utils/api-client';
 import { Badge } from '@/components/ui/badge';
+import { getAllSurveys } from '@/components/data/survey/get-all-surveys';
+import { useSession } from '@/context';
 
 interface SurveyProps {
     survey_id: number,
@@ -34,6 +36,7 @@ type Params = {
 }
 
 export const ViewSurveys = () => {
+    const { user } = useSession();
     const router = useRouter();
 
     const [surveyDeletePopUp, setSurveyDeletePopUp] = useState(false);
@@ -62,12 +65,11 @@ export const ViewSurveys = () => {
         setLoadingData(true);
 
         try {
-            const url = `survey/get-all-surveys`
-            // const response = await axios.get(`${apiEndPoint}/${url}`);
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-            setSurveys(response?.data)
+            const surveysData = await getAllSurveys(user)
+            setSurveys(surveysData)
             setLoadingData(false);
-
+            console.log("surveys data returned my gee: ", surveysData)
+            
         } catch (error) {
             console.error("An error occurred when fetching surveys:", error)
             setIsError(true);

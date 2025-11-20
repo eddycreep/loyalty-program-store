@@ -2,15 +2,16 @@
 
 import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { Edit, Expand, Trash2, Shrink, X, Check, XOctagon, ShieldAlert, PlusCircle } from "lucide-react";
-
 import { AddProductsSpecials } from "@/modules/admin/specials/product/add-product-specials";
 import { EditProductSpecials } from "@/modules/admin/specials/product/edit-product-specials";
 import { DeleteSpecialConfirmation } from "@/modules/admin/specials/product/delete-special-confirmation";
 import SquareCircleLoader from "@/lib/square-circle-loader";
 import { apiClient } from '@/utils/api-client';
+import { useSession } from '@/context';
+import { getAllProductSpecials } from '@/components/data/specials/product/get-all-product-specials';
 
 //get-all-active-product-specials
 export interface ProductSpecialsProps {
@@ -27,7 +28,8 @@ export interface ProductSpecialsProps {
     isActive: boolean, 
     loyalty_tier: string,
     age_group: string,
-    specialItem: SpecialItem
+    specialItem?: SpecialItem,
+    specialItems?: SpecialItem[]
 }
 type ProductSpecialsResponse = ProductSpecialsProps[]
 
@@ -37,6 +39,7 @@ interface SpecialItem {
 }
 
 export const ProductSpecials = () => {
+    const { user } = useSession();
     const [productSpecials, setProductSpecials] = useState<ProductSpecialsResponse>([]);
 
     // Define the type of selectedSpecial to accept either ProductSpecialsProps or null
@@ -53,22 +56,20 @@ export const ProductSpecials = () => {
 
     const headers = ['Special ID',	'Special Name',	'Special',	'Product', 'Special Price', 'Special Value', 'Action']
 
-    const geAllProductSpecials = async () => {
+    const fetchProductSpecials = useCallback(async () => {
         setLoadingData(true);
 
         try{
-            const url = `specials/get-all-product-specials`
-            // const response = await axios.get<ProductSpecialsResponse>(`${apiEndPoint}/${url}`)
-            const response = await apiClient.get(url)
-
-            setProductSpecials(response?.data)
+            const productSpecials = await getAllProductSpecials(user)
+            setProductSpecials(productSpecials)
+            console.log("product-specials returned: ", productSpecials)
             setLoadingData(false);
 
         } catch (error) {
             console.log("AN ERROR OCCURED WHEN FETCHING PRODUCT SPECIALS:", error)
             setIsError(true);
         }
-    }
+    }, [user])
 
     const handleEditProductSpecial = (special_id: any) => {
         const selected = productSpecials.find((item) => item.special_id === special_id) || null;
@@ -103,19 +104,19 @@ export const ProductSpecials = () => {
     }
 
     useEffect(() => {
-        geAllProductSpecials();
+        fetchProductSpecials();
     
         // Only set up the interval if the add/edit popups are NOT open
         const specialInterval = !productSpecialsComponent && !editProductsPopup ? 
             setInterval(() => {
-                geAllProductSpecials();
+                fetchProductSpecials();
             }, 120000) // 2 minutes
             : null;
     
         return () => {
             if (specialInterval) clearInterval(specialInterval);
         }; 
-    }, [productSpecialsComponent, editProductsPopup]); // Add dependencies
+    }, [productSpecialsComponent, editProductsPopup, fetchProductSpecials]); // Add dependencies
 
 
     if (loadingData) {

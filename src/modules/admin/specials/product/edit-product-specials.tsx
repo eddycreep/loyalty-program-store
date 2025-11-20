@@ -2,7 +2,7 @@
 
 import { format } from "date-fns";
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { X, Search, Check, PlusCircle } from 'lucide-react';
@@ -16,6 +16,12 @@ import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductDesc
 import { Special, SaveSpecial, SpecialItems, SpecialInfo, SpecialInfoRes, UpdateSpecialItems } from '@/modules/types/special/product/data-types'
 import { useSession } from '@/context';
 import { ProductSpecialsProps } from "./product-specials";
+import { getOrganisations } from "@/components/data/organisation/get-organisations-data";
+import { Organisation } from "@/modules/types/organisation/organisation-types";
+import { Branch } from "@/modules/types/branch/branches-types";
+import { getBranches } from "@/components/data/branch/get-branches-data";
+import { getInventory } from "@/components/data/inventory/get-inventory";
+import { Item } from "@/modules/types/products/product-types";
 //import { CombinedSpecial } from "./add-product-specials";
 
 
@@ -51,6 +57,8 @@ type CombinedSpecial = {
     loyalty_tier: string
     age_group: string
     isActive: boolean
+    organisation: string
+    branch: string
     product: SpecialProduct | null
 }
 
@@ -69,34 +77,45 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
         loyalty_tier: '',
         age_group: '',
         isActive: false,
+        organisation: '',
+        branch: '',
         product: null
     })
     const [searchTerm, setSearchTerm] = useState('')
     const [specialID, setSpecialID] = useState<SpecialInfoRes>([])
 
-    const [allProducts, setAllProducts] = useState<Products[]>([])
+    const [allProducts, setAllProducts] = useState<Item[]>([])
     const [allStores, setAllStores] = useState<StoresResponse>([]);
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([]);
 
+    //organisations x branches
+    const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
+    const [branches, setBranches] = useState<Branch[] | null>(null);
+
     // First filter products based on search term
     const searchProducts = allProducts.filter(product =>
-        product.inventory.description_1.toLowerCase().includes(searchTerm.toLowerCase())
+        product?.description_1 && 
+        product.description_1.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     // Then limit to first 3 matches
     const displayedProducts = searchProducts.slice(0, 3);
+    console.log("selected special: ", selectedSpecial)
 
-    const fetchProducts = async () => {
+    const fetchInventory = useCallback(async () => {
+        // setLoadingData(true);
+
         try {
-            const url = `inventory/get-products`;
-            const response = await axios.get<ProductsResponse>(`${apiEndPoint}/${url}`);
-            setAllProducts(response?.data.results || []);
-
+            const inventory = await getInventory(user)
+            setAllProducts(inventory)
+            console.log("inventory returned: ", inventory)
+            setAllProducts(inventory);
         } catch (error) {
-            console.error('error fetching products: ', error);
+            console.error('Error fetching inventory:', error)
+            setAllProducts([]);
         }
-    };
+    }, [user])
 
     const getStores = async () => {
         try {
@@ -127,13 +146,33 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
             console.error('Error RETURNING AGE_GROUPS:', error)
         }
     }
+
+    const getAllOrganisations = async () => {
+        try {
+            const orgData = await getOrganisations()
+            setOrganisations(orgData)
+            console.log("all organisations returned bro: ", orgData)
+        } catch (error) {
+            console.error('error fetching all organisations bro:', error)
+        }
+    }
+
+    const getAllBranches = useCallback(async () => {
+        try {
+            const branchesData = await getBranches(user)
+            setBranches(branchesData)
+            console.log("all branches returned bro: ", branchesData)
+        } catch (error) {
+            console.error('error fetching all branches bro:', error)
+        }
+    }, [user])
     
-    const addProductToSpecial = (product: Products) => {
+    const addProductToSpecial = (product: Item) => {
         setCurrentSpecial(prev => ({
             ...prev,
             product: {
                 id: product.id.toString(),
-                name: product.inventory.description_1,
+                name: product?.description_1 || '',
                 price: product.selling_incl_1,
                 item_code: product.item_code
             }
@@ -160,7 +199,15 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                 return `${dateStr} 00:00:00`;
             };
 
-            const payload = {
+            // Only include organisationId and branchId if they are valid numbers (not "All" or empty)
+            const organisationId = currentSpecial.organisation && currentSpecial.organisation !== 'All' 
+                ? parseInt(currentSpecial.organisation) 
+                : undefined;
+            const branchId = currentSpecial.branch && currentSpecial.branch !== 'All' 
+                ? parseInt(currentSpecial.branch) 
+                : undefined;
+
+            const payload: any = {
                 special_name: currentSpecial.special_name,
                 special: currentSpecial.special,
                 description: currentSpecial.description,
@@ -173,6 +220,14 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                 loyalty_tier: currentSpecial.loyalty_tier,
                 age_group: currentSpecial.age_group,
                 isActive: currentSpecial.isActive,
+            };
+
+            // Only add organisationId and branchId if they are valid numbers
+            if (organisationId && !isNaN(organisationId)) {
+                payload.organisationId = organisationId;
+            }
+            if (branchId && !isNaN(branchId)) {
+                payload.branchId = branchId;
             }
 
             const url = `specials/update-special/${selectedSpecial?.special_id}`
@@ -197,6 +252,7 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
             })
         }
     }
+    
     //     try {
     //         const url = `specials/get-special-info/${currentSpecial.special_name}`;
     //         const response = await axios.get<SpecialInfoRes>(`${apiEndPoint}/${url}`);
@@ -231,6 +287,7 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
     const updateSpecialItems = async () => {
         try {
             const payload = {
+                item_code: currentSpecial.product?.item_code,
                 product_description: currentSpecial.product?.name,
             }
 
@@ -294,11 +351,13 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
     };
 
     useEffect(() => {
-        fetchProducts();
+        fetchInventory();
         getStores();
         getLoyaltyTiers();
         getAgeGroups();
-    }, []);
+        getAllOrganisations();
+        getAllBranches();
+    }, [fetchInventory, getAllBranches]);
 
     useEffect(() => {
         if (selectedSpecial) {
@@ -315,10 +374,43 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                 age_group: selectedSpecial.age_group,
                 isActive: selectedSpecial.isActive,
                 special_price: parseFloat(selectedSpecial.special_price),
+                organisation: user?.organisation?.uid?.toString() || '',
+                branch: user?.branch?.uid?.toString() || '',
                 product: null,
             });
         }
-    }, [selectedSpecial]);
+    }, [selectedSpecial, user]);
+
+    // Find and set the product when both selectedSpecial and allProducts are available
+    useEffect(() => {
+        // Check for specialItems (array) - the actual API response structure
+        // The product_description in the API is actually the item_code
+        const specialItems = (selectedSpecial as any)?.specialItems;
+        const productIdentifier = specialItems?.[0]?.product_description || 
+                                  selectedSpecial?.specialItem?.product_description;
+        
+        if (productIdentifier && allProducts.length > 0) {
+            // Find the product that matches by item_code (product_description in API is actually item_code)
+            const matchedProduct = allProducts.find(product => 
+                product?.item_code === productIdentifier
+            );
+
+            if (matchedProduct) {
+                setCurrentSpecial(prev => ({
+                    ...prev,
+                    product: {
+                        id: matchedProduct.id.toString(),
+                        name: matchedProduct.description_1 || '',
+                        price: matchedProduct.selling_incl_1,
+                        item_code: matchedProduct.item_code
+                    }
+                }));
+            } else {
+                console.log('Product not found in inventory by item_code:', productIdentifier);
+                console.log('Available item_codes:', allProducts.map(p => p.item_code));
+            }
+        }
+    }, [selectedSpecial, allProducts]);
 
   return (
     <div className="fixed inset-0 z-50">
@@ -452,6 +544,46 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                             </div>
                         </div>
 
+                        { /* Organisation x Branch */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div>
+                                <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
+                                <Select
+                                    value={currentSpecial.organisation}
+                                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, organisation: value }))}
+                                >
+                                    <SelectTrigger className="w-full mt-1">
+                                        <SelectValue placeholder="Select Organisation" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
+                                        <SelectItem value={user?.organisation?.uid?.toString() || ''} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                            {user?.organisation?.name || 'User Organisation'}
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div>
+                                <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
+                                <Select
+                                    value={currentSpecial.branch}
+                                    onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, branch: value }))}
+                                >
+                                    <SelectTrigger className="w-full mt-1">
+                                        <SelectValue placeholder="Select Branch" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
+                                        {branches?.map((branch) => (
+                                            <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                                {branch.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-end">
                             <div>
                                 <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
@@ -524,7 +656,7 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                                     className="justify-start bg-white text-black text-xs sm:text-sm"
                                 >
                                     <PlusCircle className="h-4 w-4 mr-2" />
-                                    <span className="truncate">{product.inventory.description_1}</span>
+                                    <span className="truncate">{product?.description_1 || 'No description'}</span>
                                 </Button>
                             ))}
                         </div>
@@ -533,7 +665,7 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                             <label className="text-black text-xs sm:text-sm">Selected Product</label>
                             {currentSpecial.product && (
                                 <Card className="p-2 flex justify-between items-center mt-1">
-                                    <span className="text-xs sm:text-sm truncate">{currentSpecial.product.name}</span>
+                                    <span className="text-xs sm:text-sm text-black font-bold truncate">{currentSpecial.product.name}</span>
                                     <Button
                                         variant="ghost"
                                         size="icon"

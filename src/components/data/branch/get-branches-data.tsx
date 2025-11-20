@@ -2,10 +2,25 @@ import { apiEndPoint } from '@/utils/colors';
 import { BranchesResponse } from '@/modules/types/branch/branches-types';
 import { apiClient } from "@/utils/api-client";
 
-export const getBranches = async () => {
+interface UserSession {
+    organisation?: {
+        uid: number;
+    };
+}
+
+export const getBranches = async (user?: UserSession | null) => {
     try {
-        const url = `branch/get-branches`;
-        const response = await apiClient.get<BranchesResponse>(`${apiEndPoint}/${url}`)
+        const url = `branch/get-all-branches`;
+        
+        const params = new URLSearchParams();
+        if (user?.organisation?.uid) {
+            params.append('organisationId', user.organisation.uid.toString());
+        }
+        
+        const queryString = params.toString();
+        const fullUrl = queryString ? `${url}?${queryString}` : url;
+        
+        const response = await apiClient.get<BranchesResponse>(`${apiEndPoint}/${fullUrl}`)
         console.log('branches returned my gee: ', response?.data?.data);
 
         return response?.data?.data;

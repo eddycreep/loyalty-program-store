@@ -1,7 +1,4 @@
-import { apiEndPoint } from '@/utils/colors';
 import { apiClient } from "@/utils/api-client";
-import { BranchesResponse } from '@/modules/types/branch/branches-types';
-import { UsersResponse } from '@/modules/types/user/user-types';
 
 interface UserSession {
     organisation?: {
@@ -12,9 +9,9 @@ interface UserSession {
     };
 }
 
-export const getAllUsers = async (user?: UserSession | null) => {
+export const getAllProductSpecials = async (user?: UserSession | null) => {
     try {
-        const url = `user/get-all-users`;
+        const url = `specials/get-all-product-specials`;
 
         const params = new URLSearchParams();
         if (user?.organisation?.uid) {
@@ -27,12 +24,12 @@ export const getAllUsers = async (user?: UserSession | null) => {
         const queryString = params.toString();
         const fullUrl = queryString ? `${url}?${queryString}` : url;
 
-        const response = await apiClient.get<UsersResponse>(fullUrl)
-        console.log('users returned my gee: ', response?.data?.data);
+        const response = await apiClient.get<any>(fullUrl)
+        console.log('product-specials returned my gee: ', response?.data);
 
-        return response?.data?.data;
+        return response?.data;
     } catch (error) {
-        console.error('Error fetching users: ', error);
+        console.error('Error fetching all product-specials:', error);
         return null;
     }
 };
