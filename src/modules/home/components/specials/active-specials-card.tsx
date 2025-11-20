@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,6 +9,8 @@ import { PercentDiamond, Coins, Coffee, BadgeCheck, BadgeInfo, AlertTriangle, Us
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { apiClient } from '@/utils/api-client';
+import { getActiveSpecials } from '@/components/data/specials/get-active-specials';
+import { useSession } from '@/context';
 
 interface SpecialProps {
     uid: number,
@@ -32,23 +34,21 @@ type SpecialResponse = {
 
 
 export const ActiveSpecialCards = () => {
+    const { user } = useSession()
     const [activeSpecials, setActiveSpecials] = useState<SpecialProps[]>([]);
 
     const [activeSpecialsLoading, setActiveSpecialsLoading] = useState(false);
     const [activeSpecialsErrors, setActiveSpecialsErrors] = useState(false);
 
 
-    const getActiveSpecials = async () => {
+    const fetchActiveSpecials = useCallback(async () => {
         setActiveSpecialsLoading(true);
         //http://localhost:4400/specials/get-all-active-specials
     
         try {
-            const url = `specials/get-all-active-specials`
-            // const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-
-            setActiveSpecials(response?.data.results || []);
-            console.log('Active Specials: ', response.data);
+            const activeSpecials = await getActiveSpecials(user)
+            setActiveSpecials(activeSpecials || []);
+            console.log('Active Specials: ', activeSpecials);
     
         } catch (error) {
             console.log("An error occurred when fetching the active specials");
@@ -56,7 +56,7 @@ export const ActiveSpecialCards = () => {
         }
     
         setActiveSpecialsLoading(false);
-    }
+    }, [user]);
 
     const getSpecialTypeIcon = (special_value: string) => {
         switch (special_value) {
@@ -72,16 +72,16 @@ export const ActiveSpecialCards = () => {
     };
 
     useEffect(() => {
-        getActiveSpecials();
+        fetchActiveSpecials();
 
         // Set up an interval to fetch data every 5 minutes
         const interval = setInterval(() => {
-            getActiveSpecials();
+            fetchActiveSpecials();
         }, 300000); // 300,000 ms = 5 minutes || 60000 = 1 minute
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
-    }, []);
+    }, [fetchActiveSpecials]);
 
     if (activeSpecialsLoading) {
         return (

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,6 +9,8 @@ import { PercentDiamond, Coins, Coffee, BadgeCheck, BadgeInfo, AlertTriangle, Us
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { apiClient } from '@/utils/api-client';
+import { useSession } from '@/context';
+import { getUpcomingRewards } from '@/components/data/rewards/get-upcoming-rewards';
 
 interface RewardProps {
     reward_id: number,
@@ -34,22 +36,20 @@ interface RewardsResponse {
 }
 
 export const UpcomingRewardsCards = () => {
+    const { user } = useSession();
     const [upcomingRewards, setUpcomingRewards] = useState<RewardProps[]>([]);
 
     const [loadingRewards, setLoadingRewards] = useState(false);
     const [rewardError, setRewardError] = useState(false);
 
 
-    const getUpcomingRewards = async () => {
+    const fetchUpcomingRewards = useCallback(async () => {
         setLoadingRewards(true);
 
         try {
-            const url = `rewards/get-upcoming-rewards`
-            // const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-
-            setUpcomingRewards(response.data.results);
-            console.log('Upcoming Rewards: ', response.data);
+            const upcomingRewards = await getUpcomingRewards(user)
+            setUpcomingRewards(upcomingRewards || []);
+            console.log('Upcoming Rewards: ', upcomingRewards);
     
         } catch (error) {
             console.log("An error occurred when fetching the Upcoming rewards");
@@ -57,7 +57,7 @@ export const UpcomingRewardsCards = () => {
         }
     
         setLoadingRewards(false);
-    }
+    }, [user]);
 
     const getSpecialTypeIcon = (special_value: string) => {
         switch (special_value) {
@@ -73,14 +73,14 @@ export const UpcomingRewardsCards = () => {
     };
 
     useEffect(() => {
-        getUpcomingRewards();
+        fetchUpcomingRewards();
 
         const interval = setInterval(() => {
-            getUpcomingRewards();
+            fetchUpcomingRewards();
         }, 300000); 
 
         return () => clearInterval(interval);
-    }, []);
+    }, [fetchUpcomingRewards]);
 
 
     if (loadingRewards) {

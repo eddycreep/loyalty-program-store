@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,6 +12,8 @@ import { BlueLoader } from "@/lib/blueLoader"
 import MultiColorLoader from "@/lib/loaders"
 import ThreeDotsLoader from "@/lib/three-dots-loader"
 import { apiClient } from '@/utils/api-client';
+import { getUpcomingSpecials } from '@/components/data/specials/get-upcoming-specials';
+import { useSession } from '@/context';
 
 interface SpecialProps {
     uid: number,
@@ -35,23 +37,20 @@ type SpecialResponse = {
 
 // SpecialCard component to display individual special information
 export const UpcomingSpecialCards = () => {
+    const { user } = useSession()
     const [upcomingSpecials, setUpcomingSpecials] = useState<SpecialProps[]>([])
 
     const [upcomingSpecialsLoading, setUpcomingSpecialsLoading] = useState(false);
     const [upcomingSpecialsErrors, setUpcomingSpecialsErrors] = useState(false);
 
 
-    const getUpcomingSpecials = async () => {
+    const fetchUpcomingSpecials = useCallback(async () => {
         setUpcomingSpecialsLoading(true);
-        //http://localhost:4400/specials/get-all-upcoming-specials
     
         try {
-            const url = `specials/get-all-upcoming-specials`
-            // const response = await axios.get<SpecialResponse>(`${apiEndPoint}/${url}`);
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-
-            setUpcomingSpecials(response?.data.results || []);
-            console.log('Upcoming Specials: ', response.data);
+            const upcomingSpecials = await getUpcomingSpecials(user)
+            setUpcomingSpecials(upcomingSpecials || []);
+            console.log('Upcoming Specials: ', upcomingSpecials);
     
         } catch (error) {
             console.log("An error occurred when fetching the upcoming specials");
@@ -59,7 +58,7 @@ export const UpcomingSpecialCards = () => {
         }
     
             setUpcomingSpecialsLoading(false);
-    }
+    }, [user]);
 
     const getSpecialTypeIcon = (special_value: string) => {
         switch (special_value) {
@@ -75,16 +74,16 @@ export const UpcomingSpecialCards = () => {
     };
 
     useEffect(() => {
-        getUpcomingSpecials();
+        fetchUpcomingSpecials();
 
         // Set up an interval to fetch data every 5 minutes
         const interval = setInterval(() => {
-            getUpcomingSpecials();
+            fetchUpcomingSpecials();
         }, 300000); // 300,000 ms = 5 minutes || 60000 = 1 minute
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
-    }, []);
+    }, [fetchUpcomingSpecials]);
 
     if (upcomingSpecialsLoading) {
         return (

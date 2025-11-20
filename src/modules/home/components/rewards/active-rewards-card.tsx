@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,6 +9,8 @@ import { PercentDiamond, Coins, Coffee, BadgeCheck, BadgeInfo, AlertTriangle, Us
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { apiClient } from '@/utils/api-client';
+import { getActiveRewards } from '@/components/data/rewards/get-active-rewards';
+import { useSession } from '@/context';
 
 interface RewardProps {
     reward_id: number,
@@ -35,22 +37,21 @@ interface RewardsResponse {
 }
 
 export const ActiveRewardsCards = () => {
+    const { user } = useSession();
     const [rewards, setRewards] = useState<RewardProps[]>([]);
 
     const [loadingRewards, setLoadingRewards] = useState(false);
     const [rewardError, setRewardError] = useState(false);
 
 
-    const getActiveRewards = async () => {
+    const fetchActiveRewards = useCallback(async () => {
         setLoadingRewards(true);
     
         try {
-            const url = `rewards/get-active-rewards`
+            const activeRewards = await getActiveRewards(user)
             // const response = await axios.get<RewardsResponse>(`${apiEndPoint}/${url}`);
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-
-            setRewards(response.data.results);
-            console.log('Active Rewards: ', response.data);
+            setRewards(activeRewards || []);
+            console.log('Active Rewards: ', activeRewards);
     
         } catch (error) {
             console.log("An error occurred when fetching the active rewards");
@@ -58,7 +59,7 @@ export const ActiveRewardsCards = () => {
         }
     
         setLoadingRewards(false);
-    }
+    }, [user]);
 
     const getSpecialTypeIcon = (special_value: string) => {
         switch (special_value) {
@@ -74,16 +75,16 @@ export const ActiveRewardsCards = () => {
     };
 
     useEffect(() => {
-        getActiveRewards();
+        fetchActiveRewards();
 
         // Set up an interval to fetch data every 5 minutes
         const interval = setInterval(() => {
-            getActiveRewards();
+            fetchActiveRewards();
         }, 300000); // 300,000 ms = 5 minutes || 60000 = 1 minute
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
-    }, []);
+    }, [fetchActiveRewards]);
 
     if (loadingRewards) {
         return (

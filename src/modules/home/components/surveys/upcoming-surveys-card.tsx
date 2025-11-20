@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,6 +8,8 @@ import { BadgeCheck, BadgeInfo, AlertTriangle, Users, ScrollText, Store, UserRou
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { apiClient } from '@/utils/api-client';
+import { getUpcomingSurveys } from '@/components/data/survey/get-upcoming-surveys';
+import { useSession } from '@/context';
 
 interface SurveyProps {
     survey_id: number,
@@ -30,22 +32,20 @@ interface SurveyResponse {
 
 
 export const UpcomingSurveyCards = () => {
+    const { user } = useSession();
     const [upcomingSurveys, setUpcomingSurveys] = useState<SurveyProps[]>([]);
 
     const [upcomingSurveysLoading, setUpcomingSurveysLoading] = useState(false);
     const [upcomingSurveysErrors, setUpcomingSurveysErrors] = useState(false);
 
 
-    const getUpcomingSurveys = async () => {
+    const fetchUpcomingSurveys = useCallback(async () => {
         setUpcomingSurveysLoading(true);
 
         try {
-            const url = `survey/get-upcoming-surveys`
-            // const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-
-            setUpcomingSurveys(response.data.results);
-            console.log('Upcoming Surveys: ', response.data);
+            const upcomingSurveys = await getUpcomingSurveys(user)
+            setUpcomingSurveys(upcomingSurveys || []);
+            console.log('Upcoming Surveys: ', upcomingSurveys);
     
         } catch (error) {
             console.log("An error occurred when fetching the upcoming Surveys");
@@ -53,7 +53,7 @@ export const UpcomingSurveyCards = () => {
         }
     
             setUpcomingSurveysLoading(false);
-    }
+    }, [user]);
 
     const getSurveyCategoryIcon = (survey_category: string) => {
         switch (survey_category) {
@@ -69,16 +69,16 @@ export const UpcomingSurveyCards = () => {
     };
 
     useEffect(() => {
-        getUpcomingSurveys();
+        fetchUpcomingSurveys();
 
         // Set up an interval to fetch data every 5 minutes
         const interval = setInterval(() => {
-            getUpcomingSurveys();
+            fetchUpcomingSurveys();
         }, 300000); // 300,000 ms = 5 minutes || 60000 = 1 minute
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
-    }, []);
+    }, [fetchUpcomingSurveys]);
 
     if (upcomingSurveysLoading) {
         return (
