@@ -5,7 +5,6 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import { ShoppingBasket, ShoppingBag, Crown, WalletCards, ChefHat, Coins, Star, Globe, Heart, Bell, Sun, Moon, Cloud, Umbrella, Snowflake, Flame, Anchor, Camera, Music, XOctagon, ShieldAlert } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card"
-import "../../../styles/loyalty-program-tiers.css";
 import { apiEndPoint, colors } from '@/utils/colors'
 import { Edit, Trash2 } from "lucide-react";
 import { DeleteAlternativeRewardConfirmation } from "@/components/component/delete-alternative-reward-confirmation";
