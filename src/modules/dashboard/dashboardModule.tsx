@@ -366,13 +366,13 @@ export const DashboardModule = () => {
                             <CardDescription>Estimated total revenue per customer segment</CardDescription>
                             </CardHeader>
                             <CardContent>
-                            <ChartContainer config={{ value: { label: "LTV", color: "hsl(var(--chart-8))" } }} className="h-[300px] w-[800px]">
+                            <ChartContainer config={{ value: { label: "LTV", color: "hsl(var(--chart-1))" } }} className="h-[300px]">
                                 <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={ltv}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="segment" />
                                     <YAxis />
-                                    <ChartTooltip  content={<ChartTooltipContent />} />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
                                     <Bar dataKey="value" fill="var(--color-value)" />
                                 </BarChart>
                                 </ResponsiveContainer>
@@ -385,7 +385,7 @@ export const DashboardModule = () => {
                             <CardDescription>Comparison of costs and revenue generated</CardDescription>
                             </CardHeader>
                             <CardContent>
-                            <ChartContainer config={{ cost: { label: "Cost", color: "hsl(var(--chart-9))" }, revenue: { label: "Revenue", color: "hsl(var(--chart-10))" } }} className="h-[300px]">
+                            <ChartContainer config={{ cost: { label: "Cost", color: "hsl(var(--chart-3))" }, revenue: { label: "Revenue", color: "hsl(var(--chart-1))" } }} className="h-[300px]">
                                 <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={costVsRevenue}>
                                     <CartesianGrid strokeDasharray="3 3" />
@@ -442,7 +442,7 @@ export const DashboardModule = () => {
                                 <CardDescription>Average time for new members to redeem first reward</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-13))" } }} className="h-[300px] w-[800px]">
+                                <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-2))" } }} className="h-[300px]">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <BarChart data={timeToFirstRedemption}>
                                         <CartesianGrid strokeDasharray="3 3" />
@@ -461,7 +461,7 @@ export const DashboardModule = () => {
                             <CardDescription>How often members redeem rewards</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-14))" } }} className="h-[300px]">
+                            <ChartContainer config={{ count: { label: "Count", color: "hsl(var(--chart-3))" } }} className="h-[300px]">
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={redemptionFrequency}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -480,6 +480,7 @@ export const DashboardModule = () => {
                             <CardDescription>Total number of points earned but not redeemed</CardDescription>
                         </CardHeader>
                         <CardContent className="flex items-center justify-center">
+                            <ChartContainer config={{ liability: { label: "Liability", color: "hsl(var(--chart-4))" } }} className="h-[300px]">
                             <div className="relative w-48 h-48">
                                 <svg className="w-full h-full" viewBox="0 0 100 100">
                                     <circle
@@ -492,11 +493,10 @@ export const DashboardModule = () => {
                                         cy="50"
                                     />
                                     <circle
-                                        className="text-primary"
+                                        style={{ stroke: "hsl(var(--chart-4))" }}
                                         strokeWidth="10"
                                         strokeDasharray={`${unusedPointsLiability * 2.83} 283`}
                                         strokeLinecap="round"
-                                        stroke="currentColor"
                                         fill="transparent"
                                         r="45"
                                         cx="50"
@@ -504,9 +504,10 @@ export const DashboardModule = () => {
                                     />
                                 </svg>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-black text-2xl font-bold">{unusedPointsLiability}%</span>
+                                    <span className="text-foreground text-2xl font-bold">{unusedPointsLiability}%</span>
                                 </div>
                             </div>
+                            </ChartContainer>
                         </CardContent>
                         </Card>
                     </div>
@@ -530,15 +531,17 @@ export const DashboardModule = () => {
                         <CardDescription>Satisfaction scores from surveys</CardDescription>
                         </CardHeader>
                         <CardContent>
-                        <ResponsiveContainer width="100%" height={300}>
+                        <ChartContainer config={{ score: { label: "CSAT Score", color: "hsl(var(--chart-1))" } }} className="h-[300px]">
+                        <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={csatScores}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="month" />
                             <YAxis domain={[0, 5]} />
-                            <Tooltip /> {/* Recharts' built-in Tooltip */}
-                            <Line type="monotone" dataKey="score" stroke="#8884d8" /> {/* Static color for testing */}
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Line type="monotone" dataKey="score" stroke="var(--color-score)" strokeWidth={2} />
                             </LineChart>
                         </ResponsiveContainer>
+                        </ChartContainer>
                         </CardContent>
                     </Card>
 
@@ -548,33 +551,37 @@ export const DashboardModule = () => {
                         <CardDescription>Likelihood of members recommending the program</CardDescription>
                         </CardHeader>
                         <CardContent>
-                        <ResponsiveContainer width="100%" height={300}>
+                        <ChartContainer config={{ score: { label: "NPS Score", color: "hsl(var(--chart-2))" } }} className="h-[300px]">
+                        <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={npsScores}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="month" />
                             <YAxis domain={[-100, 100]} />
-                            <Tooltip />  {/* Built-in Recharts Tooltip */}
-                            <Line type="monotone" dataKey="score" stroke="#8884d8" />  {/* Test with static color */}
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Line type="monotone" dataKey="score" stroke="var(--color-score)" strokeWidth={2} />
                             </LineChart>
                         </ResponsiveContainer>
+                        </ChartContainer>
                         </CardContent>
                     </Card>
                         <Card>
-                        <CardHeader>
-                            <CardTitle>Average Spend per Transaction</CardTitle>
-                            <CardDescription>By customer segment</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={300}>
+                            <CardHeader>
+                                <CardTitle>Average Spend per Transaction</CardTitle>
+                                <CardDescription>By customer segment</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                            <ChartContainer config={{ spend: { label: "Spend", color: "hsl(var(--chart-1))" } }} className="h-[300px]">
+                            <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={averageSpend}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="segment" />
                                 <YAxis />
-                                <Tooltip />
+                                <ChartTooltip content={<ChartTooltipContent />} />
                                 <Legend />
-                                <Bar dataKey="spend" fill="hsl(var(--chart-10))" />
+                                <Bar dataKey="spend" fill="var(--color-spend)" />
                             </BarChart>
                             </ResponsiveContainer>
+                            </ChartContainer>
                         </CardContent>
                         </Card>
                         <Card>
@@ -583,7 +590,7 @@ export const DashboardModule = () => {
                             <CardDescription>Success rate of additional product purchases</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <ChartContainer config={{ crossSell: { label: "Cross-Sell", color: "hsl(var(--chart-18))" }, upSell: { label: "Up-Sell", color: "hsl(var(--chart-19))" } }} className="h-[300px] w-[800px]">
+                            <ChartContainer config={{ crossSell: { label: "Cross-Sell", color: "hsl(var(--chart-1))" }, upSell: { label: "Up-Sell", color: "hsl(var(--chart-2))" } }} className="h-[300px]">
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={crossSellUpsellRate}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -615,7 +622,11 @@ export const DashboardModule = () => {
                                 <CardDescription>Distribution of rewards across membership tiers</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ResponsiveContainer width="100%" height={300}>
+                                <ChartContainer config={{ 
+                                    rewards: { label: "Number of Redemptions", color: "hsl(var(--chart-5))" },
+                                    avgValue: { label: "Avg. Value", color: "hsl(var(--chart-6))" }
+                                }} className="h-[300px]">
+                                <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={[
                                     // { tier: 'Bronze', rewards: 150, avgValue: 25 },
                                     { tier: 'Gold', rewards: 280, avgValue: 40 },
@@ -626,12 +637,13 @@ export const DashboardModule = () => {
                                     <XAxis dataKey="tier" />
                                     <YAxis yAxisId="left" />
                                     <YAxis yAxisId="right" orientation="right" />
-                                    <Tooltip />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
                                     <Legend />
                                     <Bar yAxisId="left" dataKey="rewards" fill="var(--color-rewards)" name="Number of Redemptions" />
-                                    <Line yAxisId="right" type="monotone" dataKey="avgValue" stroke="var(--color-value)" name="Avg. Value" />
+                                    <Line yAxisId="right" type="monotone" dataKey="avgValue" stroke="var(--color-avgValue)" name="Avg. Value" />
                                 </BarChart>
                                 </ResponsiveContainer>
+                                </ChartContainer>
                             </CardContent>
                             </Card>
 
@@ -641,7 +653,8 @@ export const DashboardModule = () => {
                                 <CardDescription>Composite score based on program participation</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ResponsiveContainer width="100%" height={300}>
+                                <ChartContainer config={{ score: { label: "Engagement Score", color: "hsl(var(--chart-1))" } }} className="h-[300px]">
+                                <ResponsiveContainer width="100%" height="100%">
                                 <LineChart data={[
                                     { month: 'Jan', score: 72 },
                                     { month: 'Feb', score: 75 },
@@ -653,10 +666,11 @@ export const DashboardModule = () => {
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="month" />
                                     <YAxis domain={[0, 100]} />
-                                    <Tooltip />
-                                    <Line type="monotone" dataKey="score" stroke="var(--color-score)" />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                    <Line type="monotone" dataKey="score" stroke="var(--color-score)" strokeWidth={2} />
                                 </LineChart>
                                 </ResponsiveContainer>
+                                </ChartContainer>
                             </CardContent>
                             </Card>
 
@@ -687,7 +701,7 @@ export const DashboardModule = () => {
                                 <CardDescription>Percentage of non-members joining the loyalty program</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ChartContainer config={{ value: { label: "Conversion", color: "hsl(var(--chart-20))" } }} className="h-[300px] w-[800px]">
+                                <ChartContainer config={{ value: { label: "Conversion", color: "hsl(var(--chart-2))" } }} className="h-[300px]">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart data={memberConversionRate}>
                                     <CartesianGrid strokeDasharray="3 3" />
@@ -707,7 +721,10 @@ export const DashboardModule = () => {
                                 <CardDescription>Effectiveness of special promotions on sales</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ChartContainer config={{ sales: { label: "Sales", color: "hsl(var(--chart-22))" } }} className="h-[300px]">
+                                <ChartContainer config={{ 
+                                    sales: { label: "Sales", color: "hsl(var(--chart-1))" },
+                                    promotion: { label: "Promotion", color: "hsl(var(--chart-3))" }
+                                }} className="h-[300px]">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={promotionalImpact}>
                                     <CartesianGrid strokeDasharray="3 3" />

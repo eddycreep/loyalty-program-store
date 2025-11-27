@@ -258,14 +258,14 @@ export const ProductSpecials = () => {
                             ))}
                         </div>
 
-                        {productSpecials?.map(({ special_id, special_name, special, special_price, special_type, store_id, start_date, expiry_date, special_value, isActive, specialItem }) => (
+                        {productSpecials?.map(({ special_id, special_name, special, special_price, special_type, store_id, start_date, expiry_date, special_value, isActive, specialItem, specialItems }) => (
                             <div key={special_id} className="pt-2 max-h-[350px] pb-1 space-y-2">
                                 <div className="bg-white text-gray-600 flex flex-col p-2 mx-2 rounded shadow-md">
                                     <div className="flex items-center justify-between">
                                         <p className="text-sm flex-1 text-center text-purple">{special_id}</p>
                                         <p className="text-sm flex-1 text-center">{special_name || '--:--'}</p>
                                         <p className="text-sm flex-1 text-center">{special || '--:--'}</p>
-                                        <p className="text-sm flex-1 text-center">{specialItem?.product_description || '--:--'}</p>
+                                        <p className="text-sm flex-1 text-center">{specialItems?.map((item) => item.product_description).join(', ') || '--:--'}</p>
                                         <p className="text-sm flex-1 text-center">R{special_price || '--:--'}</p>
                                         <p className="text-sm flex-1 text-center">{special_value || '--:--'}</p>
                                         <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
