@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from '@/context';
 import { format } from "date-fns";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
@@ -262,7 +262,7 @@ export function AddReview({ onClose }: any) {
                     </div>
                     <div>
                       <label htmlFor="reward-type" className="text-black text-xs sm:text-sm">Type</label>
-                      <Select
+                      {/* <Select
                         value={currentReview.reward_type}
                         onValueChange={(value) => setCurrentReview(prev => ({ ...prev, reward_type: value }))}
                       >
@@ -274,7 +274,18 @@ export function AddReview({ onClose }: any) {
                           <SelectItem value="Percentage">Percentage</SelectItem>
                           <SelectItem value="Amount">Amount</SelectItem>
                         </SelectContent>
-                      </Select>
+                      </Select> */}
+                      <select
+                        id="reward-type"
+                        value={currentReview.reward_type}
+                        onChange={(e) => setCurrentReview(prev => ({ ...prev, reward_type: e.target.value }))}
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                      >
+                        <option value="">Select type</option>
+                        <option value="All">All</option>
+                        <option value="Percentage">Percentage</option>
+                        <option value="Amount">Amount</option>
+                      </select>
                     </div>
                   </div>
     
@@ -282,7 +293,7 @@ export function AddReview({ onClose }: any) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <label htmlFor="loyalty-tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
-                      <Select
+                      {/* <Select
                         value={currentReview.loyalty_tier}
                         onValueChange={(value) => setCurrentReview(prev => ({ ...prev, loyalty_tier: value }))}
                       >
@@ -297,7 +308,21 @@ export function AddReview({ onClose }: any) {
                             </SelectItem>
                           ))}
                         </SelectContent>
-                      </Select>
+                      </Select> */}
+                      <select
+                        id="loyalty-tier"
+                        value={currentReview.loyalty_tier}
+                        onChange={(e) => setCurrentReview(prev => ({ ...prev, loyalty_tier: e.target.value }))}
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                      >
+                        <option value="">Select tier</option>
+                        <option value="All">All</option>
+                        {loyaltyTiers.map((loyalty) => (
+                          <option key={loyalty.tier_id} value={loyalty.tier}>
+                            {loyalty.tier}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label htmlFor="reward-price" className="text-black text-xs sm:text-sm">Price</label>
@@ -338,7 +363,7 @@ export function AddReview({ onClose }: any) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
-                      <Select
+                      {/* <Select
                         value={currentReview.store_id}
                         onValueChange={(value) => setCurrentReview(prev => ({ ...prev, store_id: value }))}
                       >
@@ -353,11 +378,25 @@ export function AddReview({ onClose }: any) {
                             </SelectItem>
                           ))}
                         </SelectContent>
-                      </Select>
+                      </Select> */}
+                      <select
+                        id="store-id"
+                        value={currentReview.store_id}
+                        onChange={(e) => setCurrentReview(prev => ({ ...prev, store_id: e.target.value }))}
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                      >
+                        <option value="">Select store</option>
+                        <option value="All">All</option>
+                        {allStores.map((branch) => (
+                          <option key={branch.id} value={branch.code}>
+                            {branch.code}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label htmlFor="age-group" className="text-black text-xs sm:text-sm">Age Group</label>
-                      <Select
+                      {/* <Select
                         value={currentReview.age_group}
                         onValueChange={(value) => setCurrentReview(prev => ({ ...prev, age_group: value }))}
                       >
@@ -372,7 +411,21 @@ export function AddReview({ onClose }: any) {
                             </SelectItem>
                           ))}
                         </SelectContent>
-                      </Select>
+                      </Select> */}
+                      <select
+                        id="age-group"
+                        value={currentReview.age_group}
+                        onChange={(e) => setCurrentReview(prev => ({ ...prev, age_group: e.target.value }))}
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                      >
+                        <option value="">Select age group</option>
+                        <option value="All">All</option>
+                        {ageGroups.map((age) => (
+                          <option key={age.age_group_id} value={age.age_range}>
+                            {age.group_name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 
@@ -380,7 +433,7 @@ export function AddReview({ onClose }: any) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                        <Select
+                        {/* <Select
                           value={currentReview.organisation === 0 ? "All" : currentReview.organisation.toString()}
                           onValueChange={(value: string) => setCurrentReview(prev => ({ ...prev, organisation: value === "All" ? 0 : Number(value) }))}
                         >
@@ -390,16 +443,27 @@ export function AddReview({ onClose }: any) {
                           <SelectContent>
                               <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
                                 {/* {organisations?.map((org) => ( */}
-                                    <SelectItem  value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                                    {/* <SelectItem  value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                         {userOrganisation}
-                                    </SelectItem>
+                                    </SelectItem> */}
                                 {/* // ))} */}
-                          </SelectContent>
-                                    </Select>
+                          {/* </SelectContent>
+                                    </Select> */}
+                        <select
+                          id="organisation"
+                          value={currentReview.organisation === 0 ? "All" : currentReview.organisation.toString()}
+                          onChange={(e) => setCurrentReview(prev => ({ ...prev, organisation: e.target.value === "All" ? 0 : Number(e.target.value) }))}
+                          className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                        >
+                          <option value="All">All</option>
+                          <option value={userOrganisationUid.toString()}>
+                            {userOrganisation}
+                          </option>
+                        </select>
                                 </div>
                                 <div>
                                     <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentReview.branch === 0 ? "All" : currentReview.branch.toString()}
                                         onValueChange={(value: string) => setCurrentReview(prev => ({ ...prev, branch: value === "All" ? 0 : Number(value) }))}
                                     >
@@ -414,15 +478,28 @@ export function AddReview({ onClose }: any) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                      id="branch"
+                                      value={currentReview.branch === 0 ? "All" : currentReview.branch.toString()}
+                                      onChange={(e) => setCurrentReview(prev => ({ ...prev, branch: e.target.value === "All" ? 0 : Number(e.target.value) }))}
+                                      className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                      <option value="All">All</option>
+                                      {branches?.map((branch) => (
+                                        <option key={branch.uid} value={branch.uid.toString()}>
+                                          {branch.name}
+                                        </option>
+                                      ))}
+                                    </select>
                                 </div>
                   </div>
 
                   {/* review category x active */}
                   <div className="flex space-x-2 mt-1">
                         <div className="flex flex-col w-full">
-                            <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Review Category</label>
-                            <Select
+                            <label htmlFor="review-category" className="text-black text-xs sm:text-sm">Review Category</label>
+                            {/* <Select
                                 value={currentReview.review_category}
                                 onValueChange={(value) => setCurrentReview(prev => ({ ...prev, review_category: value }))}
                             >
@@ -434,7 +511,18 @@ export function AddReview({ onClose }: any) {
                                     <SelectItem value="Store">Store</SelectItem>
                                     <SelectItem value="Loyalty">Loyalty</SelectItem>
                                 </SelectContent>
-                            </Select>
+                            </Select> */}
+                            <select
+                              id="review-category"
+                              value={currentReview.review_category}
+                              onChange={(e) => setCurrentReview(prev => ({ ...prev, review_category: e.target.value }))}
+                              className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                            >
+                              <option value="">Select category</option>
+                              <option value="Products">Products</option>
+                              <option value="Store">Store</option>
+                              <option value="Loyalty">Loyalty</option>
+                            </select>
                         </div>
                         <div className="flex flex-col items-center space-x-2">
                             <label htmlFor="active-toggle" className="text-black text-xs sm:text-sm">

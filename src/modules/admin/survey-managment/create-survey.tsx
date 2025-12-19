@@ -35,6 +35,7 @@ export const CreateSurveys = () => {
     // store whats selected
     const [selectedOrganisation, setSelectedOrganisation] = useState("");
     const [selectedBranch, setSelectedBranch] = useState("");
+    const [selectedRegion, setSelectedRegion] = useState("");
 
     const [allStores, setAllStores] = useState<StoresResponse>([]);
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([]);
@@ -134,12 +135,6 @@ export const CreateSurveys = () => {
 
     const saveSurvey = async () => {
         try {
-            const selectedstore = allStores.find(store => store.code === selectedStore);
-            const region = selectedstore ? selectedstore.address_4 : ''; 
-
-            console.log('selected store: ', selectedstore);
-            console.log('region: ', region);
-    
             const formatDateTime = (value: string): string => {
                 const [date, time] = value.split('T'); // Split date and time from 'YYYY-MM-DDTHH:mm'
                 return `${date} ${time}:00`; // Append ':00' to match 'HH:mm:ss'
@@ -150,18 +145,18 @@ export const CreateSurveys = () => {
             console.log('startdate: ', formattedStartDate);
             console.log('enddate: ', formattedExpiryDate);
 
-
             const newOrgId = Number(selectedOrganisation);
             const newBrId = Number(selectedBranch);
             console.log('org id: ', newOrgId);
             console.log('br id: ', newBrId);
+            console.log('selected region: ', selectedRegion);
 
             const payload = {
                 survey_title: surveyName,
                 survey_category: surveyCategory,
                 description: description,
                 store_id: selectedStore,
-                region: region,
+                region: selectedRegion || 'All', // Use selected region or default to 'All'
                 loyalty_tier: selectedTier,
                 start_date: formattedStartDate,
                 expiry_date: formattedExpiryDate,
@@ -213,22 +208,29 @@ export const CreateSurveys = () => {
                 question_type: q.action.trim(),
             }));
 
-            // Use a bulk API call instead of looping (if supported by the backend)
+            // Wrap the array in an object to match the DTO structure
+            const payload = {
+                questions: questionPayloads
+            };
+
+            // Save questions and get back saved questions with IDs
             const url = `survey/save-survey-questions`;
-            const response = await apiClient.post(url, questionPayloads)
+            const response = await apiClient.post(url, payload)
+            console.log("saving survey questions successful: ", response.data)
+
+            // Get saved questions with their IDs from response
+            const savedQuestions = response.data?.questions || [];
+            
+            // Now save choices for multiple-choice questions
+            if (savedQuestions.length > 0) {
+                await saveSurveyChoices(surveyData.survey_id, validQuestions, savedQuestions);
+            }
 
             toast.success('Survey Saved Successfully!');
             logUserActivity(surveyData);
-            // if (response.status === 201 || response.status === 200) {
-            //     console.log('Questions saved successfully:', response.data);
-            //     toast.success('Survey Saved Successfully!');
-            //     logUserActivity(surveyData);
-            // } else {
-            //     throw new Error('Failed to save questions');
-            // }
         } catch (error) {
             console.error('Error Saving Survey:', error)
-            toast.error('Survey Not Saved', {
+            toast.error('Survey Questions Not Saved', {
                 icon: <X color={colors.red} size={24} />,
                 duration: 3000,
                 style: {
@@ -236,6 +238,47 @@ export const CreateSurveys = () => {
                     color: 'white', 
                 },
             });
+        }
+    }
+
+    // Save choices for multiple-choice questions
+    const saveSurveyChoices = async (surveyId: number, validQuestions: Question[], savedQuestions: any[]) => {
+        try {
+            const choicesToSave: any[] = [];
+
+            // Map through valid questions and match with saved questions by index
+            validQuestions.forEach((question, index) => {
+                // Only save choices for Multiple Choice questions
+                if (question.action === 'Multiple Choice' && question.options && question.options.length > 0) {
+                    const savedQuestion = savedQuestions[index];
+                    if (savedQuestion && savedQuestion.question_id) {
+                        // Create choice entries for each option
+                        question.options.forEach((optionText, optionIndex) => {
+                            if (optionText && optionText.trim()) {
+                                choicesToSave.push({
+                                    survey_id: surveyId,
+                                    question_id: savedQuestion.question_id,
+                                    option_text: optionText.trim(),
+                                    option_order: optionIndex + 1
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+
+            // Save choices in bulk if there are any
+            if (choicesToSave.length > 0) {
+                const choicesPayload = {
+                    choices: choicesToSave
+                };
+                const url = `survey/save-survey-choices-bulk`;
+                const response = await apiClient.post(url, choicesPayload);
+                console.log("saving survey choices successful: ", response.data);
+            }
+        } catch (error) {
+            console.error('Error Saving Survey Choices:', error);
+            // Don't show error toast here to avoid confusing the user - questions were saved successfully
         }
     }
 
@@ -257,51 +300,27 @@ export const CreateSurveys = () => {
             const response = await apiClient.post(url, payload) // Note: no need for full URL since apiClient has baseURL
             console.log('The Users activity has been logged!', response.data);
 
-            toast.success('Activity Logged Successufully', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-                style: {
-                    backgroundColor: 'black',
-                    color: 'white', 
-                },
-            });
+            // toast.success('Activity Logged Successufully', {
+            //     icon: <Check color={colors.green} size={24} />,
+            //     duration: 3000,
+            //     style: {
+            //         backgroundColor: 'black',
+            //         color: 'white', 
+            //     },
+            // });
         } catch (error) {
             console.error('Error logging surevy activity:', error);
-            toast.error('Activity Not Logged', {
-                icon: <X color={colors.red} size={24} />,
-                duration: 3000,
-                style: {
-                    backgroundColor: 'black',
-                    color: 'white', 
-                },
-            });
+            // toast.error('Activity Not Logged', {
+            //     icon: <X color={colors.red} size={24} />,
+            //     duration: 3000,
+            //     style: {
+            //         backgroundColor: 'black',
+            //         color: 'white', 
+            //     },
+            // });
         }
     };
 
-    // const saveSurveyChoices = async (questionID: number) => {
-    //     try {
-    //         // const payload = {
-    //         //     choice_id: 
-    //         //     question_id
-    //         //     choice_text
-    //         // }
-
-
-    //         const url = `admin/savesurveychoices/${questionID}`
-    //         const response = await axios.post<SurveyResponse>(`${apiEndPoint}/${url}`)
-    //         console.log('The Survey has been saved successfully', response)
-    //         toast.success('Survey Saved Successfully!', {
-    //             icon: <Check color={colors.green} size={24} />,
-    //             duration: 3000,
-    //         });
-    //     } catch (error) {
-    //         console.error('Error saving survey:', error)
-    //         toast.error('Error Saving Survey', {
-    //             icon: <X color={colors.red} size={24} />,
-    //             duration: 3000,
-    //         });
-    //     }
-    // }
 
     useEffect(() => {
         getStores();
@@ -326,7 +345,7 @@ export const CreateSurveys = () => {
                             <Tooltip>
                                 <TooltipTrigger>
                                     <div className="">
-                                        <button onClick={addQuestion} className="bg-gray-400 hover:bg-gray-300 text-white h-9 w-16 rounded flex items-center justify-center">
+                                        <button onClick={addQuestion} className="flex justify-center items-center w-16 h-9 text-white bg-gray-400 rounded hover:bg-gray-300">
                                             <HelpCircle />
                                         </button>
                                     </div>
@@ -340,7 +359,7 @@ export const CreateSurveys = () => {
                             <Tooltip>
                                 <TooltipTrigger>
                                 <div className="">
-                                    <button onClick={ saveSurvey } className="bg-green hover:bg-emerald-300 text-white h-10 w-16 rounded flex items-center justify-center">
+                                    <button onClick={ saveSurvey } className="flex justify-center items-center w-16 h-10 text-white rounded bg-green hover:bg-emerald-300">
                                         <Save />
                                     </button>
                                 </div>
@@ -372,7 +391,7 @@ export const CreateSurveys = () => {
                     <input
                         type="input"
                         placeholder="enter survey title"
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
                         value={surveyName}
                         onChange={(e) => setSurveyName(e.target.value)}
                     />
@@ -382,12 +401,12 @@ export const CreateSurveys = () => {
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Survey Category</label>
                     <select
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
                         onChange={(e) => setSurveyCategory(e.target.value)}
                     >
                         <option value="All">All</option>
                         <option value="Products">Products</option>
-                        <option value="Staff">Staff</option>
+                        <option value="Loyalty">Loyalty</option>
                         <option value="Store">Store</option>
                     </select>
                 </div>
@@ -396,7 +415,7 @@ export const CreateSurveys = () => {
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Store ID</label>
                     <select
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
                         value={selectedStore}
                         onChange={(e) => setSelectedStore(e.target.value)}
                     >
@@ -413,7 +432,7 @@ export const CreateSurveys = () => {
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Loyalty Tiers</label>
                     <select
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
                         value={selectedTier}
                         onChange={(e) => setSelectedTier(e.target.value)}
                     >
@@ -437,7 +456,7 @@ export const CreateSurveys = () => {
                         name="start-date"
                         value={startDate} 
                         onChange={(e) => setStartDate(e.target.value)}
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300">
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300">
                     </input>
                 </div>
 
@@ -449,7 +468,7 @@ export const CreateSurveys = () => {
                         name="expiry-date"
                         value={expiryDate} 
                         onChange={(e) => setExpiryDate(e.target.value)}
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300">
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300">
                     </input>
                 </div>
 
@@ -457,7 +476,7 @@ export const CreateSurveys = () => {
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Organisation</label>
                     <select
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
                         value={selectedOrganisation}
                         onChange={(e) => setSelectedOrganisation(e.target.value)}
                     >
@@ -474,7 +493,7 @@ export const CreateSurveys = () => {
                 <div className="w-[350px] flex flex-col pt-4">
                     <label className="text-black">Branch</label>
                     <select
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
                         value={selectedBranch}
                         onChange={(e) => setSelectedBranch(e.target.value)}
                     >
@@ -496,7 +515,7 @@ export const CreateSurveys = () => {
                     <input
                         type="input"
                         placeholder="enter reward"
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
                         value={reward}
                         onChange={(e) => setReward(e.target.value)}
                     />
@@ -508,10 +527,27 @@ export const CreateSurveys = () => {
                     <input
                         type="input"
                         placeholder="enter description"
-                        className="bg-white text-black w-full h-12 p-2 rounded-lg border border-gray-300"
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
+                </div>
+
+                {/* Region */}
+                <div className="w-[350px] flex flex-col pt-4">
+                    <label className="text-black">Region</label>
+                    <select
+                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                    >
+                        <option value="All">All</option>
+                        {Array.from(new Set(allStores.map(store => store.address_4).filter(Boolean))).map((region) => (
+                            <option key={region} value={region}>
+                                {region}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             </div>
 
@@ -523,13 +559,13 @@ export const CreateSurveys = () => {
                             <input
                                 type="input"
                                 placeholder="Enter your question here..."
-                                className="bg-white text-black w-full p-2 rounded-lg border border-gray-300"
+                                className="p-2 w-full text-black bg-white rounded-lg border border-gray-300"
                                 value={q.question}
                                 onChange={(e) => updateQuestionText(index, e.target.value)}
                             />
                         </div>
                         <div className="pt-12 pl-6 cursor-pointer" onClick={() => removeQuestion(index)}>
-                            <div className="border border-red w-full">
+                            <div className="w-full border border-red">
                                 <X color="red" />
                             </div>
                         </div>
@@ -539,7 +575,7 @@ export const CreateSurveys = () => {
                         <div className="w-[300px] flex flex-col pt-4">
                             <label>Action</label>
                             <select
-                                className="bg-white text-black w-full p-2 rounded-lg border border-gray-300"
+                                className="p-2 w-full text-black bg-white rounded-lg border border-gray-300"
                                 value={q.action}
                                 onChange={(e) => {
                                     const updatedQuestions = [...questions];
@@ -556,14 +592,14 @@ export const CreateSurveys = () => {
                     </div>
 
                     {q.action === "Multiple Choice" && (
-                        <div className="flex pt-4 gap-2">
+                        <div className="flex gap-2 pt-4">
                             {[...Array(3)].map((_, optionIndex) => (
                                 <div key={optionIndex} className="w-[300px] flex flex-col pt-4">
                                     <label>{`Option ${optionIndex + 1}`}</label>
                                     <input
                                         type="input"
                                         placeholder={`Option ${optionIndex + 1}`}
-                                        className="bg-white text-black w-full p-2 rounded-lg border border-gray-300"
+                                        className="p-2 w-full text-black bg-white rounded-lg border border-gray-300"
                                         value={q.options?.[optionIndex] || ""}
                                         onChange={(e) => updateOption(index, optionIndex, e.target.value)}
                                     />

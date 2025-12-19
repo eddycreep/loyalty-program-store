@@ -102,32 +102,32 @@ export const ReviewsModule = () => {
     if (loadingData) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='flex flex-col gap-4 mb-80 w-full h-full rounded-lg overflow-y'>
                 <div>
                     <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
+                    <div className="flex flex-col pt-6 pl-2">
                       <h4 className="text-xl font-semibold text-purple">Customer Reviews</h4>
                       <p className="text-gray-400">Manage customer feedback to gain insights on products, store experience, and the loyalty program.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddReviews } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddReviews } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
                 </div>
-                <div className="pt-20 flex flex-col items-center justify-center">
+                <div className="flex flex-col justify-center items-center pt-20">
                     <SquareCircleLoader />
-                    <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
+                    <p className="pt-4 text-gray-500 uppercase">Loading data, please be patient.</p>
                 </div>
             </div>
         </div>
@@ -137,37 +137,36 @@ export const ReviewsModule = () => {
         </div>
         )
     }
-
 
     if (isError) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='flex flex-col gap-4 mb-80 w-full h-full rounded-lg overflow-y'>
                 <div>
                     <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
+                    <div className="flex flex-col pt-6 pl-2">
                       <h4 className="text-xl font-semibold text-purple">Customer Reviews</h4>
                       <p className="text-gray-400">Manage customer feedback to gain insights on products, store experience, and the loyalty program.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddReviews } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddReviews } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
                 </div>
-                <div className="flex flex-col items-center justify-center pt-10">
+                <div className="flex flex-col justify-center items-center pt-10">
                     <XOctagon size={44} className="text-black" />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occoured when fetching the rewards!</p>
+                    <p className="pt-2 ml-2 uppercase text-red">An error occoured when fetching the rewards!</p>
                 </div>
             </div>
         </div>
@@ -178,36 +177,35 @@ export const ReviewsModule = () => {
         )
     }
 
-
     if (reviews.length === 0) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='flex flex-col gap-4 mb-80 w-full h-full rounded-lg overflow-y'>
                 <div>
                     <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
+                    <div className="flex flex-col pt-6 pl-2">
                       <h4 className="text-xl font-semibold text-purple">Customer Reviews</h4>
                       <p className="text-gray-400">Manage customer feedback to gain insights on products, store experience, and the loyalty program.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddReviews } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddReviews } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
                 </div>
-                <div className="flex flex-col items-center justify-center pt-10">
+                <div className="flex flex-col justify-center items-center pt-10">
                     <ShieldAlert size={44} className="text-black" />
-                    <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
+                    <p className="pt-2 ml-2 uppercase text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
                 </div>
             </div>
         </div>
@@ -220,25 +218,25 @@ export const ReviewsModule = () => {
 
     return (
         <div className="pb-52">
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+            <div className='flex flex-col gap-4 pb-10 w-full h-full rounded-lg overflow-y'>
                 <div className="pt-6">
                     <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-24">
+                    <div className="flex flex-col pt-24 pl-2">
                         <h4 className="text-xl font-semibold text-purple">Customer Reviews</h4>
                         <p className="text-gray-400">Manage customer feedback to gain insights on products, store experience, and the loyalty program.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddReviews } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddReviews } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
                 <div className="overflow-x-auto">
                     <div className="min-w-[800px]">
-                        <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                        <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                             {headers?.map((header, index) => (
                                 <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                                     {header}
@@ -247,53 +245,53 @@ export const ReviewsModule = () => {
                         </div>
                         <div className="pt-2 max-h-[550px] pb-2 space-y-2">
                         {reviews?.map(({ review_id, review_title, description, review_category, store_id, reward, reward_price, reward_type, region, loyalty_tier, age_group, start_date, expiry_date, isActive }) => (
-                                    <div key={review_id} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
-                                        <div className="flex items-center justify-between">
-                                            <p className="text-sm flex-1 text-center text-purple">{review_id}</p>
-                                            <p className="text-sm flex-1 text-center">{review_title || '--:--'}</p>
-                                            <p className="text-sm flex-1 text-center">{description || '--:--'}</p>
-                                            <p className="text-sm flex-1 text-center">{reward || '--:--'}</p>
-                                            <p className="text-sm flex-1 text-center">{reward_type || '--:--'}</p>
-                                            <p className="text-sm flex-1 text-center">R{reward_price || '--:--'}</p>
-                                            <p className="text-sm flex-1 text-center">{store_id || '--:--'}</p>
-                                            <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                                <button onClick={() => handleExpandClick(review_id)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
+                                    <div key={review_id} className="flex flex-col p-3 mx-2 text-gray-600 bg-white rounded shadow-lg">
+                                        <div className="flex justify-between items-center">
+                                            <p className="flex-1 text-sm text-center text-purple">{review_id}</p>
+                                            <p className="flex-1 text-sm text-center">{review_title || '--:--'}</p>
+                                            <p className="flex-1 text-sm text-center">{description || '--:--'}</p>
+                                            <p className="flex-1 text-sm text-center">{reward || '--:--'}</p>
+                                            <p className="flex-1 text-sm text-center">{reward_type || '--:--'}</p>
+                                            <p className="flex-1 text-sm text-center">R{reward_price || '--:--'}</p>
+                                            <p className="flex-1 text-sm text-center">{store_id || '--:--'}</p>
+                                            <div className="flex flex-1 gap-4 justify-center items-center text-sm text-center">
+                                                <button onClick={() => handleExpandClick(review_id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
                                                     {expandedRow === review_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
                                                 </button>
-                                                <button onClick={() => handleEditReview(review_id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
+                                                <button onClick={() => handleEditReview(review_id)} className="flex justify-center items-center p-1 text-gray-500 bg-white rounded-lg border border-gray-500 cursor-pointer hover:bg-gray-200">
                                                     <Edit size={21} /> 
                                                 </button>
-                                                <button onClick={() => toggleDeletePage(review_id, review_title)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                <button onClick={() => toggleDeletePage(review_id, review_title)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <Trash2 size={21} /> 
                                                 </button>
                                             </div>
                                         </div>
                                         {expandedRow === review_id && (
                                             <div className="pt-4">
-                                                <div className="grid grid-cols-8 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
+                                                <div className="grid grid-cols-8 gap-4 p-4 pt-2 text-sm text-center bg-gray-100 rounded shadow-inner">
                                                     <p className="font-medium text-gray-600"></p>
                                                 <div>
-                                                    <p className="font-bold text-gray-600 text-xs uppercase">Region</p>
-                                                    <p className="text-sm text-gray-500 pt-1">{region || '--:--'}</p>
+                                                    <p className="text-xs font-bold text-gray-600 uppercase">Region</p>
+                                                    <p className="pt-1 text-sm text-gray-500">{region || '--:--'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-gray-600 text-xs uppercase">Loyalty Tier</p>
-                                                    <p className="text-sm text-gray-500 pt-1">{loyalty_tier || '--:--'}</p>
+                                                    <p className="text-xs font-bold text-gray-600 uppercase">Loyalty Tier</p>
+                                                    <p className="pt-1 text-sm text-gray-500">{loyalty_tier || '--:--'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-gray-600 text-xs uppercase">Age Group</p>
-                                                    <p className="text-sm text-gray-500 pt-1">{age_group || '--:--'}</p>
+                                                    <p className="text-xs font-bold text-gray-600 uppercase">Age Group</p>
+                                                    <p className="pt-1 text-sm text-gray-500">{age_group || '--:--'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-gray-600 text-xs uppercase">Start Date</p>
-                                                    <p className="text-sm text-gray-500 pt-1">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
+                                                    <p className="text-xs font-bold text-gray-600 uppercase">Start Date</p>
+                                                    <p className="pt-1 text-sm text-gray-500">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-gray-600 text-xs uppercase">Expiry Date</p>
-                                                    <p className="text-sm pt-1 text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
+                                                    <p className="text-xs font-bold text-gray-600 uppercase">Expiry Date</p>
+                                                    <p className="pt-1 text-sm text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-gray-600 text-xs uppercase">Status</p>
+                                                    <p className="text-xs font-bold text-gray-600 uppercase">Status</p>
                                                     <p className={`text-sm pt-1 ${isActive === true ? 'text-green' : 'text-red'}`}>
                                                         {isActive === true ? 'Active' : 'Inactive'}
                                                     </p>

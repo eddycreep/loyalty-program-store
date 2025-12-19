@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from '@/context';
 import { format } from "date-fns";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
@@ -265,7 +265,7 @@ export function AddNewRewards({ onClose }: any) {
                 </div>
                 <div>
                   <label htmlFor="reward-type" className="text-black text-xs sm:text-sm">Type</label>
-                  <Select
+                  {/* <Select
                     value={currentReward.reward_type}
                     onValueChange={(value) => setCurrentReward(prev => ({ ...prev, reward_type: value }))}
                   >
@@ -278,7 +278,19 @@ export function AddNewRewards({ onClose }: any) {
                       <SelectItem value="Amount">Amount</SelectItem>
                       <SelectItem value="Free Item">Free Item</SelectItem>
                     </SelectContent>
-                  </Select>
+                  </Select> */}
+                  <select
+                    id="reward-type"
+                    value={currentReward.reward_type}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_type: e.target.value }))}
+                    className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                  >
+                    <option value="">Select type</option>
+                    <option value="All">All</option>
+                    <option value="Percentage">Percentage</option>
+                    <option value="Amount">Amount</option>
+                    <option value="Free Item">Free Item</option>
+                  </select>
                 </div>
               </div>
 
@@ -286,7 +298,7 @@ export function AddNewRewards({ onClose }: any) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="loyalty-tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
-                  <Select
+                  {/* <Select
                     value={currentReward.loyaltyTier}
                     onValueChange={(value) => setCurrentReward(prev => ({ ...prev, loyaltyTier: value }))}
                   >
@@ -301,7 +313,21 @@ export function AddNewRewards({ onClose }: any) {
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </Select> */}
+                  <select
+                    id="loyalty-tier"
+                    value={currentReward.loyaltyTier}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, loyaltyTier: e.target.value }))}
+                    className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                  >
+                    <option value="">Select tier</option>
+                    <option value="All">All</option>
+                    {loyaltyTiers.map((loyalty) => (
+                      <option key={loyalty.tier_id} value={loyalty.tier}>
+                        {loyalty.tier}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label htmlFor="reward-price" className="text-black text-xs sm:text-sm">Price</label>
@@ -342,7 +368,7 @@ export function AddNewRewards({ onClose }: any) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
-                  <Select
+                  {/* <Select
                     value={currentReward.store_id}
                     onValueChange={(value) => setCurrentReward(prev => ({ ...prev, store_id: value }))}
                   >
@@ -357,11 +383,25 @@ export function AddNewRewards({ onClose }: any) {
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </Select> */}
+                  <select
+                    id="store-id"
+                    value={currentReward.store_id}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, store_id: e.target.value }))}
+                    className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                  >
+                    <option value="">Select store</option>
+                    <option value="All">All</option>
+                    {allStores.map((branch) => (
+                      <option key={branch.id} value={branch.code}>
+                        {branch.code}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label htmlFor="age-group" className="text-black text-xs sm:text-sm">Age Group</label>
-                  <Select
+                  {/* <Select
                     value={currentReward.ageGroup}
                     onValueChange={(value) => setCurrentReward(prev => ({ ...prev, ageGroup: value }))}
                   >
@@ -376,7 +416,21 @@ export function AddNewRewards({ onClose }: any) {
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </Select> */}
+                  <select
+                    id="age-group"
+                    value={currentReward.ageGroup}
+                    onChange={(e) => setCurrentReward(prev => ({ ...prev, ageGroup: e.target.value }))}
+                    className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                  >
+                    <option value="">Select age group</option>
+                    <option value="All">All</option>
+                    {ageGroups.map((age) => (
+                      <option key={age.age_group_id} value={age.age_range}>
+                        {age.group_name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -384,7 +438,7 @@ export function AddNewRewards({ onClose }: any) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                          <Select
+                          {/* <Select
                               value={currentReward.organisation === 0 ? "All" : currentReward.organisation.toString()}
                               onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, organisation: value === "All" ? 0 : Number(value) }))}
                           >
@@ -397,11 +451,22 @@ export function AddNewRewards({ onClose }: any) {
                                           {userOrganisation}
                                       </SelectItem>
                               </SelectContent>
-                          </Select>
+                          </Select> */}
+                          <select
+                            id="organisation"
+                            value={currentReward.organisation === 0 ? "All" : currentReward.organisation.toString()}
+                            onChange={(e) => setCurrentReward(prev => ({ ...prev, organisation: e.target.value === "All" ? 0 : Number(e.target.value) }))}
+                            className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                          >
+                            <option value="All">All</option>
+                            <option value={userOrganisationUid.toString()}>
+                              {userOrganisation}
+                            </option>
+                          </select>
                     </div>
                     <div>
                         <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                            <Select
+                            {/* <Select
                               value={currentReward.branch === 0 ? "All" : currentReward.branch.toString()}
                               onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, branch: value === "All" ? 0 : Number(value) }))}
                             >
@@ -416,7 +481,20 @@ export function AddNewRewards({ onClose }: any) {
                                         </SelectItem>
                                     ))}
                               </SelectContent>
-                            </Select>
+                            </Select> */}
+                            <select
+                              id="branch"
+                              value={currentReward.branch === 0 ? "All" : currentReward.branch.toString()}
+                              onChange={(e) => setCurrentReward(prev => ({ ...prev, branch: e.target.value === "All" ? 0 : Number(e.target.value) }))}
+                              className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                            >
+                              <option value="All">All</option>
+                              {branches?.map((branch) => (
+                                <option key={branch.uid} value={branch.uid.toString()}>
+                                  {branch.name}
+                                </option>
+                              ))}
+                            </select>
                     </div>
               </div>
 

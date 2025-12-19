@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Special, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { useSession } from '@/context';
@@ -382,7 +382,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                                 <div>
                                     <label htmlFor="special-type" className="text-black text-xs sm:text-sm">Special Type</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.special_value}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_value: value as 'Percentage' | 'Amount' }))}
                                     >
@@ -393,7 +393,17 @@ export function AddProductsSpecials({ onClose }: Props) {
                                             <SelectItem value="Percentage" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Percentage</SelectItem>
                                             <SelectItem value="Amount" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Amount</SelectItem>
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                        id="special-type"
+                                        value={currentSpecial.special_value}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_value: e.target.value as 'Percentage' | 'Amount' }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                        <option value="">Select special type</option>
+                                        <option value="Percentage">Percentage</option>
+                                        <option value="Amount">Amount</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -401,7 +411,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.loyalty_tier}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, loyalty_tier: value }))}
                                     >
@@ -416,11 +426,11 @@ export function AddProductsSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                                 <div>
                                     <label htmlFor="age-group" className="text-black text-xs sm:text-sm">Age Group</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.age_group}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, age_group: value }))}
                                     >
@@ -435,7 +445,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                             </div>
 
@@ -467,7 +477,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.organisation}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, organisation: value }))}
                                     >
@@ -476,17 +486,17 @@ export function AddProductsSpecials({ onClose }: Props) {
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                            {/* {organisations?.map((org) => ( */}
+
                                                 <SelectItem value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
                                                     {userOrganisation}
                                                 </SelectItem>
-                                            {/* // ))} */}
+                                            
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                                 <div>
                                     <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.branch}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, branch: value }))}
                                     >
@@ -501,7 +511,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                             </div>
 
@@ -509,7 +519,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-end">
                                 <div>
                                     <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.store_id}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, store_id: value }))}
                                     >
@@ -524,7 +534,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                                 <div className="flex flex-col items-center justify-center space-x-2 pr-56 pb-4">
                                     <label htmlFor="active-toggle" className="text-black text-xs sm:text-sm">

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, UserActivity } from '@/modules/types/data-types'
 import { Special, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { apiClient } from '@/utils/api-client';
@@ -474,7 +474,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                 </div>
                                 <div>
                                     <label htmlFor="special-type" className="text-black text-xs sm:text-sm">Special Type</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.special_value}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_value: value }))}
                                     >
@@ -485,7 +485,17 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                             <SelectItem value="Percentage" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Percentage</SelectItem>
                                             <SelectItem value="Amount" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Amount</SelectItem>
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                        id="special-type"
+                                        value={currentSpecial.special_value}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_value: e.target.value }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                        <option value="">Select special type</option>
+                                        <option value="Percentage">Percentage</option>
+                                        <option value="Amount">Amount</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -493,7 +503,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.loyalty_tier}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, loyalty_tier: value }))}
                                     >
@@ -508,11 +518,25 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                        id="tier"
+                                        value={currentSpecial.loyalty_tier}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, loyalty_tier: e.target.value }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                        <option value="">Select Tier</option>
+                                        <option value="All">All</option>
+                                        {loyaltyTiers.map((loyalty) => (
+                                            <option key={loyalty.tier_id} value={loyalty.tier}>
+                                                {loyalty.tier}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div>
                                     <label htmlFor="age-group" className="text-black text-xs sm:text-sm">Age Group</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.age_group}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, age_group: value }))}
                                     >
@@ -527,7 +551,21 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                        id="age-group"
+                                        value={currentSpecial.age_group}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, age_group: e.target.value }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                        <option value="">Select Age Group</option>
+                                        <option value="All">All</option>
+                                        {ageGroups.map((group) => (
+                                            <option key={group.age_group_id} value={group.age_range}>
+                                                {group.group_name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
@@ -559,7 +597,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.organisation}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, organisation: value }))}
                                         disabled={!organisations || organisations.length === 0}
@@ -576,11 +614,29 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                                 ))
                                             )}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                        id="organisation"
+                                        value={currentSpecial.organisation}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, organisation: e.target.value }))}
+                                        disabled={!organisations || organisations.length === 0}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <option value="">
+                                            {organisations && organisations.length > 0 ? "Select Organisation" : "No organisations available"}
+                                        </option>
+                                        {organisations && organisations.length > 0 && (
+                                            organisations.map((org) => (
+                                                <option key={org.uid} value={org.uid.toString()}>
+                                                    {org.name}
+                                                </option>
+                                            ))
+                                        )}
+                                    </select>
                                 </div>
                                 <div>
                                     <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.branch}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, branch: value }))}
                                         disabled={!branches || branches.length === 0}
@@ -597,7 +653,25 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                                 ))
                                             )}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                        id="branch"
+                                        value={currentSpecial.branch}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, branch: e.target.value }))}
+                                        disabled={!branches || branches.length === 0}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <option value="">
+                                            {branches && branches.length > 0 ? "Select Branch" : "No branches available"}
+                                        </option>
+                                        {branches && branches.length > 0 && (
+                                            branches.map((branch) => (
+                                                <option key={branch.uid} value={branch.uid.toString()}>
+                                                    {branch.name}
+                                                </option>
+                                            ))
+                                        )}
+                                    </select>
                                 </div>
                             </div>
 
@@ -605,7 +679,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-end">
                                 <div>
                                     <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.store_id}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, store_id: value }))}
                                     >
@@ -620,7 +694,21 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                        id="store-id"
+                                        value={currentSpecial.store_id}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, store_id: e.target.value }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                        <option value="">Select store ID</option>
+                                        <option value="All">All</option>
+                                        {allStores.map((branch) => (
+                                            <option key={branch.id} value={branch.code}>
+                                                {branch.code}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="flex flex-col items-center justify-center space-x-2 pr-56 pb-4">
                                     <label htmlFor="active-toggle" className="text-black text-xs sm:text-sm">
