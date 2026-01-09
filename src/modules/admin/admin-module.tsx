@@ -10,6 +10,7 @@ import { OrganizationModule } from './organization-module';
 import { BranchModule } from './branch-module';
 import { UserModule } from './user-module';
 import { InventoryModule } from './inventory-module';
+import { CustomersModule } from './customers-module';
 
 export const AdminModule = () => {
     const [currentTab, setCurrentTab] = useState('specials');
@@ -26,6 +27,7 @@ export const AdminModule = () => {
                 <button onClick={() => setCurrentTab('branch')} className={`whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'branch'? 'bg-purple text-white' : 'bg-white text-black'} text-sm p-2 cursor-pointer font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Branch</button>
                 <button onClick={() => setCurrentTab('users')} className={`whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'users'? 'bg-purple text-white' : 'bg-white text-black'} text-sm p-2 cursor-pointer font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Users</button>
                 <button onClick={() => setCurrentTab('inventory')} className={`whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'inventory'? 'bg-purple text-white' : 'bg-white text-black'} text-sm p-2 cursor-pointer font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Inventory</button>
+                <button onClick={() => setCurrentTab('customers')} className={`whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded ${currentTab === 'customers'? 'bg-purple text-white' : 'bg-white text-black'} text-sm p-2 cursor-pointer font-medium hover:text-white hover:bg-purple lg:ease-in-out duration-300 w-44 outline-none`}>Customers</button>
             </div>
             {currentTab === 'specials' && <SpecialsModule />}
             {currentTab === 'rewards' && <RewardsModule />}
@@ -36,6 +38,7 @@ export const AdminModule = () => {
             {currentTab === 'branch' && <BranchModule />}
             {currentTab === 'users' && <UserModule />}
             {currentTab === 'inventory' && <InventoryModule />}
+            {currentTab === 'customers' && <CustomersModule />}
         </div>
     );
 }

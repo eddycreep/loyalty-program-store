@@ -175,9 +175,7 @@ export function AddProductsSpecials({ onClose }: Props) {
             console.log("selected organisation value: ", currentSpecial.organisation)
             console.log("selected branch value: ", currentSpecial.branch)
 
-            // const newOrgId = currentSpecial.organisation
-            // const newBrId = currentSpecial.branch
-            const newOrgId = Number(currentSpecial.organisation);
+            // Removed: newOrgId — organisationId is implicit via private DB connection in multi-tenancy
             const newBrId = Number(currentSpecial.branch);
             
             // const selectedStore = allStores.find(store => store.code === currentReward.store_id);
@@ -189,6 +187,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                 return `${dateStr} 00:00:00`;
             };
 
+            // Fixed: frontend payload no longer sends organisationId — implicit via private DB connection
             const payload = {
                 special_name: currentSpecial.special_name,
                 special: currentSpecial.special,
@@ -202,7 +201,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                 loyalty_tier: currentSpecial.loyalty_tier,
                 age_group: currentSpecial.age_group,
                 isActive: currentSpecial.isActive,
-                organisationId: currentSpecial.organisation,
+                // Removed: organisationId — implicit via private DB connection in multi-tenancy
                 branchId: currentSpecial.branch,
             }
 
@@ -477,41 +476,36 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                                    {/* <Select
-                                        value={currentSpecial.organisation}
-                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, organisation: value }))}
+                                    <select
+                                        id="organisation"
+                                        value={currentSpecial.organisation || ''}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, organisation: e.target.value }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                        disabled
                                     >
-                                        <SelectTrigger className="w-full mt-1">
-                                            <SelectValue placeholder="Select Organisation" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-
-                                                <SelectItem value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                                    {userOrganisation}
-                                                </SelectItem>
-                                            
-                                        </SelectContent>
-                                    </Select> */}
+                                        <option value="">Select Organisation</option>
+                                        {userOrganisationUid && (
+                                            <option value={userOrganisationUid.toString()}>
+                                                {userOrganisation || 'User Organisation'}
+                                            </option>
+                                        )}
+                                    </select>
                                 </div>
                                 <div>
                                     <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                                    {/* <Select
-                                        value={currentSpecial.branch}
-                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, branch: value }))}
+                                    <select
+                                        id="branch"
+                                        value={currentSpecial.branch || ''}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, branch: e.target.value }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
                                     >
-                                        <SelectTrigger className="w-full mt-1">
-                                            <SelectValue placeholder="Select Branch" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                            {branches?.map((branch) => (
-                                                <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                                    {branch.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select> */}
+                                        <option value="">Select Branch</option>
+                                        {branches && branches.length > 0 && branches.map((branch) => (
+                                            <option key={branch.uid} value={branch.uid.toString()}>
+                                                {branch.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 

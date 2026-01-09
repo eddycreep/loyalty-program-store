@@ -28,7 +28,7 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
             opening: '',
             closing: ''
         },
-        organisationId: 0
+        // organisationId: 0
     })
 
     const saveBranch = async () => {
@@ -45,7 +45,7 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                     opening: currentBranch.operatingHours.opening,
                     closing: currentBranch.operatingHours.closing
                 },
-                organisationId: user?.organisation?.uid
+                // organisationId: user?.organisation?.uid
             }
             console.log("payload in add-new-branch: ", payload)
 
@@ -170,7 +170,7 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select> */}
-                                        <select
+                                        {/* <select
                                           id="organisation"
                                           value={currentBranch.organisationId.toString()}
                                           onChange={(e) => setCurrentBranch(prev => ({ ...prev, organisationId: Number(e.target.value) }))}
@@ -180,7 +180,7 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                                           <option value={user?.organisation?.uid.toString()}>
                                             {user?.organisation?.name}
                                           </option>
-                                        </select>
+                                        </select> */}
                                 </div>
                             </div>
 

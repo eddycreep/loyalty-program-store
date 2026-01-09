@@ -145,12 +145,12 @@ export const CreateSurveys = () => {
             console.log('startdate: ', formattedStartDate);
             console.log('enddate: ', formattedExpiryDate);
 
-            const newOrgId = Number(selectedOrganisation);
+            // Removed: newOrgId — organisationId is implicit via private DB connection in multi-tenancy
             const newBrId = Number(selectedBranch);
-            console.log('org id: ', newOrgId);
             console.log('br id: ', newBrId);
             console.log('selected region: ', selectedRegion);
 
+            // Fixed: frontend payload no longer sends organisationId — implicit via private DB connection
             const payload = {
                 survey_title: surveyName,
                 survey_category: surveyCategory,
@@ -162,7 +162,7 @@ export const CreateSurveys = () => {
                 expiry_date: formattedExpiryDate,
                 isActive: true,
                 reward: reward,
-                organisationId: newOrgId,
+                // Removed: organisationId — implicit via private DB connection in multi-tenancy
                 branchId: newBrId
             }
 
@@ -498,7 +498,7 @@ export const CreateSurveys = () => {
                         onChange={(e) => setSelectedBranch(e.target.value)}
                     >
                         <option value="All">All</option>
-                        {branches && branches.map((branch) => (
+                        {branches && Array.isArray(branches) && branches.length > 0 && branches.map((branch) => (
                             <option key={branch.uid} value={branch.uid.toString()}>
                                 {branch.name}
                             </option>

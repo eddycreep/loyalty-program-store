@@ -1,0 +1,426 @@
+'use client'
+
+import { useState, useEffect, useCallback } from "react"
+import { Edit, Trash2, ShieldAlert, XOctagon, PlusCircle, ArchiveRestore, Activity} from "lucide-react"
+import SquareCircleLoader from "@/lib/square-circle-loader";
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { getAllUsers } from "@/components/data/user/get-all-users-data";
+import { User } from "@/modules/types/user/user-types";
+import { Badge } from "@/components/ui/badge";
+import { DeactivateUserConfirmation } from "./user/deactivate-user-confirmation";
+import { ActivateUserConfirmation } from "./user/activate-user-confirmation";
+import { DeleteUserConfirmation } from "./user/delete-user-confirmation";
+import { RestoreUserConfirmation } from "./user/restore-user-confirmation";
+import { AddNewUser } from "./user/add-new-user";
+import { EditUser } from "./user/edit-user";
+import { useSession } from '@/context';
+import { Customer } from "@/modules/types/customer/customer-types";
+import { getAllCustomers } from "@/components/data/customer/get-all-customers";
+import { getLoyaltyCustomersByOrganisation } from "@/components/data/customer/get-loyalty-customers-by-organisation";
+
+export const CustomersModule = () => {
+    const { user } = useSession();
+    const [customers, setCustomers] = useState<Customer[] | null>(null);
+
+    const [addUserPopUp, setAddUserPopUp] = useState(false);
+    const [editUserPopup, setEditUserPopup] = useState(false);
+    const [activationPopUp, setActivationPopUp] = useState(false);
+    const [deactivationPopUp, setDeactivationPopUp] = useState(false);
+    const [restorePopUp, setRestorePopUp] = useState(false);
+
+    const [selectedUser, setSelectedUser] = useState<Customer | null>(null);
+    const [selectedUserID, setSelectedUserID] = useState(0);
+    const [selectedUserName, setSelectedUserName] = useState('');
+
+    // Updated headers array: Removed 'Logo' column to maintain alignment
+    const headers = ['ID', 'Name', 'Mobile Number', 'Email', 'Tier', 'Signup Date', 'Action']
+
+    const [deletePopUp, setDeletePopUp] = useState(false);
+    const [expandedRow, setExpandedRow] = useState<number | null>(null);
+
+    const [loadingData, setLoadingData] = useState(false);
+    const [isError, setIsError] = useState(false);
+
+    const handleExpandClick = (id: number) => {
+        setExpandedRow(expandedRow === id ? null : id);
+    };
+
+    const toggleActivationPage = (uid: number) => {
+        setActivationPopUp(!activationPopUp);
+        setSelectedUserID(uid)
+    };
+
+    const toggleDeactivationPage = (uid: number) => {
+        setDeactivationPopUp(!deactivationPopUp);
+        setSelectedUserID(uid)
+    };
+
+    const toggleRestorePage = (uid: number) => {
+        setRestorePopUp(!restorePopUp);
+        setSelectedUserID(uid)
+    };
+
+    const fetchCustomers = useCallback(async () => {
+        setLoadingData(true);
+
+        try {
+            // Use the new endpoint to fetch loyalty customers by organisation
+            const customersData = await getLoyaltyCustomersByOrganisation(user)
+            setCustomers(customersData)
+            console.log("loyalty customers returned: ", customersData)
+        } catch (error) {
+            console.error('error fetching loyalty customers by organisation:', error)
+            setIsError(true);
+        }
+        setLoadingData(false);
+    }, [user])
+
+    const toggleAddUser = () => {
+        setAddUserPopUp(!addUserPopUp);
+    }   
+
+    const handleEditUser = (uid: any) => {
+        const selected = customers?.find((item) => item.customer_id === uid) || null;
+        
+        if (selected) {
+            setSelectedUser(selected);
+            setEditUserPopup(true);
+
+        } else {
+            console.log("No selected Customer, sumn wrong with the code my nigga:" + selected);
+        }
+    }; 
+
+    const toggleDeletePage = (uid: number) => {
+        setDeletePopUp(!deletePopUp);
+        setSelectedUserID(uid)
+    };
+
+    const closeEditUserPopup = () => {
+        setEditUserPopup(false);
+    }
+
+    const closeActivationPopup = () => {
+        setActivationPopUp(false);
+    };
+
+    const handleSuccess = () => {
+        // Refresh the organisations data after successful activation
+        fetchCustomers();
+    };
+
+    useEffect(() => {
+        fetchCustomers();
+    }, [fetchCustomers]);
+
+    if (loadingData) {
+        return (
+            <div>
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                <div>
+                    <div className="flex justify-between">
+                        <div className="flex flex-col pl-2 pt-6">
+                            <h4 className="text-xl font-semibold text-purple">Customers</h4>
+                            <p className="text-gray-400">View, manage, and update user information, roles, and preferences.</p>
+                        </div>
+                        <div className='flex gap-2 pt-8 pr-2'>
+                            <button onClick={ toggleAddUser } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                <PlusCircle size={21} /> 
+                            </button>
+                        </div>
+                    </div>
+                    <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                        {headers?.map((header, index) => (
+                            <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                                {header}
+                            </p>
+                        ))}
+                    </div>
+                    <div className="pt-20 flex flex-col items-center justify-center">
+                        <SquareCircleLoader />
+                        <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
+                    </div>
+                </div>
+        </div>
+        {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+        {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
+        {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />} */}
+        </div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div>
+                <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                    <div>
+                        <div className="flex justify-between">
+                            <div className="flex flex-col pl-2 pt-6">
+                                <h4 className="text-xl font-semibold text-purple">Customers</h4>
+                                <p className="text-gray-400">View, manage, and update user information, roles, and preferences.</p>
+                            </div>
+                            <div className='flex gap-2 pt-8 pr-2'>
+                                <button onClick={ toggleAddUser } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                    <PlusCircle size={21} /> 
+                                </button>
+                            </div>
+                        </div>
+                        <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                            {headers?.map((header, index) => (
+                                <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                                    {header}
+                                </p>
+                            ))}
+                        </div>
+                        <div className="flex flex-col items-center justify-center pt-10">
+                            <XOctagon size={44} className="text-black" />
+                            <p className="ml-2 uppercase pt-2 text-red">An error occoured when fetching the rewards!</p>
+                        </div>
+                    </div>
+                </div>
+                {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+                {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
+                {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />} */}
+            </div>
+        )
+    }
+
+    if (customers?.length === 0) {
+        return (
+            <div>
+                <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+                    <div>
+                        <div className="flex justify-between">
+                            <div className="flex flex-col pl-2 pt-6">
+                                <h4 className="text-xl font-semibold text-purple">Customers</h4>
+                                <p className="text-gray-400">View, manage, and update user information, roles, and preferences.</p>
+                            </div>
+                            <div className='flex gap-2 pt-8 pr-2'>
+                                <button onClick={ toggleAddUser } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                                    <PlusCircle size={21} /> 
+                                </button>
+                            </div>
+                        </div>
+                        <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                            {headers?.map((header, index) => (
+                                <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                                    {header}
+                                </p>
+                            ))}
+                        </div>
+                        <div className="flex flex-col items-center justify-center pt-10">
+                            <ShieldAlert size={44} className="text-black" />
+                            <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
+                        </div>
+                    </div>
+                </div>
+                {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+                {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
+                {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />} */}
+            </div>
+        )
+    }
+
+    return (
+        <div className="pb-52">
+            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+            <div>
+                <div className="flex justify-between">
+                    <div className="flex flex-col pl-2 pt-24">
+                        <h4 className="text-xl font-semibold text-purple">Customers</h4>
+                        <p className="text-gray-400">View, manage, and update user information, roles, and preferences.</p>
+                    </div>
+                    <div className='flex gap-2 pt-28 pr-2'>
+                        <button onClick={ toggleAddUser } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                            <PlusCircle size={21} /> 
+                        </button>
+                    </div>
+                </div>
+                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                    {headers?.map((header, index) => (
+                        <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
+                            {header}
+                        </p>
+                    ))}
+                </div>
+                <div className="pt-2 max-h-[550px] pb-2 space-y-2">
+                        {customers?.map(({ customer_id, first_name, last_name, mobile_number, email, loyalty_tier, total_purchases, signup_date }) => (
+                            <div key={customer_id} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
+                                <div className="flex items-center justify-between">
+                                    {/* Fixed alignment: All columns now use consistent structure and padding */}
+                                    <div className="text-sm flex-1 text-center">
+                                        <p className="text-purple">{customer_id}</p>
+                                    </div>
+                                    <div className="text-sm flex-1 text-center">
+                                        <p>{first_name} {last_name}</p>
+                                    </div>
+                                    <div className="text-sm flex-1 text-center">
+                                        <p>{mobile_number || '--:--'}</p>
+                                    </div>
+                                    {/* <div className="text-sm flex-1 text-center">
+                                        <p>{email || '--:--'}</p>
+                                    </div> */}
+                                    <div className="text-sm flex-1 text-center">
+                                        <p>{email || '--:--'}</p>
+                                    </div>
+                                    <div className="text-sm flex-1 text-center">
+                                        <Badge className={`${loyalty_tier ? 'bg-green hover:bg-green-100 text-white' : 'bg-red hover:bg-red-100 text-white'}`}>
+                                            {loyalty_tier || 'N/A'}
+                                        </Badge>    
+                                    </div>
+                                    <div className="text-sm flex-1 text-center">
+                                        <p className="">
+                                            {signup_date ? signup_date.split('T')[0] : '--:--'}
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
+                                        {/* Edit Branch */}
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <button onClick={() => handleEditUser(customer_id)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
+                                                    <Edit size={21} /> 
+                                                </button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Edit</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+
+                                        {/* Activate Branch */}
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <button onClick={() => toggleActivationPage(customer_id)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
+                                                    <Activity size={21} />
+                                                </button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Activate</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+
+                                        {/* Deactivate Branch */}
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <button onClick={() => toggleDeactivationPage(customer_id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                    <ShieldAlert size={21} />
+                                                </button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Deactivate</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+
+                                        {/* Restore Branch */}
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <button onClick={() => toggleRestorePage(customer_id)} className="flex items-center justify-center cursor-pointer bg-white text-green border border-green hover:bg-green-100 p-1 rounded-lg">
+                                                    <ArchiveRestore size={21} /> 
+                                                </button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Restore</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+
+                                        {/* Delete Organisation */}
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <button onClick={() => toggleDeletePage(customer_id)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
+                                                    <Trash2 size={21} /> 
+                                                </button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Delete</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </div>
+                                </div>
+                                {/* {expandedRow === uid && (
+                                    <div className="pt-4">
+                                        <div className="grid grid-cols-8 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
+                                            <p className="font-medium text-gray-600"></p>
+                                        <div>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Region</p>
+                                            <p className="text-sm text-gray-500 pt-1">{region || '--:--'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Loyalty Tier</p>
+                                            <p className="text-sm text-gray-500 pt-1">{loyalty_tier || '--:--'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Age Group</p>
+                                            <p className="text-sm text-gray-500 pt-1">{age_group || '--:--'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Start Date</p>
+                                            <p className="text-sm text-gray-500 pt-1">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Expiry Date</p>
+                                            <p className="text-sm pt-1 text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-600 text-xs uppercase">Status</p>
+                                            <p className={`text-sm pt-1 ${isActive === true ? 'text-green' : 'text-red'}`}>
+                                                {isActive === true ? 'Active' : 'Inactive'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </div>
+                                )} */}
+                            </div>
+                        ))}
+                </div>
+            </div>
+        </div>  
+        {deletePopUp && (
+            <DeleteUserConfirmation
+                userID={selectedUserID} 
+                isOpen={deletePopUp} 
+                onClose={toggleDeletePage}
+                onSuccess={handleSuccess}
+            /> 
+        )}
+        {activationPopUp && (
+            <ActivateUserConfirmation
+                userID={selectedUserID} 
+                isOpen={activationPopUp} 
+                onClose={closeActivationPopup}
+                onSuccess={handleSuccess}
+            />
+        )} 
+        {deactivationPopUp && (
+            <DeactivateUserConfirmation
+                userID={selectedUserID} 
+                isOpen={deactivationPopUp} 
+                onClose={toggleDeactivationPage}
+                onSuccess={handleSuccess}
+            /> 
+        )}
+        
+        {restorePopUp && (
+            <RestoreUserConfirmation
+                userID={selectedUserID} 
+                isOpen={restorePopUp} 
+                onClose={toggleRestorePage}
+                onSuccess={handleSuccess}
+            /> 
+        )}
+        
+        {editUserPopup && 
+            <EditUser
+                onClose={closeEditUserPopup} 
+                selectedUser={selectedUser}
+                onSuccess={handleSuccess}
+            />
+        }
+        
+        {addUserPopUp && 
+            <AddNewUser
+                onClose={toggleAddUser} 
+                onSuccess={handleSuccess} 
+            />
+        }
+        </div>
+    );
+}

@@ -258,7 +258,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
         try {
             const specialType = 'Combined Special'
 
-            const newOrgId = Number(currentSpecial.organisation);
+            // Removed: newOrgId — organisationId is implicit via private DB connection in multi-tenancy
             const newBrId = Number(currentSpecial.branch);
 
             // const selectedStore = allStores.find(store => store.code === currentReward.store_id);
@@ -270,6 +270,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                 return `${dateStr} 00:00:00`;
             };
 
+            // Fixed: frontend payload no longer sends organisationId — implicit via private DB connection
             const payload = {
                 special_name: currentSpecial.special_name,
                 special: currentSpecial.special,
@@ -283,7 +284,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                 loyalty_tier: currentSpecial.loyalty_tier,
                 age_group: currentSpecial.age_group,
                 isActive: currentSpecial.isActive,
-                organisationId: currentSpecial.organisation,
+                // Removed: organisationId — implicit via private DB connection in multi-tenancy
                 branchId: currentSpecial.branch,
             }
 
@@ -617,7 +618,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                     </Select> */}
                                     <select
                                         id="organisation"
-                                        value={currentSpecial.organisation}
+                                        value={currentSpecial.organisation || ''}
                                         onChange={(e) => setCurrentSpecial(prev => ({ ...prev, organisation: e.target.value }))}
                                         disabled={!organisations || organisations.length === 0}
                                         className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -625,7 +626,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                         <option value="">
                                             {organisations && organisations.length > 0 ? "Select Organisation" : "No organisations available"}
                                         </option>
-                                        {organisations && organisations.length > 0 && (
+                                        {organisations && Array.isArray(organisations) && organisations.length > 0 && (
                                             organisations.map((org) => (
                                                 <option key={org.uid} value={org.uid.toString()}>
                                                     {org.name}
@@ -656,7 +657,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                     </Select> */}
                                     <select
                                         id="branch"
-                                        value={currentSpecial.branch}
+                                        value={currentSpecial.branch || ''}
                                         onChange={(e) => setCurrentSpecial(prev => ({ ...prev, branch: e.target.value }))}
                                         disabled={!branches || branches.length === 0}
                                         className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -664,7 +665,7 @@ export function AddCombinedSpecials({ onClose }: Props) {
                                         <option value="">
                                             {branches && branches.length > 0 ? "Select Branch" : "No branches available"}
                                         </option>
-                                        {branches && branches.length > 0 && (
+                                        {branches && Array.isArray(branches) && branches.length > 0 && (
                                             branches.map((branch) => (
                                                 <option key={branch.uid} value={branch.uid.toString()}>
                                                     {branch.name}

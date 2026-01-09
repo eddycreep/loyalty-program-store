@@ -34,7 +34,7 @@ export interface CreateBranch {
         opening: string,
         closing: string
     },
-    organisationId: number
+    // organisationId: number
 }
 
 

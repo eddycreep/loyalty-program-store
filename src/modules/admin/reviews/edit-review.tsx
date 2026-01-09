@@ -19,6 +19,8 @@ import { Organisation } from "@/modules/types/organisation/organisation-types";
 import { Branch } from "@/modules/types/branch/branches-types";
 import { getOrganisations } from '@/components/data/organisation/get-organisations-data';
 import { getBranches } from '@/components/data/branch/get-branches-data';
+import { getAllRewards } from '@/components/data/rewards/get-all-rewards';
+import { RewardProps } from '@/modules/admin/rewards-module';
 
 export function EditReview({ onClose, selectedReview }: any) {
     const { user } = useSession();
@@ -28,6 +30,7 @@ export function EditReview({ onClose, selectedReview }: any) {
     const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
     const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
     const [reviewInfo, setReviewInfo] = useState<ReviewInfoResponse>([])
+    const [rewards, setRewards] = useState<RewardProps[]>([]) // ✅ NEW: State for rewards dropdown
 
     //organisations x branches
     const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
@@ -40,16 +43,13 @@ export function EditReview({ onClose, selectedReview }: any) {
         review_category: '',
         store_id: '',
         isActive: false,
-        reward: '',
-        reward_price: 0,
-        reward_type: '',
+        reward_id: null, // ✅ UPDATED: Changed from reward, reward_price, reward_type to reward_id
         region: '',
         loyalty_tier: '',
         age_group: '',
         start_date: '',
         expiry_date: '',
-        organisation: 0,
-        branch: 0,
+        branch: 0, // ✅ Removed: organisation (only branchId is saved)
     })
 
     const getStores = async () => {
@@ -104,13 +104,20 @@ export function EditReview({ onClose, selectedReview }: any) {
         }
     }
 
+    // ✅ NEW: Fetch all rewards for dropdown
+    const getAllRewardsList = async () => {
+        try {
+            const rewardsData = await getAllRewards(user)
+            setRewards(rewardsData || [])
+            console.log("all rewards returned: ", rewardsData)
+        } catch (error) {
+            console.error('error fetching all rewards:', error)
+        }
+    }
+
     const updateReview = async () => {
         try {
-            console.log("selected organisation value: ", currentReview.organisation)
             console.log("selected branch value: ", currentReview.branch)
-
-            const selectedStore = allStores.find(store => store.code === currentReview.store_id);
-            const region = selectedStore ? selectedStore.address_4 : ''; 
 
             // Function to format date-time value to 'YYYY-MM-DD HH:mm:ss'
             const formatDateTime = (value: string): string => {
@@ -121,13 +128,16 @@ export function EditReview({ onClose, selectedReview }: any) {
             const formattedStartDate = formatDateTime(currentReview.start_date);
             const formattedExpiryDate = formatDateTime(currentReview.expiry_date);
 
+            // ✅ UPDATED: Payload now sends reward_id instead of reward, reward_price, reward_type
+            // ✅ UPDATED: Region is now manually entered by user (or auto-populated from store if not set)
+            const selectedStore = allStores.find(store => store.code === currentReview.store_id);
+            const region = currentReview.region || (selectedStore ? selectedStore.address_4 : '');
+
             const payload = {
                 review_title: currentReview.review_title,
                 description: currentReview.description,
                 review_category: currentReview.review_category,
-                reward: currentReview.reward,
-                reward_type: currentReview.reward_type,
-                reward_price: currentReview.reward_price,
+                reward_id: currentReview.reward_id || null, // ✅ NEW: Optional reward_id
                 store_id: currentReview.store_id,
                 region: region,
                 start_date: formattedStartDate,
@@ -135,7 +145,7 @@ export function EditReview({ onClose, selectedReview }: any) {
                 loyalty_tier: currentReview.loyalty_tier,
                 age_group: currentReview.age_group,
                 isActive: currentReview.isActive,
-                organisationId: currentReview.organisation,
+                // Removed: organisationId — implicit via private DB connection in multi-tenancy
                 branchId: currentReview.branch,
             }
 
@@ -209,14 +219,18 @@ export function EditReview({ onClose, selectedReview }: any) {
         getAgeGroups();
         getAllOrganisations();
         getAllBranches();
+        getAllRewardsList(); // ✅ NEW: Fetch rewards for dropdown
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         if (selectedReview) {
             const reviewData = selectedReview as any;
             
-            const organisationValue = reviewData.organisation?.uid || reviewData.organisation || 0;
             const branchValue = reviewData.branch?.uid || reviewData.branch || 0;
+            
+            // ✅ UPDATED: Extract reward_id from review relationship or direct field
+            const rewardId = reviewData.reward?.reward_id || reviewData.reward_id || null;
             
             setCurrentReview({
                 review_id: selectedReview.review_id || 0,
@@ -225,16 +239,13 @@ export function EditReview({ onClose, selectedReview }: any) {
                 review_category: selectedReview.review_category || '',
                 store_id: selectedReview.store_id || '',
                 isActive: selectedReview.isActive || false,
-                reward: selectedReview.reward || '',
-                reward_price: selectedReview.reward_price || 0,
-                reward_type: selectedReview.reward_type || '',
+                reward_id: rewardId, // ✅ UPDATED: Use reward_id instead of reward, reward_price, reward_type
                 region: selectedReview.region || '',
                 loyalty_tier: selectedReview.loyalty_tier || '',
                 age_group: selectedReview.age_group || '',
                 start_date: formatDateTimeForInput(selectedReview.start_date) || '',
                 expiry_date: formatDateTimeForInput(selectedReview.expiry_date) || '',
-                organisation: organisationValue,
-                branch: branchValue,
+                branch: branchValue, // ✅ Removed: organisation (only branchId is saved)
             });
         }
     }, [selectedReview]);
@@ -244,11 +255,11 @@ export function EditReview({ onClose, selectedReview }: any) {
 
     return (
         <div className="fixed inset-0 z-50">
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="flex fixed inset-0 justify-center items-center p-4 bg-black bg-opacity-50">
             <Card className="w-full max-w-[95vw] md:max-w-[600px] max-h-[90vh] overflow-y-auto">
-              <div className="flex justify-end pr-4 pt-4">
+              <div className="flex justify-end pt-4 pr-4">
                 <button onClick={onClose}>
-                  <X className="h-4 w-4" color="red" />
+                  <X className="w-4 h-4" color="red" />
                 </button>
               </div>
               <CardHeader>
@@ -261,9 +272,9 @@ export function EditReview({ onClose, selectedReview }: any) {
                 <div className="space-y-3 sm:space-y-4">
 
                   {/* title x description */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                     <div>
-                      <label htmlFor="reward-title" className="text-black text-xs sm:text-sm">Title</label>
+                      <label htmlFor="reward-title" className="text-xs text-black sm:text-sm">Title</label>
                       <Input
                         id="reward-title"
                         value={currentReview.review_title}
@@ -273,7 +284,7 @@ export function EditReview({ onClose, selectedReview }: any) {
                       />
                     </div>
                     <div>
-                      <label htmlFor="description" className="text-black text-xs sm:text-sm">Description</label>
+                      <label htmlFor="description" className="text-xs text-black sm:text-sm">Description</label>
                       <Input
                         id="description"
                         value={currentReview.description}
@@ -284,74 +295,52 @@ export function EditReview({ onClose, selectedReview }: any) {
                     </div>
                   </div>
     
-                  {/* reward x type */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <div>
-                      <label htmlFor="reward" className="text-black text-xs sm:text-sm">Reward</label>
-                      <Input
-                        id="reward"
-                        value={currentReview.reward}
-                        onChange={(e) => setCurrentReview(prev => ({ ...prev, reward: e.target.value }))}
-                        placeholder="Enter reward"
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="reward-type" className="text-black text-xs sm:text-sm">Type</label>
-                      <Select
-                        value={currentReview.reward_type}
-                        onValueChange={(value) => setCurrentReview(prev => ({ ...prev, reward_type: value }))}
-                      >
-                        <SelectTrigger className="w-full mt-1">
-                          <SelectValue placeholder="Select type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="All">All</SelectItem>
-                          <SelectItem value="Percentage">Percentage</SelectItem>
-                          <SelectItem value="Amount">Amount</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  {/* ✅ UPDATED: Reward dropdown - replaced reward, reward_type, reward_price fields */}
+                  <div>
+                    <label htmlFor="reward-select" className="text-xs text-black sm:text-sm">Reward (Optional)</label>
+                    <Select
+                      value={currentReview.reward_id?.toString() || ''}
+                      onValueChange={(value) => setCurrentReview(prev => ({ ...prev, reward_id: value ? Number(value) : null }))}
+                    >
+                      <SelectTrigger className="mt-1 w-full">
+                        <SelectValue placeholder="Select a reward (optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">None (No reward)</SelectItem>
+                        {rewards.map((reward) => (
+                          <SelectItem key={reward.reward_id} value={reward.reward_id.toString()}>
+                            {reward.reward_title} - {reward.reward} ({reward.reward_type})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
     
-                  {/* loyalty tier x price */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <div>
-                      <label htmlFor="loyalty-tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
-                      <Select
-                        value={currentReview.loyalty_tier}
-                        onValueChange={(value) => setCurrentReview(prev => ({ ...prev, loyalty_tier: value }))}
-                      >
-                        <SelectTrigger className="w-full mt-1">
-                          <SelectValue placeholder="Select tier" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="All">All</SelectItem>
-                          {loyaltyTiers.map((loyalty) => (
-                            <SelectItem key={loyalty.tier_id} value={loyalty.tier}>
-                              {loyalty.tier}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <label htmlFor="reward-price" className="text-black text-xs sm:text-sm">Price</label>
-                      <Input
-                        id="reward-price"
-                        type="number"
-                        value={currentReview.reward_price || ''}
-                        onChange={(e) => setCurrentReview(prev => ({ ...prev, reward_price: parseFloat(e.target.value) }))}
-                        placeholder="Enter price"
-                        className="mt-1"
-                      />
-                    </div>
+                  {/* loyalty tier */}
+                  <div>
+                    <label htmlFor="loyalty-tier" className="text-xs text-black sm:text-sm">Loyalty Tier</label>
+                    <Select
+                      value={currentReview.loyalty_tier}
+                      onValueChange={(value) => setCurrentReview(prev => ({ ...prev, loyalty_tier: value }))}
+                    >
+                      <SelectTrigger className="mt-1 w-full">
+                        <SelectValue placeholder="Select tier" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="All">All</SelectItem>
+                        {loyaltyTiers.map((loyalty) => (
+                          <SelectItem key={loyalty.tier_id} value={loyalty.tier}>
+                            {loyalty.tier}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
     
                   {/* start date x end date */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                     <div>
-                      <label htmlFor="start-date" className="text-black text-xs sm:text-sm">Start Date</label>
+                      <label htmlFor="start-date" className="text-xs text-black sm:text-sm">Start Date</label>
                       <Input
                         type="datetime-local"
                         value={currentReview.start_date}
@@ -360,7 +349,7 @@ export function EditReview({ onClose, selectedReview }: any) {
                       />
                     </div>
                     <div>
-                      <label htmlFor="end-date" className="text-black text-xs sm:text-sm">End Date</label>
+                      <label htmlFor="end-date" className="text-xs text-black sm:text-sm">End Date</label>
                       <Input
                         type="datetime-local"
                         value={currentReview.expiry_date}
@@ -370,15 +359,43 @@ export function EditReview({ onClose, selectedReview }: any) {
                     </div>
                   </div>
     
+                  {/* region */}
+                  <div>
+                    <label htmlFor="region" className="text-xs text-black sm:text-sm">Region</label>
+                    <Input
+                      id="region"
+                      value={currentReview.region}
+                      onChange={(e) => setCurrentReview(prev => ({ ...prev, region: e.target.value }))}
+                      placeholder="Enter region (e.g., Gauteng, Western Cape)"
+                      className="mt-1"
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      {(() => {
+                        const selectedStore = allStores.find(store => store.code === currentReview.store_id);
+                        return selectedStore && selectedStore.address_4 
+                          ? `Store region: ${selectedStore.address_4}` 
+                          : 'Select a store to auto-populate region';
+                      })()}
+                    </p>
+                  </div>
+
                   {/* store id x age group */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                     <div>
-                      <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
+                      <label htmlFor="store-id" className="text-xs text-black sm:text-sm">Store ID</label>
                       <Select
                         value={currentReview.store_id}
-                        onValueChange={(value) => setCurrentReview(prev => ({ ...prev, store_id: value }))}
+                        onValueChange={(value) => {
+                          const selectedStore = allStores.find(store => store.code === value);
+                          // Auto-populate region from store if region is empty
+                          setCurrentReview(prev => ({ 
+                            ...prev, 
+                            store_id: value,
+                            region: prev.region || (selectedStore ? selectedStore.address_4 : '')
+                          }));
+                        }}
                       >
-                        <SelectTrigger className="w-full mt-1">
+                        <SelectTrigger className="mt-1 w-full">
                           <SelectValue placeholder="Select store" />
                         </SelectTrigger>
                         <SelectContent>
@@ -392,12 +409,12 @@ export function EditReview({ onClose, selectedReview }: any) {
                       </Select>
                     </div>
                     <div>
-                      <label htmlFor="age-group" className="text-black text-xs sm:text-sm">Age Group</label>
+                      <label htmlFor="age-group" className="text-xs text-black sm:text-sm">Age Group</label>
                       <Select
                         value={currentReview.age_group}
                         onValueChange={(value) => setCurrentReview(prev => ({ ...prev, age_group: value }))}
                       >
-                        <SelectTrigger className="w-full mt-1">
+                        <SelectTrigger className="mt-1 w-full">
                           <SelectValue placeholder="Select age group" />
                         </SelectTrigger>
                         <SelectContent>
@@ -412,57 +429,36 @@ export function EditReview({ onClose, selectedReview }: any) {
                     </div>
                   </div>
 
-                  {/* organisation x branch */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <div>
-                      <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                        <Select
-                          value={currentReview.organisation === 0 ? "All" : currentReview.organisation.toString()}
-                          onValueChange={(value: string) => setCurrentReview(prev => ({ ...prev, organisation: value === "All" ? 0 : Number(value) }))}
-                        >
-                          <SelectTrigger className="w-full mt-1">
-                              <SelectValue placeholder="Select Organisation" />
-                          </SelectTrigger>
-                          <SelectContent>
-                              <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                {/* {organisations?.map((org) => ( */}
-                                    <SelectItem  value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                        {userOrganisation}
-                                    </SelectItem>
-                                {/* // ))} */}
-                          </SelectContent>
-                                    </Select>
-                                </div>
-                                <div>
-                                    <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                                    <Select
-                                        value={currentReview.branch === 0 ? "All" : currentReview.branch.toString()}
-                                        onValueChange={(value: string) => setCurrentReview(prev => ({ ...prev, branch: value === "All" ? 0 : Number(value) }))}
-                                    >
-                                        <SelectTrigger className="w-full mt-1">
-                                            <SelectValue placeholder="Select Branch" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                            {branches?.map((branch) => (
-                                                <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                                    {branch.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                  {/* branch */}
+                  <div>
+                    <label htmlFor="branch" className="text-xs text-black sm:text-sm">Branch</label>
+                    <Select
+                      value={currentReview.branch === 0 ? "All" : currentReview.branch.toString()}
+                      onValueChange={(value: string) => setCurrentReview(prev => ({ ...prev, branch: value === "All" ? 0 : Number(value) }))}
+                    >
+                      <SelectTrigger className="mt-1 w-full">
+                        <SelectValue placeholder="Select Branch" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
+                        {branches?.map((branch) => (
+                          <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
+                            {branch.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {/* review category x active */}
-                  <div className="flex space-x-2 mt-1">
+                  <div className="flex mt-1 space-x-2">
                         <div className="flex flex-col w-full">
-                            <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Review Category</label>
+                            <label htmlFor="store-id" className="text-xs text-black sm:text-sm">Review Category</label>
                             <Select
                                 value={currentReview.review_category}
                                 onValueChange={(value) => setCurrentReview(prev => ({ ...prev, review_category: value }))}
                             >
-                                <SelectTrigger className="w-full mt-1">
+                                <SelectTrigger className="mt-1 w-full">
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -473,7 +469,7 @@ export function EditReview({ onClose, selectedReview }: any) {
                             </Select>
                         </div>
                         <div className="flex flex-col items-center space-x-2">
-                            <label htmlFor="active-toggle" className="text-black text-xs sm:text-sm">
+                            <label htmlFor="active-toggle" className="text-xs text-black sm:text-sm">
                                 Active
                             </label>
                             <Switch
@@ -486,11 +482,11 @@ export function EditReview({ onClose, selectedReview }: any) {
                         </div>
                   </div>
     
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
-                    <Button onClick={onClose} className="bg-red hover:bg-rose-300 text-white">
+                  <div className="grid grid-cols-2 gap-3 mt-4 sm:gap-4">
+                    <Button onClick={onClose} className="text-white bg-red hover:bg-rose-300">
                       Cancel
                     </Button>
-                    <Button onClick={updateReview} className="bg-green hover:bg-emerald-300 text-white">
+                    <Button onClick={updateReview} className="text-white bg-green hover:bg-emerald-300">
                       Update
                     </Button>
                   </div>

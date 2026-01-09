@@ -35,6 +35,7 @@ export function AddNewRewards({ onClose }: any) {
   const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
   const [branches, setBranches] = useState<Branch[] | null>(null);
 
+  // Updated: DTO now only requires branchId - organisationId implicit via private DB
   const [currentReward, setCurrentReward] = useState<Rewards>({
     reward_title: '',
     description: '',
@@ -48,7 +49,7 @@ export function AddNewRewards({ onClose }: any) {
     isActive: false,
     loyaltyTier: '',
     ageGroup: '',
-    organisation: 0,
+    organisation: 0, // Kept for UI compatibility, not sent in payload
     branch: 0,
   })
 
@@ -105,6 +106,7 @@ export function AddNewRewards({ onClose }: any) {
     }
   }
 
+  // Fixed: frontend payload no longer sends organisationId - implicit via private DB connection
   const saveReward = async () => {
     try {
         const selectedStore = allStores.find(store => store.code === currentReward.store_id);
@@ -119,6 +121,7 @@ export function AddNewRewards({ onClose }: any) {
         const formattedStartDate = formatDateTime(currentReward.start_date);
         const formattedExpiryDate = formatDateTime(currentReward.expiry_date);
 
+        // Removed: organisationId — implicit via private DB connection in multi-tenancy
         const payload = {
             reward_title: currentReward.reward_title,
             description: currentReward.description,
@@ -132,7 +135,6 @@ export function AddNewRewards({ onClose }: any) {
             loyalty_tier: currentReward.loyaltyTier,
             age_group: currentReward.ageGroup,
             isActive: currentReward.isActive,
-            organisationId: currentReward.organisation,
             branchId: currentReward.branch,
         }
 
@@ -454,14 +456,17 @@ export function AddNewRewards({ onClose }: any) {
                           </Select> */}
                           <select
                             id="organisation"
-                            value={currentReward.organisation === 0 ? "All" : currentReward.organisation.toString()}
+                            value={currentReward.organisation === 0 ? "All" : (currentReward.organisation?.toString() || "All")}
                             onChange={(e) => setCurrentReward(prev => ({ ...prev, organisation: e.target.value === "All" ? 0 : Number(e.target.value) }))}
                             className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                            disabled
                           >
                             <option value="All">All</option>
-                            <option value={userOrganisationUid.toString()}>
-                              {userOrganisation}
-                            </option>
+                            {userOrganisationUid && (
+                              <option value={userOrganisationUid.toString()}>
+                                {userOrganisation || 'User Organisation'}
+                              </option>
+                            )}
                           </select>
                     </div>
                     <div>
@@ -489,7 +494,7 @@ export function AddNewRewards({ onClose }: any) {
                               className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
                             >
                               <option value="All">All</option>
-                              {branches?.map((branch) => (
+                              {branches && branches.length > 0 && branches.map((branch) => (
                                 <option key={branch.uid} value={branch.uid.toString()}>
                                   {branch.name}
                                 </option>

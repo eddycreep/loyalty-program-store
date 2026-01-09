@@ -13,32 +13,17 @@ import { apiClient } from '@/utils/api-client';
 import { EditReview } from './reviews/edit-review';
 import { getAllReviews } from '@/components/data/reviews/get-all-reviews';
 import { useSession } from '@/context';
+import { Reviews } from '@/modules/types/reviews/reviews-data'; // ✅ UPDATED: Use the updated Reviews interface
 
-export interface ReviewProps {
-    review_id: number,
-    review_title: string,
-    description: string,
-    review_category: string,
-    store_id: string,
-    reward: string,
-    reward_price: number,
-    reward_type: string,
-    region: string,
-    loyalty_tier: string,
-    age_group: string,
-    start_date: string,
-    expiry_date: string,
-    isActive: boolean
-    
-}
-type ReviewsResponse = ReviewProps[]
+// ✅ UPDATED: Use the Reviews interface from reviews-data.tsx instead of defining a separate ReviewProps
+type ReviewsResponse = Reviews[]
 
 export const ReviewsModule = () => {
     const { user } = useSession();
     const [reviews, setReviews] = useState<ReviewsResponse>([]);
     const [addReviewsPopUp, setReviewsPopUp] = useState(false);
     const [editProductsPopup, setEditProductsPopup] = useState(false);
-    const [selectedReview, setSelectedReview] = useState<ReviewProps | null>(null);
+    const [selectedReview, setSelectedReview] = useState<Reviews | null>(null); // ✅ UPDATED: Use Reviews type
     const [selectedReviewID, setSelectedReviewID] = useState(0);
     const [selectedReviewTitle, setSelectedReviewTitle] = useState('');
 
@@ -96,6 +81,7 @@ export const ReviewsModule = () => {
 
     useEffect(() => {
         fetchReviews();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -244,71 +230,80 @@ export const ReviewsModule = () => {
                             ))}
                         </div>
                         <div className="pt-2 max-h-[550px] pb-2 space-y-2">
-                        {reviews?.map(({ review_id, review_title, description, review_category, store_id, reward, reward_price, reward_type, region, loyalty_tier, age_group, start_date, expiry_date, isActive }) => (
-                                    <div key={review_id} className="flex flex-col p-3 mx-2 text-gray-600 bg-white rounded shadow-lg">
-                                        <div className="flex justify-between items-center">
-                                            <p className="flex-1 text-sm text-center text-purple">{review_id}</p>
-                                            <p className="flex-1 text-sm text-center">{review_title || '--:--'}</p>
-                                            <p className="flex-1 text-sm text-center">{description || '--:--'}</p>
-                                            <p className="flex-1 text-sm text-center">{reward || '--:--'}</p>
-                                            <p className="flex-1 text-sm text-center">{reward_type || '--:--'}</p>
-                                            <p className="flex-1 text-sm text-center">R{reward_price || '--:--'}</p>
-                                            <p className="flex-1 text-sm text-center">{store_id || '--:--'}</p>
+                        {reviews?.map((review) => {
+                            // ✅ UPDATED: Extract reward info from relationship object
+                            // The reward field is now a Reward object (not a string) when included in API response
+                            const rewardInfo = review.reward && typeof review.reward === 'object' ? review.reward : null;
+                            const rewardTitle = rewardInfo?.reward_title || '--:--';
+                            const rewardType = rewardInfo?.reward_type || '--:--';
+                            const rewardPrice = rewardInfo?.reward_price || '--:--';
+                            
+                            return (
+                                <div key={review.review_id} className="flex flex-col p-3 mx-2 text-gray-600 bg-white rounded shadow-lg">
+                                    <div className="flex justify-between items-center">
+                                        <p className="flex-1 text-sm text-center text-purple">{review.review_id}</p>
+                                        <p className="flex-1 text-sm text-center">{review.review_title || '--:--'}</p>
+                                        <p className="flex-1 text-sm text-center">{review.description || '--:--'}</p>
+                                        <p className="flex-1 text-sm text-center">{rewardTitle}</p>
+                                        <p className="flex-1 text-sm text-center">{rewardType}</p>
+                                        <p className="flex-1 text-sm text-center">R{rewardPrice}</p>
+                                        <p className="flex-1 text-sm text-center">{review.store_id || '--:--'}</p>
                                             <div className="flex flex-1 gap-4 justify-center items-center text-sm text-center">
-                                                <button onClick={() => handleExpandClick(review_id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
-                                                    {expandedRow === review_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
+                                                <button onClick={() => handleExpandClick(review.review_id)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
+                                                    {expandedRow === review.review_id ? (<Shrink size={21} />) : (<Expand size={21} />)}
                                                 </button>
-                                                <button onClick={() => handleEditReview(review_id)} className="flex justify-center items-center p-1 text-gray-500 bg-white rounded-lg border border-gray-500 cursor-pointer hover:bg-gray-200">
+                                                <button onClick={() => handleEditReview(review.review_id)} className="flex justify-center items-center p-1 text-gray-500 bg-white rounded-lg border border-gray-500 cursor-pointer hover:bg-gray-200">
                                                     <Edit size={21} /> 
                                                 </button>
-                                                <button onClick={() => toggleDeletePage(review_id, review_title)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
+                                                <button onClick={() => toggleDeletePage(review.review_id, review.review_title)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
                                                     <Trash2 size={21} /> 
                                                 </button>
                                             </div>
                                         </div>
-                                        {expandedRow === review_id && (
+                                        {expandedRow === review.review_id && (
                                             <div className="pt-4">
                                                 <div className="grid grid-cols-8 gap-4 p-4 pt-2 text-sm text-center bg-gray-100 rounded shadow-inner">
                                                     <p className="font-medium text-gray-600"></p>
                                                 <div>
                                                     <p className="text-xs font-bold text-gray-600 uppercase">Region</p>
-                                                    <p className="pt-1 text-sm text-gray-500">{region || '--:--'}</p>
+                                                    <p className="pt-1 text-sm text-gray-500">{review.region || '--:--'}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-xs font-bold text-gray-600 uppercase">Loyalty Tier</p>
-                                                    <p className="pt-1 text-sm text-gray-500">{loyalty_tier || '--:--'}</p>
+                                                    <p className="pt-1 text-sm text-gray-500">{review.loyalty_tier || '--:--'}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-xs font-bold text-gray-600 uppercase">Age Group</p>
-                                                    <p className="pt-1 text-sm text-gray-500">{age_group || '--:--'}</p>
+                                                    <p className="pt-1 text-sm text-gray-500">{review.age_group || '--:--'}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-xs font-bold text-gray-600 uppercase">Start Date</p>
-                                                    <p className="pt-1 text-sm text-gray-500">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
+                                                    <p className="pt-1 text-sm text-gray-500">{review.start_date ? review.start_date.split(" ")[0] : '--:--'}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-xs font-bold text-gray-600 uppercase">Expiry Date</p>
-                                                    <p className="pt-1 text-sm text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
+                                                    <p className="pt-1 text-sm text-red">{review.expiry_date ? review.expiry_date.split(" ")[0] : '--:--'}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-xs font-bold text-gray-600 uppercase">Status</p>
-                                                    <p className={`text-sm pt-1 ${isActive === true ? 'text-green' : 'text-red'}`}>
-                                                        {isActive === true ? 'Active' : 'Inactive'}
+                                                    <p className={`text-sm pt-1 ${review.isActive === true ? 'text-green' : 'text-red'}`}>
+                                                        {review.isActive === true ? 'Active' : 'Inactive'}
                                                     </p>
                                                 </div>
                                             </div>
                                             </div>
                                         )}
                                     </div>
-                                ))}
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {deletePopUp && (<DeleteReviewConfirmation reviewID={selectedReviewID} reviewTitle={selectedReviewTitle} isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
-        {editProductsPopup && <EditReview onClose={closeEditReviewsPopup} selectedReview={selectedReview} />}
-        {addReviewsPopUp && <AddReview onClose={ toggleAddReviews } />} 
+            {deletePopUp && (<DeleteReviewConfirmation reviewID={selectedReviewID} reviewTitle={selectedReviewTitle} isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
+            {editProductsPopup && <EditReview onClose={closeEditReviewsPopup} selectedReview={selectedReview} />}
+            {addReviewsPopUp && <AddReview onClose={ toggleAddReviews } />}
+            </div>
         </div>
     );
 }
