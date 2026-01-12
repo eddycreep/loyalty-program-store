@@ -33,7 +33,7 @@ export function EditBranch({ onClose, selectedBranch, onSuccess }: any) {
             opening: '',
             closing: ''
         },
-        organisationId: 0
+        // organisationId: 0
     })
 
     const saveBranch = async () => {
@@ -50,7 +50,7 @@ export function EditBranch({ onClose, selectedBranch, onSuccess }: any) {
                     opening: currentBranch.operatingHours.opening,
                     closing: currentBranch.operatingHours.closing
                 },
-                organisationId: user?.organisation?.uid
+                // organisationId: user?.organisation?.uid
             }
             console.log("payload in add-new-branch: ", payload)
 
@@ -120,7 +120,7 @@ export function EditBranch({ onClose, selectedBranch, onSuccess }: any) {
                 email: selectedBranch.email || '',
                 managerName: selectedBranch.managerName || '',
                 operatingHours: parsedOperatingHours,
-                organisationId: 0 // Will be set from user context
+                // organisationId: 0 // Will be set from user context
             });
         }
     }, [selectedBranch]); // Added selectedBranch to dependency array
@@ -199,7 +199,7 @@ export function EditBranch({ onClose, selectedBranch, onSuccess }: any) {
                                         className="mt-1"
                                     />
                                 </div>
-                                <div>
+                                {/* <div>
                                     <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
                                         <Select
                                             value={currentBranch.organisationId.toString()}
@@ -215,7 +215,7 @@ export function EditBranch({ onClose, selectedBranch, onSuccess }: any) {
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* Operating Hours Section - Added to capture operatingHours field */}

@@ -154,9 +154,9 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                                         className="mt-1"
                                     />
                                 </div>
-                                <div>
+                                {/* <div>
                                     <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                                        {/* <Select
+                                        <Select
                                             value={currentBranch.organisationId.toString()}
                                             onValueChange={(value) => setCurrentBranch(prev => ({ ...prev, organisationId: Number(value) }))}
                                         >
@@ -169,8 +169,8 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                                                     {user?.organisation?.name}
                                                 </SelectItem>
                                             </SelectContent>
-                                        </Select> */}
-                                        {/* <select
+                                        </Select>
+                                        <select
                                           id="organisation"
                                           value={currentBranch.organisationId.toString()}
                                           onChange={(e) => setCurrentBranch(prev => ({ ...prev, organisationId: Number(e.target.value) }))}
@@ -180,8 +180,8 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                                           <option value={user?.organisation?.uid.toString()}>
                                             {user?.organisation?.name}
                                           </option>
-                                        </select> */}
-                                </div>
+                                        </select>
+                                </div> */}
                             </div>
 
                             {/* Operating Hours Section - Added to capture operatingHours field */}
