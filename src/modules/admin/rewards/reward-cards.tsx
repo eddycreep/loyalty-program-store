@@ -60,7 +60,7 @@ export function RewardSummaryCards() {
       {
         title: "Common Items Redeemed",
         icon: <Popcorn className="w-6 h-6 text-red" />,
-        content: "Coke 2L\nLays\nMaynards",
+        content: "GYPROC-R/BOARD 6.4X0.9X2.7\nBIT BOARD 6.4X0.9X3.0\nBIT DRYWALL SCREW 32MM",
       },
     ];
 

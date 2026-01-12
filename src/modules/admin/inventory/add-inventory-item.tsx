@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { apiClient } from '@/utils/api-client';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Inventory item form data interface
 interface InventoryItemFormData {
@@ -296,7 +296,7 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                             <div className="grid grid-cols-1 gap-3 pb-4 border-b sm:grid-cols-2 sm:gap-4">
                                 <div>
                                     <label className="text-xs font-medium text-black sm:text-sm">Organization *</label>
-                                    <Select 
+                                    {/* <Select 
                                         value={selectedOrgId?.toString() || ''} 
                                         onValueChange={(value) => setSelectedOrgId(Number(value))}
                                         disabled={loadingOrgs}
@@ -311,11 +311,24 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                      value={selectedOrgId?.toString() || ''}
+                                      onChange={(e) => setSelectedOrgId(Number(e.target.value))}
+                                      disabled={loadingOrgs}
+                                      className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      <option value="">{loadingOrgs ? "Loading..." : "Select organization"}</option>
+                                      {organisations?.map((org) => (
+                                        <option key={org.id} value={org.id.toString()}>
+                                          {org.organisation_name}
+                                        </option>
+                                      ))}
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="text-xs font-medium text-black sm:text-sm">Branch *</label>
-                                    <Select 
+                                    {/* <Select 
                                         value={selectedBranchId?.toString() || ''} 
                                         onValueChange={(value) => setSelectedBranchId(Number(value))}
                                         disabled={!selectedOrgId || loadingBranches}
@@ -334,7 +347,24 @@ export function AddInventoryItem({ onClose, onSuccess }: any) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                      value={selectedBranchId?.toString() || ''}
+                                      onChange={(e) => setSelectedBranchId(Number(e.target.value))}
+                                      disabled={!selectedOrgId || loadingBranches}
+                                      className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      <option value="">
+                                        {!selectedOrgId ? "Select organization first" : 
+                                         loadingBranches ? "Loading..." : 
+                                         "Select branch"}
+                                      </option>
+                                      {branches?.map((branch) => (
+                                        <option key={branch.id} value={branch.id.toString()}>
+                                          {branch.branch_name}
+                                        </option>
+                                      ))}
+                                    </select>
                                 </div>
                             </div>
 

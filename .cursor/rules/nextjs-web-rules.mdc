@@ -1,0 +1,53 @@
+---
+alwaysApply: true
+---
+
+# Web Store Architecture (loyalty-program-store – Next.js + TypeScript + Tailwind + Shadcn/UI)
+
+Always use the Next.js App Router (/app directory) — never the pages/ directory.
+
+Default to server components. Only add "use client" at the top of a file when strictly necessary (interactivity, hooks, browser APIs). Move client-side logic to child components or custom hooks when possible.
+
+All styling must use Tailwind CSS classes. Never use CSS modules, styled-jsx, or inline styles except for extremely rare dynamic cases.
+
+Use Shadcn/UI components exclusively for UI elements (Button, Card, Table, Dialog, Tabs, Accordion, DropdownMenu, Toast, etc.) — follow https://ui.shadcn.com/ patterns exactly.
+
+When adding a new Shadcn/UI component: run the official CLI command (npx shadcn-ui@latest add component-name) and place it in /components/ui/.
+
+Customize Shadcn components only via the central theme in /components/ui/ or tailwind.config.ts — never override with one-off classes.
+
+Layout and responsiveness: Use responsive Tailwind utilities (sm:, md:, lg:) to ensure the store looks great on mobile, tablet, and desktop. Test key pages on mobile widths.
+
+Images: Always use next/image with proper width/height or fill/layout props, priority on above-the-fold, and loading="lazy" elsewhere.
+
+Data fetching: Prefer server-side fetching (direct in server components or via server actions). Use Route Handlers (app/api/) for any client-needed endpoints.
+
+API calls to the backend (loyalty-program-server-1) must go through a centralized API client utility (e.g., lib/api.ts) — never inline fetch URLs in components.
+
+Use React Server Components patterns: fetch data directly in server components, pass to client components via props.
+
+For forms and mutations: Use server actions where possible; otherwise use client-side with optimistic updates and proper loading/error states via Shadcn/UI components.
+
+Authentication: Protect routes with middleware or server-side checks; redirect unauthenticated users to login.
+
+State management: Avoid heavy global stores. Use server components + props for most data. For client-only state (cart preview, toast notifications), use simple React context or Zustand if needed.
+
+Performance: Enable Next.js built-in optimizations (static rendering where possible, dynamic only when needed). Use loading.tsx and error.tsx skeletons in app routes.
+
+SEO & Metadata: Always define metadata (title, description, open graph) in layout.tsx or page.tsx using Next.js Metadata API.
+
+Use yarn as the package manager — all commands via yarn (yarn add, yarn dev, etc.).
+
+Deploy to Vercel: Follow Vercel best practices (environment variables in dashboard, preview deployments).
+
+All code must be fully typed with TypeScript strict mode: explicit interfaces for props, params, API responses, and server actions.
+
+Keep components small and reusable: Shared UI in /components/ui/ or /components/common/.
+
+Error handling: Use error.tsx boundaries and show user-friendly messages with Shadcn/UI Alert or Toast.
+
+Accessibility: Follow Shadcn/UI accessibility standards (aria labels, keyboard navigation).
+
+Testing: Write unit tests for utilities and server actions; add component tests with React Testing Library where critical.
+
+Code readability: Short components (<300 lines), descriptive file names (e.g., product-card.tsx, checkout-form.tsx), and comments only for complex logic.

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Image from 'next/image';
 import { Edit, Trash2, ShieldAlert, XOctagon, PlusCircle, ArchiveRestore, Activity} from "lucide-react"
 import { RewardSummaryCards } from "./rewards/reward-cards";
@@ -8,16 +8,21 @@ import SquareCircleLoader from "@/lib/square-circle-loader";
 import { Organisation } from '../types/organisation/organisation-types';
 import { AddNewOrganisation } from './organisation/add-new-organisation';
 import { DeleteOrganisationConfirmation } from './organisation/delete-organisation-confirmation';
-import { getAllOrganisations } from '@/components/data/organisation/get-all-organisations-data';
+// Removed getAllOrganisations import - users now only see their own organisation
 import { EditOrganisation } from './organisation/edit-organisation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ActivateOrganisationConfirmation } from './organisation/activate-organisation-confirmation';
 import { DeactivateOrganisationConfirmation } from './organisation/deactivate-organisation-confirmation';
 import { RestoreOrganisationConfirmation } from './organisation/restore-organisation-confimation';
 import { Badge } from "@/components/ui/badge";
+import { useSession } from "@/context";
+import { getOrganisation } from "@/components/data/organisation/get-organisation-data";
 
 export const OrganizationModule = () => {
-    const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
+    const { user } = useSession();
+    const userOrganisationId = user?.organisation?.uid;
+    // Removed organisations state - users now only see their own organisation
+    const [userOrganisation, setUserOrganisation] = useState<Organisation | null>(null);
 
     const [addOrganisationPopUp, setAddOrganisationPopUp] = useState(false);
     const [editOrganisationPopup, setEditOrganisationPopup] = useState(false);
@@ -57,33 +62,35 @@ export const OrganizationModule = () => {
         setSelectedOrganisationID(uid)
     };
 
-    const fetchOrganisations = async () => {
+    // Removed fetchOrganisations - users now only fetch their own organisation
+    const fetchUserOrganisation = useCallback(async () => {
+        if (!userOrganisationId) return;
+        
         setLoadingData(true);
 
         try {
-            const orgData = await getAllOrganisations()
-            setOrganisations(orgData)
-            console.log("all organisations returned bro: ", orgData)
+            const orgData = await getOrganisation(userOrganisationId as number)
+            setUserOrganisation(orgData as Organisation)
+            console.log("user organisation returned bro: ", orgData)
         } catch (error) {
-            console.error('error fetching all organisations bro:', error)
+            console.error('error fetching user organisation bro:', error);
             setIsError(true);
+        } finally {
+            setLoadingData(false);
         }
-        setLoadingData(false);
-    }
+    }, [userOrganisationId])
 
     const toggleAddOrganisation = () => {
         setAddOrganisationPopUp(!addOrganisationPopUp);
     }
 
     const handleEditOrganisation = (uid: any) => {
-        const selected = organisations?.find((item) => item.uid === uid) || null;
-        
-        if (selected) {
-            setSelectedOrganisation(selected);
+        // Use userOrganisation directly since users only see their own organisation
+        if (userOrganisation && userOrganisation.uid === uid) {
+            setSelectedOrganisation(userOrganisation);
             setEditOrganisationPopup(true);
-            
         } else {
-            console.log("No selected Organisation, sumn wrong with the code my nigga:" + selected);
+            console.log("No selected Organisation found or UID mismatch");
         }
     }; 
 
@@ -102,43 +109,44 @@ export const OrganizationModule = () => {
     };
 
     const handleSuccess = () => {
-        // Refresh the organisations data after successful activation
-        fetchOrganisations();
+        // Refresh the user's organisation data after successful operations
+        fetchUserOrganisation();
     };
 
     useEffect(() => {
-        fetchOrganisations();
-    }, []);
+        // Only fetch user's own organisation
+        fetchUserOrganisation();
+    }, [fetchUserOrganisation]);
 
     if (loadingData) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='flex flex-col gap-4 mb-80 w-full h-full rounded-lg overflow-y'>
                 <div>
                     <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
+                    <div className="flex flex-col pt-6 pl-2">
                         <h4 className="text-xl font-semibold text-purple">Organizations</h4>
                         <p className="text-gray-400">Manage your organization&apos;s details and settings.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddOrganisation } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddOrganisation } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
                 </div>
-                <div className="pt-20 flex flex-col items-center justify-center">
+                <div className="flex flex-col justify-center items-center pt-20">
                     <SquareCircleLoader />
-                    <p className="text-gray-500 uppercase pt-4">Loading data, please be patient.</p>
+                    <p className="pt-4 text-gray-500 uppercase">Loading data, please be patient.</p>
                 </div>
             </div>
         </div>
@@ -152,32 +160,32 @@ export const OrganizationModule = () => {
     if (isError) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='flex flex-col gap-4 mb-80 w-full h-full rounded-lg overflow-y'>
                 <div>
                     <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
+                    <div className="flex flex-col pt-6 pl-2">
                         <h4 className="text-xl font-semibold text-purple">Organizations</h4>
                         <p className="text-gray-400">Manage your organization&apos;s details and settings.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddOrganisation } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddOrganisation } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
                 </div>
-                <div className="flex flex-col items-center justify-center pt-10">
+                <div className="flex flex-col justify-center items-center pt-10">
                     <XOctagon size={44} className="text-black" />
-                    <p className="ml-2 uppercase pt-2 text-red">An error occoured when fetching the rewards!</p>
+                    <p className="pt-2 ml-2 uppercase text-red">An error occoured when fetching the rewards!</p>
                 </div>
             </div>
         </div>
@@ -188,61 +196,58 @@ export const OrganizationModule = () => {
         )
     }
 
-    if (organisations?.length === 0) {
+    if (!userOrganisation) {
         return (
             <div>
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y mb-80'>
+            <div className='flex flex-col gap-4 mb-80 w-full h-full rounded-lg overflow-y'>
                 <div>
                     <RewardSummaryCards />
                 </div>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-6">
+                    <div className="flex flex-col pt-6 pl-2">
                     <h4 className="text-xl font-semibold text-purple">Organizations</h4>
                     <p className="text-gray-400">Manage your organization&apos;s details and settings.</p>
                     </div>
                     <div className='flex gap-2 pt-8 pr-2'>
-                        <button onClick={ toggleAddOrganisation } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddOrganisation } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
                         </p>
                     ))}
                 </div>
-                <div className="flex flex-col items-center justify-center pt-10">
+                <div className="flex flex-col justify-center items-center pt-10">
                     <ShieldAlert size={44} className="text-black" />
-                    <p className="ml-2 uppercase pt-2 text-green">No rewards have been set for customers. Add new rewards to enhance their experience!</p>
+                    <p className="pt-2 ml-2 uppercase text-green">No organization found. Add a new organization to get started!</p>
                 </div>
             </div>
         </div>
-        {/* {deletePopUp && (<DeleteRewardConfirmation isOpen={ deletePopUp } onClose={ toggleDeletePage } /> )}
-        {editProductsPopup && <EditRewards onClose={closeEditRewardsPopup} selectedReward={selectedReward} />}
-        {addRewardsPopUp && <AddNewRewards onClose={ toggleAddRewards } />} */}
         </div>
         )
     }
 
     return (
         <div className="pb-52">
-            <div className='w-full h-full flex flex-col gap-4 rounded-lg overflow-y pb-10'>
+            <div className='flex flex-col gap-4 pb-10 w-full h-full rounded-lg overflow-y'>
             <div>
                 <div className="flex justify-between">
-                    <div className="flex flex-col pl-2 pt-24">
+                    <div className="flex flex-col pt-24 pl-2">
                         <h4 className="text-xl font-semibold text-purple">Organizations</h4>
                         <p className="text-gray-400">Manage your organization&apos;s details and settings.</p>
                     </div>
                     <div className='flex gap-2 pt-28 pr-2'>
-                        <button onClick={ toggleAddOrganisation } className="bg-green text-white py-2 px-2 w-10 h-10 rounded-lg hover:bg-emerald-300">
+                        <button onClick={ toggleAddOrganisation } className="px-2 py-2 w-10 h-10 text-white rounded-lg bg-green hover:bg-emerald-300">
                             <PlusCircle size={21} /> 
                         </button>
                     </div>
                 </div>
-                <div className="bg-white text-gray-600 font-bold flex items-center justify-between divide-x divide-gray-500 p-3 mt-4 mx-2 rounded shadow-lg">
+                <div className="flex justify-between items-center p-3 mx-2 mt-4 font-bold text-gray-600 bg-white rounded divide-x divide-gray-500 shadow-lg">
                     {headers?.map((header, index) => (
                         <p key={index} className={`text-xs uppercase flex-1 text-center ${index === 1 ? 'hidden lg:block' : ''}`}>
                             {header}
@@ -250,147 +255,112 @@ export const OrganizationModule = () => {
                     ))}
                 </div>
                 <div className="pt-2 max-h-[550px] pb-2 space-y-2">
-                        {organisations?.map(({ uid, name, description, email, website, logo, active, isDeleted }) => (
-                            <div key={uid} className="bg-white text-gray-600 flex flex-col p-3 mx-2 rounded shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    {/* Fixed alignment: All columns now use consistent structure and padding */}
-                                    <div className="text-sm flex-1 text-center">
-                                        <p className="text-purple">{uid}</p>
-                                    </div>
-                                    <div className="text-sm flex-1 text-center">
-                                        <p>{name || '--:--'}</p>
-                                    </div>
-                                    <div className="text-sm flex-1 text-center">
-                                        <p>{description || '--:--'}</p>
-                                    </div>
-                                    {/* <div className="text-sm flex-1 text-center">
-                                        <p>{email || '--:--'}</p>
-                                    </div> */}
-                                    <div className="text-sm flex-1 text-center flex justify-center items-center">
-                                        {logo && logo !== '--:--' ? (
-                                            <div className="relative w-10 h-10">
-                                                <Image 
-                                                    src={logo} 
-                                                    alt={`${name} logo`}
-                                                    fill
-                                                    className="object-contain rounded-lg"
-                                                    unoptimized
-                                                />
-                                            </div>
-                                        ) : (
-                                            <span className="text-gray-400">--:--</span>
-                                        )}
-                                    </div>
-                                    {/* <div className="text-sm flex-1 text-center">
-                                        <p>{website || '--:--'}</p>
-                                    </div> */}
-                                    <div className="text-sm flex-1 text-center">
-                                        <Badge className={`${active === true ? 'bg-green hover:bg-green-100 text-white' : 'bg-red hover:bg-red-100 text-white'}`}>
-                                            {active === true ? 'Active' : 'Inactive'}
-                                        </Badge>
-                                    </div>
-                                    <div className="text-sm flex-1 text-center">
-                                        <Badge className={`${isDeleted === true ? 'bg-red hover:bg-red-100 text-white' : 'bg-green hover:bg-green-100 text-white'}`}>
-                                            {isDeleted === true ? 'Deleted' : 'Not Deleted'}
-                                        </Badge>
-                                    </div>
-                                    <div className="flex items-center justify-center text-sm flex-1 text-center gap-4">
-                                        {/* Edit Organisation */}
-                                        <Tooltip>
-                                            <TooltipTrigger>
-                                                <button onClick={() => handleEditOrganisation(uid)} className="flex items-center justify-center cursor-pointer bg-white text-gray-500 border border-gray-500 hover:bg-gray-200 p-1 rounded-lg">
-                                                    <Edit size={21} /> 
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Edit</p>
-                                            </TooltipContent>
-                                        </Tooltip>
+                        {/* Display single user organisation - users only see their own organisation */}
+                        {userOrganisation && (() => {
+                            const { uid, name, description, email, website, logo, active, isDeleted } = userOrganisation;
+                            return (
+                                <div key={uid} className="flex flex-col p-3 mx-2 text-gray-600 bg-white rounded shadow-lg">
+                                    <div className="flex justify-between items-center">
+                                        {/* Fixed alignment: All columns now use consistent structure and padding */}
+                                        <div className="flex-1 text-sm text-center">
+                                            <p className="text-purple">{uid}</p>
+                                        </div>
+                                        <div className="flex-1 text-sm text-center">
+                                            <p>{name || '--:--'}</p>
+                                        </div>
+                                        <div className="flex-1 text-sm text-center">
+                                            <p>{description || '--:--'}</p>
+                                        </div>
+                                        <div className="flex flex-1 justify-center items-center text-sm text-center">
+                                            {logo && logo !== '--:--' ? (
+                                                <div className="relative w-10 h-10">
+                                                    <Image 
+                                                        src={logo} 
+                                                        alt={`${name} logo`}
+                                                        fill
+                                                        className="object-contain rounded-lg"
+                                                        unoptimized
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <span className="text-gray-400">--:--</span>
+                                            )}
+                                        </div>
+                                        <div className="flex-1 text-sm text-center">
+                                            <Badge className={`${active === true ? 'bg-green hover:bg-green-100 text-white' : 'bg-red hover:bg-red-100 text-white'}`}>
+                                                {active === true ? 'Active' : 'Inactive'}
+                                            </Badge>
+                                        </div>
+                                        <div className="flex-1 text-sm text-center">
+                                            <Badge className={`${isDeleted === true ? 'bg-red hover:bg-red-100 text-white' : 'bg-green hover:bg-green-100 text-white'}`}>
+                                                {isDeleted === true ? 'Deleted' : 'Not Deleted'}
+                                            </Badge>
+                                        </div>
+                                        <div className="flex flex-1 gap-4 justify-center items-center text-sm text-center">
+                                            {/* Edit Organisation */}
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <button onClick={() => handleEditOrganisation(uid)} className="flex justify-center items-center p-1 text-gray-500 bg-white rounded-lg border border-gray-500 cursor-pointer hover:bg-gray-200">
+                                                        <Edit size={21} /> 
+                                                    </button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Edit</p>
+                                                </TooltipContent>
+                                            </Tooltip>
 
-                                        {/* Activate Organisation */}
-                                        <Tooltip>
-                                            <TooltipTrigger>
-                                                <button onClick={() => toggleActivationPage(uid)} className="flex items-center justify-center cursor-pointer bg-white text-purple border border-purple hover:bg-indigo-100 p-1 rounded-lg">
-                                                    <Activity size={21} />
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Activate</p>
-                                            </TooltipContent>
-                                        </Tooltip>
+                                            {/* Activate Organisation */}
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <button onClick={() => toggleActivationPage(uid)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-purple border-purple hover:bg-indigo-100">
+                                                        <Activity size={21} />
+                                                    </button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Activate</p>
+                                                </TooltipContent>
+                                            </Tooltip>
 
-                                        {/* Deactivate Organisation */}
-                                        <Tooltip>
-                                            <TooltipTrigger>
-                                                <button onClick={() => toggleDeactivationPage(uid)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
-                                                    <ShieldAlert size={21} />
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Deactivate</p>
-                                            </TooltipContent>
-                                        </Tooltip>
+                                            {/* Deactivate Organisation */}
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <button onClick={() => toggleDeactivationPage(uid)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
+                                                        <ShieldAlert size={21} />
+                                                    </button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Deactivate</p>
+                                                </TooltipContent>
+                                            </Tooltip>
 
-                                        {/* Restore Organisation */}
-                                        <Tooltip>
-                                            <TooltipTrigger>
-                                                <button onClick={() => toggleRestorePage(uid)} className="flex items-center justify-center cursor-pointer bg-white text-green border border-green hover:bg-green-100 p-1 rounded-lg">
-                                                    <ArchiveRestore size={21} /> 
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Restore</p>
-                                            </TooltipContent>
-                                        </Tooltip>
+                                            {/* Restore Organisation */}
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <button onClick={() => toggleRestorePage(uid)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-green border-green hover:bg-green-100">
+                                                        <ArchiveRestore size={21} /> 
+                                                    </button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Restore</p>
+                                                </TooltipContent>
+                                            </Tooltip>
 
-                                        {/* Delete Organisation */}
-                                        <Tooltip>
-                                            <TooltipTrigger>
-                                                <button onClick={() => toggleDeletePage(uid, name)} className="flex items-center justify-center cursor-pointer bg-white text-red border border-red hover:bg-rose-100 p-1 rounded-lg">
-                                                    <Trash2 size={21} /> 
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Delete</p>
-                                            </TooltipContent>
-                                        </Tooltip>
+                                            {/* Delete Organisation */}
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <button onClick={() => toggleDeletePage(uid, name)} className="flex justify-center items-center p-1 bg-white rounded-lg border cursor-pointer text-red border-red hover:bg-rose-100">
+                                                        <Trash2 size={21} /> 
+                                                    </button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Delete</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </div>
                                     </div>
                                 </div>
-                                {/* {expandedRow === uid && (
-                                    <div className="pt-4">
-                                        <div className="grid grid-cols-8 gap-4 pt-2 bg-gray-100 rounded shadow-inner text-center p-4 text-sm">
-                                            <p className="font-medium text-gray-600"></p>
-                                        <div>
-                                            <p className="font-bold text-gray-600 text-xs uppercase">Region</p>
-                                            <p className="text-sm text-gray-500 pt-1">{region || '--:--'}</p>
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-gray-600 text-xs uppercase">Loyalty Tier</p>
-                                            <p className="text-sm text-gray-500 pt-1">{loyalty_tier || '--:--'}</p>
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-gray-600 text-xs uppercase">Age Group</p>
-                                            <p className="text-sm text-gray-500 pt-1">{age_group || '--:--'}</p>
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-gray-600 text-xs uppercase">Start Date</p>
-                                            <p className="text-sm text-gray-500 pt-1">{start_date ? start_date.split(" ")[0] : '--:--'}</p>
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-gray-600 text-xs uppercase">Expiry Date</p>
-                                            <p className="text-sm pt-1 text-red">{expiry_date ? expiry_date.split(" ")[0] : '--:--'}</p>
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-gray-600 text-xs uppercase">Status</p>
-                                            <p className={`text-sm pt-1 ${isActive === true ? 'text-green' : 'text-red'}`}>
-                                                {isActive === true ? 'Active' : 'Inactive'}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    </div>
-                                )} */}
-                            </div>
-                        ))}
+                            );
+                        })()}
                 </div>
             </div>
         </div>  

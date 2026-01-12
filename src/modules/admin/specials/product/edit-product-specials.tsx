@@ -199,10 +199,8 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                 return `${dateStr} 00:00:00`;
             };
 
-            // Only include organisationId and branchId if they are valid numbers (not "All" or empty)
-            const organisationId = currentSpecial.organisation && currentSpecial.organisation !== 'All' 
-                ? parseInt(currentSpecial.organisation) 
-                : undefined;
+            // Fixed: frontend payload no longer sends organisationId — implicit via private DB connection
+            // Only include branchId if it's a valid number (not "All" or empty)
             const branchId = currentSpecial.branch && currentSpecial.branch !== 'All' 
                 ? parseInt(currentSpecial.branch) 
                 : undefined;
@@ -222,10 +220,8 @@ export function EditProductSpecials ({ onClose, selectedSpecial }: Props) {
                 isActive: currentSpecial.isActive,
             };
 
-            // Only add organisationId and branchId if they are valid numbers
-            if (organisationId && !isNaN(organisationId)) {
-                payload.organisationId = organisationId;
-            }
+            // Removed: organisationId — implicit via private DB connection in multi-tenancy
+            // Only add branchId if it's a valid number
             if (branchId && !isNaN(branchId)) {
                 payload.branchId = branchId;
             }

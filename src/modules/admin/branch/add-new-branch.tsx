@@ -11,7 +11,7 @@ import { useSession } from '@/context';
 import { Organisation } from '@/modules/types/organisation/organisation-types';
 import { apiClient } from '@/utils/api-client';
 import { CreateBranch, SuccessResponse } from '@/modules/types/branch/branches-types';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function AddNewBranch({ onClose, onSuccess }: any) {
     const { user } = useSession();
@@ -28,7 +28,7 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
             opening: '',
             closing: ''
         },
-        organisationId: 0
+        // organisationId: 0
     })
 
     const saveBranch = async () => {
@@ -45,7 +45,7 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                     opening: currentBranch.operatingHours.opening,
                     closing: currentBranch.operatingHours.closing
                 },
-                organisationId: user?.organisation?.uid
+                // organisationId: user?.organisation?.uid
             }
             console.log("payload in add-new-branch: ", payload)
 
@@ -156,7 +156,7 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                                 </div>
                                 <div>
                                     <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                                        <Select
+                                        {/* <Select
                                             value={currentBranch.organisationId.toString()}
                                             onValueChange={(value) => setCurrentBranch(prev => ({ ...prev, organisationId: Number(value) }))}
                                         >
@@ -169,7 +169,18 @@ export function AddNewBranch({ onClose, onSuccess }: any) {
                                                     {user?.organisation?.name}
                                                 </SelectItem>
                                             </SelectContent>
-                                        </Select>
+                                        </Select> */}
+                                        {/* <select
+                                          id="organisation"
+                                          value={currentBranch.organisationId.toString()}
+                                          onChange={(e) => setCurrentBranch(prev => ({ ...prev, organisationId: Number(e.target.value) }))}
+                                          className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                        >
+                                          <option value="All">All</option>
+                                          <option value={user?.organisation?.uid.toString()}>
+                                            {user?.organisation?.name}
+                                          </option>
+                                        </select> */}
                                 </div>
                             </div>
 

@@ -1,12 +1,9 @@
 "use client"
 
 import React from "react";
-import axios from "axios"
 import { useState, useEffect } from "react"
 import { Crown, WalletCards, ShoppingBag, ShoppingBasket, ChefHat, Coins, Star, Edit, Trash2, XOctagon, ShieldAlert, PlusCircle } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import "../styles/loyalty-program-tiers.css"
-import { apiEndPoint } from '@/utils/colors'
 import { AddNewTiers } from "@/modules/admin/loyalty-tiers/add-new-tiers"
 import { DeleteTierConfirmation } from "./component/delete-tier-confirmation";
 import { LoyaltyTiersProps } from '@/modules/types/tiers/data-types';
@@ -14,6 +11,7 @@ import { EditTiers } from "@/modules/admin/loyalty-tiers/edit-tiers"
 import { AddNewAlternativeReward } from "@/modules/admin/rewards/add-alternative-reward";
 import { AlternativeRewardCard } from "@/modules/admin/rewards/alternative-reward-card"
 import SquareCircleLoader from "@/lib/square-circle-loader";
+import { apiClient } from "@/utils/api-client";
 
 const icons = [
   { id: 1, icon: ShoppingBasket, color: "text-blue" },
@@ -59,7 +57,7 @@ export default function LoyaltyProgramTiers() {
 
     try {
       const url = `tiers/get-loyalty-tiers`
-      const response = await axios.get<TiersResponse>(`${apiEndPoint}/${url}`)
+      const response = await apiClient.get<TiersResponse>(url)
       setTiersData(response.data);
       setLoading(false);
 
@@ -165,7 +163,6 @@ export default function LoyaltyProgramTiers() {
     )
   }
 
-
   if (isError) {
     return (
       <div className="pb-14 py-8">
@@ -228,7 +225,6 @@ export default function LoyaltyProgramTiers() {
     )
   }
 
-
   if (tiersData.length === 0) {
     return (
       <div className="pb-14 py-8">
@@ -280,7 +276,6 @@ export default function LoyaltyProgramTiers() {
       </div>
     )
   }
-
 
   return (
     <div className="pb-14 py-8 px-2">

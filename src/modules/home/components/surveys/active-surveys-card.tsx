@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { apiEndPoint } from '@/utils/colors'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,6 +8,8 @@ import { BadgeCheck, BadgeInfo, AlertTriangle, Users, ScrollText, Store, UserRou
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import SquareCircleLoader from "@/lib/square-circle-loader"
 import { apiClient } from '@/utils/api-client';
+import { getActiveSurveys } from '@/components/data/survey/get-active-surveys';
+import { useSession } from '@/context';
 
 interface SurveyProps {
     survey_id: number,
@@ -31,22 +33,20 @@ interface SurveyResponse {
 }
 
 export const ActiveSurveyCards = () => {
+    const { user } = useSession();
     const [activeSurveys, setActiveSurveys] = useState<SurveyProps[]>([])
 
     const [activeSurveysLoading, setActiveSurveysLoading] = useState(false);
     const [activeSurveysErrors, setActiveSurveysErrors] = useState(false);
 
 
-    const getActiveSurveys = async () => {
+    const fetchActiveSurveys = useCallback(async () => {
         setActiveSurveysLoading(true);
 
         try {
-            const url = `survey/get-active-surveys`
-            // const response = await axios.get<SurveyResponse>(`${apiEndPoint}/${url}`);
-            const response = await apiClient.get(url) // Note: no need for full URL since apiClient has baseURL
-
-            setActiveSurveys(response.data.results);
-            console.log('Active Surveys: ', response.data);
+            const activeSurveys = await getActiveSurveys(user)
+            setActiveSurveys(activeSurveys || []);
+            console.log('Active Surveys: ', activeSurveys);
     
         } catch (error) {
             console.log("An error occurred when fetching the Active Surveys");
@@ -54,7 +54,7 @@ export const ActiveSurveyCards = () => {
         }
     
         setActiveSurveysLoading(false);
-    }
+    }, [user]);
 
 
     const getSurveyCategoryIcon = (survey_category: string) => {
@@ -71,16 +71,16 @@ export const ActiveSurveyCards = () => {
     };
 
     useEffect(() => {
-        getActiveSurveys();
+        fetchActiveSurveys();
 
         // Set up an interval to fetch data every 5 minutes
         const interval = setInterval(() => {
-            getActiveSurveys();
+            fetchActiveSurveys();
         }, 300000); // 300,000 ms = 5 minutes || 60000 = 1 minute
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
-    }, []);
+    }, [fetchActiveSurveys]);
 
     if (activeSurveysLoading) {
         return (

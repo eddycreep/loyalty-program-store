@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, Products, ProductsResponse, UserActivity } from '@/modules/types/data-types'
 import { Special, SpecialInfo, SpecialInfoRes } from '@/modules/types/special/product/data-types'
 import { useSession } from '@/context';
@@ -175,9 +175,7 @@ export function AddProductsSpecials({ onClose }: Props) {
             console.log("selected organisation value: ", currentSpecial.organisation)
             console.log("selected branch value: ", currentSpecial.branch)
 
-            // const newOrgId = currentSpecial.organisation
-            // const newBrId = currentSpecial.branch
-            const newOrgId = Number(currentSpecial.organisation);
+            // Removed: newOrgId — organisationId is implicit via private DB connection in multi-tenancy
             const newBrId = Number(currentSpecial.branch);
             
             // const selectedStore = allStores.find(store => store.code === currentReward.store_id);
@@ -189,6 +187,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                 return `${dateStr} 00:00:00`;
             };
 
+            // Fixed: frontend payload no longer sends organisationId — implicit via private DB connection
             const payload = {
                 special_name: currentSpecial.special_name,
                 special: currentSpecial.special,
@@ -202,7 +201,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                 loyalty_tier: currentSpecial.loyalty_tier,
                 age_group: currentSpecial.age_group,
                 isActive: currentSpecial.isActive,
-                organisationId: currentSpecial.organisation,
+                // Removed: organisationId — implicit via private DB connection in multi-tenancy
                 branchId: currentSpecial.branch,
             }
 
@@ -382,7 +381,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                 </div>
                                 <div>
                                     <label htmlFor="special-type" className="text-black text-xs sm:text-sm">Special Type</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.special_value}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, special_value: value as 'Percentage' | 'Amount' }))}
                                     >
@@ -393,7 +392,17 @@ export function AddProductsSpecials({ onClose }: Props) {
                                             <SelectItem value="Percentage" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Percentage</SelectItem>
                                             <SelectItem value="Amount" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Amount</SelectItem>
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                        id="special-type"
+                                        value={currentSpecial.special_value}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, special_value: e.target.value as 'Percentage' | 'Amount' }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                        <option value="">Select special type</option>
+                                        <option value="Percentage">Percentage</option>
+                                        <option value="Amount">Amount</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -401,7 +410,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="tier" className="text-black text-xs sm:text-sm">Loyalty Tier</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.loyalty_tier}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, loyalty_tier: value }))}
                                     >
@@ -416,11 +425,11 @@ export function AddProductsSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                                 <div>
                                     <label htmlFor="age-group" className="text-black text-xs sm:text-sm">Age Group</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.age_group}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, age_group: value }))}
                                     >
@@ -435,7 +444,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                             </div>
 
@@ -467,41 +476,36 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                                    <Select
-                                        value={currentSpecial.organisation}
-                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, organisation: value }))}
+                                    <select
+                                        id="organisation"
+                                        value={currentSpecial.organisation || ''}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, organisation: e.target.value }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                        disabled
                                     >
-                                        <SelectTrigger className="w-full mt-1">
-                                            <SelectValue placeholder="Select Organisation" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                            {/* {organisations?.map((org) => ( */}
-                                                <SelectItem value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                                    {userOrganisation}
-                                                </SelectItem>
-                                            {/* // ))} */}
-                                        </SelectContent>
-                                    </Select>
+                                        <option value="">Select Organisation</option>
+                                        {userOrganisationUid && (
+                                            <option value={userOrganisationUid.toString()}>
+                                                {userOrganisation || 'User Organisation'}
+                                            </option>
+                                        )}
+                                    </select>
                                 </div>
                                 <div>
                                     <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                                    <Select
-                                        value={currentSpecial.branch}
-                                        onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, branch: value }))}
+                                    <select
+                                        id="branch"
+                                        value={currentSpecial.branch || ''}
+                                        onChange={(e) => setCurrentSpecial(prev => ({ ...prev, branch: e.target.value }))}
+                                        className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
                                     >
-                                        <SelectTrigger className="w-full mt-1">
-                                            <SelectValue placeholder="Select Branch" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                            {branches?.map((branch) => (
-                                                <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                                    {branch.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                        <option value="">Select Branch</option>
+                                        {branches && branches.length > 0 && branches.map((branch) => (
+                                            <option key={branch.uid} value={branch.uid.toString()}>
+                                                {branch.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
@@ -509,7 +513,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-end">
                                 <div>
                                     <label htmlFor="store-id" className="text-black text-xs sm:text-sm">Store ID</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentSpecial.store_id}
                                         onValueChange={(value) => setCurrentSpecial(prev => ({ ...prev, store_id: value }))}
                                     >
@@ -524,7 +528,7 @@ export function AddProductsSpecials({ onClose }: Props) {
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                                 <div className="flex flex-col items-center justify-center space-x-2 pr-56 pb-4">
                                     <label htmlFor="active-toggle" className="text-black text-xs sm:text-sm">

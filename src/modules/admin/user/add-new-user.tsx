@@ -11,7 +11,7 @@ import { useSession } from '@/context';
 import { Organisation } from '@/modules/types/organisation/organisation-types';
 import { apiClient } from '@/utils/api-client';
 import { SuccessResponse } from '@/modules/types/branch/branches-types';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CreateUser, UserRole } from '@/modules/types/user/user-types';
 
 export function AddNewUser({ onClose, onSuccess }: any) {
@@ -140,7 +140,7 @@ export function AddNewUser({ onClose, onSuccess }: any) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="role" className="text-black text-xs sm:text-sm">Role</label>
-                                    <Select
+                                    {/* <Select
                                         value={currentUser.role}
                                         onValueChange={(value) => setCurrentUser(prev => ({ ...prev, role: value as UserRole }))}
                                     >
@@ -156,11 +156,26 @@ export function AddNewUser({ onClose, onSuccess }: any) {
                                             <SelectItem value={UserRole.MD} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">MD</SelectItem>
                                             <SelectItem value={UserRole.OWNER} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">Owner</SelectItem>
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                      id="role"
+                                      value={currentUser.role}
+                                      onChange={(e) => setCurrentUser(prev => ({ ...prev, role: e.target.value as UserRole }))}
+                                      className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                      <option value="">Select Role</option>
+                                      <option value={UserRole.ADMIN}>Admin</option>
+                                      <option value={UserRole.USER}>User</option>
+                                      <option value={UserRole.MANAGER}>Manager</option>
+                                      <option value={UserRole.SUPERVISOR}>Supervisor</option>
+                                      <option value={UserRole.HR}>HR</option>
+                                      <option value={UserRole.MD}>MD</option>
+                                      <option value={UserRole.OWNER}>Owner</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                                        <Select
+                                        {/* <Select
                                             // value={user?.organisation?.uid.toString() || ''}
                                             onValueChange={(value) => setCurrentUser(prev => ({ ...prev, organisation: Number(value) }))}
                                         >
@@ -173,7 +188,18 @@ export function AddNewUser({ onClose, onSuccess }: any) {
                                                     {user?.organisation?.name}
                                                 </SelectItem>
                                             </SelectContent>
-                                        </Select>
+                                        </Select> */}
+                                        <select
+                                          id="organisation"
+                                          value={currentUser.organisation === 0 ? "All" : currentUser.organisation.toString()}
+                                          onChange={(e) => setCurrentUser(prev => ({ ...prev, organisation: e.target.value === "All" ? 0 : Number(e.target.value) }))}
+                                          className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                        >
+                                          <option value="All">All</option>
+                                          <option value={user?.organisation?.uid.toString()}>
+                                            {user?.organisation?.name}
+                                          </option>
+                                        </select>
                                 </div>
                             </div>
 
@@ -181,7 +207,7 @@ export function AddNewUser({ onClose, onSuccess }: any) {
                             <div className="grid grid-cols-1 gap-3 sm:gap-4">
                                 <div>
                                     <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                                    <Select
+                                    {/* <Select
                                         // value={user?.branch?.uid.toString() || ''}
                                         onValueChange={(value) => setCurrentUser(prev => ({ ...prev, branch: Number(value) }))}
                                     >
@@ -194,7 +220,18 @@ export function AddNewUser({ onClose, onSuccess }: any) {
                                                 {user?.branch?.name}
                                             </SelectItem>
                                         </SelectContent>
-                                    </Select>
+                                    </Select> */}
+                                    <select
+                                      id="branch"
+                                      value={currentUser.branch === 0 ? "All" : currentUser.branch.toString()}
+                                      onChange={(e) => setCurrentUser(prev => ({ ...prev, branch: e.target.value === "All" ? 0 : Number(e.target.value) }))}
+                                      className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
+                                    >
+                                      <option value="All">All</option>
+                                      <option value={user?.branch?.uid.toString()}>
+                                        {user?.branch?.name}
+                                      </option>
+                                    </select>
                                 </div>
                             </div>
 

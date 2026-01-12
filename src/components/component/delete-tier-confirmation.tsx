@@ -2,13 +2,14 @@
 
 import toast from 'react-hot-toast';
 import axios from 'axios'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { X, Check } from 'lucide-react'
 import { apiEndPoint, colors } from '@/utils/colors';
 import { UserActivity } from '@/modules/types/data-types'
-import { TierInfo, TierInfoResponse, LoyaltyTiersProps, LoyaltyTiersResponse } from '@/modules/types/tiers/data-types';
+import { TierInfo, TierInfoResponse } from '@/modules/types/tiers/data-types';
 import { useSession } from '@/context';
+import { apiClient } from '@/utils/api-client';
 
 export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: any) => {
     const { user } = useSession();
@@ -20,7 +21,7 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
     const getTierInfo = async () => {
         try {
             const url = `tiers/get-tier-info/${tierTitle}`
-            const response = await axios.get<TierInfoResponse>(`${apiEndPoint}/${url}`)
+            const response = await apiClient.get<TierInfoResponse>(url)
             setTierInfo(response.data)
 
             await logUserActivity(response.data[0]); 
@@ -28,7 +29,6 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
             console.error('Error RETURNING REWARD INFO:', error)
         }
     }
-
 
     const logUserActivity = async (tierInfo: TierInfo) => {
         const message = "User deleted a tier";
@@ -53,56 +53,56 @@ export const DeleteTierConfirmation = ({ isOpen, onClose, tierID, tierTitle }: a
         }
     };
 
-
     const deleteTier = async () => {
         try{
-        const url = `tiers/delete-tier/${tierID}`
-        const response = await axios.delete(`${apiEndPoint}/${url}`)
+            const url = `tiers/delete-tier/${tierID}`
+            const response = await apiClient.delete(url)
+            console.log("tier deleted successfully: ", response.data)
 
-        toast.success('Tier Deleted', {
-            icon: <Check color={colors.green} size={24} />,
-            duration: 3000,
-            style: {
-                backgroundColor: 'black', 
-                color: 'white',
-            },
-        });
+            toast.success('Tier Deleted', {
+                icon: <Check color={colors.green} size={24} />,
+                duration: 3000,
+                style: {
+                    backgroundColor: 'black', 
+                    color: 'white',
+                },
+            });
 
-        onClose();
+            onClose();
         } catch (error) {
-        console.error('Error deleting special:', error)
-        toast.error('Reward Not Deleted', {
-            icon: <X color={colors.red} size={24} />,
-            duration: 3000,
-        });
+            console.error('Error deleting tier:', error)
+            toast.error('Tier Not Deleted', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
         }
     }
 
     return (
         <div className="h-screen fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="relative bg-white rounded-lg shadow-lg p-6 w-[450px]">
-            <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-2 top-2"
-            onClick={onClose}
-            aria-label="Close"
-            >
-            <X className="h-4 w-4" />
-            </Button>
-            <div>
-            <div className="text-lg font-bold pb-2 text-gray-600">Confirm Deletion</div>
-            <p className="text-gray-600 pb-4">Are you sure you want to delete this tier? This action cannot be undone.</p>
+            <div className="relative bg-white rounded-lg shadow-lg p-6 w-[450px]">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-2 top-2"
+                    onClick={onClose}
+                    aria-label="Close"
+                >
+                    <X className="h-4 w-4" />
+                </Button>
+                <div>
+                    <div className="text-lg font-bold pb-2 text-gray-600">Confirm Deletion</div>
+                    <p className="text-gray-600 pb-4">Are you sure you want to delete this tier? This action cannot be undone.</p>
+                </div>
+                <div className="flex justify-end space-x-2">
+                    <Button onClick={onClose} className="bg-purple text-white border-purple hover:bg-indigo-300 hover:border-indigo-300 hover:text-white h-8">
+                        Cancel
+                    </Button>
+                    <Button onClick={() => getTierInfo() } className="bg-red text-white border-red hover:bg-rose-300 hover:border-rose-300 h-8">
+                        Confirm
+                    </Button>
+                </div>
             </div>
-            <div className="flex justify-end space-x-2">
-            <Button onClick={onClose} className="bg-purple text-white border-purple hover:bg-indigo-300 hover:border-indigo-300 hover:text-white h-8">
-                Cancel
-            </Button>
-            <Button onClick={() => getTierInfo() } className="bg-red text-white border-red hover:bg-rose-300 hover:border-rose-300 h-8">
-                Confirm
-            </Button>
-            </div>
-        </div>
         </div>
     );
 };
