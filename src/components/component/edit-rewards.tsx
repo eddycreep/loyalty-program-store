@@ -13,6 +13,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RewardProps } from "@/modules/admin/rewards-module";
 import { AgeGroupsResponse, TiersResponse, StoresResponse, ProductsResponse, UserActivity } from '@/modules/types/data-types'
+import { Item } from "@/modules/types/products/product-types";
+import { getInventory } from "@/components/data/inventory/get-inventory";
+import { useSession } from '@/context';
+import { apiClient } from '@/utils/api-client';
 
 interface Props {
   onClose: () => void;  // Corrected syntax here
@@ -36,9 +40,14 @@ interface Rewards {
 }
 
 export function EditRewards({ onClose, selectedReward }: any) {
+  const { user } = useSession();
   const [allStores, setAllStores] = useState<StoresResponse>([])
   const [loyaltyTiers, setLoyaltyTiers] = useState<TiersResponse>([])
   const [ageGroups, setAgeGroups] = useState<AgeGroupsResponse>([])
+  // Added: Product selection state for Free Item rewards
+  const [allProducts, setAllProducts] = useState<Item[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<Item | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const [currentReward, setCurrentReward] = useState<Rewards>({
       reward_id: 0,
@@ -88,6 +97,37 @@ export function EditRewards({ onClose, selectedReward }: any) {
     }
   }
 
+  // Added: Fetch inventory for product selection
+  const fetchInventory = async () => {
+    try {
+        const inventory = await getInventory(user)
+        setAllProducts(inventory)
+        console.log("inventory in edit rewards returned: ", inventory)
+    } catch (error) {
+        console.error('Error fetching inventory in edit rewards:', error)
+        setAllProducts([]);
+    }
+  }
+
+  // Added: Filter products based on search term, show all if search is empty
+  const searchProducts = allProducts.filter(product =>
+    !searchTerm || // Show all products when search term is empty
+    product?.description_1?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  // Added: Limit to 9 products to display 3 rows (3 columns × 3 rows = 9 items on medium/large screens)
+  const displayedProducts = searchProducts.slice(0, 9);
+
+  // Added: Add product to reward (for Free Item type)
+  const addProductToReward = (product: Item) => {
+    setSelectedProduct(product);
+  }
+
+  // Added: Remove product from reward
+  const removeProductFromReward = () => {
+    setSelectedProduct(null);
+  }
+
   const updateReward = async () => {
     try {
         let region;
@@ -110,7 +150,17 @@ export function EditRewards({ onClose, selectedReward }: any) {
         const formattedStartDate = formatDateTime(currentReward.start_date);
         const formattedExpiryDate = formatDateTime(currentReward.expiry_date);
 
-        const payload = {
+        // Added: Validate item_code is selected for Free Item rewards
+        if (currentReward.reward_type === 'Free Item' && !selectedProduct) {
+            toast.error('Please select a product for Free Item rewards', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            return;
+        }
+
+        // Updated: Save item_code only for Free Item rewards
+        const payload: any = {
           reward_title: currentReward.reward_title,
           description: currentReward.description,
           reward: currentReward.reward,
@@ -123,6 +173,11 @@ export function EditRewards({ onClose, selectedReward }: any) {
           loyalty_tier: currentReward.loyalty_tier,
           age_group: currentReward.age_group,
           isActive: currentReward.isActive,
+        }
+
+        // Added: Include item_code only if reward_type is 'Free Item'
+        if (currentReward.reward_type === 'Free Item' && selectedProduct) {
+            payload.item_code = selectedProduct.item_code;
         }
         console.log('Payload:', payload);
 
@@ -151,6 +206,7 @@ export function EditRewards({ onClose, selectedReward }: any) {
     getStores();
     getLoyaltyTiers();
     getAgeGroups();
+    fetchInventory();
   }, [])
 
   // Synchronize `selectedReward` data with `currentReward` and populate age group
@@ -163,9 +219,17 @@ export function EditRewards({ onClose, selectedReward }: any) {
             ...selectedReward,
             age_group: matchedAgeGroup ? matchedAgeGroup.group_name : '',
         }));
+
+        // Added: If reward has item_code and is Free Item type, find and set selected product
+        if (selectedReward.reward_type === 'Free Item' && (selectedReward as any).item_code) {
+            const product = allProducts.find(p => p.item_code === (selectedReward as any).item_code);
+            if (product) {
+                setSelectedProduct(product);
+            }
+        }
     }
 
-  }, [selectedReward, ageGroups]);
+  }, [selectedReward, ageGroups, allProducts]);
 
   return (
     <div className="fixed inset-0 z-50">
@@ -226,7 +290,13 @@ export function EditRewards({ onClose, selectedReward }: any) {
                                 <label htmlFor="reward-type" className="text-black text-xs sm:text-sm">Type</label>
                                 <Select
                                     value={currentReward.reward_type}
-                                    onValueChange={(value) => setCurrentReward(prev => ({ ...prev, reward_type: value }))}
+                                    onValueChange={(value) => {
+                                        setCurrentReward(prev => ({ ...prev, reward_type: value }));
+                                        // Added: Clear selected product if reward type changes away from Free Item
+                                        if (value !== 'Free Item') {
+                                            setSelectedProduct(null);
+                                        }
+                                    }}
                                 >
                                     <SelectTrigger className="w-full mt-1">
                                         <SelectValue placeholder="Select type" />
@@ -234,10 +304,78 @@ export function EditRewards({ onClose, selectedReward }: any) {
                                     <SelectContent>
                                         <SelectItem value="Percentage">Percentage</SelectItem>
                                         <SelectItem value="Amount">Amount</SelectItem>
+                                        <SelectItem value="Free Item">Free Item</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
                         </div>
+
+                        {/* Added: Product Grid - Only shown when reward_type is 'Free Item' */}
+                        {currentReward.reward_type === 'Free Item' && (
+                            <>
+                                {/* Search Products */}
+                                <div>
+                                    <label htmlFor="product-search" className="text-black text-xs sm:text-sm">Search Products</label>
+                                    <div className="flex space-x-2 mt-1">
+                                        <Input
+                                            id="product-search"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            placeholder="Search for products"
+                                        />
+                                        <Button variant="outline" size="icon">
+                                            <Search className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                {/* Product Grid - Balanced layout: 1 mobile, 2 small, 3 medium/large with comfortable spacing */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                    {displayedProducts.length > 0 ? (
+                                        displayedProducts.map((product) => (
+                                            <Button
+                                                key={product.id}
+                                                onClick={() => addProductToReward(product)}
+                                                disabled={selectedProduct !== null}
+                                                className="justify-start bg-white text-black text-xs sm:text-sm"
+                                            >
+                                                <PlusCircle className="h-4 w-4 mr-2" />
+                                                <span className="truncate">{product.description_1}</span>
+                                            </Button>
+                                        ))
+                                    ) : (
+                                        // Show message when no products match search or no products loaded
+                                        <div className="col-span-full text-center text-gray-500 text-sm py-4">
+                                            {allProducts.length === 0 
+                                                ? "Loading products..." 
+                                                : searchTerm 
+                                                    ? "No products found matching your search." 
+                                                    : "No products available."
+                                            }
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Selected Product */}
+                                <div>
+                                    <label className="text-black text-xs sm:text-sm">Selected Product</label>
+                                    {selectedProduct ? (
+                                        <Card className="p-2 flex justify-between items-center mt-1">
+                                            <span className="text-black font-bold text-xs sm:text-sm truncate">{selectedProduct.description_1}</span>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={removeProductFromReward}
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        </Card>
+                                    ) : (
+                                        <p className="text-red text-xs mt-1">Please select a product for this Free Item reward</p>
+                                    )}
+                                </div>
+                            </>
+                        )}
 
                         {/* Tier and Price */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">

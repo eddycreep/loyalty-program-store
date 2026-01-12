@@ -1,10 +1,10 @@
 'use client'
 
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { apiEndPoint, colors } from '@/utils/colors';
-import { X, Check } from 'lucide-react';
+import { X, Check, Search, PlusCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +21,9 @@ import { getOrganisations } from '@/components/data/organisation/get-organisatio
 import { getBranches } from '@/components/data/branch/get-branches-data';
 import { Organisation } from "@/modules/types/organisation/organisation-types";
 import { Branch } from "@/modules/types/branch/branches-types";
+import { Item, ItemsResponse } from "@/modules/types/products/product-types";
+import { getInventory } from '@/components/data/inventory/get-inventory';
+
 
 export function AddNewRewards({ onClose }: any) {
   const { user } = useSession();
@@ -35,7 +38,13 @@ export function AddNewRewards({ onClose }: any) {
   const [organisations, setOrganisations] = useState<Organisation[] | null>(null);
   const [branches, setBranches] = useState<Branch[] | null>(null);
 
+  const [allProducts, setAllProducts] = useState<Item[]>([])
+  // Added: Product selection state for Free Item rewards
+  const [selectedProduct, setSelectedProduct] = useState<Item | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+
   // Updated: DTO now only requires branchId - organisationId implicit via private DB
+  // Removed: organisation field (tenant context implicit)
   const [currentReward, setCurrentReward] = useState<Rewards>({
     reward_title: '',
     description: '',
@@ -52,6 +61,40 @@ export function AddNewRewards({ onClose }: any) {
     organisation: 0, // Kept for UI compatibility, not sent in payload
     branch: 0,
   })
+
+  // Added: Filter products based on search term, show all if search is empty
+  const searchProducts = allProducts.filter(product =>
+    !searchTerm || // Show all products when search term is empty
+    product?.description_1?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  // Added: Limit to 9 products to display 3 rows (3 columns × 3 rows = 9 items on medium/large screens)
+  const displayedProducts = searchProducts.slice(0, 9);
+
+  // Added: Add product to reward (for Free Item type)
+  const addProductToReward = (product: Item) => {
+    setSelectedProduct(product);
+  }
+
+  // Added: Remove product from reward
+  const removeProductFromReward = () => {
+    setSelectedProduct(null);
+  }
+
+
+  const fetchInventory = useCallback(async () => {
+    // setLoadingData(true);
+
+    try {
+        const inventory = await getInventory(user)
+        setAllProducts(inventory)
+        console.log("inventory in rewards returned: ", inventory)
+        setAllProducts(inventory);
+    } catch (error) {
+        console.error('Error fetching inventory in rewards:', error)
+        setAllProducts([]);
+    }
+}, [user])
 
   const getStores = async () => {
     try {
@@ -85,15 +128,15 @@ export function AddNewRewards({ onClose }: any) {
     }
   }
 
-  const getAllBranches = async () => {
+  const getAllBranches = useCallback(async () => {
     try {
-        const branchesData = await getBranches()
+        const branchesData = await getBranches(user)
         setBranches(branchesData)
         console.log("all branches returned bro: ", branchesData)
     } catch (error) {
         console.error('error fetching all branches bro:', error)
     }
-  }
+  }, [user])
 
   const getAgeGroups = async () => {
     try {
@@ -109,6 +152,15 @@ export function AddNewRewards({ onClose }: any) {
   // Fixed: frontend payload no longer sends organisationId - implicit via private DB connection
   const saveReward = async () => {
     try {
+        // Added: Validate item_code is selected for Free Item rewards
+        if (currentReward.reward_type === 'Free Item' && !selectedProduct) {
+            toast.error('Please select a product for Free Item rewards', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+            return;
+        }
+
         const selectedStore = allStores.find(store => store.code === currentReward.store_id);
         const region = selectedStore ? selectedStore.address_4 : ''; 
 
@@ -122,7 +174,8 @@ export function AddNewRewards({ onClose }: any) {
         const formattedExpiryDate = formatDateTime(currentReward.expiry_date);
 
         // Removed: organisationId — implicit via private DB connection in multi-tenancy
-        const payload = {
+        // Updated: Save item_code only for Free Item rewards
+        const payload: any = {
             reward_title: currentReward.reward_title,
             description: currentReward.description,
             reward: currentReward.reward,
@@ -136,6 +189,11 @@ export function AddNewRewards({ onClose }: any) {
             age_group: currentReward.ageGroup,
             isActive: currentReward.isActive,
             branchId: currentReward.branch,
+        }
+
+        // Added: Include item_code only if reward_type is 'Free Item'
+        if (currentReward.reward_type === 'Free Item' && selectedProduct) {
+            payload.item_code = selectedProduct.item_code;
         }
 
         const url = `rewards/save-reward`
@@ -204,12 +262,10 @@ export function AddNewRewards({ onClose }: any) {
     getStores();
     getLoyaltyTiers();
     getAgeGroups();
-    getAllOrganisations();
     getAllBranches();
-  }, []);
+    fetchInventory();
+  }, [fetchInventory, getAllBranches]);
 
-  const userOrganisation = user?.organisation?.name
-  const userOrganisationUid = user?.organisation?.uid
 
   return (
     <div className="fixed inset-0 z-50">
@@ -284,7 +340,14 @@ export function AddNewRewards({ onClose }: any) {
                   <select
                     id="reward-type"
                     value={currentReward.reward_type}
-                    onChange={(e) => setCurrentReward(prev => ({ ...prev, reward_type: e.target.value }))}
+                    onChange={(e) => {
+                      const newType = e.target.value;
+                      setCurrentReward(prev => ({ ...prev, reward_type: newType }));
+                      // Added: Clear selected product if reward type changes away from Free Item
+                      if (newType !== 'Free Item') {
+                        setSelectedProduct(null);
+                      }
+                    }}
                     className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
                   >
                     <option value="">Select type</option>
@@ -295,6 +358,73 @@ export function AddNewRewards({ onClose }: any) {
                   </select>
                 </div>
               </div>
+
+              {/* Added: Product Grid - Only shown when reward_type is 'Free Item' */}
+              {currentReward.reward_type === 'Free Item' && (
+                <>
+                  {/* Search Products */}
+                  <div>
+                    <label htmlFor="product-search" className="text-black text-xs sm:text-sm">Search Products</label>
+                    <div className="flex space-x-2 mt-1">
+                      <Input
+                        id="product-search"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Search for products"
+                      />
+                      <Button variant="outline" size="icon">
+                        <Search className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Product Grid - Balanced layout: 1 mobile, 2 small, 3 medium/large with comfortable spacing */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {displayedProducts.length > 0 ? (
+                      displayedProducts.map((product) => (
+                        <Button
+                          key={product.id}
+                          onClick={() => addProductToReward(product)}
+                          disabled={selectedProduct !== null}
+                          className="justify-start bg-white text-black text-xs sm:text-sm"
+                        >
+                          <PlusCircle className="h-4 w-4 mr-2" />
+                          <span className="truncate">{product.description_1}</span>
+                        </Button>
+                      ))
+                    ) : (
+                      // Show message when no products match search or no products loaded
+                      <div className="col-span-full text-center text-gray-500 text-sm py-4">
+                        {allProducts.length === 0 
+                          ? "Loading products..." 
+                          : searchTerm 
+                            ? "No products found matching your search." 
+                            : "No products available."
+                        }
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Selected Product */}
+                  <div>
+                    <label className="text-black text-xs sm:text-sm">Selected Product</label>
+                    {selectedProduct ? (
+                      <Card className="p-2 flex justify-between items-center mt-1">
+                        <span className="text-black font-bold text-xs sm:text-sm truncate">{selectedProduct.description_1}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={removeProductFromReward}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </Card>
+                    ) : (
+                      <p className="text-red text-xs mt-1">Please select a product for this Free Item reward</p>
+                    )}
+                  </div>
+                </>
+              )}
 
               {/* Loyalty Tier x Reward Price */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -436,57 +566,10 @@ export function AddNewRewards({ onClose }: any) {
                 </div>
               </div>
 
-              { /* Organisation x Branch */}
+              { /* Branch - Removed: organisation field (tenant context implicit) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                      <label htmlFor="organisation" className="text-black text-xs sm:text-sm">Organisation</label>
-                          {/* <Select
-                              value={currentReward.organisation === 0 ? "All" : currentReward.organisation.toString()}
-                              onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, organisation: value === "All" ? 0 : Number(value) }))}
-                          >
-                              <SelectTrigger className="w-full mt-1">
-                                  <SelectValue placeholder="Select Organisation" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                  <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                      <SelectItem  value={userOrganisationUid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                          {userOrganisation}
-                                      </SelectItem>
-                              </SelectContent>
-                          </Select> */}
-                          <select
-                            id="organisation"
-                            value={currentReward.organisation === 0 ? "All" : (currentReward.organisation?.toString() || "All")}
-                            onChange={(e) => setCurrentReward(prev => ({ ...prev, organisation: e.target.value === "All" ? 0 : Number(e.target.value) }))}
-                            className="p-2 w-full h-12 text-black bg-white rounded-lg border border-gray-300 mt-1"
-                            disabled
-                          >
-                            <option value="All">All</option>
-                            {userOrganisationUid && (
-                              <option value={userOrganisationUid.toString()}>
-                                {userOrganisation || 'User Organisation'}
-                              </option>
-                            )}
-                          </select>
-                    </div>
-                    <div>
                         <label htmlFor="branch" className="text-black text-xs sm:text-sm">Branch</label>
-                            {/* <Select
-                              value={currentReward.branch === 0 ? "All" : currentReward.branch.toString()}
-                              onValueChange={(value: string) => setCurrentReward(prev => ({ ...prev, branch: value === "All" ? 0 : Number(value) }))}
-                            >
-                              <SelectTrigger className="w-full mt-1">
-                                  <SelectValue placeholder="Select Branch" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="All" className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">All</SelectItem>
-                                    {branches?.map((branch) => (
-                                        <SelectItem key={branch.uid} value={branch.uid.toString()} className="hover:bg-purple hover:text-white focus:bg-purple focus:text-white">
-                                          {branch.name}
-                                        </SelectItem>
-                                    ))}
-                              </SelectContent>
-                            </Select> */}
                             <select
                               id="branch"
                               value={currentReward.branch === 0 ? "All" : currentReward.branch.toString()}

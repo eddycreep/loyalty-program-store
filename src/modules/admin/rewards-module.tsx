@@ -27,7 +27,8 @@ export interface RewardProps {
     loyalty_tier: string,
     age_group: string,
     isActive: boolean
-    
+    // Added: optional item_code for Free Item rewards
+    item_code?: string
 }
 type RewardsResponse = RewardProps[]
 
